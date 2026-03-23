@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="category" content="mockup">
+<meta name="issue" content="경쟁사 분석기 v2 — Ad Library API 기반">
+<title>경쟁사 분석기 v2 — bscamp 디자인</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: { DEFAULT:'#F75D5D', light:'#fee2e2', dark:'#dc2626' },
+        bg: { DEFAULT:'#f8f9fc', card:'#ffffff', soft:'#f1f3f8' },
+        txt: { main:'#1a1a1a', sub:'#64748b', muted:'#94a3b8' },
+        bdr: { DEFAULT:'#e2e8f0', light:'rgba(0,0,0,0.06)' },
+        success: '#10b981',
+        warning: '#f59e0b',
+      },
+      fontFamily: {
+        sans: ['"Pretendard Variable"','Pretendard','-apple-system','BlinkMacSystemFont','system-ui','sans-serif'],
+      },
+      borderRadius: { xl:'0.75rem' }
+    }
+  }
+}
+</script>
+<style>
+  body { font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #f8f9fc; color: #1a1a1a; }
+  .sidebar { width: 220px; background: #fff; border-right: 1px solid #e2e8f0; height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; font-size: 14px; color: #64748b; cursor: pointer; transition: all 0.15s; margin: 2px 8px; }
+  .sidebar-item:hover { background: #f1f5f9; color: #1a1a1a; }
+  .sidebar-item.active { background: #fee2e2; color: #F75D5D; font-weight: 600; }
+  .main-content { margin-left: 220px; }
+  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; transition: all 0.15s; }
+  .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+  .tab { padding: 10px 16px; font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; color: #64748b; transition: all 0.15s; }
+  .tab:hover { color: #1a1a1a; }
+  .tab.active { color: #F75D5D; border-bottom-color: #F75D5D; font-weight: 600; }
+  .btn-primary { background: #F75D5D; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .btn-primary:hover { background: #e54b4b; }
+  .btn-outline { background: #fff; color: #F75D5D; border: 1px solid #F75D5D; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .btn-outline:hover { background: #fee2e2; }
+  .search-bar { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; transition: border-color 0.2s; }
+  .search-bar:focus-within { border-color: #F75D5D; box-shadow: 0 0 0 3px rgba(247,93,93,0.1); }
+  .duration-bar { height: 6px; background: #f1f3f8; border-radius: 3px; overflow: hidden; }
+  .duration-fill { height: 100%; border-radius: 3px; }
+  .filter-chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 20px; border: 1px solid #e2e8f0; font-size: 13px; color: #64748b; cursor: pointer; transition: all 0.15s; }
+  .filter-chip:hover { border-color: #F75D5D; color: #F75D5D; }
+  .filter-chip.active { background: #fee2e2; border-color: #F75D5D; color: #F75D5D; }
+  .platform-icon { width: 20px; height: 20px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+  .mock-label { position: fixed; top: 12px; right: 12px; background: #F75D5D; color: white; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; z-index: 100; }
+  .creative-thumb { width: 140px; height: 140px; object-fit: cover; border-radius: 0.75rem; background: #f1f3f8; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .green-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; }
+  .orange-dot { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .stat-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 16px; text-align: center; }
+  .insight-item { display: flex; gap: 8px; padding: 10px 0; border-bottom: 1px solid #f1f3f8; }
+  .insight-item:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="mock-label">📐 MOCKUP v2</div>
+
+<!-- 사이드바 -->
+<aside class="sidebar flex flex-col">
+  <div class="px-5 py-5 border-b border-bdr">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm">B</div>
+      <span class="font-bold text-txt-main text-sm">자사몰사관학교</span>
+    </div>
+  </div>
+  <nav class="flex-1 py-3">
+    <div class="sidebar-item">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      대시보드
+    </div>
+    <div class="sidebar-item">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Q&A
+    </div>
+    <div class="sidebar-item">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+      정보공유
+    </div>
+    <div class="sidebar-item">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+      공지사항
+    </div>
+    <div class="sidebar-item active">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      총가치각도기
+    </div>
+    <div class="sidebar-item">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      설정
+    </div>
+  </nav>
+  <div class="px-4 py-4 border-t border-bdr">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-bg-soft flex items-center justify-center text-xs font-bold text-txt-sub">김</div>
+      <div>
+        <div class="text-sm font-medium text-txt-main">김수강</div>
+        <div class="text-xs text-txt-muted">2기 수강생</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- 메인 -->
+<div class="main-content min-h-screen">
+  <!-- 탭 바 -->
+  <div class="bg-white border-b border-bdr sticky top-0 z-30">
+    <div class="px-8 flex items-center gap-0">
+      <div class="tab">대시보드</div>
+      <div class="tab">벤치마크</div>
+      <div class="tab active">경쟁사 분석</div>
+    </div>
+  </div>
+
+  <div class="px-8 py-6 max-w-[1100px]">
+
+    <!-- 모니터링 중인 브랜드 -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-bold text-txt-main flex items-center gap-2">
+          🔔 모니터링 중인 브랜드
+          <span class="text-xs bg-primary-light text-primary px-2 py-0.5 rounded-full font-medium">3</span>
+        </h3>
+        <button class="text-xs text-txt-muted hover:text-primary">관리 →</button>
+      </div>
+      <div class="flex gap-3">
+        <div class="flex-1 card p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-green-50 flex items-center justify-center text-sm">🌿</div>
+              <div>
+                <div class="text-sm font-medium">이니스프리</div>
+                <div class="text-xs text-txt-muted">86개 광고</div>
+              </div>
+            </div>
+            <div class="orange-dot" title="신규 감지"></div>
+          </div>
+          <div class="text-xs text-primary font-medium">🆕 2개 신규 · 오늘</div>
+        </div>
+        <div class="flex-1 card p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-pink-50 flex items-center justify-center text-sm">🌸</div>
+              <div>
+                <div class="text-sm font-medium">에뛰드</div>
+                <div class="text-xs text-txt-muted">42개 광고</div>
+              </div>
+            </div>
+            <div class="green-dot"></div>
+          </div>
+          <div class="text-xs text-txt-muted">변동 없음</div>
+        </div>
+        <div class="flex-1 card p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-purple-50 flex items-center justify-center text-sm">💜</div>
+              <div>
+                <div class="text-sm font-medium">달바</div>
+                <div class="text-xs text-txt-muted">28개 광고</div>
+              </div>
+            </div>
+            <div class="orange-dot" title="신규 감지"></div>
+          </div>
+          <div class="text-xs text-primary font-medium">🆕 5개 신규 · 어제</div>
+        </div>
+        <div class="w-16 card flex items-center justify-center cursor-pointer border-dashed hover:border-primary hover:text-primary text-txt-muted text-xl">+</div>
+      </div>
+    </div>
+
+    <!-- 검색 -->
+    <div class="mb-5">
+      <div class="search-bar flex items-center gap-3 px-4 py-3">
+        <svg class="w-5 h-5 text-txt-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" value="이니스프리" class="w-full outline-none text-txt-main text-sm" placeholder="브랜드명 또는 키워드로 검색">
+        <button class="btn-primary flex-shrink-0">검색</button>
+      </div>
+      <div class="flex items-center gap-2 mt-3 flex-wrap">
+        <span class="filter-chip active">🇰🇷 한국</span>
+        <span class="filter-chip active">🔥 30일+</span>
+        <span class="filter-chip">게재중만</span>
+        <span class="filter-chip">Facebook</span>
+        <span class="filter-chip">Instagram</span>
+        <span class="filter-chip">영상</span>
+        <span class="filter-chip">이미지</span>
+      </div>
+    </div>
+
+    <!-- 검색 결과 헤더 -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <h2 class="text-base font-bold">Innisfree (이니스프리)</h2>
+        <span class="badge bg-pink-50 text-pink-600">뷰티</span>
+        <span class="text-sm text-txt-muted">86개 중 <strong class="text-txt-main">12개</strong> (30일+)</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn-outline text-xs" onclick="document.getElementById('toast').style.display='flex';setTimeout(()=>document.getElementById('toast').style.display='none',2500)">🔔 모니터링 등록</button>
+      </div>
+    </div>
+
+    <!-- 토스트 -->
+    <div id="toast" style="display:none" class="fixed top-5 right-5 bg-txt-main text-white px-5 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2 text-sm">
+      ✅ <strong>이니스프리</strong> 모니터링 등록 완료!
+    </div>
+
+    <!-- 광고 카드 리스트 -->
+    <div class="space-y-3">
+
+      <!-- 광고 1: 104일 -->
+      <div class="card p-4">
+        <div class="flex gap-4">
+          <div class="creative-thumb bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 text-4xl">🧴</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between mb-1.5">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="badge bg-red-50 text-red-600 font-semibold">🔥 104일 운영</span>
+                  <div class="flex gap-1">
+                    <span class="platform-icon bg-blue-600">f</span>
+                    <span class="platform-icon bg-gradient-to-br from-purple-500 to-pink-500">I</span>
+                  </div>
+                </div>
+                <p class="text-sm text-txt-main leading-relaxed">⭐딱 7일만! 올영 1등 레티놀앰플 1+1 떴다! 🏆760만 인생템 올영세일 개당 1만원대?! 모공 & 색소침착 한번에 잡는 깐달걀 피부결 치트키🥚✨</p>
+              </div>
+              <button class="text-txt-muted hover:text-primary p-1 flex-shrink-0" title="저장">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+              </button>
+            </div>
+            <div class="mb-2">
+              <div class="flex items-center justify-between text-xs text-txt-muted mb-1">
+                <span>2025-11-22 시작</span>
+                <span class="text-success font-medium">운영 중</span>
+              </div>
+              <div class="duration-bar"><div class="duration-fill bg-primary" style="width:100%"></div></div>
+            </div>
+            <div class="flex items-center gap-4 text-xs text-txt-muted">
+              <span>📱 Facebook, Instagram</span>
+              <span>🎯 더 알아보기</span>
+              <a href="#" class="text-primary hover:underline">🔗 랜딩페이지</a>
+              <a href="#" class="text-primary hover:underline">📥 소재 다운로드</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 광고 2: 78일 -->
+      <div class="card p-4">
+        <div class="flex gap-4">
+          <div class="creative-thumb bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-100 text-4xl">🌸</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between mb-1.5">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="badge bg-orange-50 text-orange-600 font-semibold">🔥 78일 운영</span>
+                  <div class="flex gap-1">
+                    <span class="platform-icon bg-blue-600">f</span>
+                    <span class="platform-icon bg-gradient-to-br from-purple-500 to-pink-500">I</span>
+                    <span class="platform-icon bg-blue-400">M</span>
+                  </div>
+                </div>
+                <p class="text-sm text-txt-main leading-relaxed">💗봄맞이 이니스프리 SALE FESTA💗 세일 페스타 ~70% 🌷 75일 한정! INNI SALE FESTA 최대 70% OFF</p>
+              </div>
+              <button class="text-txt-muted hover:text-primary p-1 flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+            </div>
+            <div class="mb-2">
+              <div class="flex items-center justify-between text-xs text-txt-muted mb-1"><span>2025-12-18 시작</span><span class="text-success font-medium">운영 중</span></div>
+              <div class="duration-bar"><div class="duration-fill bg-orange-400" style="width:75%"></div></div>
+            </div>
+            <div class="flex items-center gap-4 text-xs text-txt-muted">
+              <span>📱 Facebook, Instagram, Messenger</span>
+              <span>🎯 지금 구매하기</span>
+              <a href="#" class="text-primary hover:underline">🔗 랜딩페이지</a>
+              <a href="#" class="text-primary hover:underline">📥 소재 다운로드</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 광고 3: 45일 영상 -->
+      <div class="card p-4">
+        <div class="flex gap-4">
+          <div class="creative-thumb bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-100 relative">
+            <span class="text-4xl">🎬</span>
+            <span class="absolute top-2 left-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">▶ 0:30</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between mb-1.5">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="badge bg-yellow-50 text-yellow-700 font-semibold">🔥 45일 운영</span>
+                  <span class="badge bg-purple-50 text-purple-600">📹 영상</span>
+                  <div class="flex gap-1">
+                    <span class="platform-icon bg-gradient-to-br from-purple-500 to-pink-500">I</span>
+                  </div>
+                </div>
+                <p class="text-sm text-txt-main leading-relaxed">🧪 PDRN 앰플 출시! 피부과 시술 성분을 집에서? 임상완료 탄력+보습+진정 올인원 앰플 ✨</p>
+              </div>
+              <button class="text-txt-muted hover:text-primary p-1 flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+            </div>
+            <div class="mb-2">
+              <div class="flex items-center justify-between text-xs text-txt-muted mb-1"><span>2026-01-20 시작</span><span class="text-success font-medium">운영 중</span></div>
+              <div class="duration-bar"><div class="duration-fill bg-yellow-400" style="width:43%"></div></div>
+            </div>
+            <div class="flex items-center gap-4 text-xs text-txt-muted">
+              <span>📱 Instagram</span>
+              <span>🎯 더 알아보기</span>
+              <a href="#" class="text-primary hover:underline">🔗 랜딩페이지</a>
+              <a href="#" class="text-primary hover:underline">📥 소재 다운로드</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 광고 4: 8일 신규 -->
+      <div class="card p-4">
+        <div class="flex gap-4">
+          <div class="creative-thumb bg-gradient-to-br from-sky-50 to-blue-50 border border-sky-100 text-4xl">💧</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between mb-1.5">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="badge bg-sky-50 text-sky-600 font-semibold">🆕 8일</span>
+                  <div class="flex gap-1">
+                    <span class="platform-icon bg-blue-600">f</span>
+                    <span class="platform-icon bg-gradient-to-br from-purple-500 to-pink-500">I</span>
+                  </div>
+                </div>
+                <p class="text-sm text-txt-main leading-relaxed">🌿 NEW 이니스프리 비타C 브라이트닝 패키지 💛 칙칙한 피부톤, 비타민C로 환하게!</p>
+              </div>
+              <button class="text-txt-muted hover:text-primary p-1 flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+            </div>
+            <div class="mb-2">
+              <div class="flex items-center justify-between text-xs text-txt-muted mb-1"><span>2026-02-26 시작</span><span class="text-success font-medium">운영 중</span></div>
+              <div class="duration-bar"><div class="duration-fill bg-sky-400" style="width:8%"></div></div>
+            </div>
+            <div class="flex items-center gap-4 text-xs text-txt-muted">
+              <span>📱 Facebook, Instagram</span>
+              <span>🎯 지금 구매하기</span>
+              <a href="#" class="text-primary hover:underline">🔗 랜딩페이지</a>
+              <a href="#" class="text-primary hover:underline">📥 소재 다운로드</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 인사이트 -->
+    <div class="card p-5 mt-6">
+      <h3 class="text-sm font-bold text-txt-main mb-4 flex items-center gap-2">📊 AI 인사이트</h3>
+      <div class="grid grid-cols-4 gap-3 mb-5">
+        <div class="stat-card"><div class="text-xl font-bold text-primary">5개</div><div class="text-xs text-txt-muted mt-1">30일+ 장기 광고</div></div>
+        <div class="stat-card"><div class="text-xl font-bold text-txt-main">86개</div><div class="text-xs text-txt-muted mt-1">총 게재 광고</div></div>
+        <div class="stat-card"><div class="text-xl font-bold text-purple-600">67%</div><div class="text-xs text-txt-muted mt-1">영상 광고 비율</div></div>
+        <div class="stat-card"><div class="text-xl font-bold text-blue-600">FB+IG</div><div class="text-xs text-txt-muted mt-1">주력 플랫폼</div></div>
+      </div>
+      <div>
+        <div class="insight-item"><span>🔥</span><p class="text-sm text-txt-sub"><strong class="text-txt-main">수익성 높은 광고:</strong> 레티놀앰플 1+1 프로모션이 104일째 운영 중 — 핵심 매출원일 가능성 높음</p></div>
+        <div class="insight-item"><span>📱</span><p class="text-sm text-txt-sub"><strong class="text-txt-main">플랫폼 전략:</strong> 장기 광고는 FB+IG 동시 집행, 단기 테스트는 IG 단독</p></div>
+        <div class="insight-item"><span>🎨</span><p class="text-sm text-txt-sub"><strong class="text-txt-main">크리에이티브:</strong> 이모지 + 가격 혜택 강조 + 숫자(760만, 1+1) 중심 훅</p></div>
+        <div class="insight-item"><span>📅</span><p class="text-sm text-txt-sub"><strong class="text-txt-main">시즌 패턴:</strong> 봄(2~3월) 세일 집중, 겨울 캠페인은 1월 초 종료</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="category" content="plan">
+<meta name="issue" content="마케팅 프레임워크 — CPO 사고방식 (ChatPRD 역추출)">
+<title>마케팅 프레임워크 — 쉬운 버전</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif; background: #f8f9fc; color: #1a1a1a; line-height: 1.7; }
+  .container { max-width: 780px; margin: 0 auto; padding: 32px 24px; }
+  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 28px; margin-bottom: 24px; }
+  .section-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  .section-sub { font-size: 14px; color: #64748b; margin-bottom: 20px; }
+  .example { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 16px; margin: 12px 0; font-size: 14px; }
+  .example-label { font-size: 11px; font-weight: 700; color: #92400e; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .bad { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; margin: 8px 0; font-size: 14px; }
+  .good { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 8px 0; font-size: 14px; }
+  .step { display: flex; gap: 16px; margin: 16px 0; align-items: flex-start; }
+  .step-num { min-width: 36px; height: 36px; border-radius: 50%; background: #F75D5D; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex-shrink: 0; }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+  .step-desc { font-size: 14px; color: #475569; }
+  .quote { border-left: 3px solid #F75D5D; padding: 12px 16px; margin: 16px 0; background: #fff5f5; border-radius: 0 8px 8px 0; font-size: 14px; color: #64748b; }
+  .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+  h2 { font-size: 15px; font-weight: 700; color: #F75D5D; margin: 24px 0 8px; }
+  .divider { height: 1px; background: #e2e8f0; margin: 24px 0; }
+  .tldr { background: linear-gradient(135deg, #F75D5D 0%, #e54b4b 100%); color: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
+  .action-item { display: flex; gap: 8px; padding: 10px 14px; background: #f8f9fc; border: 1px solid #e2e8f0; border-radius: 8px; margin: 6px 0; font-size: 14px; }
+  .mock-label { position: fixed; top: 12px; right: 12px; background: #F75D5D; color: white; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; z-index: 100; }
+</style>
+</head>
+<body>
+<div class="mock-label">📋 FRAMEWORK v2</div>
+<div class="container">
+
+<!-- Header -->
+<div class="mb-6">
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:4px;">🧠 기획 & 마케팅 사고법</h1>
+  <p style="font-size:14px;color:#64748b;">ChatPRD (Claire Vo, 3회 CPO) 역추출 · 우리 서비스 예시로 풀어쓴 버전</p>
+</div>
+
+<!-- TL;DR -->
+<div class="tldr">
+  <div style="font-weight:700;font-size:16px;margin-bottom:8px;">한 줄 요약</div>
+  <div style="font-size:14px;opacity:0.95;">새 기능을 만들 때 "뭘 만들지" 먼저 생각하면 망한다. "누가 왜 아파하는지"부터 시작해야 한다. 이 문서는 그 순서를 정리한 것.</div>
+</div>
+
+<!-- ====================== -->
+<!-- PART 1: 기획 순서 -->
+<!-- ====================== -->
+<div class="card">
+  <div class="section-title">🎯 새 기능 기획할 때 — 이 순서대로 생각해</div>
+  <div class="section-sub">기능을 만들기 전에 6가지를 순서대로 답해야 한다. 순서를 바꾸면 엉뚱한 걸 만들게 됨.</div>
+
+  <!-- Step 1 -->
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <div class="step-title">누가 아파하고, 해결되면 어떤 모습이야?</div>
+      <div class="step-desc">기능이 아니라 <strong>문제</strong>부터 정의. "이걸 왜 만드는지" 한 문장으로 못 쓰면 시작하면 안 됨.</div>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-label">🏫 우리 서비스 예시 — 경쟁사 분석기</div>
+    <div class="bad" style="margin-top:8px;">
+      ❌ 잘못된 시작: "경쟁사 광고를 보여주는 기능을 만들자"<br>
+      <span style="font-size:12px;color:#991b1b;">→ 뭘 만들지부터 말함. 왜 필요한지 모름.</span>
+    </div>
+    <div class="good">
+      ✅ 올바른 시작: "수강생이 경쟁사가 뭘 하는지 몰라서 자기 광고 전략을 못 세운다. 경쟁사 광고를 한눈에 볼 수 있으면 '아 이래서 저기가 잘 되는구나' 하고 바로 적용할 수 있다."<br>
+      <span style="font-size:12px;color:#166534;">→ 누가 아픈지(수강생), 왜 아픈지(전략 못 세움), 해결 모습(바로 적용) 명확.</span>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <div class="step-title">뭘 하고, 뭘 안 할 건지 정해</div>
+      <div class="step-desc">"안 할 것"이 "할 것"만큼 중요하다. 이거 안 정하면 기능이 끝없이 불어남.</div>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-label">🏫 우리 서비스 예시</div>
+    <strong>할 것:</strong> Meta 광고만 검색, 30일+ 장기 광고 하이라이트, 브랜드 모니터링<br>
+    <strong style="color:#F75D5D;">안 할 것:</strong> Google 광고 ❌, 소재 자동 생성 ❌, 실시간 입찰가 분석 ❌<br>
+    <span style="font-size:12px;color:#64748b;">→ "이것도 넣으면 좋지 않아?" 할 때 "안 할 것 리스트"에 있으면 바로 거절 가능.</span>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <div class="step-title">실제로 어떻게 쓰는지 한 발씩 그려봐</div>
+      <div class="step-desc">실제 사람이 화면에서 뭘 누르고, 뭘 보고, 뭘 하는지. 말로 설명 못 하면 아직 기능이 아니라 그냥 아이디어.</div>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-label">🏫 우리 서비스 예시</div>
+    1️⃣ 수강생이 총가치각도기 → "경쟁사 분석" 탭 클릭<br>
+    2️⃣ 검색창에 "이니스프리" 입력 → 검색<br>
+    3️⃣ 86개 광고 중 30일+ 장기 광고 12개가 상단에 뜸<br>
+    4️⃣ 104일째 운영 중인 레티놀 광고 클릭 → 소재+문구+랜딩페이지 확인<br>
+    5️⃣ "🔔 모니터링 등록" 누르면 → 새 광고 올라오면 다음에 알려줌<br>
+    6️⃣ 하단에 AI 인사이트: "이 브랜드는 할인형 훅이 70%, 영상 비율 67%"
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <div class="step-title">성공을 어떻게 측정할지 미리 정해</div>
+      <div class="step-desc">만들고 나서 "잘 됐나?" 판단하려면, 만들기 전에 기준을 정해야 함. 안 그러면 나한테 유리한 숫자만 골라 봄.</div>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-label">🏫 우리 서비스 예시</div>
+    <strong>사용자:</strong> 주 2회 이상 경쟁사 검색하는 수강생 비율 > 40%<br>
+    <strong>비즈니스:</strong> 모니터링 등록 브랜드 수 / 수강생 평균 > 3개<br>
+    <strong>기술:</strong> API 응답 시간 < 3초, 에러율 < 1%
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <div class="step-title">기술적으로 뭐가 걸리는지 체크</div>
+      <div class="step-desc">외부 API 제한, 데이터 저장, 비용 같은 현실적 제약.</div>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-label">🏫 우리 서비스 예시</div>
+    • Meta Ad Library API = 시간당 200회 호출 제한<br>
+    • engagement(좋아요/댓글) 데이터 없음 → 운영기간이 유일한 수익성 시그널<br>
+    • AI 인사이트 생성 시 Anthropic API 비용 발생 (건당 ~₩100)
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-content">
+      <div class="step-title">뭐부터 만들지 순서 정해</div>
+      <div class="step-desc">한 번에 다 못 만듦. "이것만 있으면 핵심 가치는 전달된다"는 최소 버전(MVP) 정하기.</div>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-label">🏫 우리 서비스 예시</div>
+    <strong>1주차:</strong> 검색 + 결과 카드 (MVP — 이것만 있어도 쓸 수 있음)<br>
+    <strong>2주차:</strong> 모니터링 등록 + 알림<br>
+    <strong>3주차:</strong> AI 인사이트 자동 생성
+  </div>
+
+  <div class="quote">
+    💡 <strong>자가 체크:</strong> "이대로 배포하고 다른 건 아무것도 안 한다면, 수강생의 문제가 해결되나?"<br>
+    → 망설이면 아직 기획이 안 끝난 거.
+  </div>
+</div>
+
+<!-- ====================== -->
+<!-- PART 2: 결정할 때 -->
+<!-- ====================== -->
+<div class="card">
+  <div class="section-title">⚖️ 어려운 결정을 내려야 할 때</div>
+  <div class="section-sub">기획하다 보면 "이거 어떻게 해?" 싶은 순간이 온다. 3가지 도구.</div>
+
+  <h2>① 의견이 갈릴 때 — 디폴트 vs 접근권 구분</h2>
+  <p style="font-size:14px;color:#475569;">갈등이 생기면 먼저 "이건 뭘 기본값으로 할지 싸움인가, 아니면 누군가는 접근 못 하게 해야 하는 싸움인가?" 구분해.</p>
+  
+  <div class="example">
+    <div class="example-label">🏫 우리 서비스 예시</div>
+    <strong>상황:</strong> 강사는 "30일+ 광고만 보여줘" / 수강생은 "전부 보여줘"<br><br>
+    이건 <strong>디폴트 싸움</strong>이야 (둘 다 볼 수 있는데, 기본 화면이 뭐냐의 문제).<br>
+    → <strong>해결:</strong> 기본은 30일+ 필터 ON. 수강생이 원하면 "전체 보기" 토글 한 번이면 끝.<br><br>
+    <div class="bad">
+      ❌ 절대 하면 안 되는 것: 둘 다 불만족하는 타협 ("15일로 하자")<br>
+      <span style="font-size:12px;color:#991b1b;">→ 강사한테도 애매하고, 수강생한테도 애매한 결과.</span>
+    </div>
+  </div>
+
+  <h2>② 이거 지금 꼼꼼하게 해야 해? — 비가역성 테스트</h2>
+  <p style="font-size:14px;color:#475569;">"나중에 고칠 수 있는 건 대충 해도 되고, 나중에 고치기 힘든 건 처음부터 제대로 해."</p>
+  
+  <div class="vs-grid">
+    <div class="good">
+      <strong>😎 대충 해도 되는 것</strong><br>
+      서버 구조, 크론 주기, UI 배치<br>
+      <span style="font-size:12px;color:#166534;">→ 나중에 리팩터하면 됨</span>
+    </div>
+    <div class="bad">
+      <strong>🔒 처음부터 제대로 할 것</strong><br>
+      DB 테이블 구조, AI 프롬프트 포맷<br>
+      <span style="font-size:12px;color:#991b1b;">→ 데이터 쌓인 후 바꾸면 지옥</span>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-label">🏫 예시</div>
+    경쟁사 분석기에서 크론 배칭(서버 최적화)? → 수강생 30명이면 루프 하나면 됨. 나중에 최적화.<br>
+    DB에 competitor_monitors 테이블 구조? → <strong>처음부터 user_id, page_id, last_ad_count 제대로 설계.</strong> 500명 데이터 쌓인 후 바꾸려면 마이그레이션 지옥.
+  </div>
+
+  <h2>③ 새 기능이 기존 기능을 죽이나? — 카니발리제이션 체크</h2>
+  <p style="font-size:14px;color:#475569;">새 기능이 기존 기능의 사용을 줄이는 건지, 아니면 기존 기능으로 가는 새 입구인지 구분.</p>
+  
+  <div class="example">
+    <div class="example-label">🏫 예시 — "인사이트 피드가 대시보드를 죽이나?"</div>
+    주간 AI 인사이트를 보내면 수강생이 대시보드에 안 들어올까?<br><br>
+    → <strong>아니야.</strong> 인사이트에서 "네 CTR 18% 빠졌어" → 클릭하면 대시보드로 감.<br>
+    → 인사이트 = 대시보드로 가는 <strong>새 입구</strong>이지, 대시보드를 대체하는 게 아님.<br><br>
+    <strong style="color:#F75D5D;">⚠️ 진짜 위험 신호:</strong> 인사이트를 읽기만 하고 아무 행동을 안 할 때. 그러면 뉴스레터가 된 거.
+  </div>
+</div>
+
+<!-- ====================== -->
+<!-- PART 3: 마케팅 -->
+<!-- ====================== -->
+<div class="card">
+  <div class="section-title">🚀 마케팅 — 우리를 어떻게 팔아야 하나</div>
+  <div class="section-sub">우리 고객은 마케터야. 마케팅 기법을 다 아는 사람들한테 팔아야 해.</div>
+
+  <h2>① 포지셔닝 — "왜 우리가 유일한가"</h2>
+  <div style="font-size:14px;margin-bottom:12px;">다른 데서 배우면 뭐가 부족한지 딱 짚어줘야 해:</div>
+  
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+    <div style="background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#64748b;margin-bottom:4px;">Udemy / Class101</div>
+      <div style="font-size:14px;">"남의 예제"로 배움 → <strong>내 상황에 안 맞음</strong></div>
+    </div>
+    <div style="background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#64748b;margin-bottom:4px;">BigSpy / AdSpy</div>
+      <div style="font-size:14px;">데이터만 있음 → <strong>뭘 해야 하는지 모름</strong></div>
+    </div>
+    <div style="background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#64748b;margin-bottom:4px;">에이전시 (월 300만+)</div>
+      <div style="font-size:14px;">대신해줌 → <strong>내 실력이 안 늘음</strong></div>
+    </div>
+    <div style="background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#64748b;margin-bottom:4px;">유튜브 무료 강의</div>
+      <div style="font-size:14px;">일반론만 → <strong>내 숫자를 안 다룸</strong></div>
+    </div>
+  </div>
+  
+  <div class="good">
+    <strong style="font-size:16px;">우리의 답:</strong><br>
+    "네 <strong>실제 광고 데이터</strong>로 배우는 유일한 곳."<br><br>
+    교육 플랫폼이 아니야. <strong>"커리큘럼이 붙은 퍼포먼스 운영 시스템"</strong>이야.<br>
+    수업료가 ROAS로 돌아오는 학교.
+  </div>
+
+  <h2>② 첫 경험 — "이 순간에 빠져들게 해"</h2>
+  <div class="vs-grid">
+    <div class="bad">
+      <strong>❌ 지금</strong><br>
+      가입 → 대시보드 보여줌 → "음... 그래서?"<br>
+      <span style="font-size:12px;color:#991b1b;">수동적. 감동이 없음.</span>
+    </div>
+    <div class="good">
+      <strong>✅ 바꿔야 할 것</strong><br>
+      가입 → <strong>Meta 계정 연동 강제</strong> → 즉시 벤치마크 비교<br>
+      <span style="font-size:12px;color:#166534;">"네 CTR 1.4% vs 평균 2.1%" → 아프지만 빠져드는 순간</span>
+    </div>
+  </div>
+  <div class="quote">
+    💡 이 "아픈 숫자"를 보는 순간 = 제품이 "내 것"이 되는 순간.<br>
+    Meta 계정 연동한 사람 = 안 한 사람보다 훨씬 오래 남음.
+  </div>
+
+  <h2>③ 입소문 — "자랑하고 싶게 만들어"</h2>
+  <div class="bad">
+    ❌ 할인코드 추천: "친구 데려오면 10% 할인"<br>
+    <span style="font-size:12px;color:#991b1b;">우리 고객이 마케터야. 이런 리퍼럴 뻔히 보임. 안 먹힘.</span>
+  </div>
+  <div class="good">
+    ✅ <strong>졸업 카드</strong>: 기수 끝나면 before/after 성장률 카드 자동 생성<br>
+    "6주 전 ROAS 1.8 → 지금 3.2 (+78%)" 시각 카드<br>
+    → 링크드인이나 커뮤니티에 <strong>자발적으로 올림</strong> (자랑하고 싶으니까)<br>
+    → "어디서 배웠어?" → 자연 입소문<br>
+    <span style="font-size:12px;color:#166534;">인센티브가 아니라 <strong>정체성</strong>으로 퍼짐. "나 이만큼 성장했다"는 자부심.</span>
+  </div>
+
+  <h2>④ 가격 — "기수 끝나면 어떻게 할 건데?"</h2>
+  <div class="vs-grid">
+    <div class="bad">
+      <strong>❌ 프리미엄 (무료 도구)</strong><br>
+      기수 안에서만 의미 있는 도구를 무료로 풀면 → 누가 기수 등록하겠어?<br>
+      <span style="font-size:12px;color:#991b1b;">기수의 희소성이 사라짐.</span>
+    </div>
+    <div class="good">
+      <strong>✅ 동문 티어 (월 3~5만원)</strong><br>
+      기수 졸업 후 → 대시보드+경쟁사+인사이트 계속 접근<br>
+      <span style="font-size:12px;color:#166534;">기수 끝날 때가 가장 결제 의향 높은 순간. 이때 자연스럽게 제안.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== -->
+<!-- PART 4: 실패 방지 -->
+<!-- ====================== -->
+<div class="card">
+  <div class="section-title">🛡️ 실패하지 않으려면 — 미리 체크할 것</div>
+  <div class="section-sub">6개월 후 망했다고 가정하고, 가장 가능성 높은 원인 3개를 미리 막아.</div>
+
+  <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:20px;">
+    <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:18px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">📉 실패 1: "이거 내 얘기가 아닌데?"</div>
+      <div style="font-size:14px;color:#1a1a1a;margin-bottom:8px;">AI가 뱉는 인사이트가 너무 일반적이면, 수강생이 "이거 아무 데서나 볼 수 있는 거잖아" 하고 떠남.</div>
+      <div style="font-size:13px;color:#991b1b;"><strong>경보:</strong> 인사이트를 열어보기만 하고 아무 행동을 안 할 때 (클릭률 낮음)</div>
+      <div style="font-size:13px;color:#166534;margin-top:4px;"><strong>예방:</strong> 처음엔 AI 말고 직접 수동으로 개인화 인사이트 써봐. 수강생이 뭐에 반응하는지 확인 → 그 다음에 자동화.</div>
+    </div>
+    <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:18px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">📅 실패 2: "기수 끝나면 안 돌아와"</div>
+      <div style="font-size:14px;color:#1a1a1a;margin-bottom:8px;">6주 집중 코스 → 끝 → 사라짐. 졸업 후 돌아올 이유가 없으면 일회성 교육 사업.</div>
+      <div style="font-size:13px;color:#9a3412;"><strong>경보:</strong> 졸업 30일 후 재방문율 &lt; 20%</div>
+      <div style="font-size:13px;color:#166534;margin-top:4px;"><strong>예방:</strong> 졸업 경험 설계 + 동문 티어 (대시보드+경쟁사+인사이트 유지)</div>
+    </div>
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:18px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">🔌 실패 3: "Meta가 API 바꿨는데?"</div>
+      <div style="font-size:14px;color:#1a1a1a;margin-bottom:8px;">대시보드도, 경쟁사분석도, 인사이트도 전부 Meta 데이터. Meta가 정책 바꾸면 60% 기능 마비.</div>
+      <div style="font-size:13px;color:#1e40af;"><strong>경보:</strong> Meta 개발자 정책 업데이트 뉴스 (보통 60~90일 전 공지)</div>
+      <div style="font-size:13px;color:#166534;margin-top:4px;"><strong>예방:</strong> Meta 아닌 데이터 소스 최소 1개 확보 (Google Trends 등)</div>
+    </div>
+  </div>
+
+  <h2>속으면 안 되는 숫자 vs 진짜 봐야 할 숫자</h2>
+  <div class="vs-grid">
+    <div class="bad">
+      <strong>❌ 거짓 지표 (좋아 보이지만 의미 없음)</strong><br>
+      • 총 가입자 수 — 가입만 하고 안 들어온 사람 포함<br>
+      • 기수 등록 수 — 돈 더 써서 채운 거 아닌지?<br>
+      • Q&A 질문 수 — 많이 물으면 열심히 하는 건가, 헷갈려서인가?<br>
+      • 일일 접속자(DAU) — 들어와서 뭘 했는지가 중요
+    </div>
+    <div class="good">
+      <strong>✅ 진짜 지표 (아프지만 진실)</strong><br>
+      • <strong>Week 3 이탈율</strong> — 3주차에 빠지는 사람 = 끝까지 안 감<br>
+      • <strong>ROAS 개선율</strong> — 수강 전/후 실제로 나아졌나?<br>
+      • <strong>졸업 30/60/90일 재방문율</strong> — 끝나고도 오나?<br>
+      • <strong>기수별 NPS</strong> — "추천하겠냐"에 솔직한 답
+    </div>
+  </div>
+  <div class="quote">💡 테스트: "회의적인 투자자한테 이 숫자 보여줘도 괜찮아?" → 아니면 거짓 지표.</div>
+</div>
+
+<!-- ====================== -->
+<!-- PART 5: 빌드 순서 -->
+<!-- ====================== -->
+<div class="card">
+  <div class="section-title">🗺️ 뭐부터 만들지 — 로드맵 순서</div>
+  <div class="section-sub">원칙: "지금 기수에 가치 주는 것 먼저, 졸업 후 유지하는 것 나중에"</div>
+
+  <div style="display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;">
+      <span style="font-weight:800;color:#166534;font-size:18px;">1</span>
+      <div><strong>경쟁사 분석</strong><div style="font-size:12px;color:#64748b;">나머지 기능이 다 여기에 의존. 이게 있어야 인사이트도, 이메일도 됨.</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;">
+      <span style="font-weight:800;color:#166534;font-size:18px;">2</span>
+      <div><strong>수강생 랭킹</strong><div style="font-size:12px;color:#64748b;">라이브 세션에서 팀 경쟁 돌리는 데 필수. 지금 기수에 바로 필요.</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;">
+      <span style="font-weight:800;color:#1e40af;font-size:18px;">3</span>
+      <div><strong>이메일 다이제스트</strong><div style="font-size:12px;color:#64748b;">인사이트 피드의 "배달 수단". 이메일이 있어야 습관이 생김.</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;">
+      <span style="font-weight:800;color:#1e40af;font-size:18px;">4</span>
+      <div><strong>개인화 인사이트 피드</strong><div style="font-size:12px;color:#64748b;">내 광고 × 경쟁사 데이터 크로스. 킬러 리텐션 기능.</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;">
+      <span style="font-weight:800;color:#94a3b8;font-size:18px;">5</span>
+      <div><strong>모바일 반응형</strong><div style="font-size:12px;color:#64748b;">인사이트 이메일 → 폰에서 열면 깨짐 방지. 4번이랑 동시에.</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;">
+      <span style="font-weight:800;color:#94a3b8;font-size:18px;">6</span>
+      <div><strong>동문 접근 티어</strong><div style="font-size:12px;color:#64748b;">졸업생이 있고, 제품이 충분히 좋을 때. 너무 일찍 만들면 가격 기준이 잘못 잡힘.</div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <div class="bad">
+      <strong>🗑️ 지금 안 할 것 (커팅):</strong><br>
+      • Google Trends — 아직 핵심 기능 검증도 안 됐는데 리스크 분산은 이름<br>
+      • 네이버 쇼핑 연동 — 팀이 2배 됐을 때<br>
+      • 큐레이션 v2 — 이미 돌아가는 기능 개선은 나중에
+    </div>
+  </div>
+</div>
+
+<!-- ====================== -->
+<!-- PART 6: 리뷰 체크리스트 -->
+<!-- ====================== -->
+<div class="card">
+  <div class="section-title">📋 기획서 리뷰할 때 — 8가지 체크</div>
+  <div class="section-sub">누군가 기획서를 가져왔을 때, 이 8개만 체크하면 된다.</div>
+
+  <div style="display:grid;grid-template-columns:1fr;gap:6px;">
+    <div class="bad">1️⃣ "~하는 기능을 만든다"만 있고, <strong>왜 만드는지</strong> 없음</div>
+    <div class="bad">2️⃣ <strong>목표</strong>가 없음 — 이걸로 뭘 달성하려는 건지?</div>
+    <div class="bad">3️⃣ "오른쪽 상단에 표시"처럼 <strong>UI 위치만</strong> 적음 — 그건 디자인이지 기획 아님</div>
+    <div class="bad">4️⃣ <strong>누가 쓰는지</strong> 안 적음 — "사용자"가 아니라 구체적인 사람</div>
+    <div class="bad">5️⃣ <strong>사용 흐름</strong>이 없음 — 뭘 누르고 뭘 보는지 step by step</div>
+    <div class="bad">6️⃣ <strong>성공 기준</strong>이 없음 — 잘 됐는지 어떻게 알 건데?</div>
+    <div class="bad">7️⃣ "2주"만 적고 <strong>범위/인원/MVP</strong> 없음</div>
+    <div style="background:#fecaca;border:1px solid #f87171;border-radius:8px;padding:10px 14px;font-size:14px;">
+      8️⃣ <strong style="color:#991b1b;">제일 치명적:</strong> "뭘 만들지"를 먼저 쓰고 "왜"는 나중에 씀 → 순서가 뒤집힘
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="text-align:center;padding:24px;color:#94a3b8;font-size:12px;">
+  🍤 텐동 · ChatPRD 리버스프롬프팅 결과 · 2026-03-07 · 비공개 내부 문서
+</div>
+
+</div>
+</body>
+</html>

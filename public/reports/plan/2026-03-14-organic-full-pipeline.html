@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오가닉 마케팅 풀 파이프라인 — bscamp</title>
+<style>
+:root{--bg:#0a0d14;--bg2:#111827;--bg3:#1a2233;--bd:#2a3245;--t:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--acc:#3b82f6;--grn:#22c55e;--ylw:#eab308;--red:#ef4444;--pur:#a855f7;--org:#f97316;--cyn:#06b6d4;--pnk:#ec4899}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:var(--bg);color:var(--t);font-size:14px;line-height:1.7}
+.container{max-width:960px;margin:0 auto;padding:0 24px}
+
+/* Header */
+.hero{background:linear-gradient(135deg,#0a0d14 0%,#1a1f35 50%,#0a0d14 100%);border-bottom:1px solid var(--bd);padding:60px 24px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(59,130,246,.1),transparent 70%);pointer-events:none}
+.hero .badge{display:inline-block;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:#93c5fd;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:20px}
+.hero h1{font-size:clamp(22px,5vw,36px);font-weight:800;color:#f1f5f9;margin-bottom:10px;letter-spacing:-.03em}
+.hero p{color:var(--t2);font-size:15px;max-width:600px;margin:0 auto 24px}
+.hero .meta{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--t3)}
+
+/* Flow */
+.flow-section{padding:48px 0}
+.flow-title{font-size:20px;font-weight:700;margin-bottom:32px;text-align:center;color:#f1f5f9}
+.flow-steps{display:flex;flex-direction:column;gap:0;position:relative}
+.flow-step{display:flex;gap:20px;position:relative}
+.flow-line{width:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:center}
+.flow-dot{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;z-index:1}
+.flow-connector{flex:1;width:2px;margin:4px 0}
+.flow-content{flex:1;background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:24px;margin-bottom:16px}
+.flow-content h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.flow-content .subtitle{font-size:12px;color:var(--t2);margin-bottom:16px}
+.flow-content .detail{font-size:13px;color:var(--t2);line-height:1.8}
+.flow-content .detail strong{color:var(--t)}
+.flow-content .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:.02em}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin:24px 0}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:20px;transition:border-color .2s}
+.card:hover{border-color:rgba(59,130,246,.3)}
+.card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.card p{font-size:13px;color:var(--t2);line-height:1.6}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--bd);color:var(--t2);font-size:12px;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid rgba(42,50,69,.5)}
+tr:hover td{background:rgba(255,255,255,.02)}
+.kw-star{color:var(--ylw)}
+
+/* Sections */
+.section{padding:40px 0;border-top:1px solid var(--bd)}
+.section-title{font-size:18px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.section-sub{font-size:13px;color:var(--t2);margin-bottom:24px}
+.num-badge{width:28px;height:28px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+
+/* Checklist */
+.checklist{list-style:none}
+.checklist li{padding:8px 0;border-bottom:1px solid rgba(42,50,69,.3);font-size:13px;display:flex;align-items:flex-start;gap:8px}
+.checklist li:last-child{border-bottom:none}
+.check{width:18px;height:18px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-top:2px}
+.check.done{background:var(--grn);color:#fff}
+.check.todo{background:var(--bg3);border:1px solid var(--bd)}
+.check.build{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.3);color:var(--pur)}
+
+/* Footer */
+.footer{text-align:center;padding:40px 24px;color:var(--t3);font-size:12px;border-top:1px solid var(--bd)}
+.footer a{color:var(--acc);text-decoration:none}
+
+@media(max-width:640px){
+  .flow-step{flex-direction:column}
+  .flow-line{flex-direction:row;width:auto;height:48px}
+  .flow-connector{height:2px;width:auto;flex:0}
+  .card-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="badge">Full Pipeline v1</span>
+  <h1>오가닉 마케팅 풀 파이프라인</h1>
+  <p>고객 정의부터 확장프로그램까지 — bscamp 오가닉 채널의 전체 흐름</p>
+  <div class="meta">
+    <span>📅 2026-03-14</span>
+    <span>📊 5단계 파이프라인</span>
+    <span>🔑 34개 키워드</span>
+    <span>🎯 3개 페르소나</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== PIPELINE FLOW ===== -->
+<div class="flow-section">
+  <div class="flow-title">🔗 파이프라인 전체 흐름</div>
+  <div class="flow-steps">
+
+    <!-- Step 1 -->
+    <div class="flow-step">
+      <div class="flow-line">
+        <div class="flow-dot" style="background:rgba(34,197,94,.15);color:#22c55e">1</div>
+        <div class="flow-connector" style="background:linear-gradient(var(--grn),var(--acc))"></div>
+      </div>
+      <div class="flow-content">
+        <h3>🎯 고객 정의</h3>
+        <div class="subtitle">엠타트업 마케팅축: "어떤 욕구 × 어떤 대안 × 접근" = 돈</div>
+        <div class="detail">
+          <strong>페르소나 A — 초기 대표</strong> (매출 1억↓, 광고비 100만↓)<br>
+          욕구: 자사몰에서 매출 만들기 · 고통: 어디서 시작? · 접근: 체험단, SNS<br><br>
+          <strong>페르소나 B — 성장기 대표</strong> (매출 1~10억, 광고비 100~500만) ← <span style="color:#22c55e;font-weight:700">핵심 타겟</span><br>
+          욕구: 광고비 대비 ROAS 올리기 · 고통: 전환 안 됨, 데이터 못 읽음 · 접근: 메타 최적화, 상세페이지<br><br>
+          <strong>페르소나 C — 확장기 대표</strong> (매출 10억+, 광고비 500만+)<br>
+          욕구: 시스템화 + 스케일업 · 고통: 광고 의존도 · 접근: 자동화, ASC+
+        </div>
+        <div class="tag-row">
+          <span class="tag" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#86efac">내부 데이터 29명</span>
+          <span class="tag" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#86efac">QA 6건+</span>
+          <span class="tag" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#86efac">업종 뷰티 34%</span>
+          <span class="tag" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#86efac">매출 10~50억 38%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="flow-step">
+      <div class="flow-line">
+        <div class="flow-dot" style="background:rgba(59,130,246,.15);color:#3b82f6">2</div>
+        <div class="flow-connector" style="background:linear-gradient(var(--acc),var(--pur))"></div>
+      </div>
+      <div class="flow-content">
+        <h3>🔍 키워드 선정</h3>
+        <div class="subtitle">엠타트업 5단계 스펙트럼 × 페르소나 매핑 × 네이버 검색량</div>
+        <div class="detail">
+          <strong>Level 1</strong> 순수정보 → <strong>Level 2</strong> 관심탐색 → <strong style="color:#eab308">Level 3 비교검토</strong> → <strong style="color:#ef4444">Level 4 구매직전</strong> → <strong>Level 5</strong> 행동/전환<br><br>
+          핵심: <strong style="color:#ef4444">L3~L4 구간이 전환을 만든다</strong> (엠타트업 "물길" 구간)<br><br>
+          <strong>우선 공략 Top 5:</strong><br>
+          1. 상세페이지제작 (6,120/월, L4) — 전환글<br>
+          2. 메타광고 (5,960/월, L3~4) — 전환글<br>
+          3. 상세페이지 (4,640/월, L2~3) — 복합글<br>
+          4. 광고대행사 (3,500/월, L3) — 비교글<br>
+          5. ROAS (3,040/월, L1~2) — 정보+가이드
+        </div>
+        <div class="tag-row">
+          <span class="tag" style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:#93c5fd">네이버 검색광고 API</span>
+          <span class="tag" style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:#93c5fd">7일 자동 갱신</span>
+          <span class="tag" style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:#93c5fd">34개 키워드</span>
+          <span class="tag" style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:#93c5fd">4 Tier</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="flow-step">
+      <div class="flow-line">
+        <div class="flow-dot" style="background:rgba(168,85,247,.15);color:#a855f7">3</div>
+        <div class="flow-connector" style="background:linear-gradient(var(--pur),var(--org))"></div>
+      </div>
+      <div class="flow-content">
+        <h3>📈 네이버 상위노출 로직</h3>
+        <div class="subtitle">C-Rank + DIA + 키워드 배치 + 서식 최적화</div>
+        <div class="detail">
+          <strong>C-Rank (신뢰도)</strong><br>
+          • 한 분야 전문성 유지 (자사몰/마케팅/광고)<br>
+          • 총 포스팅 수, 이웃 수, 방문자 수 = 블로그 지수<br>
+          • AI 글 감지 우회: 개인 경험 + 구어체 + 불규칙 문장<br><br>
+          <strong>DIA (문서품질)</strong><br>
+          • 제목 30자 이내, 키워드 앞쪽 배치<br>
+          • 본문 키워드 5~6회 자연 반복<br>
+          • 이미지 직접 제작/촬영, alt 태그에 키워드<br>
+          • 사진↔글 교차, 인용구 1~2, 구분선 2~3<br><br>
+          <strong>티어별 글 구조</strong><br>
+          • Tier A 전환글: 1,800~2,500자 / 이미지 8~12장 / 비포↔애프터 + CTA<br>
+          • Tier B 비교글: 1,500~2,000자 / 이미지 7~10장 / A vs B 표 + 추천<br>
+          • Tier C 탐색글: 1,200~1,800자 / 이미지 5~8장 / 팁 3가지 + 시리즈 연결<br>
+          • Tier D 정보글: 800~1,200자 / 이미지 3~5장 / 정의 + 예시 + 관련 링크<br><br>
+          <strong>주간 발행 (주 3회)</strong><br>
+          월: Tier C/D 정보글 (블로그 지수) · 수: Tier B 비교글 (설득) · 금: Tier A 전환글 (CTA)
+        </div>
+        <div class="tag-row">
+          <span class="tag" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);color:#c4b5fd">C-Rank</span>
+          <span class="tag" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);color:#c4b5fd">DIA</span>
+          <span class="tag" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);color:#c4b5fd">4 Tier 글구조</span>
+          <span class="tag" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);color:#c4b5fd">주 3회 발행</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="flow-step">
+      <div class="flow-line">
+        <div class="flow-dot" style="background:rgba(249,115,22,.15);color:#f97316">4</div>
+        <div class="flow-connector" style="background:linear-gradient(var(--org),var(--cyn))"></div>
+      </div>
+      <div class="flow-content">
+        <h3>🔬 콘텐츠 분석 엔진 (blai 벤치마크)</h3>
+        <div class="subtitle">blai.co.kr 역분석 기반 — 자체 구현 (Python 없이 TypeScript)</div>
+        <div class="detail">
+          <strong>① 금칙어 실시간 체크</strong><br>
+          section.blog.naver.com 검색 → displayType null = 금칙어<br><br>
+          <strong>② 키워드 분석</strong><br>
+          네이버 검색광고 API → 검색량/CTR/경쟁도 + 포화도(발행량÷검색량)<br><br>
+          <strong>③ 비속어/금칙어 DB</strong><br>
+          오픈소스 300+ 단어, 6카테고리 (욕설/성인/차별/범죄/상업성/도박)<br><br>
+          <strong>④ 포스팅 진단 (6항목)</strong><br>
+          글자수 · 비속어 · 19금 · 외부링크 · 이미지수 · 키워드반복<br><br>
+          <strong>⑤ TOP 3 블로그 벤치마킹</strong><br>
+          상위 3개 블로그 크롤링 → 글자수/이미지/인용구/구분선 평균값<br>
+          우리 글 목표: 평균 × 1.2 (글자수), 평균 + 2장 (이미지)<br><br>
+          <strong>⑥ 7일 주기 자동화</strong><br>
+          매주 월요일: 검색량 갱신 → TOP 3 분석 → 글 구조 업데이트 → 초안 3개 생성
+        </div>
+        <div class="tag-row">
+          <span class="tag" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25);color:#fdba74">금칙어 API</span>
+          <span class="tag" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25);color:#fdba74">키워드 분석</span>
+          <span class="tag" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25);color:#fdba74">비속어 DB</span>
+          <span class="tag" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25);color:#fdba74">포스팅 진단</span>
+          <span class="tag" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25);color:#fdba74">TOP3 벤치마킹</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="flow-step">
+      <div class="flow-line">
+        <div class="flow-dot" style="background:rgba(6,182,212,.15);color:#06b6d4">5</div>
+        <div class="flow-connector" style="background:transparent"></div>
+      </div>
+      <div class="flow-content">
+        <h3>🧩 크롬 확장프로그램 (bscamp Extension)</h3>
+        <div class="subtitle">늑대플 역분석 기반 — 네이버 블로그 발행 + SERP 분석</div>
+        <div class="detail">
+          <strong>블로그 에디터 연동</strong><br>
+          • SmartEditor DOM 접근 (chrome.debugger API / CDP)<br>
+          • 글 작성 중 실시간: 글자수, 이미지수, 금칙어 경고<br>
+          • bscamp에서 작성한 초안 → 에디터에 자동 삽입<br><br>
+          <strong>SERP 분석 오버레이</strong><br>
+          • 네이버 검색결과 페이지에 분석 레이어 표시<br>
+          • 순위별 블로그 등급(WEB/최적블/인플루언서), 키워드 반복수<br>
+          • 30+ 섹션 감지 (blg/kin/img/vdo/web/news/인플루언서 등)<br><br>
+          <strong>발행 워크플로</strong><br>
+          bscamp 초안 작성 → AI 진단 → Smith님 첨삭 → 확장프로그램으로 에디터 삽입 → 발행
+        </div>
+        <div class="tag-row">
+          <span class="tag" style="background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);color:#67e8f9">Manifest V3</span>
+          <span class="tag" style="background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);color:#67e8f9">chrome.debugger</span>
+          <span class="tag" style="background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);color:#67e8f9">React 18</span>
+          <span class="tag" style="background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);color:#67e8f9">SmartEditor</span>
+          <span class="tag" style="background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);color:#67e8f9">SERP 30+ 섹션</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== KEYWORD MAP ===== -->
+<div class="section">
+  <div class="section-title"><span class="num-badge" style="background:rgba(59,130,246,.15);color:#3b82f6">2</span> 키워드 전체 맵</div>
+  <div class="section-sub">페르소나별 × Level별 매핑. 굵은 글씨 = 우선 공략 키워드</div>
+
+  <h4 style="margin:20px 0 8px;font-size:14px;color:#22c55e">🎯 페르소나 B (핵심 타겟) — 성장기 대표</h4>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Level</th><th>키워드</th><th>월 검색량</th><th>경쟁도</th><th>공략 가치</th></tr>
+      <tr><td style="color:#ef4444;font-weight:700">L4</td><td><strong>상세페이지제작</strong></td><td>6,120</td><td>높</td><td><span class="kw-star">★★★</span></td></tr>
+      <tr><td style="color:#ef4444;font-weight:700">L3~4</td><td><strong>메타광고</strong></td><td>5,960</td><td>높</td><td><span class="kw-star">★★★</span></td></tr>
+      <tr><td style="color:#eab308;font-weight:700">L3</td><td><strong>광고대행사</strong></td><td>3,500</td><td>높</td><td><span class="kw-star">★★★</span></td></tr>
+      <tr><td style="color:#eab308;font-weight:700">L2~3</td><td>상세페이지</td><td>4,640</td><td>높</td><td><span class="kw-star">★★★</span></td></tr>
+      <tr><td>L1~2</td><td>ROAS</td><td>3,040</td><td>높</td><td><span class="kw-star">★★</span></td></tr>
+      <tr><td>L2</td><td>메타광고관리자</td><td>3,750</td><td>높</td><td><span class="kw-star">★★</span></td></tr>
+      <tr><td>L1</td><td>CPM</td><td>4,020</td><td>높</td><td><span class="kw-star">★</span></td></tr>
+    </table>
+  </div>
+
+  <h4 style="margin:20px 0 8px;font-size:14px;color:#3b82f6">👤 페르소나 A — 초기 대표</h4>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Level</th><th>키워드</th><th>월 검색량</th><th>경쟁도</th><th>공략 가치</th></tr>
+      <tr><td style="color:#ef4444;font-weight:700">L4</td><td><strong>체험단모집</strong></td><td>2,840</td><td>높</td><td><span class="kw-star">★★★</span></td></tr>
+      <tr><td style="color:#ef4444;font-weight:700">L4</td><td><strong>온라인쇼핑몰창업</strong></td><td>1,410</td><td>높</td><td><span class="kw-star">★★★</span></td></tr>
+      <tr><td style="color:#eab308;font-weight:700">L3</td><td>네이버스토어창업</td><td>2,330</td><td>높</td><td><span class="kw-star">★★</span></td></tr>
+      <tr><td>L2</td><td>인스타마케팅</td><td>1,440</td><td>높</td><td><span class="kw-star">★★</span></td></tr>
+    </table>
+  </div>
+
+  <h4 style="margin:20px 0 8px;font-size:14px;color:#a855f7">🚀 페르소나 C — 확장기 대표</h4>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Level</th><th>키워드</th><th>월 검색량</th><th>경쟁도</th><th>공략 가치</th></tr>
+      <tr><td>L2</td><td>숏폼</td><td>6,580</td><td>높</td><td><span class="kw-star">★★</span></td></tr>
+      <tr><td>L2</td><td>AI영상제작</td><td>3,610</td><td>높</td><td><span class="kw-star">★★</span></td></tr>
+      <tr><td style="color:#eab308;font-weight:700">L3</td><td>숏폼마케팅</td><td>210</td><td>높</td><td><span class="kw-star">★★★ 틈새</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== WATER FLOW ===== -->
+<div class="section">
+  <div class="section-title"><span class="num-badge" style="background:rgba(168,85,247,.15);color:#a855f7">3</span> 물길 설계 (전환 경로)</div>
+  <div class="section-sub">엠타트업: 고객이 검색 → 블로그 유입 → 신뢰 형성 → 전환</div>
+  <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:24px;text-align:center">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;font-size:14px">
+      <div style="background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:12px 16px">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:4px">월요일</div>
+        <div style="font-weight:700">Tier C/D 정보글</div>
+        <div style="font-size:12px;color:var(--t2)">블로그 지수 ↑</div>
+      </div>
+      <div style="font-size:20px;color:var(--t3)">→</div>
+      <div style="background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:12px 16px">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:4px">수요일</div>
+        <div style="font-weight:700">Tier B 비교글</div>
+        <div style="font-size:12px;color:var(--t2)">설득 + 내부링크</div>
+      </div>
+      <div style="font-size:20px;color:var(--t3)">→</div>
+      <div style="background:var(--bg3);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:12px 16px">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:4px">금요일</div>
+        <div style="font-weight:700;color:#ef4444">Tier A 전환글</div>
+        <div style="font-size:12px;color:var(--t2)">CTA → 수강 신청</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bd);font-size:13px;color:var(--t2)">
+      L1/L2 정보글 → <span style="color:var(--t)">내부링크</span> → L3 비교글 → <span style="color:var(--t)">내부링크</span> → L4 전환글 → <span style="color:#ef4444;font-weight:700">CTA</span> → 자사몰사관학교 랜딩
+    </div>
+  </div>
+</div>
+
+<!-- ===== BLAI BENCHMARK ===== -->
+<div class="section">
+  <div class="section-title"><span class="num-badge" style="background:rgba(249,115,22,.15);color:#f97316">4</span> blai 벤치마크 — 구현 체크리스트</div>
+  <div class="section-sub">blai.co.kr 역분석 기반. 형태소 분석(kiwi) 제외, TypeScript만으로 구현</div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>🚫 금칙어 체크 API</h4>
+      <p>section.blog.naver.com 검색 → displayType null 판별. 배치 처리 + 200ms 딜레이. 자살어 별도 감지.</p>
+    </div>
+    <div class="card">
+      <h4>🔍 키워드 분석 API</h4>
+      <p>네이버 검색광고 API (HMAC-SHA256). 연관 키워드, PC/모바일 검색량, CTR, 경쟁도, 입찰가. 포화도 = 발행량÷검색량.</p>
+    </div>
+    <div class="card">
+      <h4>🤬 비속어 DB</h4>
+      <p>오픈소스 300+ 단어, 6카테고리. 정규식 매칭, 띄어쓰기 무시 옵션. severity 3단계.</p>
+    </div>
+    <div class="card">
+      <h4>📋 포스팅 진단 (6항목)</h4>
+      <p>글자수(≥1500) · 비속어(0) · 19금(0) · 외부링크(≤2) · 이미지(≥5) · 키워드반복(5~15회). blai 8항목 중 형태소 의존 2개 제외.</p>
+    </div>
+    <div class="card">
+      <h4>📊 TOP 3 벤치마킹</h4>
+      <p>키워드 검색 → 상위 3개 블로그 크롤링 → 글자수/이미지/인용구/구분선/해시태그 평균. 우리 목표: 평균 ×1.2.</p>
+    </div>
+    <div class="card">
+      <h4>⏰ 7일 주기 자동화</h4>
+      <p>매주 월요일 크론: 검색량 갱신 → 키워드 재선정 → TOP 3 분석 → 글 구조 업데이트 → 초안 3개 생성.</p>
+    </div>
+  </div>
+
+  <h4 style="margin:24px 0 12px;font-size:14px">blai 진단 항목 매핑</h4>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>#</th><th>blai 항목</th><th>우리 구현</th><th>상태</th></tr>
+      <tr><td>1</td><td>제목 형태소 수</td><td>형태소 분석 필요 → Phase 3 (kiwi Python)</td><td style="color:var(--ylw)">보류</td></tr>
+      <tr><td>2</td><td>제목-본문 연관성</td><td>형태소 분석 필요 → Phase 3</td><td style="color:var(--ylw)">보류</td></tr>
+      <tr><td>3</td><td>본문 글자수</td><td>✅ 단순 카운트</td><td style="color:var(--grn)">P2</td></tr>
+      <tr><td>4</td><td>형태소 반복수</td><td>키워드 단순 매칭으로 대체</td><td style="color:var(--grn)">P2</td></tr>
+      <tr><td>5</td><td>비속어/부적절 단어</td><td>✅ 자체 DB + 정규식</td><td style="color:var(--grn)">P2</td></tr>
+      <tr><td>6</td><td>19금 성인 단어</td><td>✅ 자체 DB (성인 카테고리)</td><td style="color:var(--grn)">P2</td></tr>
+      <tr><td>7</td><td>이미지 안정성</td><td>이미지 수만 체크 (안정성은 네이버 내부 로직)</td><td style="color:var(--ylw)">제한적</td></tr>
+      <tr><td>8</td><td>외부 링크</td><td>✅ URL 파싱</td><td style="color:var(--grn)">P2</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== EXTENSION ===== -->
+<div class="section">
+  <div class="section-title"><span class="num-badge" style="background:rgba(6,182,212,.15);color:#06b6d4">5</span> 크롬 확장프로그램 상세</div>
+  <div class="section-sub">늑대플(ecpmbecccckiedjidgmdiophmnegmhbj) 역분석 기반 bscamp Extension</div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>📝 블로그 에디터 연동</h4>
+      <p><strong>URL 패턴 감지:</strong> postwrite, Redirect=Write/Update, PostWriteForm/UpdateForm<br>
+      <strong>DOM 접근:</strong> chrome.debugger API로 SmartEditor iframe 내부 접근<br>
+      <strong>실시간 분석:</strong> MutationObserver로 글자수/이미지수 카운트</p>
+    </div>
+    <div class="card">
+      <h4>🔎 SERP 분석 오버레이</h4>
+      <p><strong>30+ 섹션 감지:</strong> blg, kin, img, vdo, web, news, 인플루언서 등<br>
+      <strong>순위별 정보:</strong> 블로그 등급, 키워드 반복수, 발행일<br>
+      <strong>오버레이 UI:</strong> React 18 컴포넌트 인젝션</p>
+    </div>
+    <div class="card">
+      <h4>🚀 발행 워크플로</h4>
+      <p><strong>콘텐츠 삽입:</strong> bscamp API → 초안 가져오기 → SmartEditor에 HTML 삽입<br>
+      <strong>금칙어 경고:</strong> 작성 중 실시간 체크, 빨간 하이라이트<br>
+      <strong>로그인:</strong> 이미 네이버 로그인 상태 → API 키로 bscamp 인증</p>
+    </div>
+  </div>
+
+  <h4 style="margin:24px 0 12px;font-size:14px">늑대플 핵심 파일 → bscamp 매핑</h4>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>늑대플 파일</th><th>기능</th><th>bscamp 대응</th></tr>
+      <tr><td>content/blog.js (924줄)</td><td>SmartEditor 감지 + 분석 UI 인젝션</td><td>content/blog-analyzer.tsx</td></tr>
+      <tr><td>content/search.js (138줄)</td><td>SERP 30+ 섹션 파싱</td><td>content/serp-analyzer.tsx</td></tr>
+      <tr><td>content/forbiddenCheck.js</td><td>금칙어 실시간 체크</td><td>content/forbidden-check.ts</td></tr>
+      <tr><td>service-worker.js</td><td>blai API 클라이언트</td><td>service-worker.ts (bscamp API)</td></tr>
+      <tr><td>assets/popup-*.js</td><td>팝업 UI (React)</td><td>popup/App.tsx</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TREND UPDATE ===== -->
+<div class="section">
+  <div class="section-title"><span class="num-badge" style="background:rgba(236,72,153,.15);color:#ec4899">⚡</span> 트렌드 자동 업데이트</div>
+  <div class="section-sub">키워드/트렌드 변화를 자동 감지 — 7일 주기 프로세스</div>
+
+  <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:24px">
+    <div style="font-size:13px;line-height:2">
+      <strong style="color:#ec4899">매주 월요일 09:00 크론:</strong><br>
+      ① 네이버 검색광고 API → 34개 키워드 검색량 갱신<br>
+      ② 검색량 변화 감지 (±20% 이상 → 알림)<br>
+      ③ 신규 연관 키워드 발견 → Level 자동 배정 (L1~L5)<br>
+      ④ 포화도 재계산 (발행량÷검색량)<br>
+      ⑤ 키워드별 TOP 3 블로그 크롤링 → 벤치마크 갱신<br>
+      ⑥ 우선 공략 순위 재계산: <strong>검색량 × Level 가중치(L4=5, L3=4, L2=2, L1=1) × (1÷포화도)</strong><br>
+      ⑦ 다음 주 발행 키워드 3개 자동 선정<br>
+      ⑧ 초안 3개 생성 → Smith님 확인 후 발행
+    </div>
+  </div>
+</div>
+
+<!-- ===== IMPLEMENTATION STATUS ===== -->
+<div class="section">
+  <div class="section-title"><span class="num-badge" style="background:rgba(34,197,94,.15);color:#22c55e">✓</span> 구현 현황</div>
+
+  <ul class="checklist">
+    <li><div class="check done">✓</div><strong>고객 정의</strong> — 3 페르소나, 내부 데이터 29명, QA 기반</li>
+    <li><div class="check done">✓</div><strong>키워드 5단계 매핑</strong> — 34개 키워드, 4 Tier, 검색량 조회 완료</li>
+    <li><div class="check done">✓</div><strong>키워드 검색량 스크립트</strong> — keyword-search-volume.mjs</li>
+    <li><div class="check done">✓</div><strong>글 구조 템플릿</strong> — Tier A~D별 구조 정의</li>
+    <li><div class="check done">✓</div><strong>DB 테이블 6개</strong> — Supabase 마이그레이션 완료</li>
+    <li><div class="check done">✓</div><strong>오가닉 관리 UI</strong> — Phase 1 MVP (사이드바+페이지+3탭)</li>
+    <li><div class="check done">✓</div><strong>SEO 기초 인프라</strong> — sitemap, robots, OG, JSON-LD, GSC, 서치어드바이저</li>
+    <li><div class="check done">✓</div><strong>blai 역분석</strong> — 전체 로직 문서화</li>
+    <li><div class="check done">✓</div><strong>늑대플 역분석</strong> — 소스 추출 + 파일별 분석 완료</li>
+    <li><div class="check build">→</div><strong style="color:var(--pur)">P2 콘텐츠 분석 엔진</strong> — TASK 작성 완료, 에이전트팀 대기</li>
+    <li><div class="check todo"></div>P3 크롬 확장프로그램</li>
+    <li><div class="check todo"></div>P4 AI 콘텐츠 생성</li>
+    <li><div class="check todo"></div>P5 이미지 파이프라인</li>
+    <li><div class="check todo"></div>P6 발행 자동화</li>
+    <li><div class="check todo"></div>P7 성과 추적</li>
+  </ul>
+</div>
+
+</div>
+
+<div class="footer">
+  Generated by 모찌 🍡 · <a href="https://mozzi-reports.vercel.app">mozzi-reports.vercel.app</a> · 2026-03-14
+</div>
+
+</body>
+</html>

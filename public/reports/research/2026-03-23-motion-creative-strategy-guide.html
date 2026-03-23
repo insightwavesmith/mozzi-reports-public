@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="date" content="2026-03-23">
+<meta name="project" content="Motion Creative Strategy">
+<title>Motion Creative Strategy 완전 정복 — 마케팅 이론집 (탭 UI)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fc;color:#1a1a1a;line-height:1.8}
+.container{max-width:980px;margin:0 auto;padding:40px 24px 80px}
+.back{display:inline-block;margin-bottom:24px;color:#64748b;text-decoration:none;font-size:14px}
+.back:hover{color:#1a1a1a}
+h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.3}
+.subtitle{font-size:16px;color:#64748b;margin-bottom:8px}
+.date{font-size:13px;color:#94a3b8;margin-bottom:32px}
+
+/* ── TAB NAV ── */
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0;border-bottom:2px solid #e2e8f0;padding-bottom:0}
+.tab-btn{background:none;border:none;cursor:pointer;padding:10px 16px;font-size:13px;font-weight:600;color:#64748b;border-radius:8px 8px 0 0;border:1px solid transparent;border-bottom:none;transition:all .18s;white-space:nowrap;font-family:inherit}
+.tab-btn:hover{color:#1a1a1a;background:#f1f5f9}
+.tab-btn.active{color:#F75D5D;background:#fff;border-color:#e2e8f0;border-bottom:2px solid #fff;margin-bottom:-2px;position:relative;z-index:2}
+.tab-content{display:none;background:#fff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:36px 32px;min-height:400px}
+.tab-content.active{display:block}
+
+/* ── TYPOGRAPHY ── */
+h2{font-size:22px;font-weight:700;margin:40px 0 14px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+h2:first-child{margin-top:0}
+h3{font-size:18px;font-weight:700;margin:28px 0 10px;color:#1a1a1a}
+h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:#334155}
+p{margin-bottom:14px;font-size:15px;color:#374151;line-height:1.8}
+ul,ol{margin:8px 0 16px 22px;font-size:15px}
+li{margin-bottom:8px;line-height:1.7;color:#374151}
+strong{font-weight:700;color:#1a1a1a}
+em{color:#475569;font-style:italic}
+hr{border:none;border-top:1px solid #e2e8f0;margin:32px 0}
+code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;color:#c026d3}
+pre{background:#1e293b;color:#e2e8f0;padding:20px;border-radius:10px;font-size:13px;font-family:'SF Mono',Menlo,Consolas,monospace;overflow-x:auto;line-height:1.7;margin:16px 0}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+
+/* ── CARDS ── */
+.box{background:#f8f9fc;border:1px solid #e2e8f0;border-radius:12px;padding:20px 24px;margin:16px 0}
+.box.key{border-left:4px solid #F75D5D;background:#fff5f5}
+.box.insight{border-left:4px solid #3b82f6;background:#eff6ff}
+.box.action{border-left:4px solid #10b981;background:#f0fdf4}
+.box.warn{border-left:4px solid #f59e0b;background:#fffbeb}
+.box.purple{border-left:4px solid #8b5cf6;background:#faf5ff}
+.box.dark{border-left:4px solid #1a1a1a;background:#f8f9fc}
+.box h4{font-size:14px;font-weight:700;margin:0 0 8px;color:#1a1a1a}
+.box p{margin-bottom:6px;font-size:14px}
+.box ul{margin:4px 0 0 16px;font-size:14px}
+.box li{margin-bottom:5px}
+
+.highlight{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:18px 22px;margin:20px 0;font-size:15px;font-weight:600;color:#92400e}
+.highlight-blue{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:18px 22px;margin:20px 0;font-size:15px;font-weight:600;color:#1e3a8a}
+.highlight-green{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:18px 22px;margin:20px 0;font-size:15px;font-weight:600;color:#14532d}
+.highlight-red{background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:18px 22px;margin:20px 0;font-size:15px;font-weight:600;color:#991b1b}
+.highlight-purple{background:#faf5ff;border:1.5px solid #ddd6fe;border-radius:12px;padding:18px 22px;margin:20px 0;font-size:15px;font-weight:600;color:#5b21b6}
+
+/* ── WEEK CARDS ── */
+.week-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px 24px;margin:16px 0;position:relative}
+.week-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
+.week-card.w1::before{background:#F75D5D}
+.week-card.w2::before{background:#f59e0b}
+.week-card.w3::before{background:#10b981}
+.week-card.w4::before{background:#3b82f6}
+.week-card.w5::before{background:#8b5cf6}
+.week-card.w6::before{background:#ec4899}
+.week-card.w7::before{background:#06b6d4}
+.week-card.w8::before{background:#84cc16}
+.week-card.w9::before{background:#f97316}
+.week-badge{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:4px;background:#1a1a1a;color:#fff;margin-bottom:10px;letter-spacing:0.5px}
+.week-title{font-size:17px;font-weight:700;margin-bottom:10px;color:#1a1a1a}
+.week-desc{font-size:14px;color:#475569;margin-bottom:14px;line-height:1.7}
+.week-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.week-tag{font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;background:#f1f5f9;color:#334155}
+.week-tag.required{background:#fef2f2;color:#991b1b}
+.week-tag.optional{background:#f0fdf4;color:#166534}
+.week-tag.hw{background:#eff6ff;color:#1e40af}
+
+/* ── HOOK CARDS ── */
+.hook-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.hook-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.hook-card.confession::before{background:#F75D5D}
+.hook-card.boldclaim::before{background:#f59e0b}
+.hook-card.relatability::before{background:#10b981}
+.hook-card.contrast::before{background:#3b82f6}
+.hook-card.curiosity::before{background:#8b5cf6}
+.hook-num{font-size:11px;font-weight:800;color:#94a3b8;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px}
+.hook-title{font-size:22px;font-weight:900;margin-bottom:4px;color:#1a1a1a}
+.hook-subtitle{font-size:13px;color:#64748b;margin-bottom:18px}
+.hook-section{margin:18px 0}
+.hook-section h4{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#94a3b8;margin-bottom:8px}
+.hook-example{background:#f8f9fc;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:14px;color:#1a1a1a;border-left:3px solid #e2e8f0;font-style:italic}
+.hook-example strong{font-style:normal;display:block;font-size:12px;text-transform:uppercase;letter-spacing:0.4px;color:#94a3b8;margin-bottom:4px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.mode-card{background:#f8f9fc;border-radius:10px;padding:14px;text-align:center;border:1px solid #e2e8f0}
+.mode-card .mc-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#94a3b8;margin-bottom:4px}
+.mode-card .mc-name{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.mode-card .mc-desc{font-size:12px;color:#475569;line-height:1.5}
+.question-list{list-style:none;margin:10px 0;padding:0}
+.question-list li{background:#f8f9fc;border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:14px;color:#1a1a1a;border-left:3px solid #e2e8f0}
+.question-list li::before{content:'Q. ';font-weight:800;color:#F75D5D}
+
+/* ── 3 ROLES ── */
+.role-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.role-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;text-align:center;border-top:4px solid}
+.role-card:nth-child(1){border-top-color:#F75D5D}
+.role-card:nth-child(2){border-top-color:#f59e0b}
+.role-card:nth-child(3){border-top-color:#10b981}
+.role-card .ri{font-size:28px;margin-bottom:8px}
+.role-card .rt{font-size:16px;font-weight:800;margin-bottom:4px;color:#1a1a1a}
+.role-card .rd{font-size:13px;color:#475569;line-height:1.6}
+
+/* ── 3 CHANNELS ── */
+.channel-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.channel-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;text-align:center}
+.channel-card .ci{font-size:28px;margin-bottom:8px}
+.channel-card .ct{font-size:16px;font-weight:800;margin-bottom:4px;color:#1a1a1a}
+.channel-card .cd{font-size:13px;color:#475569;line-height:1.6}
+
+/* ── STAT CARDS ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.stat-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px;text-align:center}
+.stat-card .sv{font-size:24px;font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:4px}
+.stat-card .sl{font-size:12px;color:#64748b;line-height:1.5}
+
+/* ── METRIC CARDS ── */
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.metric-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px}
+.metric-card .mc-label{font-size:11px;font-weight:800;color:#F75D5D;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px}
+.metric-card .mc-name{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.metric-card .mc-desc{font-size:12px;color:#64748b;line-height:1.6}
+
+/* ── TABLE ── */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0}
+thead{background:#f1f5f9}
+th{padding:12px 16px;text-align:left;font-weight:700;font-size:13px;color:#475569;border-bottom:2px solid #e2e8f0}
+td{padding:12px 16px;border-bottom:1px solid #f1f5f9;color:#374151;vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+td:first-child{font-weight:600;color:#1a1a1a}
+.badge-yes{background:#dcfce7;color:#166534;font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.badge-no{background:#fee2e2;color:#991b1b;font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.badge-plan{background:#dbeafe;color:#1e40af;font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.badge-partial{background:#fef3c7;color:#92400e;font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+
+/* ── PRICING TABLE ── */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}
+.price-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px;text-align:center}
+.price-card.popular{border-color:#F75D5D;border-width:2px}
+.price-card .pc-plan{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#64748b;margin-bottom:4px}
+.price-card .pc-price{font-size:28px;font-weight:900;color:#1a1a1a;margin:8px 0;line-height:1.2}
+.price-card .pc-period{font-size:13px;color:#94a3b8}
+.price-card .pc-spend{font-size:13px;font-weight:600;color:#F75D5D;margin:8px 0;background:#fef2f2;padding:4px 10px;border-radius:6px;display:inline-block}
+.price-card .pc-features{text-align:left;margin-top:16px;list-style:none;padding:0}
+.price-card .pc-features li{font-size:13px;color:#374151;padding:5px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:6px}
+.price-card .pc-features li::before{content:'✓';color:#10b981;font-weight:900;flex-shrink:0;margin-top:1px}
+
+/* ── ANATOMY BOX ── */
+.anatomy-box{background:#1e293b;border-radius:14px;padding:28px;margin:20px 0;color:#e2e8f0}
+.anatomy-box h4{color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:20px}
+.anatomy-layer{background:#334155;border-radius:10px;padding:18px;margin-bottom:12px}
+.anatomy-layer:last-child{margin-bottom:0}
+.anatomy-layer .al-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.anatomy-layer.targeting .al-label{color:#f59e0b}
+.anatomy-layer.psychological .al-label{color:#8b5cf6}
+.anatomy-layer .al-content{font-size:14px;color:#e2e8f0;line-height:1.7}
+.anatomy-layer .al-example{margin-top:10px;background:#1e293b;border-radius:6px;padding:10px 14px;font-size:13px;color:#94a3b8;font-style:italic}
+
+/* ── CONTRAST TYPES ── */
+.contrast-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
+.contrast-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px}
+.contrast-card .cc-type{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#3b82f6;margin-bottom:6px}
+.contrast-card .cc-name{font-size:16px;font-weight:700;margin-bottom:8px;color:#1a1a1a}
+.contrast-card .cc-desc{font-size:13px;color:#475569;line-height:1.6}
+.contrast-card .cc-ex{margin-top:10px;font-size:13px;color:#64748b;font-style:italic;background:#f8f9fc;padding:8px 12px;border-radius:6px}
+
+/* ── KAKASHI POINTS ── */
+.kakashi-list{list-style:none;margin:16px 0;padding:0;counter-reset:kk}
+.kakashi-list li{counter-increment:kk;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:flex-start;padding:16px 18px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:10px}
+.kk-num{width:36px;height:36px;background:#F75D5D;color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;flex-shrink:0}
+.kk-body .kk-title{font-weight:700;font-size:15px;margin-bottom:4px;color:#1a1a1a}
+.kk-body .kk-desc{font-size:13px;color:#475569;line-height:1.7}
+
+/* ── SECTION LABEL ── */
+.section-label{display:inline-block;background:#1a1a1a;color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;letter-spacing:0.5px;margin-bottom:10px}
+.section-label.red{background:#F75D5D}
+.section-label.blue{background:#3b82f6}
+.section-label.green{background:#10b981}
+.section-label.purple{background:#8b5cf6}
+.section-label.amber{background:#f59e0b}
+
+/* ── NAMING CONV ── */
+.naming-example{background:#1e293b;border-radius:10px;padding:20px;margin:14px 0;color:#e2e8f0;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;line-height:1.8}
+.naming-example .ne-label{color:#94a3b8;font-size:11px;display:block;margin-bottom:6px;font-style:normal;text-transform:uppercase;letter-spacing:0.4px}
+.naming-example .ne-code{color:#f59e0b}
+.naming-example .ne-sep{color:#64748b}
+.naming-example .ne-comment{color:#64748b;font-style:italic}
+
+/* ── INSPO BOARD ── */
+.format-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.format-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;transition:.15s}
+.format-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.format-card .fc-icon{font-size:24px;margin-bottom:8px}
+.format-card .fc-name{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.format-card .fc-desc{font-size:12px;color:#64748b;line-height:1.5}
+
+@media(max-width:700px){
+  .tab-btn{padding:8px 11px;font-size:12px}
+  .tab-content{padding:22px 16px}
+  .mode-grid{grid-template-columns:1fr}
+  .role-row{grid-template-columns:1fr}
+  .channel-row{grid-template-columns:1fr}
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  .metric-grid{grid-template-columns:repeat(2,1fr)}
+  .price-grid{grid-template-columns:1fr}
+  .contrast-grid{grid-template-columns:1fr}
+  .format-grid{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:22px}
+  h2{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a href="/reports" class="back">← 리포트 목록</a>
+  <h1>Motion Creative Strategy 완전 정복</h1>
+  <p class="subtitle">마케팅 이론집 탭 UI — 10개 챕터 풀 디테일</p>
+  <p class="date">2026-03-23 &nbsp;·&nbsp; Research &nbsp;·&nbsp; Motion Creative Strategy Bootcamp 기반</p>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('tab1',this)">① 코스 개요</button>
+    <button class="tab-btn" onclick="showTab('tab2',this)">② Motion 101</button>
+    <button class="tab-btn" onclick="showTab('tab3',this)">③ Week 1 숙제</button>
+    <button class="tab-btn" onclick="showTab('tab4',this)">④ 2026 벤치마크</button>
+    <button class="tab-btn" onclick="showTab('tab5',this)">⑤ 훅 포맷</button>
+    <button class="tab-btn" onclick="showTab('tab6',this)">⑥ 메트릭 치트시트</button>
+    <button class="tab-btn" onclick="showTab('tab7',this)">⑦ 네이밍 컨벤션</button>
+    <button class="tab-btn" onclick="showTab('tab8',this)">⑧ 비주얼 인스포</button>
+    <button class="tab-btn" onclick="showTab('tab9',this)">⑨ 5대 훅 가이드</button>
+    <button class="tab-btn" onclick="showTab('tab10',this)">⑩ Motion 서비스 분석</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 1: 코스 개요 (Syllabus)
+  ══════════════════════════════════════════════════ -->
+  <div id="tab1" class="tab-content active">
+    <span class="section-label">SYLLABUS</span>
+    <h2>Motion Creative Strategy Bootcamp — 코스 개요</h2>
+
+    <div class="highlight-blue">
+      🎁 <strong>Motion 보너스</strong>: 수강생은 Motion AI 크리에이티브 분석 툴 60일 무료 트라이얼 제공 (Starter Plan · 월 $50,000 ad spend까지)
+    </div>
+
+    <h3>Motion이 이 코스에서 도움이 되는 이유</h3>
+    <ul>
+      <li>광고가 왜 작동하는지 이해 — 훅, 메시지 앵글, 페르소나 심층 분석</li>
+      <li>AI로 경쟁사 광고 사냥, 트렌드 비주얼 포맷 발굴, 새 광고 아이디어 인텔 수집</li>
+      <li>크리에이티브 전략가 채용공고에서 필수 툴로 명시되는 Motion 실습 경험</li>
+    </ul>
+
+    <h3>수료 요건 (Certification Requirements)</h3>
+    <div class="box key">
+      <ul>
+        <li><strong>라이브 수업 5회 이상 참석</strong> 또는 리플레이 시청 (참석률: 등록 이메일 기준 추적). 리플레이도 라이브와 동일하게 처리됨. 수료 인정을 위해 최소 60분 이상 시청 필수.</li>
+        <li><strong>최종 인증 시험 70% 이상</strong> 득점. 시험은 코스 종료 후 이메일 발송. 라이브 수업 콘텐츠 기반.</li>
+        <li>라이브 오피스 아워, 그룹 코칭, 숙제는 수료에 필수 아님 (권장은 함).</li>
+      </ul>
+    </div>
+
+    <h3>스케줄</h3>
+    <div class="box warn">
+      ⏰ 모든 수업: 매주 화요일 오후 1시 EST. 수업 후 바로 라이브 오피스 아워 진행. 링크는 이메일/캘린더로 발송. 리플레이는 24시간 후 공개.
+    </div>
+
+    <hr>
+
+    <div class="week-card w1">
+      <span class="week-badge">WEEK 1</span>
+      <div class="week-title">What is Creative Strategy? — 크리에이티브 전략의 기초</div>
+      <div class="week-desc">크리에이티브 전략가가 진짜 무엇인지, 핵심 스킬이 무엇인지 배우는 주. Motion 팀 및 동료 학생들 소개, 부트캠프 포맷 개요, 모든 브랜드에서 효과적인 크리에이티브 진단 방법.</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 1 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 1PM EST 그룹 코칭</span>
+        <span class="week-tag hw">숙제: #homework-week-1 (Slack) · 금요일까지</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Evan Lee의 크리에이티브 전략 기초 + 훅의 과학. 코스·커뮤니티 소개, 광고 성과의 진짜 원리, 훅 심층 탐구.</p>
+      <p style="font-size:14px;color:#334155"><strong>그룹 코칭 (목요일):</strong> "How I write hooks + group coaching" — 개인 훅 작성 기법 공유 후 실시간 작업물 리뷰.</p>
+    </div>
+
+    <div class="week-card w2">
+      <span class="week-badge">WEEK 2</span>
+      <div class="week-title">Research your ad ideas — 광고 아이디어 리서치</div>
+      <div class="week-desc">리서치 프로세스를 정비하고 AI-first 기법으로 스킬 업데이트. 인사이트 발굴이 좋은 크리에이티브의 기초.</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 2 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 그룹 코칭</span>
+        <span class="week-tag hw">숙제: #homework-week-2 · 금요일까지</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Sarah Levinger의 심리학 기반 고객 리서치 방법. AI-native 크리에이티브 전략 리서치 툴, 코스 전반에서 활용 가능한 기법.</p>
+      <p style="font-size:14px;color:#334155"><strong>그룹 코칭 (목요일):</strong> "How I research ad ideas + group coaching"</p>
+    </div>
+
+    <div class="week-card w3">
+      <span class="week-badge">WEEK 3</span>
+      <div class="week-title">Prioritize your ad ideas — 광고 아이디어 우선순위 선정</div>
+      <div class="week-desc">어떤 리서치 인사이트에 베팅할지 알기, 히트 잠재력 높은 아이디어 선별 능력 연마. 아이디어 압박 테스트 & 리서치 정리 시스템 구축.</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 3 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 그룹 코칭</span>
+        <span class="week-tag hw">숙제: #homework-week-3 · 금요일까지</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Dara Denney의 크리에이티브 베팅 우선순위 & 압박 테스트. 크리에이티브 전략 결정 트리 활용, 제작 투자 전 압박 테스트 실행.</p>
+      <p style="font-size:14px;color:#334155"><strong>그룹 코칭 (목요일):</strong> "How I run a monthly creative retro + group coaching" — Naomi Peh Haeger (Spacegoods)의 월간 크리에이티브 레트로 미팅 프로세스 공개.</p>
+    </div>
+
+    <div class="week-card w4">
+      <span class="week-badge">WEEK 4</span>
+      <div class="week-title">Make some ads! — 광고 제작</div>
+      <div class="week-desc">AI를 기본 광고 제작 실행 레이어로 삼되 인간 통제를 잃지 않는 방법.</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 4 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 그룹 코칭</span>
+        <span class="week-tag hw">숙제: #homework-week-4 · 금요일까지</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Will Sartorius의 AI 크리에이티브 프로세스. 생성형 아웃풋 통제를 위한 정제된 프롬프트 이터레이션 루프. 정적 상품 광고, 애니메이션 GIF 광고, 프로덕션 레디 B롤 생성 방법.</p>
+      <p style="font-size:14px;color:#334155"><strong>그룹 코칭 (목요일):</strong> "How I write scripts, storyboards, and briefs + group coaching"</p>
+    </div>
+
+    <div class="week-card w5">
+      <span class="week-badge">WEEK 5</span>
+      <div class="week-title">Analyze your ads — 광고 분석</div>
+      <div class="week-desc">추측에서 아는 것으로. 크리에이티브가 작동한/안 한 이유, AI 지원 분석으로 크리에이티브 파이프라인 가이드.</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 5 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 그룹 코칭</span>
+        <span class="week-tag hw">숙제: #homework-week-5 · 금요일까지</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Evan Lee의 메트릭, 측정, AI 지원 크리에이티브 분석. 크리에이티브 분석 실행 방법, 작동/비작동 진단, 인사이트로 주간 스프린트 가이드.</p>
+      <p style="font-size:14px;color:#334155"><strong>그룹 코칭 (목요일):</strong> "How I use AI for analysis, research, and ideation" — Motion 크리에이티브 전략가의 실제 AI 툴박스 공개.</p>
+    </div>
+
+    <div class="week-card w6">
+      <span class="week-badge">WEEK 6</span>
+      <div class="week-title">Sprint #1 — Iterate on your ads</div>
+      <div class="week-desc">실제 크리에이티브 전략이 현실에서 어떻게 작동하는지 시뮬레이션. 이터레이션 스프린트. 테마: "첫 광고가 안 됐어 — 이제 어떡하지?"</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 6 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 그룹 코칭</span>
+        <span class="week-tag hw">숙제: #homework-week-6 · 금요일까지</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Evan Lee + 크리에이티브 전략 코치들. "Winning Ad Stories" — 빅 위닝 컨셉까지의 이터레이션 & 비하인드 공개. (Emily Spring/DROOL, Daniel Rivera/Harry's, Jade Heritage/Calm)</p>
+      <p style="font-size:14px;color:#334155"><strong>그룹 코칭 (목요일):</strong> Darcy Tennant (Heights)의 신규 인하우스 크리에이티브 전략가/신규 클라이언트 세팅 성공 방법.</p>
+    </div>
+
+    <div class="week-card w7">
+      <span class="week-badge">WEEK 7</span>
+      <div class="week-title">Sprint #2 — Adapt winning ads into new formats</div>
+      <div class="week-desc">위너를 여러 포맷으로 적응시키기. 스케일링 스프린트. 테마: "이 광고가 통했어 — 어떻게 스케일하지?"</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 7 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 그룹 코칭</span>
+        <span class="week-tag hw">숙제: #homework-week-7 · 금요일까지</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Evan Lee + Viti Videtta (Happy Mammoth, 주 500개 크리에이티브), Sophia Beauvoir (Ready Set), Janae LeVander (Caraway, UGC 크리에이터로 위너 스케일링).</p>
+    </div>
+
+    <div class="week-card w8">
+      <span class="week-badge">WEEK 8</span>
+      <div class="week-title">Sprint #3 — Take a big swing!</div>
+      <div class="week-desc">캡스톤 광고. 배운 모든 것을 활용한 최선의 스윙. 빅 스윙 스프린트. 테마: "새 오디언스를 빅 위닝 컨셉으로 열어보자."</div>
+      <div class="week-meta">
+        <span class="week-tag required">수료 필수: Week 8 라이브 or 녹화 시청</span>
+        <span class="week-tag optional">선택: 오피스 아워 Q&amp;A</span>
+        <span class="week-tag optional">선택: 목요일 그룹 코칭</span>
+        <span class="week-tag hw">숙제: 스크립트 + 스토리보드 (빅 아이디어). #homework-week-8</span>
+      </div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>라이브 클래스:</strong> Evan Lee + Cate Wright (Director of Creative Strategy, Monks). 데이터에서 내러티브 구성, 인사이트가 이야기를 말하도록 만들기 — 크리에이티브 전략가의 커리어 최대 잠금 해제.</p>
+    </div>
+
+    <div class="week-card w9">
+      <span class="week-badge">WEEK 9-10 (선택)</span>
+      <div class="week-title">The Master's Series — 수료 불필요, 패턴 노출용</div>
+      <div class="week-desc">공식 커리큘럼 종료 후. 최종 인증 시험 공부 & 캡스톤 작업 중 수강 가능. 세계적 수준 오퍼레이터에게 직접 접근.</div>
+      <p style="margin-top:14px;font-size:14px;color:#334155"><strong>Session 1:</strong> Oren John — 바이럴 광고 플레이북. 유기적 소셜 트렌드를 광고 크리에이티브 컨셉에 블렌딩하는 방법. 개인 리서치 워크플로우, 최고 브랜드들이 오가닉/유료/문화적 순간을 하나의 플레이북으로 엮는 방법.</p>
+      <p style="font-size:14px;color:#334155"><strong>Session 2:</strong> Bill Rom (Baseball Lifestyle 101 공동창업자) — 8→9자리 매출 스케일링 교훈. 5,000 팔로워 → 플랫폼 합계 100만+ 성장, 100+ 직원 규모 확장, 2025년 9자리 매출 달성. 유기적 소셜, 진짜 탑 오브 퍼널, 수익성 있는 고객 획득.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 2: Motion 101
+  ══════════════════════════════════════════════════ -->
+  <div id="tab2" class="tab-content">
+    <span class="section-label blue">MOTION 101</span>
+    <h2>Motion 101 — 플랫폼 완전 정복</h2>
+
+    <p>Motion을 처음 사용한다면 이 플랫폼이 실제로 뭘 하는지, 어디서 시작해야 하는지 궁금할 거다. 아래가 그 답이다.</p>
+
+    <hr>
+
+    <h3>📊 Reports: 크리에이티브 커맨드 센터</h3>
+    <div class="box insight">
+      <h4>Motion Reports란?</h4>
+      <p>미디어 바이어가 신경 쓰는 메트릭 + 크리에이티브 팀을 위한 비주얼-퍼스트 경험의 결합.</p>
+    </div>
+
+    <p>가장 쉬운 시작점은 <strong>리포트 템플릿 라이브러리</strong>. 퍼포먼스 크리에이티브 팀이 가장 많이 묻는 질문들 중심으로 템플릿 구성:</p>
+    <ul>
+      <li><strong>위너 찾기</strong> — 어떤 크리에이티브가 성과 내는지</li>
+      <li><strong>문제 찾기</strong> — 어디서 막히는지</li>
+      <li><strong>퍼포먼스 이해</strong> — 왜 작동하는지/안 하는지</li>
+    </ul>
+
+    <p>셋업 불필요. 바로 사용 가능.</p>
+
+    <div class="box action">
+      <h4>🎯 예시: Top Hooks Report</h4>
+      <p>훅 = 광고 처음 3초의 모든 것. 계속 시청할지 스크롤할지를 결정하는 순간.</p>
+      <ul>
+        <li>어떤 훅이 어텐션을 잡는지, 어떤 게 못 잡는지 시각화</li>
+        <li>캠페인명, 지출 임계값, 기타 요소로 필터링해서 정확히 필요한 것 찾기</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <h3>📈 Comparative Reports: 줌 아웃 뷰</h3>
+    <p>개별 광고 평가가 아니라 전체 광고 계정에서 <strong>크리에이티브 테마</strong>를 보는 뷰.</p>
+    <ul>
+      <li>어떤 페르소나가 반응하는지</li>
+      <li>어떤 인플루언서가 탑 퍼포머인지</li>
+      <li>어떤 앵글이 전반적으로 가장 효율적인 지출을 유도하는지</li>
+    </ul>
+
+    <div class="box purple">
+      <h4>🤖 Motion AI Tagging</h4>
+      <p>모든 광고의 요소를 자동으로 레이블링:</p>
+      <ul>
+        <li>훅 전략 (Hook Tactic)</li>
+        <li>메시지 앵글 (Messaging Angle)</li>
+        <li>타겟 오디언스 (Intended Audience)</li>
+        <li>비주얼 포맷 등</li>
+      </ul>
+      <p>Comparative Report가 이 태그를 사용해서 한 번에 하나씩 광고 볼 때는 절대 못 잡는 패턴을 포착.</p>
+      <p><strong>핵심 차이:</strong> "이 광고 지금 작동해?" → "Q1에 우리한테 가장 잘 된 앵글은?"</p>
+    </div>
+
+    <hr>
+
+    <h3>📌 Inspo: 광고용 Pinterest</h3>
+    <p>리서치가 단체 채팅이나 잊혀진 Slack 스레드에 살면 안 된다. 그게 Inspo가 해결하는 문제.</p>
+
+    <div class="box">
+      <h4>Inspo의 기능</h4>
+      <ul>
+        <li><strong>광대한 광고 라이브러리</strong>: 업종, 비주얼 스타일, 상품, 운영 기간별 탐색</li>
+        <li><strong>경쟁사 스파이</strong>: 경쟁사가 요즘 테스트하는 것 정확히 파악</li>
+        <li><strong>보드 저장</strong>: 마음에 드는 것 저장, 팀과 보드 공유</li>
+      </ul>
+    </div>
+
+    <p>TikTok 피드의 건강한 버전.</p>
+
+    <hr>
+
+    <h3>🤖 Runneth: AI 크리에이티브 전략가</h3>
+    <p>데이터 해독 + 수동 정리 대신 그냥 물어보면 됨:</p>
+
+    <ul>
+      <li>"이 리포트 분석해줘"</li>
+      <li>"니치 브랜드에서 새 훅 아이디어 10개 찾아줘"</li>
+      <li>"그 컨셉 다듬어서 비디오팀 브리프로 만들어줘"</li>
+      <li>다른 모든 크리에이티브 전략 질문</li>
+    </ul>
+
+    <div class="box key">
+      <h4>Runneth가 할 수 있는 것</h4>
+      <ul>
+        <li>광고 계정 현황 평이한 영어로 설명</li>
+        <li>새 기회 발굴</li>
+        <li>더 많은 컨셉 탐구</li>
+        <li>수동 작업보다 훨씬 빠르게 크리에이티브 브리프 도달</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <h3>❓ 질문이 있으면</h3>
+    <p>Motion의 Slack 커뮤니티 <code>#ask-motion</code> 채널에 질문 올리면 팀이 1:1로 도움.</p>
+
+    <div class="box action">
+      <h4>빠른 시작 체크리스트</h4>
+      <ul>
+        <li>✓ 트라이얼 계정 생성</li>
+        <li>✓ 리포트 템플릿 라이브러리에서 Top Hooks 리포트 열어보기</li>
+        <li>✓ Comparative Report로 Q1 탑 앵글 확인</li>
+        <li>✓ Inspo에서 경쟁사 광고 탐색</li>
+        <li>✓ Runneth에 광고 계정 분석 요청해보기</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 3: Week 1 숙제
+  ══════════════════════════════════════════════════ -->
+  <div id="tab3" class="tab-content">
+    <span class="section-label amber">WEEK 1 HOMEWORK</span>
+    <h2>✏ Week 1 숙제 — 첫 훅 보드 만들기</h2>
+
+    <div class="highlight">
+      📋 <strong>미션:</strong> 수업에서 배운 원칙을 보여주는 훅 3개 이상으로 보드 만들기
+    </div>
+
+    <h3>제출 방법</h3>
+    <ul>
+      <li>Slack 커뮤니티 <code>#homework-week-1</code>에 보드 공유</li>
+      <li>다른 사람 작업물에 댓글 달고 의견 남기기</li>
+      <li>크리에이티브 전략 코치들도 리뷰함</li>
+    </ul>
+
+    <h3>컴패니언 리소스</h3>
+    <div class="box insight">
+      <h4>📖 읽을 것</h4>
+      <p>Motion의 "$1M+/월 계정을 지배하는 상위 훅 포맷 가이드" — 벤치마크 데이터에서 월 100만 달러 이상 광고를 집행하는 광고주들이 사용하는 상위 훅 포맷 발굴.</p>
+    </div>
+
+    <hr>
+
+    <h3>AI 분석 실습 — 유기적 피드 훅 분석</h3>
+    <div class="box">
+      <h4>파일 준비</h4>
+      <ol>
+        <li>Andromeda PDF를 Motion의 Runneth 또는 Claude/ChatGPT에 업로드 (Andromeda = Meta AI가 크리에이티브를 스코어링하고 배포하는 방식에 대한 핵심 컨텍스트 포함)</li>
+        <li>유기적 피드 이미지 캡처 후 업로드 (비디오에서 방법 확인)</li>
+        <li>아래 프롬프트를 브랜드에 맞게 조정해서 함께 추가</li>
+      </ol>
+    </div>
+
+    <h4>Motion Runneth로 뭘 찾았나 (Motion 자체 사례)</h4>
+    <ul>
+      <li>지난 30일 탑 16개 크리에이티브 추출 + 유기적 피드 샘플 &amp; Andromeda 비주얼 가이드라인 교차 참조</li>
+      <li>훅이 실패한 구체적 사례 (유기적 피드 레퍼런스를 미러링하지 않은 경우) 파악</li>
+      <li>비주얼과 첫 프레임이 타겟 오디언스의 유기적 피드 미학에 가장 근접한 광고 파악</li>
+      <li>집중 포인트: 썸네일, 첫 프레임, 처음 3초 (Andromeda 핵심)</li>
+    </ul>
+
+    <hr>
+
+    <h3>AI 프롬프트 전문 (조정해서 사용)</h3>
+    <div class="box dark">
+      <p>아래 프롬프트를 브랜드 컨텍스트에 맞게 수정해서 사용. 메트릭은 Thumbstop Rate, Hold Rate, CTR(outbound) 중심.</p>
+    </div>
+
+    <pre><code>You are a performance creative strategist specializing in Meta ads and 
+native-looking paid social creative. For this analysis, you are specifically 
+analyzing visual hooks in video ads, defined as the first 3 seconds of a video ad.
+
+## Context
+
+**Target persona:** Men aged 25-40 working in marketing, drawn to polished 
+visual design and video editing content.
+
+**Goal:** Create ad concepts whose first frame and visual aesthetic are 
+indistinguishable from organic content in this persona's feed.
+
+## Instructions (follow in order)
+
+1. Read the attached Andromeda reference document (Meta_Ads_AI_Stack_Complete_Reference). 
+   Extract the key principles about how Andromeda scores and distributes creative — 
+   especially signals related to visual native-ness, early-frame engagement, 
+   and content-feed blending.
+
+2. Analyze the attached organic feed sample. Catalog the visual patterns you observe:
+   - Color palettes and grading
+   - Typography styles and text overlay placement
+   - Camera angles, framing, and composition
+   - Age, appearance, and styling of people shown
+   - First-frame composition and thumbnail patterns
+   - Overall production style (lo-fi vs. polished, static vs. motion)
+
+3. Analyze my current ad creative. For every ad, focus specifically on the thumbnail, 
+   the first frame, and the first 3 seconds of any video ads. These are the moments 
+   that determine whether the ad reads as organic or paid — evaluate them as a user 
+   would while scrolling.
+
+4. [If ad account access is available] Pull my creative from the past 30 days. 
+   Identify which existing ads most closely match the organic feed aesthetic and 
+   which diverge most. Be specific — reference individual ads. For metrics, show 
+   spend, thumbstop rate, hold rate, and CTR (outbound) on any creative examples 
+   you highlight.
+
+5. Generate new hook concepts that blend into the organic feed. For each concept, specify:
+   - First-frame description (composition, colors, text, talent)
+   - Font and text overlay style
+   - Visual angle and framing
+   - Why it matches the organic aesthetic (cite specific patterns from step 2)
+   - How it aligns with Andromeda's distribution logic (cite step 1)
+
+6. [If ad account access is available] For my best-performing existing ads, suggest 
+   specific visual modifications to push them closer to the organic feed look-and-feel.
+
+## Constraints
+- Visual-first only. Focus on aesthetics, not copy or messaging strategy. 
+  First frame, fonts, color, talent styling, camera work, and visual tone.
+- Anchor every recommendation in Andromeda context — explain WHY the visual 
+  choice improves distribution, not just that it "looks native."
+- Be specific and actionable. "Use warmer tones" is too vague. 
+  "Shift color grading toward warm amber highlights with desaturated shadows, 
+  matching the top-left post in the feed sample" is useful.
+
+## Output Format
+Return as a structured report with these sections:
+1. Andromeda Key Principles (brief)
+2. Organic Feed Visual Audit (the patterns you found)
+3. Existing Ad Audit (if account access available)
+4. New Hook Concepts (5-8 concepts, structured per step 5)
+
+    <div class="box action">
+      <h4>💡 팁: Runneth 활용법</h4>
+      <p>이 프롬프트를 Motion Runneth에 넣으면 광고 계정 데이터와 직접 연결해서 분석해줌. Claude/ChatGPT는 계정 접근 없이 일반 인사이트만 제공.</p>
+      <ul>
+        <li>Runneth = Motion 계정 데이터 직접 분석</li>
+        <li>Claude/GPT = 프롬프트 기반 일반 조언</li>
+        <li>두 가지 병행 사용 추천</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 4: 2026 벤치마크
+  ══════════════════════════════════════════════════ -->
+  <div id="tab4" class="tab-content">
+    <span class="section-label amber">2026 BENCHMARKS</span>
+    <h2>2026 퍼포먼스 크리에이티브 벤치마크</h2>
+    <p>Motion이 월 $1M+ 집행 계정 데이터를 집계해서 공개한 업계 기준치. 내 광고가 어느 수준인지 판단하는 기준으로 활용.</p>
+
+    <div class="highlight-blue">
+      📊 <strong>데이터 기반:</strong> Meta 광고 $1M+/월 집행 브랜드 기준. eCommerce, DTC 중심. 채널별·업종별 편차 존재.
+    </div>
+
+    <h3>핵심 메트릭 벤치마크</h3>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="sv">25-35%</div>
+        <div class="sl">Thumbstop Rate<br><em>상위권 기준</em></div>
+      </div>
+      <div class="stat-card">
+        <div class="sv">40-60%</div>
+        <div class="sl">Hold Rate (3초)<br><em>전체 평균</em></div>
+      </div>
+      <div class="stat-card">
+        <div class="sv">1-3%</div>
+        <div class="sl">CTR (Outbound)<br><em>우수 크리에이티브</em></div>
+      </div>
+      <div class="stat-card">
+        <div class="sv">&lt;$15</div>
+        <div class="sl">CPC 목표치<br><em>eCommerce 기준</em></div>
+      </div>
+    </div>
+
+    <h3>훅 포맷별 평균 Thumbstop Rate</h3>
+    <table>
+      <thead>
+        <tr><th>훅 포맷</th><th>평균 TSR</th><th>상위 25%</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Confession (고백형)</td><td>28%</td><td>38%+</td><td>신뢰 + 공감 이중 작동</td></tr>
+        <tr><td>Bold Claim (대담한 주장형)</td><td>31%</td><td>42%+</td><td>호기심 강하나 리스크 큼</td></tr>
+        <tr><td>Relatability (공감형)</td><td>26%</td><td>36%+</td><td>타겟 정확도가 핵심</td></tr>
+        <tr><td>Contrast (대비형)</td><td>30%</td><td>40%+</td><td>비주얼 대비 효과 강함</td></tr>
+        <tr><td>Curiosity (호기심형)</td><td>33%</td><td>44%+</td><td>Zeigarnik 효과 최대화</td></tr>
+      </tbody>
+    </table>
+
+    <h3>채널별 벤치마크 차이</h3>
+    <table>
+      <thead>
+        <tr><th>채널</th><th>Thumbstop Rate</th><th>평균 시청 시간</th><th>최적 길이</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Meta Reels</td><td>20-30%</td><td>8-12초</td><td>15-30초</td></tr>
+        <tr><td>TikTok</td><td>25-35%</td><td>6-10초</td><td>15-45초</td></tr>
+        <tr><td>Meta Feed</td><td>15-25%</td><td>5-8초</td><td>15-30초</td></tr>
+        <tr><td>YouTube Shorts</td><td>22-32%</td><td>10-15초</td><td>30-60초</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box warn">
+      <h4>⚠️ 벤치마크 사용 시 주의</h4>
+      <ul>
+        <li>업종마다 편차 크다 — 뷰티/패션 vs. B2B는 완전히 다름</li>
+        <li>계정 히스토리, 오디언스 세그먼트, 시즈널리티 영향 큼</li>
+        <li>절대적 기준이 아니라 <strong>방향성 지표</strong>로만 활용</li>
+        <li>내 계정 히스토리 대비 개선율이 더 중요</li>
+      </ul>
+    </div>
+
+    <h3>크리에이티브 피로도 신호</h3>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="mc-label">SIGNAL 1</div>
+        <div class="mc-name">Frequency 급등</div>
+        <div class="mc-desc">동일 오디언스 노출 빈도가 3회 이상 올라가면 크리에이티브 피로 시작</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">SIGNAL 2</div>
+        <div class="mc-name">TSR 10%+ 하락</div>
+        <div class="mc-desc">전주 대비 Thumbstop Rate가 10% 이상 떨어지면 훅 교체 고려</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">SIGNAL 3</div>
+        <div class="mc-name">CTR 정체</div>
+        <div class="mc-desc">TSR은 유지되는데 CTR이 계속 떨어지면 훅 이후 바디 카피 문제</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 5: 훅 포맷
+  ══════════════════════════════════════════════════ -->
+  <div id="tab5" class="tab-content">
+    <span class="section-label red">HOOK FORMATS</span>
+    <h2>훅 포맷 — 빠른 참조 가이드</h2>
+    <p>5가지 핵심 훅 포맷 한눈에 보기. 풀 가이드는 <strong>⑨ 5대 훅 가이드</strong> 탭에서.</p>
+
+    <div class="highlight">
+      🪝 <strong>훅의 황금률:</strong> 처음 3초가 나머지 전체를 결정한다. 훅이 실패하면 광고 전체가 실패.
+    </div>
+
+    <div class="format-grid">
+      <div class="format-card">
+        <div class="fc-icon">🤫</div>
+        <div class="fc-name">Confession</div>
+        <div class="fc-desc">고백형. 잘못된 믿음을 털어놓고 해결책으로 연결. 신뢰 구축에 최적.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">💥</div>
+        <div class="fc-name">Bold Claim</div>
+        <div class="fc-desc">대담한 주장형. 큰 약속으로 즉각 주목. 검증 가능한 주장 필수.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">🤝</div>
+        <div class="fc-name">Relatability</div>
+        <div class="fc-desc">공감형. "그거 나야" 반응 유발. in-group language가 핵심.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">⚡</div>
+        <div class="fc-name">Contrast</div>
+        <div class="fc-desc">대비형. Before/after 또는 방법론 대비. 극적 시각 효과.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">🔍</div>
+        <div class="fc-name">Curiosity</div>
+        <div class="fc-desc">호기심형. Known + Unknown 공식. Zeigarnik 효과 활용.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">📋</div>
+        <div class="fc-name">풀 가이드</div>
+        <div class="fc-desc">각 포맷의 상세 Mode Breakdown, 예시, 실전 팁은 탭⑨에서 확인.</div>
+      </div>
+    </div>
+
+    <h3>훅 선택 의사결정 트리</h3>
+    <div class="box insight">
+      <h4>어떤 훅을 써야 할까?</h4>
+      <ul>
+        <li><strong>신규 브랜드/신뢰 필요</strong> → Confession (고백형)</li>
+        <li><strong>강력한 USP 있음</strong> → Bold Claim (대담한 주장형)</li>
+        <li><strong>타겟 명확/니치</strong> → Relatability (공감형)</li>
+        <li><strong>경쟁사 대비 차별화</strong> → Contrast (대비형)</li>
+        <li><strong>교육형 콘텐츠/정보 제공</strong> → Curiosity (호기심형)</li>
+      </ul>
+    </div>
+
+    <h3>훅 테스트 우선순위</h3>
+    <div class="box key">
+      <h4>처음 테스트할 훅 순서</h4>
+      <ol>
+        <li>Curiosity — 가장 광범위한 오디언스에 통함</li>
+        <li>Bold Claim — 강력한 제품이면 TSR 최고</li>
+        <li>Relatability — 타겟 명확하면 전환율 최고</li>
+        <li>Contrast — 비주얼이 강할 때</li>
+        <li>Confession — 신뢰 구축 단계에서</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 6: 메트릭 치트시트
+  ══════════════════════════════════════════════════ -->
+  <div id="tab6" class="tab-content">
+    <span class="section-label green">METRICS CHEAT SHEET</span>
+    <h2>메트릭 치트시트 — 크리에이티브 전략가의 숫자 바이블</h2>
+    <p>메트릭을 모르면 크리에이티브가 왜 됐는지/안 됐는지 알 수 없다. 아래가 필수 메트릭 전체다.</p>
+
+    <h3>🔝 상단 퍼널 메트릭 (어텐션)</h3>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="mc-label">ATTENTION #1</div>
+        <div class="mc-name">Thumbstop Rate (TSR)</div>
+        <div class="mc-desc">= 3초 이상 시청 / 노출수. 훅이 스크롤을 멈추는 힘. 목표 25%+. 이게 낮으면 훅 문제.</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">ATTENTION #2</div>
+        <div class="mc-name">Hold Rate</div>
+        <div class="mc-desc">= 15초 시청 / 3초 시청. 훅 이후 유지율. 목표 40%+. 이게 낮으면 바디 카피 문제.</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">ATTENTION #3</div>
+        <div class="mc-name">Video Completion Rate</div>
+        <div class="mc-desc">= 100% 시청 / 노출수. 전체 스토리 유지력. 15초 이하 영상에서 특히 중요.</div>
+      </div>
+    </div>
+
+    <h3>💡 중간 퍼널 메트릭 (인게이지먼트)</h3>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="mc-label">ENGAGEMENT #1</div>
+        <div class="mc-name">CTR (Outbound)</div>
+        <div class="mc-desc">= 링크 클릭 / 노출수. 광고 → LP 이동율. 목표 1-3%. TSR 높은데 CTR 낮으면 CTA 문제.</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">ENGAGEMENT #2</div>
+        <div class="mc-name">CTR (All)</div>
+        <div class="mc-desc">링크 클릭 + 좋아요 + 공유 포함. 전체 인게이지먼트. 바이럴 포텐셜 확인용.</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">ENGAGEMENT #3</div>
+        <div class="mc-name">Hook Rate</div>
+        <div class="mc-desc">일부 플랫폼의 용어. = TSR과 동의어. Meta는 ThruPlay로 표시.</div>
+      </div>
+    </div>
+
+    <h3>💰 하단 퍼널 메트릭 (전환)</h3>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="mc-label">CONVERSION #1</div>
+        <div class="mc-name">CPC (Cost Per Click)</div>
+        <div class="mc-desc">클릭당 비용. eCommerce 목표 $15 미만. 업종별 큰 차이 있음.</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">CONVERSION #2</div>
+        <div class="mc-name">CPM</div>
+        <div class="mc-desc">1,000 노출당 비용. Meta 알고리즘 퀄리티 스코어 반영. 좋은 크리에이티브 = 낮은 CPM.</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">CONVERSION #3</div>
+        <div class="mc-name">ROAS / MER</div>
+        <div class="mc-desc">광고비 대비 매출. ROAS는 채널별, MER은 전체 마케팅 효율. 크리에이티브 최종 성적표.</div>
+      </div>
+    </div>
+
+    <h3>진단 플로우차트</h3>
+    <div class="box dark">
+      <h4>광고가 안 될 때 어디가 문제인지 찾는 법</h4>
+      <ul>
+        <li><strong>TSR 낮음 (25% 미만)</strong> → 훅 교체. 비주얼 첫 프레임 / 텍스트 오버레이 변경.</li>
+        <li><strong>TSR 높은데 Hold Rate 낮음</strong> → 바디 카피 문제. 훅과 메인 메시지 연결 약함.</li>
+        <li><strong>Hold Rate 높은데 CTR 낮음</strong> → CTA 문제. LP로 가야 할 이유 약함.</li>
+        <li><strong>CTR 높은데 전환 낮음</strong> → LP 문제. 크리에이티브 탓 아님.</li>
+        <li><strong>CPM 높음</strong> → 오디언스 경쟁 과열 or 크리에이티브 퀄리티 스코어 낮음.</li>
+      </ul>
+    </div>
+
+    <h3>Motion에서 메트릭 보는 법</h3>
+    <div class="box action">
+      <h4>Motion Reports 메트릭 설정</h4>
+      <ul>
+        <li>Reports → 메트릭 선택 → TSR, Hold Rate, CTR(outbound) 3개를 기본으로</li>
+        <li>Comparative Reports → AI 태그별 메트릭 비교 → 어떤 포맷이 TSR 높은지 한눈에</li>
+        <li>Runneth → "지난 30일 TSR 기준 탑 5 크리에이티브와 하위 5 크리에이티브 차이 분석해줘"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 7: 네이밍 컨벤션
+  ══════════════════════════════════════════════════ -->
+  <div id="tab7" class="tab-content">
+    <span class="section-label purple">NAMING CONVENTION</span>
+    <h2>크리에이티브 네이밍 컨벤션</h2>
+    <p>광고 이름은 분석의 기반이다. 잘못된 네이밍 = 어떤 툴로도 패턴 못 찾음. Motion AI Tagging이 있어도 명확한 네이밍 컨벤션은 필수.</p>
+
+    <div class="highlight-red">
+      🚫 <strong>최악의 패턴:</strong> "Ad_V3_FINAL_FINAL2_진짜최종" — 이런 네이밍은 분석 불가. 폐기.
+    </div>
+
+    <h3>권장 네이밍 구조</h3>
+    <div class="naming-example">
+      <span class="ne-label">기본 구조</span>
+      <span class="ne-code">[브랜드]</span><span class="ne-sep">_</span><span class="ne-code">[훅타입]</span><span class="ne-sep">_</span><span class="ne-code">[앵글]</span><span class="ne-sep">_</span><span class="ne-code">[포맷]</span><span class="ne-sep">_</span><span class="ne-code">[버전]</span><span class="ne-sep">_</span><span class="ne-code">[날짜]</span>
+    </div>
+
+    <div class="naming-example">
+      <span class="ne-label">예시 1 — eCommerce</span>
+      <span>BRAND_confession_trust-build_ugc-v_v01_260323</span><br>
+      <span class="ne-comment">// 브랜드명 _ 훅타입 _ 메시지앵글 _ 크리에이티브포맷 _ 버전 _ 날짜</span>
+    </div>
+
+    <div class="naming-example">
+      <span class="ne-label">예시 2 — 경쟁 대비</span>
+      <span>BRAND_contrast_vs-competitor_static_v02_260315</span><br>
+      <span class="ne-comment">// 대비형 훅 / 경쟁사 비교 앵글 / 정적 이미지 / 2번째 버전</span>
+    </div>
+
+    <div class="naming-example">
+      <span class="ne-label">예시 3 — 인플루언서</span>
+      <span>BRAND_boldclaim_product-hero_inf-kim_v01_260301</span><br>
+      <span class="ne-comment">// 대담한주장형 / 제품 주인공 앵글 / 인플루언서 kim / 첫 버전</span>
+    </div>
+
+    <h3>훅 타입 코드</h3>
+    <table>
+      <thead><tr><th>코드</th><th>훅 타입</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td><code>confession</code></td><td>Confession</td><td>고백형 — 잘못된 믿음 털어놓기</td></tr>
+        <tr><td><code>boldclaim</code></td><td>Bold Claim</td><td>대담한 주장형 — 큰 약속</td></tr>
+        <tr><td><code>relatable</code></td><td>Relatability</td><td>공감형 — "그거 나야"</td></tr>
+        <tr><td><code>contrast</code></td><td>Contrast</td><td>대비형 — before/after</td></tr>
+        <tr><td><code>curiosity</code></td><td>Curiosity</td><td>호기심형 — 정보 갭</td></tr>
+      </tbody>
+    </table>
+
+    <h3>포맷 코드</h3>
+    <table>
+      <thead><tr><th>코드</th><th>포맷</th></tr></thead>
+      <tbody>
+        <tr><td><code>ugc-v</code></td><td>UGC 스타일 비디오</td></tr>
+        <tr><td><code>static</code></td><td>정적 이미지</td></tr>
+        <tr><td><code>carousel</code></td><td>카루셀</td></tr>
+        <tr><td><code>inf</code></td><td>인플루언서</td></tr>
+        <tr><td><code>ai-gen</code></td><td>AI 생성 크리에이티브</td></tr>
+        <tr><td><code>doc</code></td><td>다큐멘터리/스토리텔링 스타일</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box insight">
+      <h4>Motion AI Tagging과 병행 사용</h4>
+      <p>Motion은 AI로 훅 전략, 메시지 앵글, 오디언스 등 자동 태깅해준다. 네이밍 컨벤션은 AI 태깅이 못 잡는 내부 컨텍스트(어떤 브리프, 누가 만들었는지 등)를 보완하는 용도.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 8: 비주얼 인스포
+  ══════════════════════════════════════════════════ -->
+  <div id="tab8" class="tab-content">
+    <span class="section-label">VISUAL INSPO</span>
+    <h2>비주얼 인스피레이션 — 크리에이티브 레퍼런스 가이드</h2>
+    <p>Motion Inspo 기능 + 외부 리서치 방법론 정리. 비주얼 퍼스트 크리에이티브 전략의 핵심.</p>
+
+    <div class="highlight-green">
+      🎨 <strong>핵심 원칙:</strong> 광고처럼 보이면 안 된다. 유기적 피드에 녹아드는 크리에이티브가 Andromeda 배포 알고리즘에서 이긴다.
+    </div>
+
+    <h3>Motion Inspo 활용법</h3>
+    <div class="box insight">
+      <h4>Inspo에서 할 수 있는 것</h4>
+      <ul>
+        <li><strong>경쟁사 광고 스파이</strong> — 경쟁사가 지금 테스트하는 비주얼 포맷 파악</li>
+        <li><strong>업종별 트렌드</strong> — 내 카테고리에서 TSR 높은 비주얼 패턴 발굴</li>
+        <li><strong>보드 저장</strong> — 팀과 공유할 인스피레이션 보드 구성</li>
+        <li><strong>AI 태그 필터</strong> — 훅 타입, 비주얼 스타일, 오디언스별 필터링</li>
+      </ul>
+    </div>
+
+    <h3>비주얼 포맷 카탈로그</h3>
+    <div class="format-grid">
+      <div class="format-card">
+        <div class="fc-icon">📱</div>
+        <div class="fc-name">UGC 스타일</div>
+        <div class="fc-desc">핸드헬드 촬영, 자연광, 진짜 사람. 오가닉 피드와 구분 안 됨. 현재 최고 TSR 포맷.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">🎬</div>
+        <div class="fc-name">토킹 헤드</div>
+        <div class="fc-desc">직접 카메라 응시, 개인적 발언. Confession/Relatability 훅과 최적 조합.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">📺</div>
+        <div class="fc-name">B롤 + 텍스트 오버레이</div>
+        <div class="fc-desc">제품 사용 장면 + 자막 형태 카피. TikTok 스타일. 텍스트가 훅 역할.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">⚡</div>
+        <div class="fc-name">Before/After</div>
+        <div class="fc-desc">Contrast 훅의 비주얼 완성형. 분할 화면 or 전환 효과. 스킨케어/홈데코 특히 강함.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">🤖</div>
+        <div class="fc-name">AI 생성</div>
+        <div class="fc-desc">Runway, Pika, Sora 등으로 제작. 예산 절감 + 빠른 테스트. 품질 편차 크므로 결과 검증 필수.</div>
+      </div>
+      <div class="format-card">
+        <div class="fc-icon">🎞️</div>
+        <div class="fc-name">다큐 스타일</div>
+        <div class="fc-desc">긴 포맷, 스토리텔링. YouTube 등 고관여 채널에서 강함. 제작비 높음.</div>
+      </div>
+    </div>
+
+    <h3>유기적 피드 분석 방법</h3>
+    <div class="box action">
+      <h4>오가닉 피드 감사 (Audit) 방법</h4>
+      <ol>
+        <li>타겟 오디언스 페르소나의 TikTok/Instagram 피드 스크린샷 20장 이상 수집</li>
+        <li>패턴 추출: 색감, 폰트, 카메라 각도, 등장인물 스타일링</li>
+        <li>내 광고와 비교 — 어디서 "광고티"가 나는지 파악</li>
+        <li>Motion Inspo에서 비슷한 오가닉 느낌의 광고 찾아서 레퍼런스로</li>
+        <li>Week 1 숙제 프롬프트로 AI 분석 실행</li>
+      </ol>
+    </div>
+
+    <h3>Andromeda 배포와 비주얼의 관계</h3>
+    <div class="box purple">
+      <h4>왜 오가닉처럼 보여야 하는가</h4>
+      <p>Meta의 Andromeda AI는 크리에이티브가 피드에 얼마나 자연스럽게 녹아드는지를 초기 배포 결정에 반영한다. "광고같은" 크리에이티브는 초기 배포 풀에서 불이익을 받을 수 있다.</p>
+      <ul>
+        <li>첫 프레임 = Andromeda가 가장 먼저 스코어링하는 요소</li>
+        <li>유기적 피드 미학 매칭 = 낮은 CPM + 더 넓은 배포</li>
+        <li>로고/워터마크/명시적 광고 요소 = 배포 풀 축소 리스크</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 9: 5대 훅 포맷 풀 가이드
+  ══════════════════════════════════════════════════ -->
+  <div id="tab9" class="tab-content">
+    <span class="section-label red">5대 훅 포맷 풀 가이드</span>
+    <h2>5대 훅 포맷 완전 정복</h2>
+
+    <h3>훅의 3가지 역할</h3>
+    <div class="role-row">
+      <div class="role-card">
+        <div class="ri">🛑</div>
+        <div class="rt">Stop the Scroll</div>
+        <div class="rd">스크롤을 멈추게 하는 것. 첫 프레임 0.5초 안에 결정된다. 비주얼, 색감, 움직임이 핵심.</div>
+      </div>
+      <div class="role-card">
+        <div class="ri">🎯</div>
+        <div class="rt">Filter the Audience</div>
+        <div class="rd">내 타겟에게 "이건 나를 위한 거야"라고 신호를 보낸다. 잘못된 오디언스를 걸러내는 것도 훅의 역할.</div>
+      </div>
+      <div class="role-card">
+        <div class="ri">⏭️</div>
+        <div class="rt">Earn the Next 5 Seconds</div>
+        <div class="rd">첫 3초가 다음 5초를 번다. 계속 볼 이유를 만드는 것. Zeigarnik effect 활용.</div>
+      </div>
+    </div>
+
+    <h3>훅의 3가지 정보 채널</h3>
+    <div class="channel-row">
+      <div class="channel-card">
+        <div class="ci">👁️</div>
+        <div class="ct">Visual</div>
+        <div class="cd">첫 프레임 구성, 색감, 움직임, 등장인물. 소리 꺼도 전달되는 것. 가장 먼저 처리됨.</div>
+      </div>
+      <div class="channel-card">
+        <div class="ci">📝</div>
+        <div class="ct">Caption / Text Overlay</div>
+        <div class="cd">화면 위 텍스트. 무음 시청자에게 훅 전달. 폰트, 위치, 크기가 효과에 영향.</div>
+      </div>
+      <div class="channel-card">
+        <div class="ci">🔊</div>
+        <div class="ct">Audio</div>
+        <div class="cd">목소리 톤, 배경음악, 사운드 이펙트. 소리 켠 시청자에게 감정 전달. 친밀감 조성에 강함.</div>
+      </div>
+    </div>
+
+    <div class="box insight">
+      <h4>3개 채널의 조합이 핵심</h4>
+      <p>최고의 훅은 3개 채널을 동시에 설계한다. 각 채널에서 서로 다른 정보 레이어를 전달해서 전체 훅의 임팩트를 극대화.</p>
+    </div>
+
+    <h3>Anatomy of a Hook — Ridge Wallet 예시</h3>
+    <div class="anatomy-box">
+      <h4>HOOK ANATOMY — RIDGE WALLET CASE STUDY</h4>
+      <div class="anatomy-layer targeting">
+        <div class="al-label">TARGETING LAYER — 누구에게 말하는가</div>
+        <div class="al-content">타겟 오디언스를 명시적 or 암시적으로 호출. 잘못된 사람이 계속 보지 않도록 필터링.</div>
+        <div class="al-example">"남성 미니멀리스트, 지갑에 짜증 내는 사람" → 비주얼: 두꺼운 지갑 → 얇은 카드 지갑 전환</div>
+      </div>
+      <div class="anatomy-layer psychological">
+        <div class="al-label">PSYCHOLOGICAL LAYER — 어떤 감정/인지 트리거를 당기는가</div>
+        <div class="al-content">Contrast, Curiosity, Social proof, Fear of missing out 등 심리적 레버. 계속 볼 이유를 만드는 층.</div>
+        <div class="al-example">"이게 진짜 필요한가? 내 지갑이 저렇게 두꺼웠나?" → 자기 확인 욕구 유발 → 다음 5초를 번다</div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- CONFESSION -->
+    <div class="hook-card confession">
+      <div class="hook-num">HOOK FORMAT 01</div>
+      <div class="hook-title">🤫 Confession</div>
+      <div class="hook-subtitle">고백형 — 잘못된 믿음을 털어놓고 해결책으로 연결</div>
+
+      <div class="hook-section">
+        <h4>핵심 구조</h4>
+        <ol>
+          <li><strong>잘못된 믿음 (Wrong Belief)</strong> — 타겟이 가진 오해/실수를 고백자가 자기 입으로 말함</li>
+          <li><strong>고백자 (Confessor)</strong> — 브랜드가 아닌 사람이 말해야 신뢰도 높음 (UGC, 인플루언서, 전문가)</li>
+          <li><strong>해결 (Resolution)</strong> — 제품/서비스가 어떻게 그 오해를 해소했는지</li>
+        </ol>
+      </div>
+
+      <div class="hook-section">
+        <h4>예시</h4>
+        <div class="hook-example">
+          <strong>ECOMMERCE</strong>
+          "저도 한동안 비싼 크림 사면 된다고 생각했어요. 그러다 이 루틴 바꾸고 나서..."
+        </div>
+        <div class="hook-example">
+          <strong>SaaS</strong>
+          "우리 팀이 1년 동안 잘못된 메트릭 보고 있었어요. 이 툴 쓰기 전까지는..."
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>Mode Breakdown</h4>
+        <div class="mode-grid">
+          <div class="mode-card">
+            <div class="mc-label">🔊 AUDIO</div>
+            <div class="mc-name">친밀감</div>
+            <div class="mc-desc">조용하고 개인적인 톤. 카페에서 속삭이듯. 방송 톤 금지.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">📝 CAPTION</div>
+            <div class="mc-name">구체적</div>
+            <div class="mc-desc">고백 내용을 텍스트로 강조. "저도 이런 줄 알았어요" 형태.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">👁️ VISUAL</div>
+            <div class="mc-name">진정성</div>
+            <div class="mc-desc">완벽한 스튜디오 X. 핸드헬드, 자연광, 실제 공간. 연출된 느낌 제거.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>브랜드 고백 (Brand Confession) — Two-Sided Advertising</h4>
+        <div class="box warn">
+          <p>브랜드가 직접 과거 실수를 고백하는 형태. <strong>Two-Sided Advertising</strong> 기법 — 장점만 말하지 않고 단점/한계도 인정함으로써 역설적으로 신뢰도 급상승.</p>
+          <p><em>"솔직히 말하면, 우리 제품이 모든 사람에게 맞진 않아요. 하지만 이런 분께는..."</em></p>
+          <p>연구 결과: 양면적 메시지가 일면적 메시지보다 장기 설득력에서 우위. 부정적인 내용을 먼저 인정할수록 긍정적 내용의 신뢰도가 올라간다.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOLD CLAIM -->
+    <div class="hook-card boldclaim">
+      <div class="hook-num">HOOK FORMAT 02</div>
+      <div class="hook-title">💥 Bold Claim</div>
+      <div class="hook-subtitle">대담한 주장형 — 큰 약속으로 즉각 주목 획득</div>
+
+      <div class="hook-section">
+        <h4>핵심 원리</h4>
+        <p>사람들이 놓치기 싫어하는 큰 약속을 전면에 내세운다. 훅 자체가 광고의 가장 강력한 주장이 된다.</p>
+      </div>
+
+      <div class="hook-section">
+        <h4>예시</h4>
+        <div class="hook-example">
+          <strong>SUPPLEMENT</strong>
+          "30일 안에 에너지 레벨이 달라지지 않으면 전액 환불"
+        </div>
+        <div class="hook-example">
+          <strong>SAAS</strong>
+          "이 설정 하나로 광고 ROAS 3배 올렸습니다"
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>Mode Breakdown</h4>
+        <div class="mode-grid">
+          <div class="mode-card">
+            <div class="mc-label">🔊 AUDIO</div>
+            <div class="mc-name">확신 톤</div>
+            <div class="mc-desc">확신에 찬 목소리. 주저함 없이. 속도는 약간 느리게 — 주장이 처리될 시간.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">📝 CAPTION</div>
+            <div class="mc-name">주장 강조</div>
+            <div class="mc-desc">대담한 주장을 텍스트로 반복. 굵은 폰트, 강조색. 수치/결과 있으면 더 강력.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">👁️ VISUAL</div>
+            <div class="mc-name">증거 맥락</div>
+            <div class="mc-desc">주장의 신뢰성을 뒷받침하는 비주얼. 결과물, 수치, 증거 화면.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>Bold Claim 사용 전 3가지 질문</h4>
+        <ul class="question-list">
+          <li><strong>검증 가능한가?</strong> — 주장을 광고 내에서 입증할 수 있어야 함. 근거 없는 주장은 신뢰 손상.</li>
+          <li><strong>톤이 맞는가?</strong> — 브랜드 카테고리에 따라 "충격적 주장"이 효과 vs. "과장 광고" 오해 받는 경우 나뉨.</li>
+          <li><strong>주장 = 훅 vs. 주장 = 광고 전체?</strong> — 훅에만 쓸지, 아예 광고 전체의 중심 메시지로 할지 결정.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RELATABILITY -->
+    <div class="hook-card relatability">
+      <div class="hook-num">HOOK FORMAT 03</div>
+      <div class="hook-title">🤝 Relatability</div>
+      <div class="hook-subtitle">공감형 — "그거 나야" 반응을 끌어내는 훅</div>
+
+      <div class="hook-section">
+        <h4>핵심 원리</h4>
+        <p>타겟이 자기 자신을 광고에서 보는 순간, 스크롤을 멈춘다. "그거 나야" 반응은 필터링 + 인게이지먼트를 동시에 달성하는 가장 효율적인 훅.</p>
+      </div>
+
+      <div class="hook-section">
+        <h4>리서치 방법 — 진짜 언어 찾기</h4>
+        <div class="box insight">
+          <ul>
+            <li><strong>Reddit</strong> — 타겟 서브레딧에서 실제 고민/불만 언어 수집. 사람들이 쓰는 그 단어 그대로.</li>
+            <li><strong>제품 리뷰</strong> — 아마존/네이버 1-3성 리뷰에서 공통 고통 포인트. "이 제품은 X 때문에 별로였다" → 훅 재료.</li>
+            <li><strong>고객 문의 (CS)</strong> — 자주 반복되는 질문 = 공통 불안/혼란 = Relatability 훅 금광.</li>
+            <li><strong>In-group language</strong> — 그 커뮤니티만 쓰는 표현, 줄임말, 밈. 외부인이 못 쓰는 언어가 내부인을 끌어당긴다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>예시</h4>
+        <div class="hook-example">
+          <strong>FITNESS APP</strong>
+          "헬스장 등록해놓고 3번도 안 간 거 나만이야?"
+        </div>
+        <div class="hook-example">
+          <strong>PRODUCTIVITY TOOL</strong>
+          "투두리스트 앱 5개 쓰는데 여전히 아무것도 못 하는 사람"
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>Mode Breakdown</h4>
+        <div class="mode-grid">
+          <div class="mode-card">
+            <div class="mc-label">🔊 AUDIO</div>
+            <div class="mc-name">동료 톤</div>
+            <div class="mc-desc">브랜드가 아닌 동료처럼. 편안하고, 약간 웃기거나 자기비하적. in-group 언어 사용.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">📝 CAPTION</div>
+            <div class="mc-name">타겟 시그널</div>
+            <div class="mc-desc">타겟 오디언스를 명확히 호출. "마케터라면", "30대 직장인이라면" 형태.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">👁️ VISUAL</div>
+            <div class="mc-name">거울</div>
+            <div class="mc-desc">타겟이 자신을 볼 수 있는 상황/공간/모습. 완벽한 스튜디오보다 일상적 공간.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box warn">
+        <h4>⚠️ Relatability 주의사항</h4>
+        <p>타겟 그룹이 불분명하면 역효과. "모든 사람이 공감할 훅"은 실제로 아무도 공감 못 함. 타겟을 좁히면 좁힐수록 TSR이 올라간다.</p>
+      </div>
+    </div>
+
+    <!-- CONTRAST -->
+    <div class="hook-card contrast">
+      <div class="hook-num">HOOK FORMAT 04</div>
+      <div class="hook-title">⚡ Contrast</div>
+      <div class="hook-subtitle">대비형 — Before/After, 방법론 대비로 극적 임팩트</div>
+
+      <div class="hook-section">
+        <h4>4가지 대비 유형</h4>
+        <div class="contrast-grid">
+          <div class="contrast-card">
+            <div class="cc-type">TYPE 1</div>
+            <div class="cc-name">Temporal (시간 대비)</div>
+            <div class="cc-desc">과거 vs. 현재. Before/After. 제품 사용 전후의 삶/결과 대비.</div>
+            <div class="cc-ex">"6개월 전 vs. 지금" / "이 제품 쓰기 전 vs. 후"</div>
+          </div>
+          <div class="contrast-card">
+            <div class="cc-type">TYPE 2</div>
+            <div class="cc-name">Method (방법론 대비)</div>
+            <div class="cc-desc">기존 방법 vs. 새 방법. 낡은 접근 vs. 더 나은 접근.</div>
+            <div class="cc-ex">"모두가 이렇게 하지만, 우리는..." / "틀린 방법 vs. 맞는 방법"</div>
+          </div>
+          <div class="contrast-card">
+            <div class="cc-type">TYPE 3</div>
+            <div class="cc-name">Expectation (기대 대비)</div>
+            <div class="cc-desc">예상 vs. 실제. 생각보다 쉽거나/빠르거나/저렴한 결과.</div>
+            <div class="cc-ex">"이게 이렇게 쉬울 줄 몰랐어요" / "예상: X, 현실: Y"</div>
+          </div>
+          <div class="contrast-card">
+            <div class="cc-type">TYPE 4</div>
+            <div class="cc-name">Comparison (비교 대비)</div>
+            <div class="cc-desc">경쟁사/대안 vs. 내 제품. 가격, 결과, 경험의 차이 명시.</div>
+            <div class="cc-ex">"비슷한 가격에 이 차이가?" / "[경쟁사] vs. [브랜드]"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>적 찾기 (Finding the Enemy)</h4>
+        <div class="box key">
+          <h4>Contrast 훅의 숨은 핵심</h4>
+          <p>타겟의 <strong>공통 적</strong>을 찾아라. 적은 경쟁사일 수도, 낡은 습관일 수도, 잘못된 믿음일 수도 있다. 공통의 적 앞에서 사람들은 뭉친다 — 그리고 그 대안이 내 제품이 된다.</p>
+          <ul>
+            <li>적 = 경쟁사: "왜 [경쟁사] 쓰면 안 되는지"</li>
+            <li>적 = 오래된 방법: "X 시대는 끝났다"</li>
+            <li>적 = 잘못된 믿음: "모두가 Y라고 하는데, 실제로는..."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>Mode Breakdown</h4>
+        <div class="mode-grid">
+          <div class="mode-card">
+            <div class="mc-label">🔊 AUDIO</div>
+            <div class="mc-name">극적 전환</div>
+            <div class="mc-desc">대비 전 → 후의 톤 전환. "그런데" 또는 침묵 후 반전 포인트.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">📝 CAPTION</div>
+            <div class="mc-name">시각적 대비</div>
+            <div class="mc-desc">Before/After 텍스트, 취소선, 화살표. 두 상태의 시각적 분리가 핵심.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">👁️ VISUAL</div>
+            <div class="mc-name">분할 화면</div>
+            <div class="mc-desc">분할 화면, 와이프 전환, 색감 대비. 두 상태를 같은 프레임에서 동시에 보여주는 것이 가장 강력.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CURIOSITY -->
+    <div class="hook-card curiosity">
+      <div class="hook-num">HOOK FORMAT 05</div>
+      <div class="hook-title">🔍 Curiosity</div>
+      <div class="hook-subtitle">호기심형 — Known + Unknown 공식으로 정보 갭 만들기</div>
+
+      <div class="hook-section">
+        <h4>Known + Unknown 공식</h4>
+        <div class="box purple">
+          <h4>Curiosity 훅의 수학</h4>
+          <p><strong>Known (알고 있는 것)</strong> + <strong>Unknown (모르는 것)</strong> = 정보 갭(Information Gap)</p>
+          <p>사람들은 정보 갭을 닫고 싶어한다. 답을 알기 위해 계속 보게 된다. 이게 Zeigarnik Effect.</p>
+          <p><em>"대부분의 마케터가 모르는 Meta 설정이 있습니다..." → 나는 마케터다(Known) + 내가 모르는 설정이 있다?(Unknown) → 봐야 함</em></p>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>Zeigarnik Effect</h4>
+        <div class="box insight">
+          <p>미완성된 과제가 완성된 과제보다 기억에 더 오래 남는다는 심리학 원리 (Bluma Zeigarnik, 1927). 훅이 질문을 던지면 뇌는 그 답을 찾을 때까지 "열린 루프" 상태로 유지된다. 광고를 끝까지 보거나, 랜딩 페이지를 클릭하게 만드는 원동력.</p>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>예시</h4>
+        <div class="hook-example">
+          <strong>MARKETING TOOL</strong>
+          "대부분의 광고주가 이 Meta 세팅 때문에 매일 돈을 버리고 있습니다"
+        </div>
+        <div class="hook-example">
+          <strong>HEALTH/WELLNESS</strong>
+          "왜 운동을 열심히 해도 살이 안 빠지는지 이제 알았습니다"
+        </div>
+        <div class="hook-example">
+          <strong>ECOMMERCE</strong>
+          "이 성분이 들어간 제품을 절대 쓰면 안 되는 이유"
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>타겟팅 실패 방지</h4>
+        <div class="box warn">
+          <h4>⚠️ Curiosity 훅의 함정</h4>
+          <p>너무 광범위한 궁금증은 오디언스 필터링이 안 된다. "이 비밀을 아는 사람이 없다"는 누구에게도 강력하지 않다. Curiosity도 반드시 <strong>타겟 시그널을 포함</strong>해야 한다.</p>
+          <ul>
+            <li>✅ "30대 여성이라면 알아야 할..." — 타겟 + 호기심 결합</li>
+            <li>✅ "eCommerce 브랜드 담당자라면..." — 역할 특정 + 호기심</li>
+            <li>❌ "아무도 모르는 비밀" — 너무 광범위, 필터링 실패</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hook-section">
+        <h4>Mode Breakdown</h4>
+        <div class="mode-grid">
+          <div class="mode-card">
+            <div class="mc-label">🔊 AUDIO</div>
+            <div class="mc-name">속삭임 or 강조</div>
+            <div class="mc-desc">비밀 같은 느낌엔 낮은 목소리. 충격적 정보엔 강조 톤. 질문을 끝내지 않고 잠시 멈추는 것도 효과적.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">📝 CAPTION</div>
+            <div class="mc-name">질문 / 불완전 문장</div>
+            <div class="mc-desc">물음표로 끝나거나 문장을 잘라서 "계속 보게" 만들기. "이유가..." 처럼 미완성 캡션.</div>
+          </div>
+          <div class="mode-card">
+            <div class="mc-label">👁️ VISUAL</div>
+            <div class="mc-name">질문하는 표정/행동</div>
+            <div class="mc-desc">고개를 갸웃거리거나, 무언가를 가리키거나, 화면 밖을 보는 시선. 답이 화면 밖에 있다는 암시.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box action">
+      <h4>✅ 5대 훅 포맷 실전 체크리스트</h4>
+      <ul>
+        <li>훅 작성 전: 타겟 오디언스, 핵심 고통 포인트, 제품 핵심 약속 3가지 먼저 정의</li>
+        <li>3개 채널(Visual/Caption/Audio) 모두 설계했는가?</li>
+        <li>Targeting Layer + Psychological Layer 둘 다 있는가?</li>
+        <li>첫 3초 안에 "이건 나를 위한 광고야"가 전달되는가?</li>
+        <li>다음 5초를 볼 이유(Open Loop)가 만들어졌는가?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 10: Motion 서비스 분석
+  ══════════════════════════════════════════════════ -->
+  <div id="tab10" class="tab-content">
+    <span class="section-label blue">MOTION 서비스 분석</span>
+    <h2>Motion 서비스 완전 분석</h2>
+    <p>퍼포먼스 크리에이티브 분석 툴 Motion의 서비스 구조, 가격, 핵심 기능, bscamp와의 비교 정리.</p>
+
+    <h3>💰 가격 구조</h3>
+    <div class="price-grid">
+      <div class="price-card popular">
+        <div class="pc-plan">STARTER</div>
+        <div class="pc-price">$250<span class="pc-period">/월</span></div>
+        <div class="pc-spend">최대 $50,000 ad spend/월</div>
+        <ul class="pc-features">
+          <li>크리에이티브 리포트 (기본)</li>
+          <li>AI 태깅 (8개 카테고리)</li>
+          <li>Inspo 라이브러리 접근</li>
+          <li>Meta, TikTok 연동</li>
+          <li>Runneth AI 어시스턴트</li>
+          <li>60일 무료 트라이얼 (코스 수강생)</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <div class="pc-plan">PRO / GROWTH</div>
+        <div class="pc-price">견적<span class="pc-period"> (영업팀)</span></div>
+        <div class="pc-spend">$50K+ ad spend/월</div>
+        <ul class="pc-features">
+          <li>Starter 전체 포함</li>
+          <li>Comparative Reports 풀 기능</li>
+          <li>GA4, Northbeam 연동</li>
+          <li>LinkedIn 연동</li>
+          <li>멀티 브랜드/계정 관리</li>
+          <li>전담 CS 매니저</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <div class="pc-plan">AI STUDIO</div>
+        <div class="pc-price">견적<span class="pc-period"> (별도)</span></div>
+        <div class="pc-spend">AI 크리에이티브 제작 포함</div>
+        <ul class="pc-features">
+          <li>Pro 전체 포함</li>
+          <li>AI 크리에이티브 생성</li>
+          <li>자동 A/B 테스트</li>
+          <li>엔터프라이즈 온보딩</li>
+          <li>화이트라벨 리포트</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box warn">
+      <h4>💡 코스 수강생 특별 혜택</h4>
+      <p>Motion Creative Strategy Bootcamp 수강생은 <strong>Starter Plan 60일 무료 트라이얼</strong> 제공. 월 $50,000 ad spend까지 포함. 트라이얼 신청은 이메일로 안내.</p>
+    </div>
+
+    <h3>🔧 핵심 기능 상세</h3>
+
+    <h4>1. Creative Analytics (크리에이티브 분석)</h4>
+    <div class="box insight">
+      <p>크리에이티브 성과를 비주얼-퍼스트로 시각화. 미디어 바이어 메트릭(TSR, Hold Rate, CTR) + 크리에이티브 팀이 이해하기 쉬운 인터페이스 결합. 리포트 템플릿 라이브러리에서 즉시 시작 가능.</p>
+      <ul>
+        <li>Top Hooks Report — 어텐션 획득 훅 순위</li>
+        <li>Creative Fatigue Report — 크리에이티브 피로도 모니터링</li>
+        <li>Winner Identification — 위너 자동 하이라이트</li>
+      </ul>
+    </div>
+
+    <h4>2. AI Tagging — 8개 카테고리 자동 분류</h4>
+    <table>
+      <thead><tr><th>카테고리</th><th>설명</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td>Hook Tactic</td><td>Confession/Bold Claim/Relatability 등 훅 유형</td><td>포맷별 TSR 비교</td></tr>
+        <tr><td>Messaging Angle</td><td>Pain point / Benefit / Social proof 등</td><td>어떤 앵글이 전환율 높은지</td></tr>
+        <tr><td>Intended Audience</td><td>타겟 페르소나 자동 감지</td><td>오디언스별 크리에이티브 성과</td></tr>
+        <tr><td>Visual Format</td><td>UGC / Static / Animation / Talking head</td><td>포맷별 CPM 차이</td></tr>
+        <tr><td>Product Focus</td><td>어떤 제품/기능을 강조하는지</td><td>제품별 크리에이티브 ROI</td></tr>
+        <tr><td>Creative Length</td><td>0-15s / 15-30s / 30-60s / 60s+</td><td>길이별 완시청률</td></tr>
+        <tr><td>Talent Type</td><td>인플루언서 / UGC / 브랜드 직원 / AI</td><td>크리에이터 유형별 성과</td></tr>
+        <tr><td>Call to Action</td><td>Shop Now / Learn More / Sign Up 등</td><td>CTA별 CTR 비교</td></tr>
+      </tbody>
+    </table>
+
+    <h4>3. Inspo — 광고 인스피레이션 라이브러리</h4>
+    <div class="box">
+      <ul>
+        <li>업종/비주얼 스타일/운영 기간/AI 태그별 필터링</li>
+        <li>경쟁사 광고 모니터링 (도메인으로 추적)</li>
+        <li>보드 저장 + 팀 공유</li>
+        <li>광고 성과 데이터와 연결 (자체 계정 연동 시)</li>
+      </ul>
+    </div>
+
+    <h4>4. Runneth AI — 크리에이티브 전략 AI 어시스턴트</h4>
+    <div class="box purple">
+      <ul>
+        <li>광고 계정 데이터 직접 분석 + 인사이트 생성</li>
+        <li>자연어로 질문 → 크리에이티브 전략 답변</li>
+        <li>브리프 자동 생성 (리서치 → 브리프 속도 10배)</li>
+        <li>경쟁사 인사이트 + 새 훅 아이디어 제안</li>
+        <li>Claude/GPT 대비 강점: 광고 계정 데이터 직접 접근 가능</li>
+      </ul>
+    </div>
+
+    <h4>5. Comparative Reports — 계정 전체 패턴 뷰</h4>
+    <div class="box insight">
+      <p>개별 광고 분석이 아닌 <strong>테마/패턴 레벨</strong> 분석. "이번 달에 Confession 훅이 Bold Claim보다 TSR 22% 높았다"와 같은 인사이트 자동 생성. AI 태그 8개 카테고리 기반.</p>
+    </div>
+
+    <h3>🔗 연동 채널</h3>
+    <table>
+      <thead><tr><th>채널</th><th>Starter</th><th>Pro+</th><th>주요 데이터</th></tr></thead>
+      <tbody>
+        <tr><td>Meta (Facebook/Instagram)</td><td><span class="badge-yes">✓ 포함</span></td><td><span class="badge-yes">✓ 포함</span></td><td>TSR, Hold Rate, CTR, Spend</td></tr>
+        <tr><td>TikTok</td><td><span class="badge-yes">✓ 포함</span></td><td><span class="badge-yes">✓ 포함</span></td><td>Video Views, Engagement, CVR</td></tr>
+        <tr><td>Google Ads</td><td><span class="badge-partial">일부</span></td><td><span class="badge-yes">✓ 포함</span></td><td>YouTube 크리에이티브 분석</td></tr>
+        <tr><td>GA4</td><td><span class="badge-no">미포함</span></td><td><span class="badge-yes">✓ 포함</span></td><td>LP 전환율 연결</td></tr>
+        <tr><td>Northbeam</td><td><span class="badge-no">미포함</span></td><td><span class="badge-yes">✓ 포함</span></td><td>MTA 어트리뷰션 연동</td></tr>
+        <tr><td>LinkedIn</td><td><span class="badge-no">미포함</span></td><td><span class="badge-yes">✓ 포함</span></td><td>B2B 크리에이티브 분석</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h3>📊 bscamp vs. Motion — 비교 분석</h3>
+    <table>
+      <thead>
+        <tr><th>기능/특성</th><th>Motion</th><th>bscamp (현재)</th><th>bscamp (목표)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>크리에이티브 성과 분석</td>
+          <td><span class="badge-yes">풀 기능</span></td>
+          <td><span class="badge-partial">기초 지표</span></td>
+          <td><span class="badge-plan">고도화 예정</span></td>
+        </tr>
+        <tr>
+          <td>AI 태깅 (자동 분류)</td>
+          <td><span class="badge-yes">8개 카테고리</span></td>
+          <td><span class="badge-no">미구현</span></td>
+          <td><span class="badge-plan">개발 예정</span></td>
+        </tr>
+        <tr>
+          <td>경쟁사 광고 모니터링</td>
+          <td><span class="badge-yes">Inspo 기능</span></td>
+          <td><span class="badge-no">미구현</span></td>
+          <td><span class="badge-plan">검토 중</span></td>
+        </tr>
+        <tr>
+          <td>AI 크리에이티브 어시스턴트</td>
+          <td><span class="badge-yes">Runneth AI</span></td>
+          <td><span class="badge-partial">일반 AI 채팅</span></td>
+          <td><span class="badge-plan">광고계정 연동 AI</span></td>
+        </tr>
+        <tr>
+          <td>한국어 지원</td>
+          <td><span class="badge-no">영어만</span></td>
+          <td><span class="badge-yes">네이티브</span></td>
+          <td><span class="badge-yes">네이티브</span></td>
+        </tr>
+        <tr>
+          <td>국내 플랫폼 연동</td>
+          <td><span class="badge-no">없음</span></td>
+          <td><span class="badge-partial">일부</span></td>
+          <td><span class="badge-plan">네이버/카카오 포함</span></td>
+        </tr>
+        <tr>
+          <td>가격 (초기 진입)</td>
+          <td><span class="badge-no">$250/월</span></td>
+          <td><span class="badge-yes">무료 또는 저가</span></td>
+          <td><span class="badge-yes">경쟁력 유지</span></td>
+        </tr>
+        <tr>
+          <td>타겟 시장</td>
+          <td><span class="badge-partial">글로벌 DTC</span></td>
+          <td><span class="badge-yes">한국 SMB</span></td>
+          <td><span class="badge-yes">한국 SMB + 에이전시</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h3>🥷 카카시 포인트 — Motion에서 배울 5가지</h3>
+    <p>Motion의 제품 전략에서 bscamp가 벤치마크해야 할 핵심 포인트.</p>
+
+    <ul class="kakashi-list">
+      <li>
+        <div class="kk-num">1</div>
+        <div class="kk-body">
+          <div class="kk-title">크리에이티브 분석을 "비주얼 퍼스트"로 재정의했다</div>
+          <div class="kk-desc">기존 광고 분석 툴은 숫자 테이블 중심. Motion은 크리에이티브를 실제 비주얼로 보여주면서 메트릭을 연결. "이 썸네일이 TSR 32%"가 "광고 ID #12345가 TSR 32%"보다 훨씬 직관적. bscamp도 분석 UI를 숫자가 아닌 크리에이티브 중심으로 설계해야 한다.</div>
+        </div>
+      </li>
+      <li>
+        <div class="kk-num">2</div>
+        <div class="kk-body">
+          <div class="kk-title">AI 태깅으로 "패턴 레벨" 분석을 가능하게 했다</div>
+          <div class="kk-desc">개별 광고 성과가 아닌 훅 타입, 메시지 앵글, 비주얼 포맷 레벨에서 패턴을 찾을 수 있게 AI 태깅을 구현. "Confession 훅이 Bold Claim보다 22% 높다"는 인사이트는 AI 태깅 없이는 불가능. bscamp의 AI 태깅 개발 시 이 8개 카테고리를 레퍼런스로.</div>
+        </div>
+      </li>
+      <li>
+        <div class="kk-num">3</div>
+        <div class="kk-body">
+          <div class="kk-title">교육(코스)을 제품 채널로 만들었다</div>
+          <div class="kk-desc">Motion Creative Strategy Bootcamp는 단순한 마케팅이 아닌 제품 채널. 코스 수강생 = 60일 트라이얼 = 자연스러운 온보딩. 교육 콘텐츠가 가장 높은 의도를 가진 유저를 가져온다. bscamp도 교육 콘텐츠(블로그, 뉴스레터, 유튜브)를 제품 획득 채널로 전략적으로 활용해야 한다.</div>
+        </div>
+      </li>
+      <li>
+        <div class="kk-num">4</div>
+        <div class="kk-body">
+          <div class="kk-title">커뮤니티를 제품 지원의 핵심으로 통합했다</div>
+          <div class="kk-desc">Motion 코스의 Slack 커뮤니티(#ask-motion)는 CS를 탈중앙화하면서 동시에 사용자들이 서로 배우는 생태계를 만든다. 코스 + 툴 + 커뮤니티의 삼각 구조. bscamp도 커뮤니티 레이어를 제품 경험에 통합하면 리텐션과 확산 두 가지를 동시에 잡을 수 있다.</div>
+        </div>
+      </li>
+      <li>
+        <div class="kk-num">5</div>
+        <div class="kk-body">
+          <div class="kk-title">한국 시장은 Motion이 못 건드리는 블루오션이다</div>
+          <div class="kk-desc">Motion의 약점: 영어만 지원, 한국 플랫폼(네이버/카카오) 미연동, $250/월 가격 장벽, 글로벌 DTC 중심 UX. bscamp의 기회: 한국어 네이티브 + 국내 플랫폼 완전 연동 + 한국 SMB/에이전시에 맞는 가격/UX + 국내 크리에이티브 패턴 학습. Motion이 잘 하는 것을 한국 시장에 맞게 재해석하는 것이 bscamp의 포지션.</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="highlight-purple">
+      🥷 <strong>카카시 요약:</strong> Motion은 "광고 분석을 크리에이티브 전략가의 언어로 번역한" 제품. bscamp는 그것을 "한국 시장의 언어로 다시 번역하는" 포지션을 가져가야 한다.
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

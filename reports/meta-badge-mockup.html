@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>메타 비즈니스 파트너 배지 목업</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; padding: 40px; }
+    h2 { margin: 40px 0 16px; color: #333; font-size: 18px; }
+    h3 { margin: 20px 0 12px; color: #666; font-size: 14px; }
+    .section { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    /* === 배지 스타일 === */
+
+    /* 방안 A: 사이드바 하단 */
+    .sidebar-mock {
+      width: 260px;
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 20px 16px;
+      color: white;
+    }
+    .sidebar-mock .nav-item {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #a0a0b0;
+      margin-bottom: 4px;
+    }
+    .sidebar-mock .nav-item.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-badge {
+      margin-top: 20px;
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-badge img {
+      width: 28px;
+      height: 28px;
+    }
+    .sidebar-badge .badge-text {
+      font-size: 11px;
+      color: #a0a0b0;
+      line-height: 1.4;
+    }
+    .sidebar-badge .badge-text strong {
+      display: block;
+      color: #4a9eff;
+      font-size: 12px;
+    }
+
+    /* 방안 B: 로그인 페이지 */
+    .login-mock {
+      max-width: 400px;
+      text-align: center;
+      padding: 40px;
+    }
+    .login-mock .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+    .login-mock .subtitle {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+    .login-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f0f7ff;
+      border: 1px solid #d0e3ff;
+      border-radius: 20px;
+      padding: 6px 14px 6px 8px;
+      margin-bottom: 24px;
+    }
+    .login-badge img {
+      width: 20px;
+      height: 20px;
+    }
+    .login-badge span {
+      font-size: 12px;
+      color: #1877f2;
+      font-weight: 500;
+    }
+    .login-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      background: #fafafa;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #1a1a2e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* 방안 C: 대시보드 상단 배너 */
+    .dashboard-badge-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%);
+      border: 1px solid #d0e3ff;
+      border-radius: 10px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+    }
+    .dashboard-badge-banner img {
+      width: 32px;
+      height: 32px;
+    }
+    .dashboard-badge-banner .text {
+      font-size: 13px;
+      color: #333;
+    }
+    .dashboard-badge-banner .text strong {
+      color: #1877f2;
+    }
+
+    /* 메타 로고 SVG 대체 (실제로는 공식 이미지 사용) */
+    .meta-icon {
+      width: 28px;
+      height: 28px;
+      background: #1877f2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .meta-icon.sm { width: 20px; height: 20px; font-size: 11px; }
+    .meta-icon.lg { width: 32px; height: 32px; font-size: 16px; }
+
+    .note {
+      background: #fff9e6;
+      border: 1px solid #ffe58f;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #8a6d3b;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>메타 비즈니스 파트너 배지 목업</h2>
+<p style="color:#666; font-size:14px; margin-bottom:24px;">자사몰사관학교가 메타 공식 파트너임을 표시. 3가지 배치 방안.</p>
+
+<!-- 방안 A -->
+<h3>방안 A: 사이드바 하단 (추천)</h3>
+<div class="section">
+  <div class="sidebar-mock">
+    <div class="nav-item">📊 대시보드</div>
+    <div class="nav-item active">🎯 총가치각도기</div>
+    <div class="nav-item">📝 Q&A</div>
+    <div class="nav-item">⚙️ 설정</div>
+    <div class="sidebar-badge">
+      <div class="meta-icon">M</div>
+      <div class="badge-text">
+        <strong>Meta Business Partner</strong>
+        공식 인증 파트너
+      </div>
+    </div>
+  </div>
+  <div class="note">
+    현재: 사이드바 하단이 비어있음<br>
+    변경: 메타 파트너 배지 삽입. 항상 보이는 위치.<br>
+    참고: 실제 구현 시 메타 공식 파트너 로고 이미지 사용
+  </div>
+</div>
+
+<!-- 방안 B -->
+<h3>방안 B: 로그인 페이지</h3>
+<div class="section">
+  <div class="login-mock">
+    <div class="logo">자사몰사관학교</div>
+    <div class="subtitle">메타 광고 전문 교육 플랫폼</div>
+    <div class="login-badge">
+      <div class="meta-icon sm">M</div>
+      <span>Meta Business Partner</span>
+    </div>
+    <input class="login-input" placeholder="이메일" value="smith@test.com">
+    <input class="login-input" placeholder="비밀번호" type="password" value="test1234!">
+    <button class="login-btn">로그인</button>
+  </div>
+  <div class="note">
+    현재: 로그인 페이지에 배지 없음<br>
+    변경: 로고 아래에 배지 삽입. 첫인상에서 신뢰도 확보.
+  </div>
+</div>
+
+<!-- 방안 C -->
+<h3>방안 C: 대시보드 상단 배너</h3>
+<div class="section">
+  <div class="dashboard-badge-banner">
+    <div class="meta-icon lg">M</div>
+    <div class="text">
+      자사몰사관학교는 <strong>Meta Business Partner</strong> 공식 인증을 받은 교육 기관입니다.
+    </div>
+  </div>
+  <div class="note">
+    현재: 대시보드 상단에 배너 없음<br>
+    변경: 배지 배너 추가. 닫기 버튼 추가 가능.<br>
+    장점: 눈에 잘 띔 / 단점: 공간 차지
+  </div>
+</div>
+
+<h3>구현 시 참고</h3>
+<div class="section" style="font-size:13px; color:#555; line-height:1.8;">
+  <p>• 메타 공식 파트너 로고: <a href="https://www.facebook.com/business/partner-directory">Meta Partner Directory</a>에서 다운로드</p>
+  <p>• 배지 텍스트: "Meta Business Partner" (공식 명칭)</p>
+  <p>• 색상: 메타 블루 #1877f2</p>
+  <p>• A/B/C 중 택1 또는 복수 적용 가능</p>
+</div>
+
+</body>
+</html>

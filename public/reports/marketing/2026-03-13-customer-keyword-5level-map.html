@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="date" content="2026-03-13">
+  <meta name="project" content="Blog SEO">
+  <title>고객 정의 → 키워드 5단계 매핑</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #F75D5D;
+      --primary-light: #fff1f1;
+      --bg: #f8f9fc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #1a1a1a;
+      --muted: #64748b;
+      --radius: 12px;
+      --accent-blue: #3b82f6;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    a.back {
+      display: inline-block; margin-bottom: 1.5rem;
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+    }
+    a.back:hover { color: var(--primary); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #e04848 100%);
+      color: white; border-radius: var(--radius); padding: 2.5rem 2rem;
+      margin-bottom: 2rem; position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: '🎯'; position: absolute; right: 2rem; top: 50%;
+      transform: translateY(-50%); font-size: 5rem; opacity: 0.15;
+    }
+    .hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .hero p { font-size: 1rem; opacity: 0.9; }
+    .hero .meta { font-size: 0.85rem; opacity: 0.7; margin-top: 0.75rem; }
+
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .card h2 {
+      font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card h3 {
+      font-size: 1.1rem; font-weight: 700; margin: 1.25rem 0 0.75rem;
+      color: var(--text);
+    }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem; margin: 1rem 0;
+    }
+    .stat-card {
+      background: var(--bg); border-radius: 10px; padding: 1.25rem;
+      text-align: center;
+    }
+    .stat-card .number { font-size: 2rem; font-weight: 800; color: var(--primary); }
+    .stat-card .label { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+
+    table {
+      width: 100%; border-collapse: collapse; margin: 0.75rem 0;
+      font-size: 0.9rem;
+    }
+    th {
+      background: var(--bg); font-weight: 700; text-align: left;
+      padding: 0.6rem 0.75rem; border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: #fafbfd; }
+
+    .persona-card {
+      background: var(--bg); border-radius: 10px; padding: 1.25rem;
+      margin: 0.75rem 0; border-left: 4px solid var(--primary);
+    }
+    .persona-card.a { border-left-color: var(--accent-green); }
+    .persona-card.b { border-left-color: var(--accent-blue); }
+    .persona-card.c { border-left-color: var(--accent-purple); }
+    .persona-card h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .persona-card .tag {
+      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+      font-size: 0.75rem; font-weight: 600; margin-right: 0.35rem;
+    }
+    .persona-card.a .tag { background: #d1fae5; color: #065f46; }
+    .persona-card.b .tag { background: #dbeafe; color: #1e40af; }
+    .persona-card.c .tag { background: #ede9fe; color: #5b21b6; }
+
+    .level-badge {
+      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+      font-size: 0.75rem; font-weight: 700; text-align: center;
+    }
+    .level-1 { background: #f3f4f6; color: #6b7280; }
+    .level-2 { background: #dbeafe; color: #1d4ed8; }
+    .level-3 { background: #fef3c7; color: #92400e; }
+    .level-4 { background: #fee2e2; color: #991b1b; }
+    .level-5 { background: #fce7f3; color: #9d174d; }
+
+    .star { color: var(--accent-amber); }
+
+    .funnel {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0; margin: 1.5rem 0;
+    }
+    .funnel-step {
+      padding: 1rem 2rem; text-align: center; color: white;
+      font-weight: 700; font-size: 0.9rem; position: relative;
+    }
+    .funnel-step:nth-child(1) { background: #94a3b8; width: 100%; border-radius: 10px 10px 0 0; }
+    .funnel-step:nth-child(2) { background: var(--accent-blue); width: 85%; }
+    .funnel-step:nth-child(3) { background: var(--accent-amber); width: 70%; }
+    .funnel-step:nth-child(4) { background: var(--primary); width: 55%; }
+    .funnel-step:nth-child(5) { background: #059669; width: 40%; border-radius: 0 0 10px 10px; }
+    .funnel-arrow { font-size: 1.2rem; color: var(--muted); }
+
+    .chart-bar {
+      display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0;
+    }
+    .chart-bar .label { width: 100px; font-size: 0.85rem; text-align: right; flex-shrink: 0; }
+    .chart-bar .bar {
+      height: 24px; border-radius: 4px; background: var(--primary);
+      display: flex; align-items: center; padding: 0 0.5rem;
+      font-size: 0.75rem; color: white; font-weight: 600;
+      transition: width 0.3s;
+    }
+    .chart-bar .bar.blue { background: var(--accent-blue); }
+    .chart-bar .bar.green { background: var(--accent-green); }
+    .chart-bar .bar.amber { background: var(--accent-amber); }
+    .chart-bar .bar.purple { background: var(--accent-purple); }
+
+    .highlight-box {
+      background: var(--primary-light); border: 1px solid #fecaca;
+      border-radius: 8px; padding: 1rem; margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .highlight-box strong { color: var(--primary); }
+
+    .flow-diagram {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      margin: 1.5rem 0;
+    }
+    .flow-box {
+      padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600;
+      font-size: 0.9rem; text-align: center; width: 80%;
+    }
+    .flow-arrow { color: var(--muted); font-size: 1.2rem; }
+
+    .qa-item {
+      display: flex; gap: 0.75rem; padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .qa-item:last-child { border-bottom: none; }
+    .qa-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .qa-content { flex: 1; }
+    .qa-question { font-weight: 600; font-size: 0.9rem; }
+    .qa-keyword { font-size: 0.85rem; color: var(--accent-blue); margin-top: 0.25rem; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.4rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .persona-card { padding: 1rem; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back" href="/">← 목록으로</a>
+
+    <div class="hero">
+      <h1>고객 정의 → 키워드 5단계 매핑</h1>
+      <p>엠타트업 마케팅축 × 자사몰사관학교 내부 데이터 분석</p>
+      <div class="meta">2026-03-13 · Supabase 프로필 29명 + QA 데이터 · 네이버 키워드 API</div>
+    </div>
+
+    <!-- 핵심 지표 -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="number">29</div>
+        <div class="label">수강생 프로필</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">34%</div>
+        <div class="label">뷰티/화장품 (최다)</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">38%</div>
+        <div class="label">매출 10~50억 (최다)</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">6,120</div>
+        <div class="label">1순위 키워드 월검색</div>
+      </div>
+    </div>
+
+    <!-- 1. 고객 프로필 분석 -->
+    <div class="card">
+      <h2>📊 1. 고객 프로필 분석</h2>
+
+      <h3>업종 분포</h3>
+      <div class="chart-bar"><div class="label">뷰티</div><div class="bar" style="width: 68%;">10명 (34%)</div></div>
+      <div class="chart-bar"><div class="label">식품</div><div class="bar blue" style="width: 48%;">7명 (24%)</div></div>
+      <div class="chart-bar"><div class="label">리빙</div><div class="bar green" style="width: 34%;">5명 (17%)</div></div>
+      <div class="chart-bar"><div class="label">패션</div><div class="bar amber" style="width: 20%;">3명 (10%)</div></div>
+      <div class="chart-bar"><div class="label">건강</div><div class="bar purple" style="width: 14%;">2명 (7%)</div></div>
+      <div class="chart-bar"><div class="label">기타</div><div class="bar" style="width: 14%; background: #94a3b8;">2명 (7%)</div></div>
+
+      <h3>월 광고비</h3>
+      <div class="chart-bar"><div class="label">1000만+</div><div class="bar" style="width: 68%;">10명 (34%)</div></div>
+      <div class="chart-bar"><div class="label">100만↓</div><div class="bar blue" style="width: 56%;">8명 (28%)</div></div>
+      <div class="chart-bar"><div class="label">100~500만</div><div class="bar green" style="width: 48%;">7명 (24%)</div></div>
+      <div class="chart-bar"><div class="label">500~1000만</div><div class="bar amber" style="width: 28%;">4명 (14%)</div></div>
+
+      <h3>연 매출</h3>
+      <div class="chart-bar"><div class="label">10~50억</div><div class="bar" style="width: 76%;">11명 (38%)</div></div>
+      <div class="chart-bar"><div class="label">1억↓</div><div class="bar blue" style="width: 48%;">7명 (24%)</div></div>
+      <div class="chart-bar"><div class="label">5~10억</div><div class="bar green" style="width: 34%;">5명 (17%)</div></div>
+      <div class="chart-bar"><div class="label">1~5억</div><div class="bar amber" style="width: 28%;">4명 (14%)</div></div>
+      <div class="chart-bar"><div class="label">50억+</div><div class="bar purple" style="width: 7%;">1</div></div>
+    </div>
+
+    <!-- 2. 고객 페르소나 -->
+    <div class="card">
+      <h2>👤 2. 고객 페르소나 (엠타트업 마케팅축)</h2>
+
+      <div class="highlight-box">
+        엠타트업 마케팅축: <strong>"어떤 욕구가 있고, 어떤 대안으로, 접근시키면 → 돈을 벌겠구나"</strong>
+      </div>
+
+      <div class="persona-card a">
+        <h4>🌱 페르소나 A: 초기 자사몰 대표</h4>
+        <span class="tag">매출 1억↓</span><span class="tag">광고비 100만↓</span>
+        <table>
+          <tr><th width="80">욕구</th><td>"내 브랜드 자사몰에서 매출을 만들고 싶다"</td></tr>
+          <tr><th>고통</th><td>광고비 쓸 돈도 없고, 어디서부터 시작해야 할지 모름</td></tr>
+          <tr><th>대안</th><td>스마트스토어만 하다가 자사몰 필요성은 알지만 방법 모름</td></tr>
+          <tr><th>접근</th><td>체험단, SNS 마케팅, 무료/저비용 방법부터</td></tr>
+          <tr><th>실제 QA</th><td>체험단 지원자 0명, 광고비 소진 안 됨, 메타 Verified 오류</td></tr>
+        </table>
+      </div>
+
+      <div class="persona-card b">
+        <h4>🚀 페르소나 B: 성장기 대표 ← 핵심 타겟</h4>
+        <span class="tag">매출 1~10억</span><span class="tag">광고비 100~500만</span>
+        <table>
+          <tr><th width="80">욕구</th><td>"광고비 대비 효율(ROAS)을 올려서 이익을 내고 싶다"</td></tr>
+          <tr><th>고통</th><td>광고비는 나가는데 전환이 안 됨, 데이터 읽는 법 모름</td></tr>
+          <tr><th>대안</th><td>대행사 맡기다가 직접 해보려는데 복잡함</td></tr>
+          <tr><th>접근</th><td>메타 광고 최적화, 상세페이지 개선, 픽셀/전환 추적</td></tr>
+          <tr><th>실제 QA</th><td>상품별 데이터 분산, 비밀링크 SKU 통합, 머신러닝 상태</td></tr>
+        </table>
+      </div>
+
+      <div class="persona-card c">
+        <h4>🏢 페르소나 C: 확장기 대표</h4>
+        <span class="tag">매출 10억+</span><span class="tag">광고비 500만+</span>
+        <table>
+          <tr><th width="80">욕구</th><td>"시스템화해서 스케일업하고 싶다"</td></tr>
+          <tr><th>고통</th><td>광고 의존도 높음, 인하우스 역량 부족</td></tr>
+          <tr><th>대안</th><td>대행사+인하우스 하이브리드, 자동화</td></tr>
+          <tr><th>접근</th><td>카탈로그 광고, ASC+, 경매 최적화, 배수효과</td></tr>
+          <tr><th>실제 QA</th><td>메타 광고와 공구 채널 병행, 경매 입찰 최적화</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. 키워드 5단계 -->
+    <div class="card">
+      <h2>🔍 3. 키워드 5단계 스펙트럼</h2>
+
+      <div class="highlight-box">
+        엠타트업 핵심: <strong>Level 3~4 구간 조작이 전환을 만든다</strong> — 여기서 물길을 만들어야 함
+      </div>
+
+      <div class="funnel">
+        <div class="funnel-step">L1 순수정보 — ROAS 뜻, CTR 뜻, 마케팅이란</div>
+        <div class="funnel-step">L2 관심탐색 — 메타광고 효과, 상세페이지 중요성</div>
+        <div class="funnel-step">L3 비교검토 — 대행사 vs 인하우스, 자사몰 vs 스마트스토어</div>
+        <div class="funnel-step">L4 구매직전 — 상세페이지 제작, 메타광고 세팅, 체험단 모집</div>
+        <div class="funnel-step">L5 전환 — 자사몰사관학교 후기, 마케팅 교육 추천</div>
+      </div>
+    </div>
+
+    <!-- 4. 페르소나별 키워드 매핑 -->
+    <div class="card">
+      <h2>🗺️ 4. 페르소나별 키워드 × Level 매핑</h2>
+
+      <h3>🌱 페르소나 A: 초기 자사몰 대표</h3>
+      <table>
+        <thead>
+          <tr><th>Level</th><th>키워드</th><th>검색의도</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="level-badge level-1">L1</span></td><td>자사몰이란, 마케팅 뜻, 브랜딩이란</td><td>개념 학습</td></tr>
+          <tr><td><span class="level-badge level-2">L2</span></td><td>자사몰 장점, 체험단 효과, 인스타 마케팅</td><td>방향 탐색</td></tr>
+          <tr><td><span class="level-badge level-3">L3</span></td><td><strong>자사몰 vs 스마트스토어</strong>, 카페24 vs 식스샵</td><td>선택 고민</td></tr>
+          <tr><td><span class="level-badge level-4">L4</span></td><td><strong>자사몰 만들기</strong>, <strong>체험단 모집 방법</strong></td><td>실행 준비</td></tr>
+          <tr><td><span class="level-badge level-5">L5</span></td><td>자사몰사관학교 후기, 마케팅 교육 추천</td><td>전환</td></tr>
+        </tbody>
+      </table>
+
+      <h3>🚀 페르소나 B: 성장기 대표 ← 핵심</h3>
+      <table>
+        <thead>
+          <tr><th>Level</th><th>키워드</th><th>검색의도</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="level-badge level-1">L1</span></td><td>ROAS 뜻, CTR 뜻, CPA CPM 차이, 전환율이란</td><td>용어 학습</td></tr>
+          <tr><td><span class="level-badge level-2">L2</span></td><td>메타광고 효과, 상세페이지 중요성, 리타겟팅</td><td>이해 심화</td></tr>
+          <tr><td><span class="level-badge level-3">L3</span></td><td><strong>광고대행사 vs 인하우스</strong>, 메타 vs 네이버광고</td><td>의사결정</td></tr>
+          <tr><td><span class="level-badge level-4">L4</span></td><td><strong>상세페이지 제작</strong>, <strong>메타광고 최적화</strong>, ROAS 높이기</td><td>실행</td></tr>
+          <tr><td><span class="level-badge level-5">L5</span></td><td>ROAS 컨설팅, 자사몰사관학교 수강, 메타광고 교육</td><td>전환</td></tr>
+        </tbody>
+      </table>
+
+      <h3>🏢 페르소나 C: 확장기 대표</h3>
+      <table>
+        <thead>
+          <tr><th>Level</th><th>키워드</th><th>검색의도</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="level-badge level-1">L1</span></td><td>머신러닝 광고, 카탈로그 광고란, ASC+ 뜻</td><td>고급 개념</td></tr>
+          <tr><td><span class="level-badge level-2">L2</span></td><td>광고 자동화, 인하우스 마케팅 구축</td><td>전략 탐색</td></tr>
+          <tr><td><span class="level-badge level-3">L3</span></td><td><strong>인하우스 vs 대행사</strong>, ASC+ vs 수동 캠페인</td><td>전략 결정</td></tr>
+          <tr><td><span class="level-badge level-4">L4</span></td><td><strong>메타 경매 최적화</strong>, 광고 시스템화</td><td>실행</td></tr>
+          <tr><td><span class="level-badge level-5">L5</span></td><td>시스템 구축 교육, 스케일업 컨설팅</td><td>전환</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5. 실제 검색량 -->
+    <div class="card">
+      <h2>📈 5. 실제 검색량 (네이버 API 2026-03-13)</h2>
+
+      <h3>🚀 페르소나 B 키워드 — 핵심 타겟</h3>
+      <table>
+        <thead>
+          <tr><th>키워드</th><th>PC</th><th>모바일</th><th>합계</th><th>Level</th><th>공략</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>상세페이지제작</strong></td><td>3,670</td><td>2,450</td><td style="font-weight:800; color: var(--primary);">6,120</td><td><span class="level-badge level-4">L4</span></td><td><span class="star">★★★</span></td></tr>
+          <tr><td><strong>메타광고</strong></td><td>4,360</td><td>1,600</td><td style="font-weight:800; color: var(--primary);">5,960</td><td><span class="level-badge level-4">L3~4</span></td><td><span class="star">★★★</span></td></tr>
+          <tr><td>상세페이지</td><td>3,470</td><td>1,170</td><td>4,640</td><td><span class="level-badge level-2">L2~3</span></td><td><span class="star">★★★</span></td></tr>
+          <tr><td>메타광고관리자</td><td>3,100</td><td>650</td><td>3,750</td><td><span class="level-badge level-2">L2</span></td><td><span class="star">★★</span></td></tr>
+          <tr><td>광고대행사</td><td>1,850</td><td>1,650</td><td>3,500</td><td><span class="level-badge level-3">L3</span></td><td><span class="star">★★★</span></td></tr>
+          <tr><td>ROAS</td><td>2,050</td><td>990</td><td>3,040</td><td><span class="level-badge level-1">L1~2</span></td><td><span class="star">★★</span></td></tr>
+          <tr><td>CPM</td><td>1,950</td><td>2,070</td><td>4,020</td><td><span class="level-badge level-1">L1</span></td><td><span class="star">★</span></td></tr>
+        </tbody>
+      </table>
+
+      <h3>🌱 페르소나 A 키워드</h3>
+      <table>
+        <thead>
+          <tr><th>키워드</th><th>PC</th><th>모바일</th><th>합계</th><th>Level</th><th>공략</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>체험단모집</strong></td><td>1,010</td><td>1,830</td><td style="font-weight:800; color: var(--accent-green);">2,840</td><td><span class="level-badge level-4">L4</span></td><td><span class="star">★★★</span></td></tr>
+          <tr><td>온라인쇼핑몰창업</td><td>300</td><td>1,110</td><td>1,410</td><td><span class="level-badge level-4">L4</span></td><td><span class="star">★★★</span></td></tr>
+          <tr><td>인스타마케팅</td><td>1,060</td><td>380</td><td>1,440</td><td><span class="level-badge level-2">L2</span></td><td><span class="star">★★</span></td></tr>
+          <tr><td>자사몰만들기</td><td>200</td><td>240</td><td>440</td><td><span class="level-badge level-4">L4</span></td><td><span class="star">★★</span></td></tr>
+          <tr><td style="color: var(--muted);">자사몰마케팅</td><td>10</td><td>10</td><td style="color: var(--primary);">20 ⚠️</td><td><span class="level-badge level-4">L4</span></td><td><span class="star">★</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box">
+        ⚠️ <strong>"자사몰 마케팅" 월 20회</strong> — 직접 노리기엔 너무 적음. "메타광고" "상세페이지"가 실질적 전환 키워드.
+      </div>
+    </div>
+
+    <!-- 6. 우선 공략 순위 -->
+    <div class="card">
+      <h2>🎯 6. 우선 공략 키워드 (주간 발행 계획)</h2>
+
+      <h3>1순위: L4 전환 키워드 (금요일 발행)</h3>
+      <table>
+        <thead>
+          <tr><th>#</th><th>키워드</th><th>검색량</th><th>페르소나</th><th>글 구조</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>상세페이지제작</strong></td><td style="font-weight:700;">6,120</td><td>B</td><td>전환글: 비포/애프터 + 수강생 사례 + CTA</td></tr>
+          <tr><td>2</td><td><strong>메타광고</strong> 세팅/최적화</td><td style="font-weight:700;">5,960</td><td>B</td><td>전환글: Step-by-step + 데이터 증명</td></tr>
+          <tr><td>3</td><td><strong>체험단모집</strong> 방법</td><td style="font-weight:700;">2,840</td><td>A</td><td>전환글: 실제 모집 사례 + 노하우</td></tr>
+          <tr><td>4</td><td><strong>온라인쇼핑몰창업</strong></td><td style="font-weight:700;">1,410</td><td>A</td><td>전환글: 창업 로드맵 + 교육 연결</td></tr>
+        </tbody>
+      </table>
+
+      <h3>2순위: L3 비교 키워드 (수요일 발행)</h3>
+      <table>
+        <thead>
+          <tr><th>#</th><th>키워드</th><th>검색량</th><th>페르소나</th><th>글 구조</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>광고대행사</strong> 비교/순위</td><td>3,500</td><td>B</td><td>비교글: 인하우스 vs 대행사</td></tr>
+          <tr><td>2</td><td><strong>자사몰 vs 스마트스토어</strong></td><td>~500</td><td>A</td><td>비교글: 장단점 표 + 추천</td></tr>
+          <tr><td>3</td><td><strong>메타광고 vs 네이버광고</strong></td><td>~300</td><td>B</td><td>비교글: 채널별 ROAS 비교</td></tr>
+        </tbody>
+      </table>
+
+      <h3>3순위: L1~2 유입 키워드 (월요일 발행)</h3>
+      <table>
+        <thead>
+          <tr><th>#</th><th>키워드</th><th>검색량</th><th>페르소나</th><th>글 구조</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>ROAS</strong> 뜻/높이는법</td><td>3,040</td><td>B/C</td><td>정보글+가이드: 용어→실전</td></tr>
+          <tr><td>2</td><td><strong>상세페이지</strong> 디자인/중요성</td><td>4,640</td><td>B</td><td>탐색글: 좋은 상세페이지 사례</td></tr>
+          <tr><td>3</td><td><strong>메타광고관리자</strong></td><td>3,750</td><td>B</td><td>정보글: 관리자 화면 가이드</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 7. QA → 블로그 콘텐츠 -->
+    <div class="card">
+      <h2>💬 7. QA 기반 콘텐츠 아이디어</h2>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem;">수강생이 실제로 물어본 것 = 잠재 고객도 궁금한 것</p>
+
+      <div class="qa-item">
+        <div class="qa-icon">❓</div>
+        <div class="qa-content">
+          <div class="qa-question">체험단 모집했는데 지원자가 0명이에요</div>
+          <div class="qa-keyword">→ 키워드: "체험단 모집 방법 2026" <span class="level-badge level-4">L4</span></div>
+        </div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-icon">❓</div>
+        <div class="qa-content">
+          <div class="qa-question">메타 광고 머신러닝이 끝나지 않아요</div>
+          <div class="qa-keyword">→ 키워드: "메타광고 머신러닝 기간 해결" <span class="level-badge level-4">L4</span></div>
+        </div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-icon">❓</div>
+        <div class="qa-content">
+          <div class="qa-question">Meta Verified 시작하기 버튼이 안 눌려요</div>
+          <div class="qa-keyword">→ 키워드: "메타 인증 오류 해결방법" <span class="level-badge level-4">L4</span></div>
+        </div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-icon">❓</div>
+        <div class="qa-content">
+          <div class="qa-question">비밀링크로 랜딩하면 데이터가 분산돼요</div>
+          <div class="qa-keyword">→ 키워드: "메타 픽셀 데이터 통합 방법" <span class="level-badge level-3">L3</span></div>
+        </div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-icon">❓</div>
+        <div class="qa-content">
+          <div class="qa-question">메타 광고와 인스타 공구 같이 해도 되나요?</div>
+          <div class="qa-keyword">→ 키워드: "인스타 공구 메타광고 병행" <span class="level-badge level-3">L3</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. 물길 설계 -->
+    <div class="card">
+      <h2>🌊 8. 물길 설계 (엠타트업 연결)</h2>
+
+      <div class="flow-diagram">
+        <div class="flow-box" style="background: #94a3b8; color: white;">L1/L2 정보글 (월요일) — ROAS 뜻, 메타광고 효과</div>
+        <div class="flow-arrow">↓ 내부 링크</div>
+        <div class="flow-box" style="background: var(--accent-amber); color: white;">L3 비교글 (수요일) — 대행사 vs 인하우스, 자사몰 vs 스마트스토어</div>
+        <div class="flow-arrow">↓ 내부 링크</div>
+        <div class="flow-box" style="background: var(--primary); color: white;">L4 전환글 (금요일) — 상세페이지 제작, 메타광고 세팅</div>
+        <div class="flow-arrow">↓ CTA</div>
+        <div class="flow-box" style="background: var(--accent-blue); color: white;">자사몰사관학교 랜딩페이지</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-box" style="background: var(--accent-green); color: white;">✅ 수강 신청 (전환)</div>
+      </div>
+
+      <div class="highlight-box">
+        엠타트업 "물길": 고객이 검색 → 블로그 유입 → <strong>L1→L2→L3→L4 단계별 내부 링크</strong>로 신뢰 형성 → 전환
+      </div>
+    </div>
+
+    <!-- 9. 자동화 -->
+    <div class="card">
+      <h2>⚙️ 9. 7일 주기 자동화</h2>
+      <table>
+        <thead><tr><th>단계</th><th>내용</th><th>도구</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>네이버 API로 검색량 최신화</td><td>keyword-search-volume.mjs</td></tr>
+          <tr><td>2</td><td>각 티어 키워드 Top 3 선정</td><td>자동 정렬</td></tr>
+          <tr><td>3</td><td>상위 1~5위 블로그 글 분석</td><td>글자수/이미지수/서식</td></tr>
+          <tr><td>4</td><td>분석 기반 글 구조 업데이트</td><td>customer-keyword-map.md</td></tr>
+          <tr><td>5</td><td>주 3회 발행 초안 생성</td><td>월(L1~2) / 수(L3) / 금(L4)</td></tr>
+          <tr><td>6</td><td>Smith님 확인 후 발행</td><td>SmartEditor 자동 포스팅</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align: center; padding: 2rem 0; color: var(--muted); font-size: 0.85rem;">
+      모찌리포트 🍡 · 2026-03-13 · 데이터: Supabase + 네이버 키워드 API
+    </div>
+  </div>
+</body>
+</html>

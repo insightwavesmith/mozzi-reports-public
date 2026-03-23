@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>경쟁사 분석기 — 총가치각도기 목업</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: { 50:'#f0f9ff', 100:'#e0f2fe', 200:'#bae6fd', 500:'#0ea5e9', 600:'#0284c7', 700:'#0369a1', 800:'#075985', 900:'#0c4a6e' },
+        surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0', 300:'#cbd5e1', 700:'#334155', 800:'#1e293b', 900:'#0f172a' }
+      }
+    }
+  }
+}
+</script>
+<style>
+  body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #f8fafc; }
+  .tab-active { border-bottom: 2px solid #0ea5e9; color: #0ea5e9; font-weight: 600; }
+  .tab-inactive { color: #64748b; }
+  .tab-inactive:hover { color: #334155; }
+  .card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; transition: all 0.15s; }
+  .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+  .badge-beauty { background: #fce7f3; color: #be185d; }
+  .badge-health { background: #dcfce7; color: #166534; }
+  .badge-food { background: #fef3c7; color: #92400e; }
+  .badge-fashion { background: #ede9fe; color: #5b21b6; }
+  .badge-digital { background: #e0f2fe; color: #0369a1; }
+  .badge-home { background: #f1f5f9; color: #475569; }
+  .badge-profit { background: #dcfce7; color: #166534; }
+  .badge-testing { background: #fef3c7; color: #92400e; }
+  .badge-above { background: #dcfce7; color: #166534; }
+  .badge-average { background: #f1f5f9; color: #475569; }
+  .badge-below { background: #fee2e2; color: #991b1b; }
+  .stat-card { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; border-radius: 12px; padding: 16px; }
+  .search-bar { background: white; border: 2px solid #e2e8f0; border-radius: 12px; transition: border-color 0.2s; }
+  .search-bar:focus-within { border-color: #0ea5e9; }
+  .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+  .creative-thumb { width: 120px; height: 120px; object-fit: cover; border-radius: 8px; background: #f1f5f9; }
+  .tooltip { position: relative; }
+  .tooltip::after { content: attr(data-tip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; }
+  .tooltip:hover::after { opacity: 1; }
+  .mock-label { position: fixed; top: 12px; right: 12px; background: #ef4444; color: white; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; z-index: 100; }
+  .sidebar-item { padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: background 0.1s; }
+  .sidebar-item:hover { background: #f1f5f9; }
+  .sidebar-item.active { background: #e0f2fe; color: #0369a1; font-weight: 500; }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="mock-label">🎨 MOCKUP — 경쟁사 분석기 v1</div>
+
+<!-- ====== HEADER ====== -->
+<div class="bg-white border-b border-surface-200 sticky top-0 z-50">
+  <div class="max-w-[1400px] mx-auto px-6">
+    <div class="flex items-center h-14 gap-6">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">📐</span>
+        <span class="font-bold text-surface-800">총가치각도기</span>
+      </div>
+      <nav class="flex gap-1 h-full items-center">
+        <a class="px-3 py-2 text-sm tab-inactive cursor-pointer">대시보드</a>
+        <a class="px-3 py-2 text-sm tab-inactive cursor-pointer">벤치마크</a>
+        <a class="px-3 py-2 text-sm tab-active cursor-pointer pb-[14px] pt-[16px]">경쟁사 분석</a>
+      </nav>
+      <div class="ml-auto flex items-center gap-3">
+        <span class="text-xs text-surface-300">v0.1 — P0</span>
+        <div class="w-8 h-8 bg-brand-100 rounded-full flex items-center justify-center text-brand-700 text-xs font-bold">SK</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-[1400px] mx-auto flex">
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="w-[220px] shrink-0 border-r border-surface-200 bg-white min-h-[calc(100vh-56px)] p-4">
+    <div class="text-xs font-semibold text-surface-300 uppercase tracking-wider mb-3">경쟁사 분석</div>
+    <div class="space-y-1">
+      <div class="sidebar-item active">
+        <span class="text-sm">🔍 광고 검색</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="text-sm">📁 스와이프 파일</span>
+        <span class="ml-auto text-xs text-surface-300">12</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="text-sm">👁️ 모니터링</span>
+        <span class="ml-auto text-xs text-surface-300">3</span>
+      </div>
+    </div>
+
+    <div class="text-xs font-semibold text-surface-300 uppercase tracking-wider mb-3 mt-6">모니터링 페이지</div>
+    <div class="space-y-1">
+      <div class="sidebar-item flex items-center gap-2">
+        <div class="w-5 h-5 bg-pink-100 rounded-full flex items-center justify-center text-[10px]">🌸</div>
+        <span class="text-sm">이니스프리</span>
+        <span class="ml-auto w-2 h-2 bg-green-400 rounded-full" title="활성"></span>
+      </div>
+      <div class="sidebar-item flex items-center gap-2">
+        <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center text-[10px]">🥬</div>
+        <span class="text-sm">마켓컬리</span>
+        <span class="ml-auto w-2 h-2 bg-green-400 rounded-full"></span>
+      </div>
+      <div class="sidebar-item flex items-center gap-2">
+        <div class="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center text-[10px]">🧴</div>
+        <span class="text-sm">닥터지</span>
+        <span class="ml-auto w-2 h-2 bg-yellow-400 rounded-full" title="마지막 체크 48h 전"></span>
+      </div>
+    </div>
+
+    <button class="mt-4 w-full text-sm text-brand-600 hover:text-brand-700 flex items-center gap-1 px-3 py-2">
+      <span>+</span> 페이지 추가
+    </button>
+  </aside>
+
+  <!-- ====== MAIN ====== -->
+  <main class="flex-1 p-6 space-y-6">
+
+    <!-- Search bar -->
+    <div class="search-bar flex items-center px-4 py-3 gap-3">
+      <svg class="w-5 h-5 text-surface-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" value="이니스프리" class="flex-1 outline-none text-sm text-surface-800 placeholder:text-surface-300" placeholder="키워드, 브랜드명, 페이지ID로 검색...">
+      <div class="flex items-center gap-2 border-l border-surface-200 pl-3">
+        <select class="text-xs text-surface-500 bg-transparent outline-none">
+          <option>모든 카테고리</option>
+          <option selected>뷰티</option>
+          <option>건강기능식품</option>
+          <option>식품</option>
+          <option>패션</option>
+        </select>
+        <select class="text-xs text-surface-500 bg-transparent outline-none">
+          <option>모든 소재</option>
+          <option>이미지</option>
+          <option selected>영상</option>
+        </select>
+        <select class="text-xs text-surface-500 bg-transparent outline-none">
+          <option>최근 7일</option>
+          <option selected>최근 30일</option>
+          <option>최근 90일</option>
+          <option>전체</option>
+        </select>
+      </div>
+      <button class="bg-brand-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-brand-700 transition">검색</button>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="grid grid-cols-4 gap-4">
+      <div class="stat-card">
+        <div class="text-xs text-brand-600 font-medium">검색 결과</div>
+        <div class="text-2xl font-bold text-surface-900 mt-1">47<span class="text-sm font-normal text-surface-500">건</span></div>
+        <div class="text-xs text-surface-400 mt-1">이니스프리 · 최근 30일</div>
+      </div>
+      <div class="stat-card">
+        <div class="text-xs text-brand-600 font-medium">추정 총 광고비</div>
+        <div class="text-2xl font-bold text-surface-900 mt-1">₩2,340<span class="text-sm font-normal text-surface-500">만</span></div>
+        <div class="text-xs text-surface-400 mt-1">뷰티 CPM ₩22,420 기준</div>
+      </div>
+      <div class="stat-card">
+        <div class="text-xs text-brand-600 font-medium">장수 광고 (30일+)</div>
+        <div class="text-2xl font-bold text-surface-900 mt-1">8<span class="text-sm font-normal text-surface-500">건</span></div>
+        <div class="text-xs text-green-600 mt-1">↑ 수익성 높은 소재</div>
+      </div>
+      <div class="stat-card">
+        <div class="text-xs text-brand-600 font-medium">평균 운영 기간</div>
+        <div class="text-2xl font-bold text-surface-900 mt-1">18<span class="text-sm font-normal text-surface-500">일</span></div>
+        <div class="text-xs text-surface-400 mt-1">카테고리 평균: 14일</div>
+      </div>
+    </div>
+
+    <!-- Results header -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-sm font-semibold text-surface-800">검색 결과</span>
+        <span class="text-xs text-surface-400">47건 · 정렬: 추정 광고비 높은 순</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-100 text-surface-600 hover:bg-surface-200">
+          📊 카드뷰
+        </button>
+        <button class="text-xs px-3 py-1.5 rounded-lg text-surface-400 hover:bg-surface-100">
+          📋 리스트뷰
+        </button>
+      </div>
+    </div>
+
+    <!-- ====== AD CARDS ====== -->
+    <div class="space-y-4">
+
+      <!-- Card 1 — 장수 광고 -->
+      <div class="card p-4">
+        <div class="flex gap-4">
+          <!-- Thumbnail -->
+          <div class="creative-thumb flex items-center justify-center text-3xl bg-gradient-to-br from-green-50 to-emerald-100">
+            🎬
+          </div>
+          <!-- Content -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-semibold text-sm text-surface-800">그린티 히알루론산 세럼 — 봄 캠페인</span>
+              <span class="badge badge-beauty">뷰티</span>
+              <span class="badge badge-profit">🔥 수익성 확인</span>
+            </div>
+            <div class="text-xs text-surface-400 mb-2">이니스프리 · 영상 · 2026-01-15 시작 · <strong class="text-green-600">51일째 운영</strong></div>
+            <p class="text-xs text-surface-500 line-clamp-2 mb-3">
+              "겨울 건조함, 이제 그만! 🌿 그린티 히알루론산 세럼으로 촉촉한 봄 피부 준비하세요. 지금 25% 할인 중!"
+            </p>
+
+            <!-- Metrics row -->
+            <div class="flex items-center gap-6 text-xs">
+              <div>
+                <span class="text-surface-400">조회수</span>
+                <span class="font-semibold text-surface-700 ml-1">2.3M</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 노출</span>
+                <span class="font-semibold text-surface-700 ml-1">5.75M</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 광고비</span>
+                <span class="font-bold text-brand-700 ml-1">₩1,289만</span>
+              </div>
+              <div>
+                <span class="text-surface-400">Engagement</span>
+                <span class="font-semibold text-surface-700 ml-1">4.2%</span>
+                <span class="badge badge-above ml-1">ABOVE AVG</span>
+              </div>
+              <div class="tooltip" data-tip="뷰티 카테고리 상위 15%">
+                <span class="text-surface-400">벤치마크</span>
+                <span class="font-semibold text-green-600 ml-1">상위 15%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col gap-2 shrink-0">
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 font-medium">⬇️ 다운로드</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">📁 저장</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">🤖 AI 분석</button>
+          </div>
+        </div>
+
+        <!-- AI Analysis (expanded) -->
+        <div class="mt-3 pt-3 border-t border-surface-100 bg-brand-50/30 rounded-lg p-3">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-semibold text-brand-700">🤖 AI 소재 분석</span>
+            <span class="text-[10px] text-surface-400">Sonnet 4 · 0.3초</span>
+          </div>
+          <div class="grid grid-cols-4 gap-4 text-xs">
+            <div>
+              <span class="text-surface-400 block mb-1">훅 유형</span>
+              <span class="font-medium text-surface-700">문제제기 → 해결</span>
+              <span class="text-surface-400 block mt-0.5">"겨울 건조함" = 공감 유도</span>
+            </div>
+            <div>
+              <span class="text-surface-400 block mb-1">CTA 패턴</span>
+              <span class="font-medium text-surface-700">할인 + 시즌 한정</span>
+              <span class="text-surface-400 block mt-0.5">25% 할인 + "봄 준비"</span>
+            </div>
+            <div>
+              <span class="text-surface-400 block mb-1">레이아웃</span>
+              <span class="font-medium text-surface-700">제품 중심 + 텍스트 오버레이</span>
+              <span class="text-surface-400 block mt-0.5">15초 영상, 처음 3초 훅</span>
+            </div>
+            <div>
+              <span class="text-surface-400 block mb-1">💡 강의 연결</span>
+              <span class="font-medium text-brand-700">2주차 "훅 패턴 실습"과 유사</span>
+              <span class="text-surface-400 block mt-0.5">문제→해결 구조 (교재 p.34)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 — 테스트 중 -->
+      <div class="card p-4">
+        <div class="flex gap-4">
+          <div class="creative-thumb flex items-center justify-center text-3xl bg-gradient-to-br from-pink-50 to-rose-100">
+            🖼️
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-semibold text-sm text-surface-800">레티놀 시카 크림 — A/B 테스트</span>
+              <span class="badge badge-beauty">뷰티</span>
+              <span class="badge badge-testing">🧪 테스트 중</span>
+            </div>
+            <div class="text-xs text-surface-400 mb-2">이니스프리 · 이미지 · 2026-03-01 시작 · 5일째 운영</div>
+            <p class="text-xs text-surface-500 line-clamp-2 mb-3">
+              "피부 장벽이 걱정된다면? 레티놀 + 시카 듀얼 포뮬라. 자극 없이 탄력까지."
+            </p>
+            <div class="flex items-center gap-6 text-xs">
+              <div>
+                <span class="text-surface-400">좋아요</span>
+                <span class="font-semibold text-surface-700 ml-1">1,247</span>
+              </div>
+              <div>
+                <span class="text-surface-400">댓글</span>
+                <span class="font-semibold text-surface-700 ml-1">89</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 노출</span>
+                <span class="font-semibold text-surface-700 ml-1">340K</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 광고비</span>
+                <span class="font-bold text-brand-700 ml-1">₩76만</span>
+              </div>
+              <div>
+                <span class="text-surface-400">Engagement</span>
+                <span class="font-semibold text-surface-700 ml-1">3.8%</span>
+                <span class="badge badge-average ml-1">AVG</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2 shrink-0">
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 font-medium">⬇️ 다운로드</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">📁 저장</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">🤖 AI 분석</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 — 관찰 중 -->
+      <div class="card p-4">
+        <div class="flex gap-4">
+          <div class="creative-thumb flex items-center justify-center text-3xl bg-gradient-to-br from-yellow-50 to-amber-100">
+            🎬
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-semibold text-sm text-surface-800">비타C 앰플 — UGC 리뷰 편집</span>
+              <span class="badge badge-beauty">뷰티</span>
+              <span class="badge" style="background:#fef3c7;color:#92400e;">👀 관찰 중</span>
+            </div>
+            <div class="text-xs text-surface-400 mb-2">이니스프리 · 영상 · 2026-02-10 시작 · 24일째 운영</div>
+            <p class="text-xs text-surface-500 line-clamp-2 mb-3">
+              "실제 사용 후기 모음 ✨ '3일 만에 톤업 체감했어요' 비타C 앰플 지금 만나보세요"
+            </p>
+            <div class="flex items-center gap-6 text-xs">
+              <div>
+                <span class="text-surface-400">조회수</span>
+                <span class="font-semibold text-surface-700 ml-1">890K</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 노출</span>
+                <span class="font-semibold text-surface-700 ml-1">2.2M</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 광고비</span>
+                <span class="font-bold text-brand-700 ml-1">₩493만</span>
+              </div>
+              <div>
+                <span class="text-surface-400">Engagement</span>
+                <span class="font-semibold text-surface-700 ml-1">5.1%</span>
+                <span class="badge badge-above ml-1">ABOVE AVG</span>
+              </div>
+              <div class="tooltip" data-tip="댓글에서 구매 의도 신호 3건 감지">
+                <span class="text-surface-400">💬 구매 신호</span>
+                <span class="font-semibold text-green-600 ml-1">3건</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2 shrink-0">
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 font-medium">⬇️ 다운로드</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">📁 저장</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">🤖 AI 분석</button>
+          </div>
+        </div>
+
+        <!-- Comment signals -->
+        <div class="mt-3 pt-3 border-t border-surface-100">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-semibold text-surface-600">💬 댓글 구매 신호 감지</span>
+          </div>
+          <div class="space-y-1.5 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+              <span class="text-surface-500">"이거 어디서 사요? 올리브영에 있나요?"</span>
+              <span class="badge badge-above">구매 의도 높음</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+              <span class="text-surface-500">"가격이 얼마예요??"</span>
+              <span class="badge badge-above">구매 의도 높음</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>
+              <span class="text-surface-500">"저도 써봤는데 좋긴 한데 양이 적어요"</span>
+              <span class="badge badge-average">사용 후기</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 — Below average -->
+      <div class="card p-4 opacity-80">
+        <div class="flex gap-4">
+          <div class="creative-thumb flex items-center justify-center text-3xl bg-gradient-to-br from-gray-50 to-gray-100">
+            🖼️
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-semibold text-sm text-surface-800">제주 한란 크림 — 브랜딩</span>
+              <span class="badge badge-beauty">뷰티</span>
+            </div>
+            <div class="text-xs text-surface-400 mb-2">이니스프리 · 이미지 · 2026-02-28 시작 · 6일째 운영</div>
+            <p class="text-xs text-surface-500 line-clamp-2 mb-3">
+              "제주 한란의 생명력을 담은 프리미엄 크림. 깊은 보습, 지속적인 영양."
+            </p>
+            <div class="flex items-center gap-6 text-xs">
+              <div>
+                <span class="text-surface-400">좋아요</span>
+                <span class="font-semibold text-surface-700 ml-1">312</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 노출</span>
+                <span class="font-semibold text-surface-700 ml-1">85K</span>
+              </div>
+              <div>
+                <span class="text-surface-400">추정 광고비</span>
+                <span class="font-bold text-surface-500 ml-1">₩19만</span>
+              </div>
+              <div>
+                <span class="text-surface-400">Engagement</span>
+                <span class="font-semibold text-surface-700 ml-1">1.2%</span>
+                <span class="badge badge-below ml-1">BELOW AVG</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2 shrink-0">
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 font-medium">⬇️ 다운로드</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">📁 저장</button>
+            <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-50 text-surface-600 hover:bg-surface-100">🤖 AI 분석</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /space-y-4 -->
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-center gap-2 py-4">
+      <button class="text-xs px-3 py-1.5 rounded-lg bg-brand-600 text-white font-medium">1</button>
+      <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-100 text-surface-600 hover:bg-surface-200">2</button>
+      <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-100 text-surface-600 hover:bg-surface-200">3</button>
+      <span class="text-xs text-surface-400">...</span>
+      <button class="text-xs px-3 py-1.5 rounded-lg bg-surface-100 text-surface-600 hover:bg-surface-200">5</button>
+    </div>
+
+    <!-- Benchmark comparison -->
+    <div class="card p-5">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="font-semibold text-surface-800">📊 카테고리 벤치마크 비교</h3>
+          <p class="text-xs text-surface-400 mt-1">이니스프리 광고 vs 뷰티 카테고리 평균 (우리 실데이터 기준)</p>
+        </div>
+        <span class="text-xs text-surface-300">데이터: benchmarks 테이블 · 2026-03-03 기준</span>
+      </div>
+      <div class="grid grid-cols-3 gap-6">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-surface-500">CPM (1000회 노출 비용)</span>
+            <span class="text-xs font-semibold text-surface-700">₩22,420</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill bg-brand-500" style="width:72%"></div></div>
+          <div class="flex justify-between mt-1">
+            <span class="text-[10px] text-surface-400">이니스프리 추정: ₩19,800</span>
+            <span class="text-[10px] text-green-600">11% 효율적</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-surface-500">Engagement Rate</span>
+            <span class="text-xs font-semibold text-surface-700">3.4% avg</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill bg-green-500" style="width:88%"></div></div>
+          <div class="flex justify-between mt-1">
+            <span class="text-[10px] text-surface-400">이니스프리: 4.1%</span>
+            <span class="text-[10px] text-green-600">상위 20%</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-surface-500">영상 3초 시청률</span>
+            <span class="text-xs font-semibold text-surface-700">45% avg</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill bg-amber-500" style="width:56%"></div></div>
+          <div class="flex justify-between mt-1">
+            <span class="text-[10px] text-surface-400">이니스프리: 38%</span>
+            <span class="text-[10px] text-amber-600">카테고리 평균 이하</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estimation logic -->
+    <div class="card p-5 bg-surface-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-sm font-semibold text-surface-700">💡 추정 로직 안내</span>
+      </div>
+      <div class="grid grid-cols-3 gap-4 text-xs text-surface-500">
+        <div>
+          <div class="font-medium text-surface-600 mb-1">1️⃣ 노출수 추정</div>
+          <div>영상: 조회수 ÷ 0.4</div>
+          <div>이미지: (좋아요+댓글+공유) ÷ ER</div>
+        </div>
+        <div>
+          <div class="font-medium text-surface-600 mb-1">2️⃣ 광고비 추정</div>
+          <div>노출수 ÷ 1,000 × 카테고리 CPM</div>
+          <div>CPM = 우리 실데이터 기반</div>
+        </div>
+        <div>
+          <div class="font-medium text-surface-600 mb-1">3️⃣ 수익성 판단</div>
+          <div>7일 미만 = 🧪 테스트</div>
+          <div>7~30일 = 👀 관찰 · 30일+ = 🔥 수익성</div>
+        </div>
+      </div>
+      <div class="mt-2 text-[10px] text-surface-400">⚠️ 모든 수치는 추정치입니다 (±30~50% 오차)</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

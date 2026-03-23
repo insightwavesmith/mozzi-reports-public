@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>크론 대시보드 — Mozzi Reports</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#333}
+.header{background:#1a1a2e;color:#fff;padding:24px 32px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:24px;font-weight:700}
+.header p{font-size:14px;color:#8b8ba7;margin-top:4px}
+.header-badge{font-size:12px;color:#8b8ba7;text-align:right}
+.header-badge strong{color:#e94560;display:block;font-size:14px;font-weight:700}
+.tabs{display:flex;background:#16213e;padding:0 32px;flex-wrap:wrap}
+.tab{padding:12px 24px;color:#8b8ba7;font-size:14px;font-weight:500;border-bottom:3px solid transparent;transition:all .2s;text-decoration:none;display:block}
+.tab:hover{color:#e2e2e2}
+.tab.active{color:#fff;border-bottom-color:#e94560}
+.content{max-width:1100px;margin:28px auto;padding:0 16px}
+
+/* Summary */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat-card{background:#fff;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.s-ok .stat-icon{background:#d1fae5} .s-warn .stat-icon{background:#fef3c7}
+.s-err .stat-icon{background:#fee2e2} .s-off .stat-icon{background:#f3f4f6}
+.stat-num{font-size:30px;font-weight:800;line-height:1}
+.s-ok .stat-num{color:#059669} .s-warn .stat-num{color:#d97706}
+.s-err .stat-num{color:#dc2626} .s-off .stat-num{color:#9ca3af}
+.stat-label{font-size:12px;color:#6b7280;margin-top:3px}
+
+/* Section heading */
+.sec{font-size:14px;font-weight:700;color:#1a1a2e;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.sec::before{content:'';display:block;width:3px;height:16px;background:#e94560;border-radius:2px}
+
+/* Cron grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;margin-bottom:32px}
+.cron{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid #e5e7eb;transition:box-shadow .2s,transform .15s}
+.cron:hover{box-shadow:0 4px 14px rgba(0,0,0,.11);transform:translateY(-1px)}
+.cron.ok{border-left-color:#10b981} .cron.warn{border-left-color:#f59e0b}
+.cron.off{border-left-color:#9ca3af} .cron.err{border-left-color:#ef4444}
+.cron-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.cron-name{font-size:14px;font-weight:700;color:#1a1a2e;line-height:1.3}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;margin-left:8px;flex-shrink:0}
+.b-ok{background:#d1fae5;color:#065f46} .b-warn{background:#fef3c7;color:#92400e}
+.b-off{background:#f3f4f6;color:#6b7280} .b-err{background:#fee2e2;color:#991b1b}
+.b-react{background:#dbeafe;color:#1e40af}
+.meta{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.mtag{font-size:11px;color:#6b7280;background:#f9fafb;padding:3px 8px;border-radius:6px}
+.result{font-size:12px;color:#4b5563;background:#f9fafb;padding:7px 10px;border-radius:6px;line-height:1.5}
+.result.wnote{background:#fffbeb;color:#78350f}
+.result.enote{background:#fef2f2;color:#7f1d1d}
+
+/* Timeline */
+.tl-wrap{background:#fff;border-radius:10px;padding:20px 20px 16px;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:32px;overflow-x:auto}
+.tl-hrs{display:flex;padding-left:148px;margin-bottom:8px;min-width:600px}
+.tl-h{flex:1;font-size:10px;color:#9ca3af;text-align:center}
+.tl-row{display:flex;align-items:center;margin-bottom:10px;min-width:600px}
+.tl-row:last-child{margin-bottom:0}
+.tl-name{width:148px;font-size:12px;color:#374151;font-weight:500;padding-right:12px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-bar{flex:1;height:6px;background:#f1f5f9;border-radius:3px;position:relative}
+.tl-dot{position:absolute;width:12px;height:12px;border-radius:50%;top:50%;transform:translate(-50%,-50%)}
+.d-ok{background:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.2)}
+.d-warn{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.2)}
+.d-off{background:#9ca3af;box-shadow:0 0 0 3px rgba(156,163,175,.2)}
+.tl-t{font-size:11px;color:#9ca3af;width:52px;text-align:right;padding-left:10px;flex-shrink:0}
+.tl-divider{font-size:11px;font-weight:700;color:#e94560;margin:14px 0 8px;padding-left:148px;letter-spacing:.05em}
+
+/* Error history */
+.err-list{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.err-item{background:#fff;border-radius:10px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;align-items:flex-start;gap:12px}
+.err-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.d-amber{background:#f59e0b} .d-red{background:#ef4444} .d-green{background:#10b981} .d-gray{background:#9ca3af}
+.err-body .err-title{font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.err-body .err-desc{font-size:12px;color:#6b7280;line-height:1.6}
+.etag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-left:6px;vertical-align:middle}
+.et-fixed{background:#d1fae5;color:#065f46} .et-warn{background:#fef3c7;color:#92400e}
+.et-off{background:#f3f4f6;color:#6b7280} .et-react{background:#dbeafe;color:#1e40af}
+
+.footer{text-align:center;color:#9ca3af;font-size:12px;padding:16px 0 36px}
+
+@media(max-width:640px){
+  .summary{grid-template-columns:repeat(2,1fr)}
+  .header{flex-direction:column;align-items:flex-start;gap:8px;padding:16px 18px}
+  .tabs{padding:0 8px}
+  .tab{padding:10px 14px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Mozzi Reports</h1>
+    <p>태스크 · 코드 리뷰 · 결과 보고 · 아키텍처 · 마케팅 · 크론</p>
+  </div>
+  <div class="header-badge">
+    <strong>🕐 크론 대시보드</strong>
+    <span>2026-02-24 기준</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <a href="index.html" class="tab">전체 보고서</a>
+  <a href="cron-dashboard.html" class="tab active">🕐 크론 대시보드</a>
+</div>
+
+<div class="content">
+
+  <!-- Summary -->
+  <div class="summary">
+    <div class="stat-card s-ok">
+      <div class="stat-icon">✅</div>
+      <div><div class="stat-num">9</div><div class="stat-label">정상 운영 중</div></div>
+    </div>
+    <div class="stat-card s-warn">
+      <div class="stat-icon">⚠️</div>
+      <div><div class="stat-num">2</div><div class="stat-label">주의 (이전 에러)</div></div>
+    </div>
+    <div class="stat-card s-err">
+      <div class="stat-icon">🔴</div>
+      <div><div class="stat-num">0</div><div class="stat-label">현재 에러</div></div>
+    </div>
+    <div class="stat-card s-off">
+      <div class="stat-icon">⏸️</div>
+      <div><div class="stat-num">1</div><div class="stat-label">비활성</div></div>
+    </div>
+  </div>
+
+  <!-- Daily Crons -->
+  <div class="sec">매일 실행 크론 (9개)</div>
+  <div class="grid">
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">구글시트 Leads 동기화</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 00:00</span>
+        <span class="mtag">🤖 Gemini</span>
+      </div>
+      <div class="result">OK — 정상 처리 완료</div>
+    </div>
+
+    <div class="cron warn">
+      <div class="cron-top">
+        <div class="cron-name">벤치마크 일일 체크</div>
+        <span class="badge b-warn">주의</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 02:00</span>
+        <span class="mtag">🤖 ollama</span>
+      </div>
+      <div class="result wnote">OK — 단, 이전 에러 이력 있음. 모델 응답 신뢰도 모니터링 필요</div>
+    </div>
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">콘텐츠 자동 수집</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 07:00</span>
+        <span class="mtag">🤖 Gemini</span>
+      </div>
+      <div class="result">OK — 3~4개/실행 수집 중</div>
+    </div>
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">유튜브 자막 수집</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 08:00</span>
+        <span class="mtag">🤖 Gemini</span>
+      </div>
+      <div class="result">OK — 3~12개/실행 수집 중</div>
+    </div>
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">구글드라이브 동기화</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 08:30</span>
+        <span class="mtag">🤖 ollama</span>
+      </div>
+      <div class="result">OK — 신규 파일 없음 (no new files)</div>
+    </div>
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">오전 브리핑</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 09:00</span>
+        <span class="mtag">🤖 Sonnet</span>
+      </div>
+      <div class="result">OK — 채널 전송 완료</div>
+    </div>
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">OpenClaw 데일리</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 09:00</span>
+        <span class="mtag">🤖 Gemini</span>
+      </div>
+      <div class="result">OK — 데일리 리포트 전송 완료</div>
+    </div>
+
+    <div class="cron warn">
+      <div class="cron-top">
+        <div class="cron-name">QA AI 자동답변</div>
+        <span class="badge b-react">재활성화</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 10:00</span>
+        <span class="mtag">🤖 Sonnet</span>
+      </div>
+      <div class="result wnote">재활성화됨 — 이전 5연속 타임아웃 이력. 현재 모니터링 중</div>
+    </div>
+
+    <div class="cron off">
+      <div class="cron-top">
+        <div class="cron-name">크론 일일 보고</div>
+        <span class="badge b-off">비활성</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">🕐 매일 11:00</span>
+        <span class="mtag">🤖 Gemini</span>
+      </div>
+      <div class="result enote">타임아웃으로 비활성 처리됨</div>
+    </div>
+
+  </div>
+
+  <!-- Weekly Crons -->
+  <div class="sec">주간 실행 크론 (3개)</div>
+  <div class="grid">
+
+    <div class="cron warn">
+      <div class="cron-top">
+        <div class="cron-name">네이버 SEO 분석</div>
+        <span class="badge b-warn">주의</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">📅 월요일 07:00</span>
+        <span class="mtag">🤖 Gemini</span>
+      </div>
+      <div class="result wnote">딜리버리 에러 발생 → 수정 완료. 분석 자체는 정상</div>
+    </div>
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">벤치마크 주간</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">📅 월요일 10:00</span>
+        <span class="mtag">🤖 Sonnet</span>
+      </div>
+      <div class="result">OK — 주간 헬스체크 정상</div>
+    </div>
+
+    <div class="cron ok">
+      <div class="cron-top">
+        <div class="cron-name">주간 규칙 감사</div>
+        <span class="badge b-ok">정상</span>
+      </div>
+      <div class="meta">
+        <span class="mtag">📅 금요일 11:00</span>
+        <span class="mtag">🤖 Sonnet</span>
+      </div>
+      <div class="result">OK — 감사 보고서 생성 완료</div>
+    </div>
+
+  </div>
+
+  <!-- Timeline -->
+  <div class="sec">24시간 타임라인</div>
+  <div class="tl-wrap">
+    <!-- hour labels -->
+    <div class="tl-hrs">
+      <span class="tl-h">0</span><span class="tl-h">1</span><span class="tl-h">2</span>
+      <span class="tl-h">3</span><span class="tl-h">4</span><span class="tl-h">5</span>
+      <span class="tl-h">6</span><span class="tl-h">7</span><span class="tl-h">8</span>
+      <span class="tl-h">9</span><span class="tl-h">10</span><span class="tl-h">11</span>
+      <span class="tl-h">12</span><span class="tl-h">13</span><span class="tl-h">14</span>
+      <span class="tl-h">15</span><span class="tl-h">16</span><span class="tl-h">17</span>
+      <span class="tl-h">18</span><span class="tl-h">19</span><span class="tl-h">20</span>
+      <span class="tl-h">21</span><span class="tl-h">22</span><span class="tl-h">23</span>
+    </div>
+
+    <!-- Daily rows: left% = hour/23 * 100 -->
+    <div class="tl-row">
+      <div class="tl-name" title="구글시트 Leads 동기화">Leads 동기화</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:0%"></div></div>
+      <div class="tl-t">00:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="벤치마크 일일 체크">벤치마크 일일</div>
+      <div class="tl-bar"><div class="tl-dot d-warn" style="left:8.70%"></div></div>
+      <div class="tl-t">02:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="콘텐츠 자동 수집">콘텐츠 수집</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:30.43%"></div></div>
+      <div class="tl-t">07:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="유튜브 자막 수집">유튜브 자막</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:34.78%"></div></div>
+      <div class="tl-t">08:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="구글드라이브 동기화">GDrive 동기화</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:36.96%"></div></div>
+      <div class="tl-t">08:30</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="오전 브리핑">오전 브리핑</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:39.13%"></div></div>
+      <div class="tl-t">09:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="OpenClaw 데일리">OpenClaw 데일리</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:39.13%"></div></div>
+      <div class="tl-t">09:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="QA AI 자동답변">QA AI 자동답변</div>
+      <div class="tl-bar"><div class="tl-dot d-warn" style="left:43.48%"></div></div>
+      <div class="tl-t">10:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="크론 일일 보고 (비활성)">크론 일일 보고 ⏸</div>
+      <div class="tl-bar"><div class="tl-dot d-off" style="left:47.83%"></div></div>
+      <div class="tl-t">11:00</div>
+    </div>
+
+    <!-- Weekly divider -->
+    <div class="tl-divider">── 주간 스케줄 (요일별) ──</div>
+
+    <div class="tl-row">
+      <div class="tl-name" title="naver-seo 분석 (월요일)">naver-seo (월)</div>
+      <div class="tl-bar"><div class="tl-dot d-warn" style="left:30.43%"></div></div>
+      <div class="tl-t">07:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="벤치마크 주간 (월요일)">벤치마크 주간 (월)</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:43.48%"></div></div>
+      <div class="tl-t">10:00</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-name" title="주간 규칙 감사 (금요일)">규칙 감사 (금)</div>
+      <div class="tl-bar"><div class="tl-dot d-ok" style="left:47.83%"></div></div>
+      <div class="tl-t">11:00</div>
+    </div>
+
+    <!-- Legend -->
+    <div style="display:flex;gap:16px;margin-top:16px;padding-left:148px;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#6b7280">
+        <span style="width:10px;height:10px;border-radius:50%;background:#10b981;display:inline-block"></span>정상
+      </span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#6b7280">
+        <span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block"></span>주의
+      </span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#6b7280">
+        <span style="width:10px;height:10px;border-radius:50%;background:#9ca3af;display:inline-block"></span>비활성
+      </span>
+    </div>
+  </div>
+
+  <!-- Error History -->
+  <div class="sec">최근 에러 히스토리</div>
+  <div class="err-list">
+
+    <div class="err-item">
+      <div class="err-dot d-amber"></div>
+      <div class="err-body">
+        <div class="err-title">
+          벤치마크 일일 체크 (ollama)
+          <span class="etag et-warn">이전 에러</span>
+        </div>
+        <div class="err-desc">
+          반복적인 account_id 에러 이력. ollama 모델이 에러를 정상으로 잘못 해석하는 경우 있었음.<br>
+          현재는 OK 보고 중이나, Cloud Run 로그 직접 확인 권장.
+        </div>
+      </div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-dot d-red"></div>
+      <div class="err-body">
+        <div class="err-title">
+          QA AI 자동답변 (Sonnet)
+          <span class="etag et-react">재활성화</span>
+        </div>
+        <div class="err-desc">
+          5연속 타임아웃 (300초 초과) → 자동 비활성 전환.<br>
+          서비스 재시작 후 재활성화됨. 타임아웃 원인 분석 및 timeout 설정 또는 로직 최적화 필요.
+        </div>
+      </div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-dot d-green"></div>
+      <div class="err-body">
+        <div class="err-title">
+          naver-seo 분석 — 딜리버리 에러
+          <span class="etag et-fixed">수정됨</span>
+        </div>
+        <div class="err-desc">
+          Slack 전송 에러로 분석 결과 딜리버리 실패. 분석 자체는 정상 완료 (45개 게시물).<br>
+          딜리버리 설정 수정 완료.
+        </div>
+      </div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-dot d-gray"></div>
+      <div class="err-body">
+        <div class="err-title">
+          크론 일일 보고 (Gemini)
+          <span class="etag et-off">비활성</span>
+        </div>
+        <div class="err-desc">
+          타임아웃 에러 반복으로 비활성 처리됨.<br>
+          오전 브리핑 크론으로 기능 통합. 별도 복구 계획 없음.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">Mozzi Reports · 크론 대시보드 · 2026-02-24</div>
+</div>
+</body>
+</html>

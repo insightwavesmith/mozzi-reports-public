@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소재 분석 — 통합 목업</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#F75D5D',
+        'primary-dark': '#E54949',
+        'text-main': '#1a1a1a',
+        'text-sec': '#64748b',
+        'text-muted': '#94a3b8',
+        'bg-page': '#f8f9fc',
+        'border-col': '#e2e8f0',
+      },
+      fontFamily: { sans: ['Pretendard Variable', 'system-ui', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+* { font-family: 'Pretendard Variable', system-ui, sans-serif; }
+body { background: #f8f9fc; color: #1a1a1a; }
+.tab-active { border-bottom: 2px solid #F75D5D; color: #F75D5D; font-weight: 600; }
+.tab-inactive { border-bottom: 2px solid transparent; color: #64748b; }
+.tab-inactive:hover { color: #1a1a1a; }
+.sub-tab-active { background: #fff; color: #1a1a1a; font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.1); border-radius: 8px; }
+.sub-tab-inactive { color: #64748b; }
+.sub-tab-inactive:hover { color: #1a1a1a; }
+.sidebar-item { transition: background 0.15s, color 0.15s; }
+.sidebar-active { background: #fff0f0; color: #F75D5D; font-weight: 600; }
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; }
+.creative-card { border: 2px solid transparent; border-radius: 12px; background: #fff; cursor: pointer; transition: all 0.18s; }
+.creative-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.09); }
+.creative-card.selected { border-color: #F75D5D; box-shadow: 0 0 0 3px rgba(247,93,93,0.15); }
+.score-em { background: #d1fae5; color: #065f46; }
+.score-am { background: #fef3c7; color: #92400e; }
+.score-rd { background: #fee2e2; color: #991b1b; }
+.bar-fill { transition: width 0.4s ease-out; }
+.heatmap-overlay { display: none; position: absolute; inset: 0; background: transparent; pointer-events: none; }
+.heatmap-overlay.show { display: block; }
+.heatmap-blob { position: absolute; border-radius: 50%; filter: blur(22px); opacity: 0.55; }
+.suggestion-item { border-left: 3px solid; padding: 9px 12px; border-radius: 0 8px 8px 0; }
+.view-panel { display: none; }
+.view-panel.active { display: block; }
+.lp-card { border: 2px solid transparent; border-radius: 12px; background: #fff; cursor: pointer; transition: all 0.18s; }
+.lp-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.09); }
+.lp-card.selected { border-color: #F75D5D; }
+.timeline-seg { height: 8px; border-radius: 4px; cursor: pointer; }
+@keyframes pulse-heat { 0%,100%{transform:scale(1);opacity:0.55} 50%{transform:scale(1.15);opacity:0.7} }
+.heat-pulse { animation: pulse-heat 2.4s ease-in-out infinite; }
+.radar-container { position: relative; }
+</style>
+</head>
+<body class="min-h-screen flex">
+
+<!-- ─── 사이드바 ─────────────────────────────── -->
+<aside class="w-56 bg-white border-r border-[#e2e8f0] flex flex-col fixed top-0 left-0 h-full z-30">
+  <div class="px-5 py-5 border-b border-[#f1f5f9]">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 bg-[#F75D5D] rounded-lg flex items-center justify-center">
+        <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M3 3h18v4H3zm0 6h12v4H3zm0 6h18v4H3z"/></svg>
+      </div>
+      <span class="font-bold text-[#1a1a1a] text-sm">광고 인텔리전스</span>
+    </div>
+  </div>
+  <div class="px-4 py-3 border-b border-[#f1f5f9]">
+    <p class="text-xs text-[#94a3b8] mb-1 font-medium">광고 계정</p>
+    <div class="flex items-center gap-2 bg-[#f8f9fc] rounded-lg px-3 py-2 cursor-pointer hover:bg-gray-100 transition">
+      <div class="w-5 h-5 bg-[#F75D5D] rounded-full flex items-center justify-center text-white text-xs font-bold">더</div>
+      <span class="text-sm text-[#1a1a1a] font-medium flex-1 truncate">더슬렌 공식</span>
+      <svg width="12" height="12" fill="#94a3b8" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+    </div>
+  </div>
+  <nav class="flex-1 px-3 py-4 space-y-0.5">
+    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#64748b] hover:bg-[#f8f9fc] hover:text-[#1a1a1a]">
+      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+      대시보드
+    </a>
+    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#64748b] hover:bg-[#f8f9fc] hover:text-[#1a1a1a]">
+      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+      매체 성과
+    </a>
+    <a href="#" class="sidebar-item sidebar-active flex items-center gap-3 px-3 py-2 rounded-lg text-sm">
+      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6z"/></svg>
+      소재 분석
+    </a>
+    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#64748b] hover:bg-[#f8f9fc] hover:text-[#1a1a1a]">
+      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      경쟁사 분석
+    </a>
+    <div class="pt-3 pb-1 px-3">
+      <p class="text-[10px] font-semibold text-[#94a3b8] uppercase tracking-widest">관리</p>
+    </div>
+    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#64748b] hover:bg-[#f8f9fc] hover:text-[#1a1a1a]">
+      <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg>
+      회원 관리
+    </a>
+  </nav>
+  <div class="px-4 py-3 border-t border-[#f1f5f9]">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 bg-amber-400 rounded-full flex items-center justify-center text-white text-xs font-bold">김</div>
+      <div>
+        <p class="text-xs font-medium">김성현</p>
+        <p class="text-xs text-[#94a3b8]">관리자</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ─── 메인 ─────────────────────────────────── -->
+<main class="flex-1 ml-56 min-h-screen flex flex-col">
+
+  <!-- 상단 헤더 + 탭 -->
+  <header class="bg-white border-b border-[#e2e8f0] px-8 py-4 sticky top-0 z-20">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-bold">소재 분석</h1>
+        <p class="text-xs text-[#94a3b8] mt-0.5">AI 기반 크리에이티브 인텔리전스</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <select class="text-xs border border-[#e2e8f0] rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#F75D5D]">
+          <option>더슬렌 공식</option>
+          <option>얼리포레 브랜드</option>
+          <option>세븐피엠 스토어</option>
+        </select>
+        <button class="flex items-center gap-2 bg-[#F75D5D] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#E54949] transition">
+          <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          내보내기
+        </button>
+      </div>
+    </div>
+    <!-- 서브 탭 (pill 스타일) -->
+    <div class="mt-4 bg-[#f1f5f9] rounded-xl p-1 flex gap-1 w-fit">
+      <button onclick="switchView('individual')" id="sub-individual" class="sub-tab-active px-4 py-1.5 text-sm transition">개별 소재</button>
+      <button onclick="switchView('portfolio')" id="sub-portfolio" class="sub-tab-inactive px-4 py-1.5 text-sm transition rounded-lg">포트폴리오</button>
+      <button onclick="switchView('cross')" id="sub-cross" class="sub-tab-inactive px-4 py-1.5 text-sm transition rounded-lg">교차분석</button>
+      <button onclick="switchView('video')" id="sub-video" class="sub-tab-inactive px-4 py-1.5 text-sm transition rounded-lg">영상 히트맵</button>
+      <button onclick="switchView('lp')" id="sub-lp" class="sub-tab-inactive px-4 py-1.5 text-sm transition rounded-lg">LP 분석</button>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       VIEW 1: 개별 소재
+  ══════════════════════════════════════════ -->
+  <div id="view-individual" class="view-panel active flex flex-1 overflow-hidden" style="height:calc(100vh - 137px)">
+
+    <!-- 좌측 그리드 -->
+    <div class="w-80 border-r border-[#e2e8f0] bg-[#f8f9fc] overflow-y-auto p-4 shrink-0">
+      <!-- 필터 -->
+      <div class="flex gap-2 mb-3">
+        <div class="flex-1 flex items-center gap-2 bg-white border border-[#e2e8f0] rounded-lg px-3 py-2">
+          <svg width="13" height="13" fill="#94a3b8" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input class="text-xs outline-none flex-1 bg-transparent placeholder-[#94a3b8]" placeholder="소재 검색...">
+        </div>
+        <select class="text-xs border border-[#e2e8f0] rounded-lg px-2 py-1.5 bg-white">
+          <option>전체</option><option>이미지</option><option>영상</option>
+        </select>
+      </div>
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-xs text-[#64748b]">전체 <strong class="text-[#1a1a1a]">358건</strong></p>
+        <select class="text-xs border border-[#e2e8f0] rounded-lg px-2 py-1 bg-white">
+          <option>점수순</option><option>ROAS순</option><option>최신순</option>
+        </select>
+      </div>
+      <!-- 소재 카드 2열 그리드 -->
+      <div class="grid grid-cols-2 gap-2">
+        <!-- 카드1 선택됨 -->
+        <div class="creative-card selected overflow-hidden" onclick="selectCreative(this,'card1')">
+          <div class="relative">
+            <div class="w-full h-24 bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
+              <svg width="24" height="24" fill="#e08a8a" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            </div>
+            <span class="absolute top-1 right-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md score-em">82점</span>
+          </div>
+          <div class="p-2">
+            <p class="text-[11px] font-medium leading-snug line-clamp-2 mb-1">피부 고민 있으신가요? 더슬렌 세럼 한 병으로</p>
+            <div class="flex justify-between">
+              <span class="text-[10px] text-[#64748b]">ROAS <b class="text-[#1a1a1a]">3.2x</b></span>
+              <span class="text-[10px] text-[#64748b]">CTR <b class="text-[#1a1a1a]">2.8%</b></span>
+            </div>
+          </div>
+        </div>
+        <!-- 카드2 -->
+        <div class="creative-card overflow-hidden" onclick="selectCreative(this,'card2')">
+          <div class="relative">
+            <div class="w-full h-24 bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center">
+              <svg width="24" height="24" fill="#7a8fd4" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="absolute top-1 right-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md score-am">64점</span>
+          </div>
+          <div class="p-2">
+            <p class="text-[11px] font-medium leading-snug line-clamp-2 mb-1">여름 선케어 루틴 공개 영상</p>
+            <div class="flex justify-between">
+              <span class="text-[10px] text-[#64748b]">ROAS <b>2.1x</b></span>
+              <span class="text-[10px] text-[#64748b]">CTR <b>1.9%</b></span>
+            </div>
+          </div>
+        </div>
+        <!-- 카드3 -->
+        <div class="creative-card overflow-hidden" onclick="selectCreative(this,'card3')">
+          <div class="relative">
+            <div class="w-full h-24 bg-gradient-to-br from-purple-100 to-violet-200 flex items-center justify-center">
+              <svg width="24" height="24" fill="#9a7ad4" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            </div>
+            <span class="absolute top-1 right-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md score-em">91점</span>
+          </div>
+          <div class="p-2">
+            <p class="text-[11px] font-medium leading-snug line-clamp-2 mb-1">진짜 후기 — 30대 직장인의 솔직 리뷰</p>
+            <div class="flex justify-between">
+              <span class="text-[10px] text-[#64748b]">ROAS <b>4.5x</b></span>
+              <span class="text-[10px] text-[#64748b]">CTR <b>3.5%</b></span>
+            </div>
+          </div>
+        </div>
+        <!-- 카드4 -->
+        <div class="creative-card overflow-hidden" onclick="selectCreative(this,'card4')">
+          <div class="relative">
+            <div class="w-full h-24 bg-gradient-to-br from-red-100 to-orange-200 flex items-center justify-center">
+              <svg width="24" height="24" fill="#d48a5a" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            </div>
+            <span class="absolute top-1 right-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md score-rd">32점</span>
+          </div>
+          <div class="p-2">
+            <p class="text-[11px] font-medium leading-snug line-clamp-2 mb-1">무료배송 혜택 지금 바로 받기</p>
+            <div class="flex justify-between">
+              <span class="text-[10px] text-[#64748b]">ROAS <b>0.9x</b></span>
+              <span class="text-[10px] text-[#64748b]">CTR <b>0.7%</b></span>
+            </div>
+          </div>
+        </div>
+        <!-- 카드5 -->
+        <div class="creative-card overflow-hidden" onclick="selectCreative(this,'card5')">
+          <div class="relative">
+            <div class="w-full h-24 bg-gradient-to-br from-teal-100 to-green-200 flex items-center justify-center">
+              <svg width="24" height="24" fill="#4ab0a0" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            </div>
+            <span class="absolute top-1 right-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md score-am">57점</span>
+          </div>
+          <div class="p-2">
+            <p class="text-[11px] font-medium leading-snug line-clamp-2 mb-1">왜 다들 얼리포레를 재구매할까요?</p>
+            <div class="flex justify-between">
+              <span class="text-[10px] text-[#64748b]">ROAS <b>1.8x</b></span>
+              <span class="text-[10px] text-[#64748b]">CTR <b>1.5%</b></span>
+            </div>
+          </div>
+        </div>
+        <!-- 카드6 -->
+        <div class="creative-card overflow-hidden" onclick="selectCreative(this,'card6')">
+          <div class="relative">
+            <div class="w-full h-24 bg-gradient-to-br from-amber-100 to-yellow-200 flex items-center justify-center">
+              <svg width="24" height="24" fill="#c9a83c" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="absolute top-1 right-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md score-em">76점</span>
+          </div>
+          <div class="p-2">
+            <p class="text-[11px] font-medium leading-snug line-clamp-2 mb-1">세븐피엠 신상 컬렉션 런칭 영상</p>
+            <div class="flex justify-between">
+              <span class="text-[10px] text-[#64748b]">ROAS <b>2.6x</b></span>
+              <span class="text-[10px] text-[#64748b]">CTR <b>2.2%</b></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 우측 상세 패널 -->
+    <div class="flex-1 overflow-y-auto bg-white">
+      <div class="p-6 space-y-5">
+
+        <!-- 소재 개요 -->
+        <div class="card p-5">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-4">소재 개요</h3>
+          <div class="flex gap-5">
+            <!-- 이미지 + 히트맵 토글 -->
+            <div class="shrink-0">
+              <div class="relative w-44 h-44 rounded-xl overflow-hidden bg-gradient-to-br from-rose-100 to-pink-200">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <svg width="48" height="48" fill="#e08a8a" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                </div>
+                <div id="heatmap-overlay" class="heatmap-overlay">
+                  <div class="heatmap-blob heat-pulse" style="width:70px;height:70px;background:radial-gradient(circle,rgba(255,60,60,0.8),transparent);top:20%;left:30%;"></div>
+                  <div class="heatmap-blob" style="width:50px;height:50px;background:radial-gradient(circle,rgba(255,165,0,0.7),transparent);top:50%;left:55%;animation:pulse-heat 3s ease-in-out infinite;"></div>
+                  <div class="heatmap-blob" style="width:38px;height:38px;background:radial-gradient(circle,rgba(100,200,100,0.6),transparent);top:65%;left:20%;animation:pulse-heat 3.5s ease-in-out infinite;"></div>
+                </div>
+              </div>
+              <button onclick="toggleHeatmap()" class="mt-2 w-44 text-xs border border-[#e2e8f0] rounded-lg py-1.5 text-[#64748b] hover:bg-[#f8f9fc] transition">
+                🔥 시선 히트맵 보기
+              </button>
+            </div>
+            <!-- 광고 카피 + 태그 -->
+            <div class="flex-1 space-y-3">
+              <div>
+                <p class="text-xs text-[#94a3b8] mb-1">광고 카피</p>
+                <p class="text-sm font-semibold leading-snug">"피부 고민 있으신가요? 더슬렌 세럼 한 병으로 해결되는 이유"</p>
+              </div>
+              <div class="flex gap-2 flex-wrap">
+                <span class="text-[10px] bg-red-50 text-[#F75D5D] font-semibold px-2 py-0.5 rounded-full">이미지</span>
+                <span class="text-[10px] bg-blue-50 text-blue-600 font-semibold px-2 py-0.5 rounded-full">문제제기</span>
+                <span class="text-[10px] bg-purple-50 text-purple-600 font-semibold px-2 py-0.5 rounded-full">전문적</span>
+                <span class="text-[10px] bg-amber-50 text-amber-600 font-semibold px-2 py-0.5 rounded-full">warm</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <div class="bg-[#f8f9fc] rounded-xl p-3 text-center">
+                  <p class="text-xs text-[#64748b]">종합 점수</p>
+                  <p class="text-2xl font-bold text-emerald-600 mt-0.5">82<span class="text-sm font-normal text-[#94a3b8]">/100</span></p>
+                </div>
+                <div class="bg-[#f8f9fc] rounded-xl p-3 text-center">
+                  <p class="text-xs text-[#64748b]">ROAS</p>
+                  <p class="text-2xl font-bold text-[#1a1a1a] mt-0.5">3.2<span class="text-sm font-normal text-[#94a3b8]">x</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 레이더 차트 + 점수 바 -->
+        <div class="card p-5">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-4">5축 평가</h3>
+          <div class="flex gap-6">
+            <!-- SVG 레이더 차트 -->
+            <div class="shrink-0">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <!-- 배경 오각형들 -->
+                <polygon points="80,20 138,57 116,120 44,120 22,57" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                <polygon points="80,38 122,63 106,104 54,104 38,63" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                <polygon points="80,56 106,69 96,88 64,88 54,69" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                <!-- 축 선 -->
+                <line x1="80" y1="20" x2="80" y2="80" stroke="#e2e8f0" stroke-width="1"/>
+                <line x1="138" y1="57" x2="80" y2="80" stroke="#e2e8f0" stroke-width="1"/>
+                <line x1="116" y1="120" x2="80" y2="80" stroke="#e2e8f0" stroke-width="1"/>
+                <line x1="44" y1="120" x2="80" y2="80" stroke="#e2e8f0" stroke-width="1"/>
+                <line x1="22" y1="57" x2="80" y2="80" stroke="#e2e8f0" stroke-width="1"/>
+                <!-- 데이터 영역 (82%, 75%, 88%, 65%, 70%) -->
+                <polygon points="80,26 131,61 113,112 52,112 29,62" fill="rgba(247,93,93,0.18)" stroke="#F75D5D" stroke-width="2"/>
+                <!-- 레이블 -->
+                <text x="80" y="14" text-anchor="middle" font-size="9" fill="#64748b">시각효과</text>
+                <text x="148" y="60" text-anchor="start" font-size="9" fill="#64748b">메시지</text>
+                <text x="118" y="130" text-anchor="middle" font-size="9" fill="#64748b">CTA</text>
+                <text x="42" y="130" text-anchor="middle" font-size="9" fill="#64748b">사회증거</text>
+                <text x="8" y="60" text-anchor="start" font-size="9" fill="#64748b">LP일관성</text>
+              </svg>
+            </div>
+            <!-- 점수 바들 -->
+            <div class="flex-1 space-y-3">
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">시각 효과</span><span class="font-semibold">82점</span></div>
+                <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-[#F75D5D] rounded-full bar-fill" style="width:82%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">메시지 명확성</span><span class="font-semibold">75점</span></div>
+                <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-[#F75D5D] rounded-full bar-fill" style="width:75%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">CTA 효과</span><span class="font-semibold">88점</span></div>
+                <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-emerald-500 rounded-full bar-fill" style="width:88%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">사회적 증거</span><span class="font-semibold">65점</span></div>
+                <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-amber-400 rounded-full bar-fill" style="width:65%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">LP 일관성</span><span class="font-semibold">70점</span></div>
+                <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-amber-400 rounded-full bar-fill" style="width:70%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 성과 지표 -->
+        <div class="card p-5">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">성과 지표</h3>
+          <div class="grid grid-cols-4 gap-3">
+            <div class="bg-[#f8f9fc] rounded-xl p-3 text-center">
+              <p class="text-xs text-[#64748b]">ROAS</p>
+              <p class="text-xl font-bold text-[#1a1a1a] mt-0.5">3.2x</p>
+            </div>
+            <div class="bg-[#f8f9fc] rounded-xl p-3 text-center">
+              <p class="text-xs text-[#64748b]">CTR</p>
+              <p class="text-xl font-bold text-[#1a1a1a] mt-0.5">2.8%</p>
+            </div>
+            <div class="bg-[#f8f9fc] rounded-xl p-3 text-center">
+              <p class="text-xs text-[#64748b]">CPC</p>
+              <p class="text-xl font-bold text-[#1a1a1a] mt-0.5">820원</p>
+            </div>
+            <div class="bg-[#f8f9fc] rounded-xl p-3 text-center">
+              <p class="text-xs text-[#64748b]">CPM</p>
+              <p class="text-xl font-bold text-[#1a1a1a] mt-0.5">11,400원</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI 개선 제안 -->
+        <div class="card p-5">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">AI 개선 제안</h3>
+          <div class="space-y-2">
+            <div class="suggestion-item border-red-400 bg-red-50">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded">높음</span>
+                <span class="text-xs font-semibold">사회적 증거 강화</span>
+              </div>
+              <p class="text-xs text-[#64748b]">구매 후기 수치(예: "4,200명 사용")를 헤드라인에 포함하면 CTR +35% 예상됩니다.</p>
+            </div>
+            <div class="suggestion-item border-amber-400 bg-amber-50">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold bg-amber-500 text-white px-1.5 py-0.5 rounded">중간</span>
+                <span class="text-xs font-semibold">CTA 버튼 대비 개선</span>
+              </div>
+              <p class="text-xs text-[#64748b]">버튼 색상을 배경과 더 대비되는 컬러로 변경하면 클릭률 향상 기대됩니다.</p>
+            </div>
+            <div class="suggestion-item border-blue-400 bg-blue-50">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold bg-blue-500 text-white px-1.5 py-0.5 rounded">낮음</span>
+                <span class="text-xs font-semibold">LP 메시지 일관성</span>
+              </div>
+              <p class="text-xs text-[#64748b]">광고 카피의 핵심 키워드를 LP 히어로 영역에 그대로 반영하는 것을 권장합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- L1 태그 -->
+        <div class="card p-5">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">L1 속성 태그</h3>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
+            <div class="flex justify-between py-1 border-b border-[#f1f5f9]">
+              <span class="text-[#64748b]">포맷</span><span class="font-semibold">이미지</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#f1f5f9]">
+              <span class="text-[#64748b]">훅 유형</span><span class="font-semibold">문제제기</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#f1f5f9]">
+              <span class="text-[#64748b]">스타일</span><span class="font-semibold">전문적</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#f1f5f9]">
+              <span class="text-[#64748b]">색조</span><span class="font-semibold">warm</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#f1f5f9]">
+              <span class="text-[#64748b]">모델 여부</span><span class="font-semibold">없음</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#f1f5f9]">
+              <span class="text-[#64748b]">텍스트 밀도</span><span class="font-semibold">중간</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VIEW 2: 포트폴리오
+  ══════════════════════════════════════════ -->
+  <div id="view-portfolio" class="view-panel p-6 overflow-y-auto" style="max-height:calc(100vh - 137px)">
+
+    <!-- 요약 카드 4개 -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="card p-4">
+        <p class="text-xs text-[#64748b] mb-1">총 소재 수</p>
+        <p class="text-2xl font-bold">3,096<span class="text-sm text-[#94a3b8] font-normal">건</span></p>
+        <p class="text-xs text-emerald-600 mt-1">↑ 이미지 2,835 / 영상 261</p>
+      </div>
+      <div class="card p-4">
+        <p class="text-xs text-[#64748b] mb-1">평균 점수</p>
+        <p class="text-2xl font-bold text-amber-600">61<span class="text-sm text-[#94a3b8] font-normal">/100</span></p>
+        <p class="text-xs text-[#94a3b8] mt-1">업계 평균 대비 +8점</p>
+      </div>
+      <div class="card p-4">
+        <p class="text-xs text-[#64748b] mb-1">최고 점수 소재</p>
+        <p class="text-2xl font-bold text-emerald-600">95<span class="text-sm text-[#94a3b8] font-normal">/100</span></p>
+        <p class="text-xs text-[#94a3b8] mt-1">UGC 후기 영상</p>
+      </div>
+      <div class="card p-4">
+        <p class="text-xs text-[#64748b] mb-1">개선 필요 소재</p>
+        <p class="text-2xl font-bold text-red-500">412<span class="text-sm text-[#94a3b8] font-normal">건</span></p>
+        <p class="text-xs text-[#94a3b8] mt-1">점수 50점 미만</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-5 mb-6">
+      <!-- 점수 분포 히스토그램 -->
+      <div class="card p-5">
+        <h3 class="text-sm font-semibold mb-4">점수 분포</h3>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-[#64748b] w-14">0–20점</span>
+            <div class="flex-1 h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-red-400 rounded-lg" style="width:8%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#64748b]">248건</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-[#64748b] w-14">20–40점</span>
+            <div class="flex-1 h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-orange-400 rounded-lg" style="width:14%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#64748b]">432건</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-[#64748b] w-14">40–60점</span>
+            <div class="flex-1 h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-amber-400 rounded-lg" style="width:38%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#64748b]">1,176건</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-[#64748b] w-14">60–80점</span>
+            <div class="flex-1 h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-emerald-400 rounded-lg" style="width:31%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#64748b]">960건</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-[#64748b] w-14">80–100점</span>
+            <div class="flex-1 h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-emerald-600 rounded-lg" style="width:9%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#64748b]">280건</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 속성 분포 -->
+      <div class="card p-5">
+        <h3 class="text-sm font-semibold mb-4">속성 분포</h3>
+        <p class="text-xs font-semibold text-[#64748b] mb-2">훅 유형 (hook_type)</p>
+        <div class="space-y-1.5 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs w-16 text-[#64748b]">문제제기</span>
+            <div class="flex-1 h-4 bg-[#f1f5f9] rounded-full overflow-hidden">
+              <div class="h-full bg-[#F75D5D] rounded-full" style="width:45%"></div>
+            </div>
+            <span class="text-xs font-semibold w-8">45%</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs w-16 text-[#64748b]">혜택강조</span>
+            <div class="flex-1 h-4 bg-[#f1f5f9] rounded-full overflow-hidden">
+              <div class="h-full bg-[#F75D5D] opacity-70 rounded-full" style="width:30%"></div>
+            </div>
+            <span class="text-xs font-semibold w-8">30%</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs w-16 text-[#64748b]">질문유도</span>
+            <div class="flex-1 h-4 bg-[#f1f5f9] rounded-full overflow-hidden">
+              <div class="h-full bg-[#F75D5D] opacity-40 rounded-full" style="width:15%"></div>
+            </div>
+            <span class="text-xs font-semibold w-8">15%</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs w-16 text-[#64748b]">충격</span>
+            <div class="flex-1 h-4 bg-[#f1f5f9] rounded-full overflow-hidden">
+              <div class="h-full bg-[#F75D5D] opacity-25 rounded-full" style="width:10%"></div>
+            </div>
+            <span class="text-xs font-semibold w-8">10%</span>
+          </div>
+        </div>
+        <p class="text-xs font-semibold text-[#64748b] mb-2">스타일 (style)</p>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2">
+            <span class="text-xs w-16 text-[#64748b]">전문적</span>
+            <div class="flex-1 h-4 bg-[#f1f5f9] rounded-full overflow-hidden">
+              <div class="h-full bg-violet-500 rounded-full" style="width:50%"></div>
+            </div>
+            <span class="text-xs font-semibold w-8">50%</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs w-16 text-[#64748b]">UGC</span>
+            <div class="flex-1 h-4 bg-[#f1f5f9] rounded-full overflow-hidden">
+              <div class="h-full bg-violet-500 opacity-65 rounded-full" style="width:25%"></div>
+            </div>
+            <span class="text-xs font-semibold w-8">25%</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs w-16 text-[#64748b]">미니멀</span>
+            <div class="flex-1 h-4 bg-[#f1f5f9] rounded-full overflow-hidden">
+              <div class="h-full bg-violet-500 opacity-40 rounded-full" style="width:15%"></div>
+            </div>
+            <span class="text-xs font-semibold w-8">15%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상위/하위 소재 -->
+    <div class="grid grid-cols-2 gap-5">
+      <div class="card p-5">
+        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2">
+          <span class="w-5 h-5 bg-emerald-100 text-emerald-700 rounded-full text-xs flex items-center justify-center font-bold">↑</span>
+          최고 성과 소재 TOP 4
+        </h3>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-violet-200 shrink-0 flex items-center justify-center text-xs text-violet-400">UGC</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">진짜 후기 — 30대 직장인 솔직 리뷰</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 4.5x · CTR 3.5%</p>
+            </div>
+            <span class="text-xs font-bold score-em px-1.5 py-0.5 rounded-md shrink-0">91점</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-rose-100 to-pink-200 shrink-0 flex items-center justify-center text-xs text-pink-400">IMG</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">피부고민 해결 — 세럼 한 병의 기적</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 4.1x · CTR 3.2%</p>
+            </div>
+            <span class="text-xs font-bold score-em px-1.5 py-0.5 rounded-md shrink-0">88점</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-100 to-yellow-200 shrink-0 flex items-center justify-center text-xs text-amber-500">VID</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">라디보이 신상 착용 하울 영상</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 3.8x · CTR 2.9%</p>
+            </div>
+            <span class="text-xs font-bold score-em px-1.5 py-0.5 rounded-md shrink-0">85점</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-200 shrink-0 flex items-center justify-center text-xs text-blue-400">IMG</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">페시타린 — 지금 할인 중 마지막 기회</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 3.6x · CTR 2.7%</p>
+            </div>
+            <span class="text-xs font-bold score-em px-1.5 py-0.5 rounded-md shrink-0">83점</span>
+          </div>
+        </div>
+      </div>
+      <div class="card p-5">
+        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2">
+          <span class="w-5 h-5 bg-red-100 text-red-600 rounded-full text-xs flex items-center justify-center font-bold">↓</span>
+          개선 필요 소재 BOTTOM 4
+        </h3>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-100 to-slate-200 shrink-0 flex items-center justify-center text-xs text-gray-400">IMG</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">무료배송 혜택 지금 받기</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 0.9x · CTR 0.7%</p>
+            </div>
+            <span class="text-xs font-bold score-rd px-1.5 py-0.5 rounded-md shrink-0">32점</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-100 to-red-200 shrink-0 flex items-center justify-center text-xs text-red-300">VID</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">여름 세일 — 클릭하세요</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 0.7x · CTR 0.5%</p>
+            </div>
+            <span class="text-xs font-bold score-rd px-1.5 py-0.5 rounded-md shrink-0">24점</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-50 to-rose-100 shrink-0 flex items-center justify-center text-xs text-rose-300">IMG</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">신제품 출시 알림</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 1.0x · CTR 0.8%</p>
+            </div>
+            <span class="text-xs font-bold score-rd px-1.5 py-0.5 rounded-md shrink-0">28점</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 bg-[#f8f9fc] rounded-xl">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-100 to-gray-200 shrink-0 flex items-center justify-center text-xs text-gray-300">IMG</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold truncate">할인 이벤트 참여하세요</p>
+              <p class="text-[10px] text-[#64748b]">ROAS 1.1x · CTR 0.9%</p>
+            </div>
+            <span class="text-xs font-bold score-rd px-1.5 py-0.5 rounded-md shrink-0">35점</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VIEW 3: 교차분석
+  ══════════════════════════════════════════ -->
+  <div id="view-cross" class="view-panel p-6 overflow-y-auto" style="max-height:calc(100vh - 137px)">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h2 class="text-base font-bold">속성값 교차분석</h2>
+        <p class="text-xs text-[#64748b] mt-0.5">L1 태그 기준 ROAS 비교 분석</p>
+      </div>
+      <div class="flex gap-2">
+        <select class="text-xs border border-[#e2e8f0] rounded-lg px-3 py-2 bg-white">
+          <option>훅 유형 (hook_type)</option>
+          <option>스타일 (style)</option>
+          <option>색조 (color_tone)</option>
+          <option>포맷 (format)</option>
+        </select>
+        <button class="text-xs bg-[#F75D5D] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#E54949] transition">분석</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-5 mb-5">
+      <!-- ROAS 바 차트 -->
+      <div class="card p-5">
+        <h3 class="text-sm font-semibold mb-4">훅 유형별 평균 ROAS</h3>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">문제제기</span><span class="font-bold text-emerald-600">3.4x</span></div>
+            <div class="h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-emerald-500 rounded-lg" style="width:68%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#64748b]">145건</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">사회적증거</span><span class="font-bold text-emerald-600">3.1x</span></div>
+            <div class="h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-emerald-400 rounded-lg" style="width:62%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#64748b]">87건</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">혜택강조</span><span class="font-bold text-amber-600">2.6x</span></div>
+            <div class="h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-amber-400 rounded-lg" style="width:52%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#64748b]">96건</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">질문유도</span><span class="font-bold text-amber-600">2.2x</span></div>
+            <div class="h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-amber-300 rounded-lg" style="width:44%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#64748b]">48건</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">충격</span><span class="font-bold text-red-500">1.4x</span></div>
+            <div class="h-7 bg-[#f1f5f9] rounded-lg overflow-hidden relative">
+              <div class="h-full bg-red-400 rounded-lg" style="width:28%"></div>
+              <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#64748b]">32건</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 조합 분석 -->
+      <div class="card p-5">
+        <h3 class="text-sm font-semibold mb-3">조합 필터 분석</h3>
+        <div class="flex gap-2 mb-4">
+          <select class="flex-1 text-xs border border-[#e2e8f0] rounded-lg px-2 py-2 bg-white">
+            <option>훅: 문제제기</option>
+            <option>훅: 혜택강조</option>
+          </select>
+          <span class="text-xs text-[#94a3b8] flex items-center">+</span>
+          <select class="flex-1 text-xs border border-[#e2e8f0] rounded-lg px-2 py-2 bg-white">
+            <option>스타일: 전문적</option>
+            <option>스타일: UGC</option>
+          </select>
+          <button class="text-xs bg-[#F75D5D] text-white px-3 py-2 rounded-lg font-medium hover:bg-[#E54949] transition">조회</button>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-3">
+          <p class="text-xs text-[#64748b] mb-1">분석 결과</p>
+          <p class="text-sm font-bold text-emerald-700">hook_type=문제제기 + style=전문적</p>
+          <div class="flex gap-4 mt-2">
+            <div>
+              <p class="text-[10px] text-[#64748b]">평균 ROAS</p>
+              <p class="text-xl font-bold text-emerald-600">3.2x</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-[#64748b]">소재 수</p>
+              <p class="text-xl font-bold">12건</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-[#64748b]">평균 점수</p>
+              <p class="text-xl font-bold text-emerald-600">78점</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <p class="text-xs text-[#64748b] mb-1">비교 분석</p>
+          <p class="text-sm font-bold text-amber-700">hook_type=혜택강조 + style=UGC</p>
+          <div class="flex gap-4 mt-2">
+            <div>
+              <p class="text-[10px] text-[#64748b]">평균 ROAS</p>
+              <p class="text-xl font-bold text-amber-600">2.4x</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-[#64748b]">소재 수</p>
+              <p class="text-xl font-bold">8건</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-[#64748b]">평균 점수</p>
+              <p class="text-xl font-bold text-amber-600">65점</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 고성과 패턴 테이블 -->
+    <div class="card p-5 mb-5">
+      <h3 class="text-sm font-semibold mb-3">고성과 패턴 TOP 5</h3>
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="border-b border-[#f1f5f9]">
+            <th class="text-left py-2 text-[#94a3b8] font-medium">패턴</th>
+            <th class="text-right py-2 text-[#94a3b8] font-medium">평균 ROAS</th>
+            <th class="text-right py-2 text-[#94a3b8] font-medium">소재 수</th>
+            <th class="text-right py-2 text-[#94a3b8] font-medium">비중</th>
+            <th class="text-right py-2 text-[#94a3b8] font-medium">평균 점수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-[#f8f9fc] hover:bg-[#f8f9fc]">
+            <td class="py-2.5"><span class="font-semibold">문제제기 + 전문적 + warm</span></td>
+            <td class="py-2.5 text-right font-bold text-emerald-600">3.4x</td>
+            <td class="py-2.5 text-right">18건</td>
+            <td class="py-2.5 text-right text-[#64748b]">5.0%</td>
+            <td class="py-2.5 text-right font-bold text-emerald-600">84점</td>
+          </tr>
+          <tr class="border-b border-[#f8f9fc] hover:bg-[#f8f9fc]">
+            <td class="py-2.5"><span class="font-semibold">사회적증거 + UGC + cool</span></td>
+            <td class="py-2.5 text-right font-bold text-emerald-600">3.1x</td>
+            <td class="py-2.5 text-right">12건</td>
+            <td class="py-2.5 text-right text-[#64748b]">3.3%</td>
+            <td class="py-2.5 text-right font-bold text-emerald-600">81점</td>
+          </tr>
+          <tr class="border-b border-[#f8f9fc] hover:bg-[#f8f9fc]">
+            <td class="py-2.5"><span class="font-semibold">문제제기 + 라이프스타일 + warm</span></td>
+            <td class="py-2.5 text-right font-bold text-emerald-600">2.9x</td>
+            <td class="py-2.5 text-right">9건</td>
+            <td class="py-2.5 text-right text-[#64748b]">2.5%</td>
+            <td class="py-2.5 text-right font-bold text-emerald-600">79점</td>
+          </tr>
+          <tr class="border-b border-[#f8f9fc] hover:bg-[#f8f9fc]">
+            <td class="py-2.5"><span class="font-semibold">혜택강조 + 미니멀 + neutral</span></td>
+            <td class="py-2.5 text-right font-bold text-amber-600">2.6x</td>
+            <td class="py-2.5 text-right">22건</td>
+            <td class="py-2.5 text-right text-[#64748b]">6.1%</td>
+            <td class="py-2.5 text-right font-bold text-amber-600">72점</td>
+          </tr>
+          <tr class="hover:bg-[#f8f9fc]">
+            <td class="py-2.5"><span class="font-semibold">질문유도 + 볼드 + warm</span></td>
+            <td class="py-2.5 text-right font-bold text-amber-600">2.3x</td>
+            <td class="py-2.5 text-right">14건</td>
+            <td class="py-2.5 text-right text-[#64748b]">3.9%</td>
+            <td class="py-2.5 text-right font-bold text-amber-600">68점</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 인사이트 카드 -->
+    <div class="grid grid-cols-3 gap-4">
+      <div class="card p-4" style="border-left: 3px solid #F75D5D;">
+        <p class="text-xs font-bold text-[#F75D5D] mb-1">핵심 인사이트 #1</p>
+        <p class="text-sm font-semibold mb-1">문제제기 훅이 가장 효과적</p>
+        <p class="text-xs text-[#64748b]">ROAS 평균 3.4x로 다른 훅 유형 대비 31% 높은 성과를 보입니다.</p>
+      </div>
+      <div class="card p-4" style="border-left: 3px solid #3b82f6;">
+        <p class="text-xs font-bold text-blue-500 mb-1">핵심 인사이트 #2</p>
+        <p class="text-sm font-semibold mb-1">warm 색조가 cool보다 우세</p>
+        <p class="text-xs text-[#64748b]">warm 색조 소재의 평균 CTR이 cool 대비 22% 높게 측정됩니다.</p>
+      </div>
+      <div class="card p-4" style="border-left: 3px solid #10b981;">
+        <p class="text-xs font-bold text-emerald-600 mb-1">핵심 인사이트 #3</p>
+        <p class="text-sm font-semibold mb-1">영상 > 이미지 성과 우위</p>
+        <p class="text-xs text-[#64748b]">영상 소재의 평균 ROAS는 2.8x로 이미지(2.1x)보다 33% 높습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VIEW 4: 영상 히트맵 플레이어
+  ══════════════════════════════════════════ -->
+  <div id="view-video" class="view-panel p-6 overflow-y-auto" style="max-height:calc(100vh - 137px)">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-bold">영상 시선 분석 플레이어</h2>
+        <p class="text-xs text-[#64748b] mt-0.5">L2 AI 시선 예측 기반 주시 히트맵</p>
+      </div>
+      <select class="text-xs border border-[#e2e8f0] rounded-lg px-3 py-2 bg-white">
+        <option>세븐피엠 신상 컬렉션 런칭 영상</option>
+        <option>더슬렌 세럼 제품 영상</option>
+        <option>얼리포레 하울 영상</option>
+      </select>
+    </div>
+
+    <div class="flex gap-5">
+      <!-- 왼쪽: 비디오 플레이어 -->
+      <div class="flex-1">
+        <!-- 비디오 영역 -->
+        <div class="relative rounded-2xl overflow-hidden bg-gray-900 mb-3" style="aspect-ratio:16/9;max-height:360px;">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center">
+              <svg width="48" height="48" fill="#6b7280" viewBox="0 0 24 24" class="mx-auto mb-2"><path d="M8 5v14l11-7z"/></svg>
+              <p class="text-gray-400 text-sm">영상 재생 영역</p>
+            </div>
+          </div>
+          <!-- 히트맵 오버레이 -->
+          <div id="video-heatmap" class="heatmap-overlay show">
+            <div class="heatmap-blob heat-pulse" style="width:90px;height:90px;background:radial-gradient(circle,rgba(255,40,40,0.85),transparent);top:25%;left:35%;"></div>
+            <div class="heatmap-blob" style="width:65px;height:65px;background:radial-gradient(circle,rgba(255,160,0,0.75),transparent);top:45%;left:55%;animation:pulse-heat 2.8s ease-in-out infinite;"></div>
+            <div class="heatmap-blob" style="width:45px;height:45px;background:radial-gradient(circle,rgba(100,220,100,0.6),transparent);top:60%;left:20%;animation:pulse-heat 3.2s ease-in-out infinite;"></div>
+            <div class="heatmap-blob" style="width:35px;height:35px;background:radial-gradient(circle,rgba(60,140,255,0.5),transparent);top:15%;left:65%;animation:pulse-heat 3.8s ease-in-out infinite;"></div>
+          </div>
+          <!-- 타임스탬프 오버레이 -->
+          <div class="absolute bottom-3 left-3 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded-md font-mono">03.2s</div>
+        </div>
+
+        <!-- 타임라인 바 -->
+        <div class="bg-[#f1f5f9] rounded-xl p-3 mb-3">
+          <div class="flex gap-1 h-8 mb-2 relative cursor-pointer">
+            <div class="timeline-seg bg-red-400 flex items-center justify-center" style="width:20%" title="0-3초: 훅">
+              <span class="text-white text-[10px] font-bold">훅</span>
+            </div>
+            <div class="timeline-seg bg-blue-500 flex items-center justify-center" style="width:33%" title="3-8초: 제품">
+              <span class="text-white text-[10px] font-bold">제품</span>
+            </div>
+            <div class="timeline-seg bg-emerald-500 flex items-center justify-center" style="width:47%" title="8-15초: CTA">
+              <span class="text-white text-[10px] font-bold">CTA</span>
+            </div>
+            <!-- 플레이헤드 -->
+            <div class="absolute top-0 h-full w-0.5 bg-white shadow-lg" style="left:21%" id="playhead"></div>
+          </div>
+          <div class="flex text-[10px] text-[#64748b]">
+            <span style="width:20%">0–3초 훅</span>
+            <span style="width:33%">3–8초 제품 설명</span>
+            <span style="width:47%">8–15초 CTA</span>
+          </div>
+        </div>
+
+        <!-- 컨트롤 바 -->
+        <div class="flex items-center gap-3 bg-white border border-[#e2e8f0] rounded-xl p-3">
+          <button onclick="togglePlay()" id="play-btn" class="w-9 h-9 bg-[#F75D5D] text-white rounded-full flex items-center justify-center hover:bg-[#E54949] transition">
+            <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <span class="text-xs font-mono text-[#64748b]">03.2 / 15.0</span>
+          <div class="flex-1 h-1.5 bg-[#f1f5f9] rounded-full cursor-pointer">
+            <div class="h-full bg-[#F75D5D] rounded-full" style="width:21%"></div>
+          </div>
+          <select class="text-xs border border-[#e2e8f0] rounded-lg px-2 py-1.5 bg-white">
+            <option>1x</option><option>0.5x</option><option>1.5x</option><option>2x</option>
+          </select>
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked onchange="toggleVideoHeatmap(this)" class="accent-[#F75D5D]">
+            <span class="text-xs text-[#64748b]">히트맵 표시</span>
+          </label>
+        </div>
+
+        <!-- 씬 분석 테이블 -->
+        <div class="card p-4 mt-4">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">씬별 시선 분석</h3>
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="border-b border-[#f1f5f9]">
+                <th class="text-left py-2 text-[#94a3b8] font-medium">구간</th>
+                <th class="text-left py-2 text-[#94a3b8] font-medium">씬 유형</th>
+                <th class="text-left py-2 text-[#94a3b8] font-medium">주요 요소</th>
+                <th class="text-right py-2 text-[#94a3b8] font-medium">주시율</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#f8f9fc]">
+                <td class="py-2.5"><span class="bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded-md">0–3초</span></td>
+                <td class="py-2.5 font-semibold">훅</td>
+                <td class="py-2.5 text-[#64748b]">모델 등장 + 강렬한 카피</td>
+                <td class="py-2.5 text-right font-bold text-emerald-600">89%</td>
+              </tr>
+              <tr class="border-b border-[#f8f9fc]">
+                <td class="py-2.5"><span class="bg-blue-100 text-blue-600 font-bold px-2 py-0.5 rounded-md">3–8초</span></td>
+                <td class="py-2.5 font-semibold">제품</td>
+                <td class="py-2.5 text-[#64748b]">제품 클로즈업 + 성분 소개</td>
+                <td class="py-2.5 text-right font-bold text-emerald-600">76%</td>
+              </tr>
+              <tr>
+                <td class="py-2.5"><span class="bg-emerald-100 text-emerald-600 font-bold px-2 py-0.5 rounded-md">8–15초</span></td>
+                <td class="py-2.5 font-semibold">CTA</td>
+                <td class="py-2.5 text-[#64748b]">구매 유도 + 할인 표시</td>
+                <td class="py-2.5 text-right font-bold text-amber-600">54%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 주시 지표 -->
+      <div class="w-64 shrink-0 space-y-3">
+        <div class="card p-4">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">주시 지표</h3>
+          <div class="space-y-3">
+            <div class="flex justify-between items-start">
+              <p class="text-xs text-[#64748b]">최대 주시 영역</p>
+              <p class="text-xs font-bold text-right">상품 이미지<br><span class="text-[#F75D5D]">(42%)</span></p>
+            </div>
+            <div class="flex justify-between items-start">
+              <p class="text-xs text-[#64748b]">평균 시선 체류</p>
+              <p class="text-xs font-bold text-right">2.3초</p>
+            </div>
+            <div class="flex justify-between items-start">
+              <p class="text-xs text-[#64748b]">CTA 도달률</p>
+              <p class="text-xs font-bold text-right text-emerald-600">67%</p>
+            </div>
+            <div class="flex justify-between items-start">
+              <p class="text-xs text-[#64748b]">첫 주시 시간</p>
+              <p class="text-xs font-bold text-right">0.8초</p>
+            </div>
+            <div class="flex justify-between items-start">
+              <p class="text-xs text-[#64748b]">이탈 구간</p>
+              <p class="text-xs font-bold text-right text-red-500">7.2초</p>
+            </div>
+          </div>
+        </div>
+        <div class="card p-4">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">히트맵 범례</h3>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded-full bg-red-500 opacity-80"></div>
+              <span class="text-xs text-[#64748b]">매우 높은 주시 (>80%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded-full bg-orange-400 opacity-80"></div>
+              <span class="text-xs text-[#64748b]">높은 주시 (60–80%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded-full bg-yellow-300 opacity-80"></div>
+              <span class="text-xs text-[#64748b]">중간 주시 (40–60%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded-full bg-green-400 opacity-80"></div>
+              <span class="text-xs text-[#64748b]">낮은 주시 (<40%)</span>
+            </div>
+          </div>
+        </div>
+        <div class="card p-4">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-2">전체 주시율</h3>
+          <div class="relative h-24 flex items-center justify-center">
+            <svg width="90" height="90" viewBox="0 0 90 90">
+              <circle cx="45" cy="45" r="38" fill="none" stroke="#f1f5f9" stroke-width="10"/>
+              <circle cx="45" cy="45" r="38" fill="none" stroke="#F75D5D" stroke-width="10"
+                stroke-dasharray="239" stroke-dashoffset="57" stroke-linecap="round"
+                transform="rotate(-90 45 45)"/>
+              <text x="45" y="49" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a1a">76%</text>
+            </svg>
+          </div>
+          <p class="text-center text-xs text-[#64748b]">평균 주시율</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VIEW 5: LP 분석
+  ══════════════════════════════════════════ -->
+  <div id="view-lp" class="view-panel flex flex-1 overflow-hidden" style="height:calc(100vh - 137px)">
+
+    <!-- 좌측 LP 목록 -->
+    <div class="w-72 border-r border-[#e2e8f0] bg-[#f8f9fc] overflow-y-auto p-4 shrink-0">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-bold">LP 목록</h2>
+        <span class="text-xs bg-[#F75D5D] text-white px-2 py-0.5 rounded-full font-semibold">35개</span>
+      </div>
+      <div class="space-y-2">
+        <!-- LP 카드 1 선택 -->
+        <div class="lp-card selected p-3" onclick="selectLP(this)">
+          <div class="w-full h-20 bg-gradient-to-br from-rose-50 to-pink-100 rounded-lg mb-2 flex items-center justify-center relative overflow-hidden">
+            <svg width="32" height="32" fill="#e08a8a" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 2l2 2-6 6-4-4 2-2 2 2 4-4z"/></svg>
+            <span class="absolute top-1 right-1 text-[9px] bg-gray-800 text-white px-1.5 py-0.5 rounded">cafe24</span>
+          </div>
+          <p class="text-xs font-semibold truncate">더슬렌 세럼 상품 페이지</p>
+          <p class="text-[10px] text-[#64748b]">derslen.com · 연결 광고 18건</p>
+          <div class="flex items-center justify-between mt-1">
+            <span class="text-[10px] text-[#64748b]">전환 점수</span>
+            <span class="text-[11px] font-bold text-emerald-600">78/100</span>
+          </div>
+        </div>
+        <!-- LP 카드 2 -->
+        <div class="lp-card p-3" onclick="selectLP(this)">
+          <div class="w-full h-20 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg mb-2 flex items-center justify-center relative overflow-hidden">
+            <svg width="32" height="32" fill="#7a8fd4" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 2l2 2-6 6-4-4 2-2 2 2 4-4z"/></svg>
+            <span class="absolute top-1 right-1 text-[9px] bg-gray-800 text-white px-1.5 py-0.5 rounded">스마트스토어</span>
+          </div>
+          <p class="text-xs font-semibold truncate">얼리포레 보습 크림 판매 페이지</p>
+          <p class="text-[10px] text-[#64748b]">smartstore · 연결 광고 12건</p>
+          <div class="flex items-center justify-between mt-1">
+            <span class="text-[10px] text-[#64748b]">전환 점수</span>
+            <span class="text-[11px] font-bold text-amber-600">61/100</span>
+          </div>
+        </div>
+        <!-- LP 카드 3 -->
+        <div class="lp-card p-3" onclick="selectLP(this)">
+          <div class="w-full h-20 bg-gradient-to-br from-purple-50 to-violet-100 rounded-lg mb-2 flex items-center justify-center relative overflow-hidden">
+            <svg width="32" height="32" fill="#9a7ad4" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 2l2 2-6 6-4-4 2-2 2 2 4-4z"/></svg>
+            <span class="absolute top-1 right-1 text-[9px] bg-gray-800 text-white px-1.5 py-0.5 rounded">cafe24</span>
+          </div>
+          <p class="text-xs font-semibold truncate">세븐피엠 신상 컬렉션 랜딩</p>
+          <p class="text-[10px] text-[#64748b]">7pm.co.kr · 연결 광고 9건</p>
+          <div class="flex items-center justify-between mt-1">
+            <span class="text-[10px] text-[#64748b]">전환 점수</span>
+            <span class="text-[11px] font-bold text-red-500">43/100</span>
+          </div>
+        </div>
+        <!-- LP 카드 4 -->
+        <div class="lp-card p-3" onclick="selectLP(this)">
+          <div class="w-full h-20 bg-gradient-to-br from-amber-50 to-yellow-100 rounded-lg mb-2 flex items-center justify-center relative overflow-hidden">
+            <svg width="32" height="32" fill="#c9a83c" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 2l2 2-6 6-4-4 2-2 2 2 4-4z"/></svg>
+            <span class="absolute top-1 right-1 text-[9px] bg-gray-800 text-white px-1.5 py-0.5 rounded">자체몰</span>
+          </div>
+          <p class="text-xs font-semibold truncate">라디보이 특가 이벤트 페이지</p>
+          <p class="text-[10px] text-[#64748b]">radivoy.kr · 연결 광고 6건</p>
+          <div class="flex items-center justify-between mt-1">
+            <span class="text-[10px] text-[#64748b]">전환 점수</span>
+            <span class="text-[11px] font-bold text-emerald-600">85/100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 우측 LP 상세 -->
+    <div class="flex-1 overflow-y-auto bg-white p-6 space-y-5">
+
+      <!-- 스크린샷 뷰어 -->
+      <div class="card p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide">LP 미리보기</h3>
+          <div class="flex gap-1 bg-[#f1f5f9] rounded-lg p-1">
+            <button class="text-xs px-3 py-1 bg-white rounded-md shadow-sm font-semibold text-[#1a1a1a]">모바일</button>
+            <button class="text-xs px-3 py-1 text-[#64748b] rounded-md hover:bg-white transition">PC</button>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <!-- 모바일 프레임 -->
+          <div class="shrink-0 text-center">
+            <div class="border-4 border-gray-800 rounded-2xl overflow-hidden mx-auto" style="width:80px;height:160px;background:linear-gradient(135deg,#fff0f0 0%,#ffe8e8 30%,#fff 60%);">
+              <div class="bg-gray-800 h-4 flex items-center justify-center">
+                <div class="w-8 h-1 bg-gray-600 rounded-full"></div>
+              </div>
+              <div class="p-1">
+                <div class="h-6 bg-[#F75D5D] rounded-sm mb-1 flex items-center px-1">
+                  <div class="w-2 h-2 bg-white rounded-full opacity-50 mr-1"></div>
+                  <div class="h-0.5 bg-white opacity-50 flex-1 rounded"></div>
+                </div>
+                <div class="h-16 bg-gradient-to-br from-rose-100 to-pink-200 rounded-sm mb-1"></div>
+                <div class="h-1.5 bg-gray-200 rounded mb-0.5"></div>
+                <div class="h-1 bg-gray-200 rounded w-2/3 mb-1"></div>
+                <div class="h-4 bg-[#F75D5D] rounded-sm flex items-center justify-center">
+                  <div class="h-0.5 bg-white w-8 rounded"></div>
+                </div>
+              </div>
+            </div>
+            <p class="text-[10px] text-[#94a3b8] mt-1">모바일 (375×812)</p>
+          </div>
+          <!-- PC 프레임 -->
+          <div class="flex-1 text-center">
+            <div class="border-2 border-gray-300 rounded-lg overflow-hidden" style="height:160px;background:linear-gradient(135deg,#fff0f0 0%,#ffe8e8 20%,#fff 50%);">
+              <div class="bg-gray-200 h-5 flex items-center px-2 gap-1">
+                <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                <div class="flex-1 bg-white h-3 rounded mx-2 flex items-center px-2">
+                  <div class="h-0.5 bg-gray-300 w-20 rounded"></div>
+                </div>
+              </div>
+              <div class="p-2 flex gap-2 h-full">
+                <div class="flex-1 bg-gradient-to-br from-rose-50 to-pink-100 rounded flex items-center justify-center">
+                  <svg width="20" height="20" fill="#e08a8a" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2z"/></svg>
+                </div>
+                <div class="flex-1 space-y-1 pt-1">
+                  <div class="h-2 bg-gray-200 rounded"></div>
+                  <div class="h-1.5 bg-gray-100 rounded w-3/4"></div>
+                  <div class="h-1.5 bg-gray-100 rounded w-1/2"></div>
+                  <div class="h-5 bg-[#F75D5D] rounded mt-2"></div>
+                </div>
+              </div>
+            </div>
+            <p class="text-[10px] text-[#94a3b8] mt-1">PC (1280×800)</p>
+          </div>
+        </div>
+
+        <!-- 섹션 스크린샷 2x2 -->
+        <div class="mt-4">
+          <p class="text-xs font-semibold text-[#64748b] mb-2">섹션별 캡처</p>
+          <div class="grid grid-cols-4 gap-2">
+            <div class="text-center">
+              <div class="h-16 bg-gradient-to-br from-rose-100 to-pink-200 rounded-lg mb-1 flex items-center justify-center text-xs text-pink-400 font-bold">히어로</div>
+              <p class="text-[10px] text-[#94a3b8]">Hero 영역</p>
+            </div>
+            <div class="text-center">
+              <div class="h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-1 flex items-center justify-center text-xs text-gray-400 font-bold">상세</div>
+              <p class="text-[10px] text-[#94a3b8]">상세 설명</p>
+            </div>
+            <div class="text-center">
+              <div class="h-16 bg-gradient-to-br from-yellow-50 to-amber-100 rounded-lg mb-1 flex items-center justify-center text-xs text-amber-500 font-bold">리뷰</div>
+              <p class="text-[10px] text-[#94a3b8]">리뷰 섹션</p>
+            </div>
+            <div class="text-center">
+              <div class="h-16 bg-gradient-to-br from-red-50 to-rose-100 rounded-lg mb-1 flex items-center justify-center">
+                <span class="text-xs text-[#F75D5D] font-bold">CTA</span>
+              </div>
+              <p class="text-[10px] text-[#94a3b8]">CTA 영역</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 항목별 점수 -->
+      <div class="card p-5">
+        <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">LP 항목별 분석</h3>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">Hero 영역</span><span class="font-bold text-emerald-600">85점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:85%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">강렬한 비주얼 + 명확한 가치 제안</p>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">가격 표시</span><span class="font-bold text-emerald-600">80점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:80%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">할인가 명확, 정가 비교 표시 양호</p>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">CTA 버튼</span><span class="font-bold text-amber-600">65점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-amber-400 rounded-full" style="width:65%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">대비 부족, 스크롤 시 고정 CTA 없음</p>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">리뷰 배치</span><span class="font-bold text-amber-600">70점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-amber-400 rounded-full" style="width:70%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">리뷰 위치가 너무 하단, 노출률 낮음</p>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">신뢰 요소</span><span class="font-bold text-red-500">45점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-red-400 rounded-full" style="width:45%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">인증 배지, 보증 요소 부족</p>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">이미지 품질</span><span class="font-bold text-emerald-600">88점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:88%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">고해상도, 다양한 앵글 제공</p>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">텍스트 가독성</span><span class="font-bold text-amber-600">72점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-amber-400 rounded-full" style="width:72%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">일부 섹션 폰트 크기 작음</p>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">모바일 최적화</span><span class="font-bold text-emerald-600">81점</span></div>
+            <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:81%"></div></div>
+            <p class="text-[10px] text-[#94a3b8] mt-0.5">반응형 레이아웃, 터치 최적화 양호</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 소재↔LP 일관성 -->
+      <div class="card p-5">
+        <h3 class="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-3">소재 ↔ LP 일관성</h3>
+        <div class="flex gap-5 items-center">
+          <!-- 도넛 차트 -->
+          <div class="shrink-0">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="32" fill="none" stroke="#f1f5f9" stroke-width="12"/>
+              <circle cx="40" cy="40" r="32" fill="none" stroke="#F75D5D" stroke-width="12"
+                stroke-dasharray="201" stroke-dashoffset="89" stroke-linecap="round"
+                transform="rotate(-90 40 40)"/>
+              <text x="40" y="44" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">56%</text>
+            </svg>
+          </div>
+          <div class="flex-1 space-y-2">
+            <div>
+              <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">시각적 일치도</span><span class="font-bold text-emerald-600">68%</span></div>
+              <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-emerald-400 rounded-full" style="width:68%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1"><span class="text-[#64748b]">메시지 일치도</span><span class="font-bold text-red-500">44%</span></div>
+              <div class="h-2 bg-[#f1f5f9] rounded-full"><div class="h-2 bg-red-400 rounded-full" style="width:44%"></div></div>
+            </div>
+            <p class="text-xs text-[#64748b] pt-1">광고 카피의 핵심 키워드가 LP 히어로에 반영되지 않아 메시지 일관성이 낮습니다. 전환율 개선 여지 있음.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── 탭 전환 ──────────────────────────────────
+function switchView(name) {
+  ['individual','portfolio','cross','video','lp'].forEach(v => {
+    document.getElementById('view-' + v).classList.remove('active');
+    const btn = document.getElementById('sub-' + v);
+    btn.className = 'sub-tab-inactive px-4 py-1.5 text-sm transition rounded-lg';
+  });
+  document.getElementById('view-' + name).classList.add('active');
+  const active = document.getElementById('sub-' + name);
+  active.className = 'sub-tab-active px-4 py-1.5 text-sm transition';
+}
+
+// ── 소재 카드 선택 ────────────────────────────
+function selectCreative(el, id) {
+  document.querySelectorAll('#view-individual .creative-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── 히트맵 토글 (이미지) ──────────────────────
+function toggleHeatmap() {
+  const overlay = document.getElementById('heatmap-overlay');
+  const btn = event.currentTarget;
+  if (overlay.classList.contains('show')) {
+    overlay.classList.remove('show');
+    btn.textContent = '🔥 시선 히트맵 보기';
+  } else {
+    overlay.classList.add('show');
+    btn.textContent = '✕ 히트맵 숨기기';
+  }
+}
+
+// ── 영상 히트맵 토글 ──────────────────────────
+function toggleVideoHeatmap(cb) {
+  const overlay = document.getElementById('video-heatmap');
+  if (cb.checked) overlay.classList.add('show');
+  else overlay.classList.remove('show');
+}
+
+// ── 재생 버튼 토글 ───────────────────────────
+let playing = false;
+function togglePlay() {
+  playing = !playing;
+  const btn = document.getElementById('play-btn');
+  btn.innerHTML = playing
+    ? '<svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
+    : '<svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+}
+
+// ── LP 선택 ──────────────────────────────────
+function selectLP(el) {
+  document.querySelectorAll('#view-lp .lp-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>

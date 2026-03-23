@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="date" content="2026-03-12">
+<meta name="project" content="BS CAMP">
+<meta name="status" content="approved">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오가닉 콘텐츠 프롬프트 최종본 — 채널별 SEO 전략 + 키워드 맵</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+  :root{--r:#F75D5D;--rl:#FEE8E8;--rd:#D94444;--dk:#1A1A2E;--dk2:#16213E;--g9:#212529;--g7:#495057;--g5:#868E96;--g3:#DEE2E6;--g1:#F8F9FA;--w:#FFF;--b:#3B82F6;--bl:#DBEAFE;--gn:#10B981;--gnl:#D1FAE5;--p:#8B5CF6;--pl:#EDE9FE;--o:#F59E0B;--ol:#FEF3C7}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans KR',-apple-system,sans-serif;color:var(--g9);background:var(--g1);line-height:1.75;font-size:9.5pt;-webkit-font-smoothing:antialiased}
+  .doc{max-width:210mm;margin:0 auto;background:var(--w);box-shadow:0 2px 24px rgba(0,0,0,.06)}
+  @media print{body{background:#fff;font-size:9pt}.doc{box-shadow:none;max-width:100%}.page{page-break-after:always;page-break-inside:avoid}}
+  .cover{min-height:290mm;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(155deg,#0F0F1A 0%,var(--dk) 40%,var(--dk2) 70%,#0F3460 100%);color:var(--w);text-align:center;padding:35mm 30mm;position:relative;overflow:hidden}
+  .cover::before{content:'';position:absolute;top:-30%;right:-20%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(247,93,93,.08) 0%,transparent 60%)}
+  .cover *{position:relative;z-index:1}
+  .c-badge{display:inline-block;border:1.5px solid rgba(247,93,93,.5);color:var(--r);padding:5px 20px;border-radius:24px;font-size:8pt;font-weight:600;letter-spacing:4px;text-transform:uppercase;margin-bottom:28px}
+  .cover h1{font-size:26pt;font-weight:900;line-height:1.25;margin-bottom:10px;letter-spacing:-0.5px}
+  .cover h1 em{font-style:normal;color:var(--r)}
+  .c-sub{font-size:12pt;font-weight:300;color:rgba(255,255,255,.55);margin-bottom:45px;line-height:1.6}
+  .c-stats{display:flex;gap:32px;margin-bottom:40px}
+  .c-stat{text-align:center}
+  .c-stat b{display:block;font-size:22pt;font-weight:900;color:var(--r)}
+  .c-stat span{font-size:7.5pt;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase}
+  .c-meta{display:flex;gap:36px;font-size:8pt;color:rgba(255,255,255,.35);border-top:1px solid rgba(255,255,255,.08);padding-top:28px}
+  .c-meta div span:first-child{display:block;font-size:7pt;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+  .c-meta div span:last-child{color:rgba(255,255,255,.7);font-weight:500}
+  .page{padding:18mm 24mm}
+  .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .sec-num{background:var(--r);color:#fff;min-width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:10pt}
+  .sec-label{font-size:7.5pt;color:var(--r);font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+  h2{font-size:15pt;font-weight:900;color:var(--dk);margin-bottom:16px;letter-spacing:-0.3px}
+  h3{font-size:11pt;font-weight:700;color:var(--dk);margin:18px 0 8px}
+  h4{font-size:9.5pt;font-weight:700;color:var(--g7);margin:12px 0 6px}
+  p{margin-bottom:8px;color:var(--g7)}
+  .line{width:40px;height:3px;background:var(--r);margin-bottom:20px}
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:8.5pt}
+  th{background:var(--dk);color:#fff;padding:7px 10px;text-align:left;font-weight:600;font-size:8pt}
+  td{padding:7px 10px;border-bottom:1px solid var(--g3);vertical-align:top}
+  tr:nth-child(even){background:var(--g1)}
+  .box{background:var(--g1);border:1px solid var(--g3);border-radius:10px;padding:14px 16px;margin:10px 0}
+  .hl{border-left:4px solid var(--r);padding:12px 16px;border-radius:0 8px 8px 0;margin:10px 0;background:var(--rl)}
+  .hl-b{border-left-color:var(--b);background:var(--bl)}
+  .hl-p{border-left-color:var(--p);background:var(--pl)}
+  .hl-g{border-left-color:var(--gn);background:var(--gnl)}
+  .dark{background:linear-gradient(135deg,var(--dk),var(--dk2));color:#fff;padding:18px;border-radius:10px;margin:12px 0}
+  .dark h3,.dark h4{color:#fff}
+  .dark p,.dark li{color:rgba(255,255,255,.8)}
+  .prompt-box{background:#1e1e2e;color:#cdd6f4;border-radius:10px;padding:16px 18px;margin:10px 0;font-family:'SF Mono','Fira Code',monospace;font-size:8.5pt;line-height:1.65;white-space:pre-wrap;overflow-x:auto}
+  .prompt-box .role{color:#f38ba8;font-weight:700}
+  .prompt-box .key{color:#89b4fa}
+  .prompt-box .val{color:#a6e3a1}
+  .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:7.5pt;font-weight:600;margin:2px}
+  .tag-r{background:var(--rl);color:var(--rd)}
+  .tag-b{background:var(--bl);color:var(--b)}
+  .tag-g{background:var(--gnl);color:var(--gn)}
+  .tag-p{background:var(--pl);color:var(--p)}
+  .tag-o{background:var(--ol);color:var(--o)}
+  ul,ol{margin:6px 0 10px 18px;color:var(--g7)}
+  li{margin-bottom:4px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .card{background:var(--g1);border:1px solid var(--g3);border-radius:8px;padding:12px 14px}
+  .card h4{margin-top:0}
+  strong{color:var(--g9)}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="c-badge">ORGANIC MARKETING</div>
+  <h1>오가닉 콘텐츠<br><em>프롬프트 최종본</em></h1>
+  <div class="c-sub">채널별 SEO 전략 · 키워드 맵 · AI 변환 프롬프트<br>스마트블록 시대 네이버 알고리즘 대응</div>
+  <div class="c-stats">
+    <div class="c-stat"><b>4</b><span>채널</span></div>
+    <div class="c-stat"><b>25+</b><span>타겟 키워드</span></div>
+    <div class="c-stat"><b>4</b><span>프롬프트</span></div>
+  </div>
+  <div class="c-meta">
+    <div><span>DATE</span><span>2026-03-12</span></div>
+    <div><span>VERSION</span><span>v2.0 Final</span></div>
+    <div><span>STATUS</span><span>운영 적용 가능</span></div>
+    <div><span>AUTHOR</span><span>모찌 🍡</span></div>
+  </div>
+</div>
+
+<!-- SECTION 1: 알고리즘 현황 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">1</div><div class="sec-label">ALGORITHM</div></div>
+  <h2>2025~2026 네이버 검색 알고리즘 현황</h2>
+  <div class="line"></div>
+
+  <div class="hl">
+    <strong>핵심 변화:</strong> VIEW 탭 폐지 → <strong>스마트블록</strong>으로 통합 (2024.02~). 블로그 탭과 카페 탭이 별도 분리됨. AI(LLM)가 문서를 읽고 "정보 전달 의지"를 직접 판단하는 시대.
+  </div>
+
+  <h3>핵심 알고리즘 2가지</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>🏛️ C-Rank (채널 신뢰도)</h4>
+      <ul>
+        <li><strong>Context</strong>: 주제 집중도 — 얼마나 일관된 분야의 글을 쓰는가</li>
+        <li><strong>Content</strong>: 문서 품질 — 전문성, 양, 출처 신뢰도</li>
+        <li><strong>Chain</strong>: 사용자 참여 — 댓글, 공감, 체류시간</li>
+      </ul>
+      <p style="font-size:8pt;color:var(--r);font-weight:600">→ 채널(블로그) 단위 신뢰도 측정</p>
+    </div>
+    <div class="card">
+      <h4>💎 D.I.A+ (문서 품질)</h4>
+      <ul>
+        <li><strong>주제 적합도</strong>: 검색의도와 문서의 부합성</li>
+        <li><strong>경험 정보</strong>: 직접 경험, 실제 데이터, 자체 촬영 이미지</li>
+        <li><strong>독창성</strong>: 유사 문서와의 차별화</li>
+        <li><strong>어뷰징 척도</strong>: 키워드 반복, 광고성 판별</li>
+        <li><strong>적시성</strong>: 최신 정보인지</li>
+      </ul>
+      <p style="font-size:8pt;color:var(--b);font-weight:600">→ 개별 문서 단위 품질 측정</p>
+    </div>
+  </div>
+
+  <h3>스마트블록 시대 핵심 전략</h3>
+  <div class="dark">
+    <div class="grid2">
+      <div>
+        <h4>✅ 해야 하는 것</h4>
+        <ul>
+          <li>주제 일관성 유지 (자사몰/마케팅/광고 집중)</li>
+          <li>첫 문단에 핵심 정보 (AI 스니펫 대응)</li>
+          <li>소제목 + 불릿 구조화</li>
+          <li>직접 경험 기반 콘텐츠 (수강생 사례, 실제 광고 데이터)</li>
+          <li>자체 촬영 이미지/고유 데이터 차트</li>
+          <li>댓글 유도 → 체류시간 확보</li>
+        </ul>
+      </div>
+      <div>
+        <h4>❌ 하면 안 되는 것</h4>
+        <ul>
+          <li>키워드 반복 남발 → 저품질 판정</li>
+          <li>"안녕하세요~ 오늘 날씨가~" 식 서론</li>
+          <li>스톡 이미지만 사용</li>
+          <li>과도한 외부 링크</li>
+          <li>잡블로그 (다양한 주제 혼합)</li>
+          <li>광고성 표현 ("지금 바로!", "한정 할인!")</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: 키워드 맵 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">2</div><div class="sec-label">KEYWORD MAP</div></div>
+  <h2>타겟 키워드 전략</h2>
+  <div class="line"></div>
+
+  <div class="hl-b">
+    <strong>전략:</strong> Tier 3 롱테일부터 잡고 → C-Rank 쌓고 → Tier 2로 확장. 경쟁 낮은 곳에서 주제 집중도를 높여 채널 신뢰도를 먼저 확보한다.
+  </div>
+
+  <h3>🔴 Tier 1 — 고검색량 (월 1만+, 경쟁 치열)</h3>
+  <table>
+    <tr><th>키워드</th><th>검색의도</th><th>난이도</th><th>우리 포지션</th></tr>
+    <tr><td>자사몰 만들기</td><td>정보 탐색</td><td>🔴 높음</td><td>교육 전문가 관점 차별화</td></tr>
+    <tr><td>쇼핑몰 마케팅</td><td>방법론</td><td>🔴 높음</td><td>메타 광고 특화</td></tr>
+    <tr><td>메타 광고</td><td>실행 방법</td><td>🔴 높음</td><td>실전 데이터 기반</td></tr>
+    <tr><td>D2C 브랜드</td><td>개념 이해</td><td>🟡 중간</td><td>자사몰사관학교 사례</td></tr>
+    <tr><td>인스타 광고 하는법</td><td>실행</td><td>🔴 높음</td><td>교육생 실습 사례</td></tr>
+  </table>
+  <p style="font-size:8pt;color:var(--g5)">※ Tier 1은 C-Rank 축적 후 Phase 2에서 공략</p>
+
+  <h3>🟡 Tier 2 — 중간 (월 1천~1만)</h3>
+  <table>
+    <tr><th>키워드</th><th>검색의도</th><th>우리 강점</th></tr>
+    <tr><td>자사몰 마케팅</td><td>전략/방법론</td><td>커리큘럼 직결</td></tr>
+    <tr><td>카페24 광고</td><td>실행</td><td>수강생 사용 플랫폼</td></tr>
+    <tr><td>ROAS 뜻 / ROAS 계산</td><td>개념</td><td>실제 ROAS 데이터 보유</td></tr>
+    <tr><td>화장품 마케팅</td><td>산업 특화</td><td>화장품 기반 커리큘럼</td></tr>
+    <tr><td>퍼포먼스 마케팅 교육</td><td>교육 탐색</td><td>직접 교육 운영</td></tr>
+    <tr><td>메타 광고 교육</td><td>교육 탐색</td><td>직접 교육 운영</td></tr>
+    <tr><td>광고 성과 분석</td><td>방법론</td><td>bscamp 도구 연계</td></tr>
+  </table>
+
+  <h3>🟢 Tier 3 — 롱테일 (월 100~1천, 전환율 높음) ← 우선 공략</h3>
+  <table>
+    <tr><th>키워드</th><th>검색의도</th><th>콘텐츠 방향</th></tr>
+    <tr><td><strong>자사몰사관학교</strong></td><td>브랜드</td><td>후기, 커리큘럼, 성과</td></tr>
+    <tr><td>자사몰 매출 올리기</td><td>해결책</td><td>수강생 Before/After 사례</td></tr>
+    <tr><td>메타 광고 타겟 설정</td><td>실행 디테일</td><td>실습 가이드</td></tr>
+    <tr><td>광고 소재 만들기</td><td>실행</td><td>AI+Canva 활용법</td></tr>
+    <tr><td>화장품 마케팅 전략</td><td>산업 특화</td><td>화장품 브랜드 빌딩</td></tr>
+    <tr><td>자사몰 교육</td><td>교육 탐색</td><td>프로그램 소개+후기</td></tr>
+    <tr><td>메타 광고 ROAS 높이기</td><td>최적화</td><td>실전 최적화 가이드</td></tr>
+    <tr><td>자사몰 트래픽 늘리기</td><td>해결책</td><td>오가닉+페이드 조합</td></tr>
+    <tr><td>화장품 상세페이지</td><td>실행</td><td>7단계 작성법</td></tr>
+    <tr><td>카페24 마케팅 자동화</td><td>실행</td><td>도구+설정 가이드</td></tr>
+  </table>
+</div>
+
+<!-- SECTION 3: 채널별 전략 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">3</div><div class="sec-label">CHANNEL STRATEGY</div></div>
+  <h2>채널별 역할 & 전략</h2>
+  <div class="line"></div>
+
+  <div class="grid2">
+    <div class="card" style="border-left:4px solid var(--r)">
+      <h4>📝 네이버 블로그 (insight-wave)</h4>
+      <p><strong>역할:</strong> SEO 메인 + 브랜드 전문성</p>
+      <p><strong>빈도:</strong> 주 2~3회</p>
+      <p><strong>길이:</strong> 1,500~2,500자</p>
+      <ul>
+        <li>C-Rank 축적의 핵심 채널</li>
+        <li>주제 집중: 자사몰/마케팅/광고만</li>
+        <li>경험 기반: 수강생 실제 데이터, 광고 성과</li>
+        <li>스마트블록 스니펫 대응: 첫 문단 = 핵심</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--b)">
+      <h4>📌 네이버 카페 (1bpluschool)</h4>
+      <p><strong>역할:</strong> 커뮤니티 + 검색 유입 + 회원 유지</p>
+      <p><strong>빈도:</strong> 주 1~2회</p>
+      <p><strong>길이:</strong> 800~1,500자</p>
+      <ul>
+        <li>멤버 160명 커뮤니티 활성화</li>
+        <li>댓글 유도 → 체류시간↑ → 카페 탭 순위↑</li>
+        <li>카페 내부 검색 대응</li>
+        <li>오픈채팅 연계 (open.kakao.com)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--gn)">
+      <h4>🌐 구글 SEO (bscamp.vercel.app)</h4>
+      <p><strong>역할:</strong> 구글 검색 + AI 검색 소스</p>
+      <p><strong>빈도:</strong> 글 발행 시 동시</p>
+      <p><strong>길이:</strong> 1,200~2,000자</p>
+      <ul>
+        <li>Search Console 인증 완료 ✅</li>
+        <li>H1/H2/H3 구조화 필수</li>
+        <li>Article schema + meta description</li>
+        <li>sitemap.xml 자동 생성</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--p)">
+      <h4>🤖 GEO (AI 검색 최적화)</h4>
+      <p><strong>역할:</strong> ChatGPT/Perplexity/Google AI 답변 소스</p>
+      <p><strong>빈도:</strong> SEO 페이지에 자동 추가</p>
+      <ul>
+        <li>FAQ schema (Q&A 3~5쌍)</li>
+        <li>HowTo schema (단계별 가이드)</li>
+        <li>Speakable 마크업 (음성 검색)</li>
+        <li>40~120자 명확한 답변</li>
+        <li>"자사몰사관학교 bscamp" 출처 명시</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: 블로그 프롬프트 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">4</div><div class="sec-label">BLOG PROMPT</div></div>
+  <h2>네이버 블로그 변환 프롬프트</h2>
+  <div class="line"></div>
+
+  <div class="hl">
+    <strong>v2.0 변경점:</strong> 스마트블록 알고리즘 대응 (첫 문단 핵심 정보, AI 스니펫 최적화), 경험 증거 강제, 키워드 밀도 조절 (반복→저품질 방지)
+  </div>
+
+  <div class="prompt-box"><span class="role">[시스템 프롬프트]</span>
+
+너는 <span class="val">'자사몰사관학교'</span> 공식 블로그 작가다.
+자사몰 마케터 대상 교육 콘텐츠를 네이버 블로그에 최적화하여 작성한다.
+
+<span class="key">■ 알고리즘 대응 (2025 스마트블록)</span>
+- 첫 2문장에 핵심 답변을 담아라 (AI 스니펫 대응)
+- "안녕하세요~" 같은 인사 서론 금지
+- 키워드는 제목 + 첫 문단 + 소제목에 자연스럽게 3~4회
+- 같은 키워드 연속 반복 금지 (저품질 판정 위험)
+- 동의어/유의어로 변주 (예: 자사몰→D2C→독립쇼핑몰)
+
+<span class="key">■ 콘텐츠 규칙</span>
+- 어조: 친근+전문적 ("~입니다"/"~해요" 혼용, "~함" 체 가능)
+- 길이: 1,500~2,500자 (네이버 SEO 최적 구간)
+- 구조: 서론(핵심 답변) → 본론(소제목 3~5개) → 결론(요약+CTA)
+- 소제목: ✅ 이모지 + 굵게 처리 + 핵심 키워드 포함
+- 불릿/표/단계별 구조 적극 활용 (구조화 가산점)
+- 체류시간 확보: 중간에 질문 삽입 ("여기서 중요한 건...")
+
+<span class="key">■ 경험 증거 (필수)</span>
+- 실제 데이터 인용: "자사몰사관학교 N기 수강생 평균 ROAS X% 달성"
+- 실전 사례: Before/After 수치, 실제 광고 화면 언급
+- 직접 경험 표현: "직접 운영해본 결과", "수강생들이 가장 많이 묻는"
+- 스톡 이미지 대신: 실제 대시보드 캡처, 광고 성과 그래프
+
+<span class="key">■ 태그 & CTA</span>
+- 태그: 10개 (핵심 3 + 연관 4 + 브랜드 3)
+  예: #자사몰마케팅 #메타광고 #ROAS #자사몰사관학교 #D2C
+- CTA: "자사몰 마케팅, 실전으로 배우고 싶다면 → 자사몰사관학교"
+- CTA에 URL 직접 삽입 금지 (카페/블로그 프로필 링크 활용)
+
+<span class="key">■ 금지사항</span>
+- 과도한 줄바꿈 남발
+- 광고성 표현 ("지금 바로!", "선착순!", "한정 할인")
+- 외부 링크 2개 초과
+- 타 서비스 (카페24, 스마트스토어 등) 직접 비교/비하
+- 경쟁사 언급
+
+<span class="key">■ 출력 형식</span>
+{
+  <span class="key">"title"</span>: <span class="val">"...(SEO 최적화, 핵심 키워드 포함, 30자 이내)"</span>,
+  <span class="key">"content"</span>: <span class="val">"...(HTML, 네이버 에디터 호환)"</span>,
+  <span class="key">"tags"</span>: [<span class="val">"태그1"</span>, ...],
+  <span class="key">"category"</span>: <span class="val">"자사몰/마케팅"</span>,
+  <span class="key">"targetKeyword"</span>: <span class="val">"메인 키워드"</span>,
+  <span class="key">"keywordVariations"</span>: [<span class="val">"유의어1"</span>, <span class="val">"유의어2"</span>]
+}</div>
+</div>
+
+<!-- SECTION 5: 카페 프롬프트 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">5</div><div class="sec-label">CAFE PROMPT</div></div>
+  <h2>네이버 카페 변환 프롬프트</h2>
+  <div class="line"></div>
+
+  <div class="hl-b">
+    <strong>카페 정보:</strong> 자사몰 사관학교 · cafe.naver.com/1bpluschool · clubid: 31471420 · 멤버 160명 · insight-wave 매니저
+  </div>
+
+  <div class="prompt-box"><span class="role">[시스템 프롬프트]</span>
+
+너는 <span class="val">'자사몰 사관학교'</span> 네이버 카페 운영진이다.
+원본 글을 카페 게시글 형식으로 변환해라.
+
+<span class="key">■ 카페 특성 대응</span>
+- 카페 탭은 스마트블록과 별도 → 카페 내부 활성도가 순위 핵심
+- 댓글 수 + 체류시간 = 카페 검색 순위 직결
+- 카페 스팸 필터 주의 (외부 링크 최소화)
+
+<span class="key">■ 콘텐츠 규칙</span>
+- 어조: 카페 회원에게 말하는 구어체 ("여러분", "공유드려요", "궁금하시죠?")
+- 길이: 800~1,500자 (카페는 짧고 핵심만)
+- 구조: 인트로(공유 이유) → 핵심 3가지 → 마무리 질문
+- 마무리: 반드시 댓글 유도 질문 포함
+  예: "대표님들은 이런 경험 있으세요?", "어떤 방법 쓰고 계세요?"
+
+<span class="key">■ 카테고리 매핑</span>
+- 정보 공유 → 자유게시판 (menuid: 1)
+- 질문/고민 → 질문/고민게시판 (menuid: 13)
+- 성과 후기 → 후기게시판 (menuid: 2)
+- 교육 자료 → 강의자료실
+
+<span class="key">■ 금지사항</span>
+- 외부 링크 직접 삽입 (카페 스팸 필터)
+- 지나치게 형식적인 문체
+- 블로그 글 그대로 복붙 (중복 콘텐츠 패널티)
+
+<span class="key">■ 출력 형식</span>
+{
+  <span class="key">"subject"</span>: <span class="val">"...(궁금증 유발, 20자 이내)"</span>,
+  <span class="key">"content"</span>: <span class="val">"...(HTML)"</span>,
+  <span class="key">"menuId"</span>: <span class="val">1</span>,
+  <span class="key">"closingQuestion"</span>: <span class="val">"댓글 유도 질문"</span>
+}</div>
+</div>
+
+<!-- SECTION 6: SEO 프롬프트 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">6</div><div class="sec-label">SEO PROMPT</div></div>
+  <h2>구글 SEO 변환 프롬프트</h2>
+  <div class="line"></div>
+
+  <div class="hl-g">
+    <strong>인프라:</strong> bscamp.vercel.app · Google Search Console 인증 완료 ✅ · smith.kim@inwv.co 소유
+  </div>
+
+  <div class="prompt-box"><span class="role">[시스템 프롬프트]</span>
+
+너는 SEO 전문 콘텐츠 작가다.
+원본 글을 구글 검색 최적화 아티클로 변환해라.
+
+<span class="key">■ 구글 SEO 규칙</span>
+- 어조: 명확+정보 중심적 ("~입니다", 3인칭 혼용)
+- 길이: 1,200~2,000자 (품질 > 양)
+- 구조: H1(제목) → H2(소제목 3~5개) → H3(세부) 계층 명확
+- 키워드 밀도: 1~2% (과도한 반복 금지)
+- 내부 링크: bscamp.vercel.app 내 다른 페이지 1~2개
+
+<span class="key">■ 메타 태그</span>
+- title: 60자 이내, 핵심 키워드 앞쪽 배치
+- meta description: 155자 이내, 클릭 유도 + 키워드
+- OG 태그: og:title, og:description, og:image 별도 생성
+- canonical URL 명시
+
+<span class="key">■ 구조화 데이터</span>
+- Article schema (@type: Article) 기본 포함
+- author: "자사몰사관학교"
+- publisher: "자사몰사관학교 bscamp"
+- datePublished / dateModified
+
+<span class="key">■ 출력 형식</span>
+{
+  <span class="key">"slug"</span>: <span class="val">"kebab-case-url-slug"</span>,
+  <span class="key">"title"</span>: <span class="val">"...(60자 이내)"</span>,
+  <span class="key">"metaDescription"</span>: <span class="val">"...(155자 이내)"</span>,
+  <span class="key">"ogTitle"</span>: <span class="val">"..."</span>,
+  <span class="key">"ogDescription"</span>: <span class="val">"..."</span>,
+  <span class="key">"body"</span>: <span class="val">"...(마크다운, H1/H2/H3 구조)"</span>,
+  <span class="key">"structuredData"</span>: { <span class="val">"@type": "Article", ...</span> },
+  <span class="key">"internalLinks"</span>: [<span class="val">"관련 페이지 URL"</span>]
+}</div>
+</div>
+
+<!-- SECTION 7: GEO 프롬프트 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">7</div><div class="sec-label">GEO PROMPT</div></div>
+  <h2>GEO (AI 검색) 마크업 프롬프트</h2>
+  <div class="line"></div>
+
+  <div class="hl-p">
+    <strong>GEO 목표:</strong> ChatGPT, Perplexity, Google AI Overview, Naver Cue: 등에서 "자사몰사관학교"가 답변 소스로 채택되게 만든다.
+  </div>
+
+  <div class="prompt-box"><span class="role">[시스템 프롬프트]</span>
+
+너는 AI 검색 최적화(GEO) 전문가다.
+원본 글에서 FAQ 형태의 구조화 콘텐츠를 추출해라.
+
+<span class="key">■ FAQ Schema 규칙</span>
+- Q&A 쌍 3~5개 추출
+- 질문: 실제 사용자가 검색할 법한 자연어 질문
+  예: "자사몰 매출을 올리려면 어떻게 해야 하나요?"
+- 답변: 40~120자 명확한 답변 (너무 길면 AI가 발췌 안 함)
+- 출처: 모든 답변에 "자사몰사관학교 bscamp" 명시
+
+<span class="key">■ HowTo Schema</span>
+- 단계별 절차가 있으면 HowTo 스키마 동시 생성
+- step: name + text + (선택)image
+- totalTime: ISO 8601 형식
+
+<span class="key">■ Speakable 마크업</span>
+- 음성 검색 대비: 핵심 답변 텍스트를 speakable로 표시
+- 40~120자 자연스러운 문장
+
+<span class="key">■ 출력 형식</span>
+{
+  <span class="key">"faqSchema"</span>: {
+    <span class="val">"@context": "https://schema.org"</span>,
+    <span class="val">"@type": "FAQPage"</span>,
+    <span class="key">"mainEntity"</span>: [
+      {
+        <span class="val">"@type": "Question"</span>,
+        <span class="key">"name"</span>: <span class="val">"질문..."</span>,
+        <span class="key">"acceptedAnswer"</span>: {
+          <span class="val">"@type": "Answer"</span>,
+          <span class="key">"text"</span>: <span class="val">"답변... (출처: 자사몰사관학교 bscamp)"</span>
+        }
+      }
+    ]
+  },
+  <span class="key">"howToSchema"</span>: { ... },
+  <span class="key">"speakable"</span>: [<span class="val">"핵심 답변 텍스트"</span>]
+}</div>
+</div>
+
+<!-- SECTION 8: 실행 로드맵 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">8</div><div class="sec-label">ROADMAP</div></div>
+  <h2>실행 로드맵</h2>
+  <div class="line"></div>
+
+  <h3>Phase 1: 기반 구축 (이번 주)</h3>
+  <div class="box">
+    <ul>
+      <li>✅ 네이버 개발자 앱 등록 (Client ID/Secret 발급)</li>
+      <li>✅ Google Search Console 인증</li>
+      <li>⬜ 블로그 테스트 글 3~5편 발행 (Tier 3 키워드)</li>
+      <li>⬜ 카페 활성화 글 2~3편</li>
+    </ul>
+  </div>
+
+  <h3>Phase 2: 자동화 파이프라인 (다음 주)</h3>
+  <div class="box">
+    <ul>
+      <li>⬜ bscamp 어드민에 "오가닉 배포" 패널 구현</li>
+      <li>⬜ AI 포맷 변환 API (Anthropic) → 4채널 동시 변환</li>
+      <li>⬜ 네이버 블로그 writePost API 연동</li>
+      <li>⬜ 네이버 카페 글쓰기 API 연동</li>
+      <li>⬜ SEO 공개 페이지 + sitemap.xml 생성</li>
+    </ul>
+  </div>
+
+  <h3>Phase 3: 최적화 (3~4주차)</h3>
+  <div class="box">
+    <ul>
+      <li>⬜ 키워드 성과 추적 (Search Console 데이터)</li>
+      <li>⬜ Tier 3 → Tier 2 키워드 확장</li>
+      <li>⬜ GEO 마크업 전체 페이지 적용</li>
+      <li>⬜ 카페 자동 댓글 알림 + 운영 대시보드</li>
+    </ul>
+  </div>
+
+  <div class="dark">
+    <h3>📊 성과 KPI</h3>
+    <div class="grid3">
+      <div><h4>1개월</h4><p>블로그 일 방문자 100+<br>카페 주간 댓글 20+</p></div>
+      <div><h4>2개월</h4><p>Tier 3 키워드 10개 상위 3페이지<br>Search Console 노출 1,000+</p></div>
+      <div><h4>3개월</h4><p>Tier 2 진입<br>AI 검색 답변 소스 채택</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: 인프라 정보 -->
+<div class="page">
+  <div class="sec-head"><div class="sec-num">9</div><div class="sec-label">INFRASTRUCTURE</div></div>
+  <h2>현재 인프라 현황</h2>
+  <div class="line"></div>
+
+  <table>
+    <tr><th>항목</th><th>상태</th><th>상세</th></tr>
+    <tr><td>네이버 앱</td><td><span class="tag tag-g">✅ 완료</span></td><td>bscamp · Client ID: 3Wfb2Q6kvJ5d08_le86R</td></tr>
+    <tr><td>네이버 로그인 API</td><td><span class="tag tag-g">✅ 등록</span></td><td>OAuth2 · 블로그 writePost용</td></tr>
+    <tr><td>네이버 카페 API</td><td><span class="tag tag-g">✅ 등록</span></td><td>clubid: 31471420 · 매니저 권한</td></tr>
+    <tr><td>네이버 검색 API</td><td><span class="tag tag-g">✅ 등록</span></td><td>비로그인 API</td></tr>
+    <tr><td>Google Search Console</td><td><span class="tag tag-g">✅ 인증</span></td><td>bscamp.vercel.app · HTML 태그 방식</td></tr>
+    <tr><td>블로그 프롬프트</td><td><span class="tag tag-g">✅ v2.0</span></td><td>스마트블록 대응</td></tr>
+    <tr><td>카페 프롬프트</td><td><span class="tag tag-g">✅ v2.0</span></td><td>댓글 유도 + 체류시간</td></tr>
+    <tr><td>SEO 프롬프트</td><td><span class="tag tag-g">✅ v2.0</span></td><td>Article schema + meta</td></tr>
+    <tr><td>GEO 프롬프트</td><td><span class="tag tag-g">✅ v2.0</span></td><td>FAQ + HowTo + Speakable</td></tr>
+    <tr><td>자동화 파이프라인</td><td><span class="tag tag-o">⏳ 대기</span></td><td>Phase 2에서 구현</td></tr>
+    <tr><td>커스텀 도메인</td><td><span class="tag tag-r">⏳ 보류</span></td><td>Smith님 시간 될 때</td></tr>
+  </table>
+
+  <div class="hl" style="margin-top:20px">
+    <strong>다음 액션:</strong> Phase 1 테스트 글 발행 → 성과 확인 → Phase 2 자동화 TASK 작성
+  </div>
+</div>
+
+</div><!-- /doc -->
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>작성자 소개 카드 — 이메일 / 정보공유 하단</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',sans-serif;background:#f5f5f5;color:#1a1a1a;line-height:1.7}
+.container{max-width:800px;margin:0 auto;padding:20px}
+h1{font-size:22px;margin:30px 0 6px}
+h2{font-size:18px;margin:30px 0 15px;padding-bottom:8px;border-bottom:2px solid #F75D5D}
+h3{font-size:15px;margin:20px 0 10px;color:#333}
+.section{background:#fff;border-radius:12px;padding:24px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.note{background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:15px 0;border-radius:0 8px 8px 0;font-size:13px}
+.label{font-size:11px;font-weight:700;color:#999;margin-bottom:8px;letter-spacing:1px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:15px 0}
+@media(max-width:640px){.compare{grid-template-columns:1fr}}
+.compare>div{padding:16px;border-radius:10px}
+.compare .before{background:#fafafa;border:1px solid #eee}
+.compare .after{background:#f0faf0;border:1px solid #c8e6c9}
+
+/* 이메일 스타일 (현재) */
+.email-card{border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:24px 0;margin:16px 0}
+.email-card table{border-collapse:collapse}
+.email-card .photo{width:80px;height:80px;border-radius:50%;object-fit:cover;display:block}
+.email-card .name{margin:0;font-weight:800;font-size:16px;color:#1a1a1a}
+.email-card .role{font-weight:600;font-size:13px;color:#F75D5D}
+.email-card .desc{margin:6px 0 0;font-size:13px;color:#64748b;line-height:160%}
+
+/* 개선안 카드 */
+.new-card{border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:24px 0;margin:16px 0}
+.new-card .top{display:flex;align-items:center;gap:16px}
+.new-card .photo{width:80px;height:80px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.new-card .info .name{font-weight:800;font-size:16px;color:#1a1a1a}
+.new-card .info .role{font-weight:600;font-size:13px;color:#F75D5D}
+.new-card .info .desc{margin:4px 0 0;font-size:13px;color:#64748b;line-height:160%}
+.new-card .badges{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid #f1f5f9;flex-wrap:wrap}
+.new-card .partner-logo{height:28px}
+.new-card .certs{display:flex;gap:6px}
+.new-card .cert-img{width:36px;height:36px;border-radius:6px}
+
+/* bscamp 로그인 */
+.login-wrap{background:linear-gradient(to bottom,#f8fafc,#fff);border-radius:12px;padding:40px 20px;display:flex;justify-content:center}
+.login-card{background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:32px;box-shadow:0 4px 12px rgba(0,0,0,0.06);text-align:left;width:100%;max-width:400px}
+.login-card h2{font-size:20px;text-align:center;border:none;margin:0 0 20px;padding:0}
+.login-card input{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;margin:4px 0 12px;font-size:14px;color:#9ca3af}
+.login-card label{font-size:13px;font-weight:500;color:#111827}
+.login-card .btn{width:100%;padding:10px;background:#F75D5D;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;margin-top:8px}
+.login-partner{margin-top:20px;padding-top:16px;border-top:1px solid #f3f4f6;display:flex;align-items:center;justify-content:center;gap:12px}
+.login-partner img{height:28px}
+.login-partner .divider{width:1px;height:20px;background:#e5e7eb}
+
+/* 사이드바 */
+.sidebar-mock{background:hsl(240 5.9% 10%);color:#fff;border-radius:12px;padding:16px 12px;width:220px;min-height:400px;display:flex;flex-direction:column}
+.sidebar-mock .sb-header{display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:12px}
+.sidebar-mock .sb-logo{width:32px;height:32px;background:#F75D5D;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px}
+.sidebar-mock .sb-title{font-size:14px;font-weight:700}
+.sidebar-mock .sb-menu{flex:1}
+.sidebar-mock .sb-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;font-size:13px;color:hsl(240 5% 64.9%);margin:1px 0}
+.sidebar-mock .sb-item.active{background:rgba(247,93,93,0.1);color:#F75D5D}
+.sidebar-mock .sb-bottom{margin-top:auto;padding-top:12px;border-top:1px solid hsl(240 3.7% 15.9%);text-align:center}
+.sidebar-mock .sb-bottom img{height:20px;opacity:0.7}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>기획안: 작성자 소개 카드 + 메타 파트너 배치</h1>
+<p style="color:#888;font-size:13px;margin-bottom:24px">2026-03-01 | 모찌 기획 v3 — 이메일 기존 디자인 기반</p>
+
+<!-- ===== 1. 작성자 소개 카드 ===== -->
+<h2>1. 작성자 소개 카드 (이메일 / 정보공유 하단)</h2>
+
+<div class="compare">
+  <div class="before">
+    <div class="label">현재 이메일</div>
+    <div class="email-card">
+      <table><tr>
+        <td width="100" style="vertical-align:top">
+          <img class="photo" src="images/profile-smith.png" alt="스미스">
+        </td>
+        <td style="vertical-align:top;padding-left:12px">
+          <p class="name">스미스 <span class="role">자사몰사관학교 코치</span></p>
+          <p class="desc">메타파트너 / 메타공식 프로페셔널<br>스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</p>
+        </td>
+      </tr></table>
+    </div>
+  </div>
+  <div class="after">
+    <div class="label">개선안</div>
+    <div class="new-card">
+      <div class="top">
+        <img class="photo" src="images/profile-smith.png" alt="스미스">
+        <div class="info">
+          <div class="name">스미스 <span class="role">자사몰사관학교 코치</span></div>
+          <div class="desc">메타파트너 / 메타공식 프로페셔널<br>스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+        </div>
+      </div>
+      <div class="badges">
+        <img class="partner-logo" src="images/inline-positive.png" alt="Meta Business Partners">
+        <div class="certs">
+          <img class="cert-img" src="images/cert-ai-performance.png" alt="AI & Performance" title="AI and Performance Marketing">
+          <img class="cert-img" src="images/cert-media-measurement.png" alt="Media Measurement" title="Media Measurement">
+          <img class="cert-img" src="images/cert-technical-implementation.png" alt="Technical Implementation" title="Technical Implementation">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="note">
+  <strong>변경점:</strong> 기존 이메일 디자인 그대로 유지 + 하단에 Meta Partner 로고 + Certified 배지 3종 추가.<br>
+  이메일 / 정보공유 글 하단 동일 적용.
+</div>
+
+<!-- ===== 2. bscamp 로그인 ===== -->
+<h2>2. bscamp 로그인 페이지</h2>
+<div class="section">
+  <div class="login-wrap">
+    <div>
+      <div style="text-align:center;margin-bottom:24px">
+        <span style="width:40px;height:40px;background:#F75D5D;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;vertical-align:middle">B</span>
+        <span style="font-size:18px;font-weight:700;color:#111827;margin-left:8px;vertical-align:middle">자사몰사관학교</span>
+        <p style="color:#6B7280;font-size:14px;margin-top:4px">자사몰사관학교 헬프데스크</p>
+      </div>
+      <div class="login-card">
+        <h2>로그인</h2>
+        <label>이메일</label>
+        <input type="text" value="example@email.com" disabled>
+        <label>비밀번호</label>
+        <input type="password" value="••••••••" disabled>
+        <button class="btn" disabled>로그인</button>
+        <div class="login-partner">
+          <img src="images/inline-positive.png" alt="Meta Business Partners" style="height:28px">
+          <div class="divider"></div>
+          <div style="display:flex;gap:4px">
+            <img src="images/cert-ai-performance.png" style="width:28px;height:28px;border-radius:4px">
+            <img src="images/cert-media-measurement.png" style="width:28px;height:28px;border-radius:4px">
+            <img src="images/cert-technical-implementation.png" style="width:28px;height:28px;border-radius:4px">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note">로그인 카드 하단에 Partner 로고 + Certified 배지 3종. 구분선(|)으로 분리.</div>
+</div>
+
+<!-- ===== 3. 사이드바 ===== -->
+<h2>3. 사이드바 하단</h2>
+<div class="section" style="display:flex;justify-content:center">
+  <div class="sidebar-mock">
+    <div class="sb-header">
+      <div class="sb-logo">B</div>
+      <div class="sb-title">자사몰사관학교</div>
+    </div>
+    <div class="sb-menu">
+      <div class="sb-item">📊 대시보드</div>
+      <div class="sb-item active">📰 정보공유</div>
+      <div class="sb-item">❓ Q&A 헬프데스크</div>
+      <div class="sb-item">📈 총가치각도기</div>
+      <div class="sb-item">⭐ 수강후기</div>
+      <div class="sb-item">⚙️ 설정</div>
+    </div>
+    <div class="sb-bottom">
+      <img src="images/inline-white.png" alt="Meta Business Partners">
+    </div>
+  </div>
+</div>
+<div class="note">사이드바 최하단. 어두운 배경 → mono white 로고.</div>
+
+<!-- ===== 4. 정리 ===== -->
+<h2>에셋 정리</h2>
+<div class="section">
+  <table style="width:100%;font-size:13px;border-collapse:collapse">
+    <tr style="border-bottom:1px solid #eee"><td style="padding:8px;font-weight:600">위치</td><td style="padding:8px;font-weight:600">사용 에셋</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:8px">로그인 페이지</td><td style="padding:8px">inline-positive + cert 3종</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:8px">사이드바 하단</td><td style="padding:8px">inline-white</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:8px">이메일 하단</td><td style="padding:8px">profile-smith + inline-positive + cert 3종</td></tr>
+    <tr><td style="padding:8px">정보공유 글 하단</td><td style="padding:8px">profile-smith + inline-positive + cert 3종</td></tr>
+  </table>
+</div>
+
+</div>
+</body>
+</html>

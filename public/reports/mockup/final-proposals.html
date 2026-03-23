@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>최종 목업 — 프로필 카드 + 메인페이지</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',sans-serif;background:#fff;color:#1a1a1a;line-height:1.7;padding:20px}
+.container{max-width:800px;margin:0 auto}
+h1{font-size:22px;margin:30px 0 6px}
+h2{font-size:18px;margin:40px 0 15px;padding-bottom:8px;border-bottom:2px solid #F75D5D}
+h3{font-size:15px;margin:20px 0 10px;color:#555}
+.note{background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:15px 0;border-radius:0 8px 8px 0;font-size:13px}
+.mockup-wrap{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);overflow:hidden;margin:20px 0}
+
+/* ===== 프로필 카드 ===== */
+.profile-card{border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:24px 0;max-width:560px}
+.pc-top{display:flex;align-items:center;gap:16px}
+.pc-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.pc-name{font-weight:800;font-size:16px;color:#1a1a1a}
+.pc-role{font-weight:600;font-size:13px;color:#F75D5D}
+.pc-desc{margin:4px 0 0;font-size:13px;color:#64748b;line-height:160%}
+.pc-badge-row{margin-top:16px;padding-top:16px;border-top:1px solid #f1f5f9;display:flex;align-items:center;gap:12px}
+.pc-badge-row img{height:36px}
+.pc-badge-row .badge-text{font-size:12px;color:#64748b;line-height:1.4}
+
+/* ===== 메인페이지 ===== */
+.page-mock{background:#fff;border-radius:16px;overflow:hidden}
+.page-header{padding:32px 32px 0;text-align:center}
+.page-header h1{font-size:24px;font-weight:800;color:#111827;margin:0 0 16px}
+.page-header .search{width:100%;max-width:480px;margin:0 auto;padding:14px 20px;border:1px solid #e5e7eb;border-radius:12px;font-size:15px;color:#9ca3af;display:block}
+.section-wrap{padding:0 32px 32px}
+.section-title{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:12px;color:#111827}
+.ad-summary{background:#f8f9fa;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;color:#999;font-size:14px;border:1px dashed #ddd}
+.notice-box{background:#f8f9fa;border-radius:12px;padding:16px 20px;margin-bottom:12px;border:1px solid #eee}
+.notice-box .title{font-weight:600;font-size:14px;color:#333}
+.qa-box{background:#f8f9fa;border-radius:12px;padding:16px 20px;margin-bottom:12px;border:1px solid #eee}
+
+/* 신뢰 배너 */
+.trust-banner{background:#f8faff;border:1px solid #e8edf5;border-radius:12px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:20px}
+.trust-banner .badge-area{flex-shrink:0}
+.trust-banner .badge-area img{height:44px}
+.trust-banner .text-area{flex:1}
+.trust-banner .text-area .headline{font-weight:700;font-size:15px;color:#1a1a1a}
+.trust-banner .text-area .sub{font-size:13px;color:#64748b;margin-top:2px}
+
+/* 신뢰 푸터 */
+.trust-footer{background:#f8faff;border-top:1px solid #e8edf5;padding:20px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.trust-footer .profile{display:flex;align-items:center;gap:12px;flex:1}
+.trust-footer .photo{width:48px;height:48px;border-radius:50%;object-fit:cover}
+.trust-footer .name{font-weight:700;font-size:14px;color:#1a1a1a}
+.trust-footer .role{font-size:12px;color:#F75D5D;font-weight:600}
+.trust-footer .desc{font-size:12px;color:#64748b}
+.trust-footer .badge-area img{height:36px}
+
+/* 심플 바 */
+.trust-bar{background:#fafbfc;border:1px solid #eef1f5;border-radius:10px;padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:16px}
+.trust-bar img{height:28px}
+.trust-bar .sep{width:1px;height:20px;background:#ddd}
+.trust-bar .text{font-size:12px;color:#64748b;font-weight:500}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>최종 목업 — 프로필 카드 + 메인페이지</h1>
+<p style="color:#888;font-size:13px;margin-bottom:10px">2026-03-01 | Meta Partner Guidelines 준수</p>
+<p style="font-size:13px;color:#555">로그인 페이지: 합격 (현재 그대로 유지)</p>
+
+<!-- ========== PART 1: 프로필 카드 ========== -->
+<h2>프로필 카드 (이메일 / 정보공유 하단)</h2>
+<p style="font-size:13px;color:#555;margin-bottom:16px">자격증 빼고, Meta Business Partners 배지만. 기존 뉴스레터 프로필 기반.</p>
+
+<h3>안 A — 배지 가로 배치</h3>
+<div class="mockup-wrap" style="padding:24px 32px">
+  <div class="profile-card">
+    <div class="pc-top">
+      <img class="pc-photo" src="images/profile-smith.png" alt="스미스">
+      <div>
+        <div class="pc-name">스미스 <span class="pc-role">자사몰사관학교 코치</span></div>
+        <div class="pc-desc">스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+      </div>
+    </div>
+    <div class="pc-badge-row">
+      <img src="images/badge-light.png" alt="Meta Business Partners badge">
+    </div>
+  </div>
+</div>
+<div class="note">가이드라인 준수: 배지 독립 사용, clearspace 확보, 링크 가능. "메타파트너 / 메타공식 프로페셔널" 텍스트 대신 공식 배지로 대체.</div>
+
+<h3>안 B — 배지 + 한 줄 설명</h3>
+<div class="mockup-wrap" style="padding:24px 32px">
+  <div class="profile-card">
+    <div class="pc-top">
+      <img class="pc-photo" src="images/profile-smith.png" alt="스미스">
+      <div>
+        <div class="pc-name">스미스 <span class="pc-role">자사몰사관학교 코치</span></div>
+        <div class="pc-desc">스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+      </div>
+    </div>
+    <div class="pc-badge-row">
+      <img src="images/badge-light.png" alt="Meta Business Partners badge">
+      <div class="badge-text">We are a Meta Business Partner<br>specializing in performance marketing</div>
+    </div>
+  </div>
+</div>
+<div class="note">가이드라인 준수: "We are a Meta Business Partner" 공식 표현 사용. partnership/exclusive 미사용.</div>
+
+<h3>안 C — 배지 + 한국어 설명</h3>
+<div class="mockup-wrap" style="padding:24px 32px">
+  <div class="profile-card">
+    <div class="pc-top">
+      <img class="pc-photo" src="images/profile-smith.png" alt="스미스">
+      <div>
+        <div class="pc-name">스미스 <span class="pc-role">자사몰사관학교 코치</span></div>
+        <div class="pc-desc">스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+      </div>
+    </div>
+    <div class="pc-badge-row">
+      <img src="images/badge-light.png" alt="Meta Business Partners badge">
+      <div class="badge-text">Meta가 인증한 공식 비즈니스 파트너</div>
+    </div>
+  </div>
+</div>
+<div class="note">한국어 버전. 수강생이 바로 이해 가능. 가이드라인상 자사 관점 표현이라 OK.</div>
+
+<!-- ========== PART 2: 메인페이지 ========== -->
+<h2>메인페이지 — 공신력 강조</h2>
+<p style="font-size:13px;color:#555;margin-bottom:16px">광고성과 위젯은 맨 위 유지. 그 아래에 배치.</p>
+
+<h3>안 1 — 신뢰 배너 (광고성과 바로 아래)</h3>
+<div class="mockup-wrap">
+  <div class="page-mock">
+    <div class="page-header">
+      <h1 style="font-size:24px">무엇이든 물어보세요 💬</h1>
+      <input class="search" value="질문을 검색해보세요..." disabled>
+    </div>
+    <div class="section-wrap" style="padding-top:24px">
+      <div class="ad-summary">📊 내 광고 성과 요약 (현재 위치 유지)</div>
+
+      <div class="trust-banner">
+        <div class="badge-area">
+          <img src="images/badge-light.png" alt="Meta Business Partners badge">
+        </div>
+        <div class="text-area">
+          <div class="headline">Meta가 인증한 공식 비즈니스 파트너</div>
+          <div class="sub">자사몰사관학교는 Meta Business Partner로서 검증된 광고 운영 전문성을 보유하고 있습니다.</div>
+        </div>
+      </div>
+
+      <div class="section-title">📢 공지사항</div>
+      <div class="notice-box"><span class="title">자사몰사관학교에 오신 것을 환영합니다!</span></div>
+    </div>
+  </div>
+</div>
+<div class="note">배지 + 설명 텍스트. 광고성과 바로 아래라서 자연스럽게 "이 서비스가 공신력 있구나" 인식. 배지 clearspace 확보.</div>
+
+<h3>안 2 — 심플 바 (광고성과 아래, 미니멀)</h3>
+<div class="mockup-wrap">
+  <div class="page-mock">
+    <div class="page-header">
+      <h1 style="font-size:24px">무엇이든 물어보세요 💬</h1>
+      <input class="search" value="질문을 검색해보세요..." disabled>
+    </div>
+    <div class="section-wrap" style="padding-top:24px">
+      <div class="ad-summary">📊 내 광고 성과 요약 (현재 위치 유지)</div>
+
+      <div class="trust-bar">
+        <img src="images/badge-light.png" alt="Meta Business Partners badge" style="height:32px">
+        <div class="sep"></div>
+        <span class="text">Meta가 인증한 공식 비즈니스 파트너</span>
+      </div>
+
+      <div class="section-title">📢 공지사항</div>
+      <div class="notice-box"><span class="title">자사몰사관학교에 오신 것을 환영합니다!</span></div>
+    </div>
+  </div>
+</div>
+<div class="note">미니멀 한 줄. 공간 적게 차지하면서 공신력 전달. 깔끔.</div>
+
+<h3>안 3 — 하단 프로필 + 배지</h3>
+<div class="mockup-wrap">
+  <div class="page-mock">
+    <div class="page-header">
+      <h1 style="font-size:24px">무엇이든 물어보세요 💬</h1>
+      <input class="search" value="질문을 검색해보세요..." disabled>
+    </div>
+    <div class="section-wrap" style="padding-top:24px">
+      <div class="ad-summary">📊 내 광고 성과 요약 (현재 위치 유지)</div>
+      <div class="section-title">📢 공지사항</div>
+      <div class="notice-box"><span class="title">자사몰사관학교에 오신 것을 환영합니다!</span></div>
+      <div class="section-title" style="margin-top:24px">💬 최근 Q&A</div>
+      <div class="qa-box"><span class="title" style="font-weight:600;font-size:14px;color:#333">카탈로그 광고 세팅 질문</span></div>
+    </div>
+    <div class="trust-footer">
+      <div class="profile">
+        <img class="photo" src="images/profile-smith.png" alt="스미스">
+        <div>
+          <div class="name">스미스 <span class="role">자사몰사관학교 코치</span></div>
+          <div class="desc">수강생 자사몰매출 450억+ · 스킨스쿨 CEO</div>
+        </div>
+      </div>
+      <div class="badge-area">
+        <img src="images/badge-light.png" alt="Meta Business Partners badge">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="note">페이지 최하단. 프로필 + 배지로 마무리. 스크롤 끝에서 "이 사람이 운영하는 서비스구나" 신뢰감.</div>
+
+</div>
+</body>
+</html>

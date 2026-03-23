@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="category" content="plan">
+<title>오가닉 채널 자동화 기획서</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;background:#0c0a09;color:#e7e5e4;line-height:1.8;font-size:15px;-webkit-font-smoothing:antialiased}
+.c{max-width:640px;margin:0 auto;padding:40px 20px 100px}
+.hero{text-align:center;padding:48px 0 40px;border-bottom:1px solid #292524;margin-bottom:36px}
+.hero h1{font-size:26px;font-weight:800;background:linear-gradient(135deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;line-height:1.4}
+.hero .sub{font-size:13px;color:#78716c;line-height:1.6}
+.hero .ver{display:inline-block;margin-top:10px;padding:3px 10px;background:#1c1917;border:1px solid #292524;border-radius:6px;font-size:11px;color:#4ade80;font-weight:600}
+h2{font-size:20px;font-weight:700;color:#fafaf9;margin:44px 0 14px;display:flex;align-items:center;gap:10px}
+h3{font-size:16px;font-weight:600;color:#d6d3d1;margin:24px 0 10px}
+p{margin-bottom:16px;color:#a8a29e;font-size:14px}
+strong{color:#fafaf9;font-weight:600}
+.sn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:#4ade80;color:#0c0a09;border-radius:50%;font-size:13px;font-weight:700;flex-shrink:0}
+.cd{background:#1c1917;border:1px solid #292524;border-radius:12px;padding:18px;margin:14px 0;font-size:14px}
+.bc{background:#1c1917;border:1px solid #292524;border-radius:10px;padding:16px;margin:10px 0}
+.bc:hover{border-color:#4ade80}
+.bc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bi{font-size:22px;flex-shrink:0}
+.bn{font-weight:700;font-size:14px;color:#fafaf9}
+.bm{font-size:11px;color:#4ade80;font-weight:500}
+.bd{font-size:13px;color:#78716c;line-height:1.6}
+.fl{background:#111;border:1px solid #292524;border-radius:12px;padding:18px;margin:14px 0;font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:#a8a29e;line-height:1.9;white-space:pre;overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+th{text-align:left;padding:8px 10px;color:#78716c;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #292524}
+td{padding:8px 10px;border-bottom:1px solid #1c1917;color:#a8a29e;vertical-align:top;font-size:13px}
+td:first-child{color:#fafaf9;font-weight:500}
+.tg{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:600}
+.tgn{background:#052e16;color:#4ade80}.tb{background:#172554;color:#60a5fa}.ty{background:#422006;color:#fbbf24}.tp{background:#1e1b4b;color:#a78bfa}.tr{background:#1a0f0f;color:#f87171}
+.pq{margin:24px 0;padding:16px 18px;background:#1c1917;border-left:3px solid #4ade80;border-radius:0 8px 8px 0;font-size:15px;color:#d6d3d1;font-weight:500;line-height:1.7}
+.ok{background:#0f1a0f;border:1px solid #166534;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#4ade80;line-height:1.7}
+.warn{background:#1a1209;border:1px solid #7c3a00;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#fde68a;line-height:1.7}
+a{color:#4ade80;text-decoration:none}a:hover{text-decoration:underline}
+.dv{height:1px;background:#292524;margin:40px 0}
+.ft{text-align:center;padding:24px;color:#44403c;font-size:11px}
+ol,ul{margin:6px 0 14px 18px;color:#a8a29e;font-size:13px}li{margin:4px 0}
+li strong{color:#d6d3d1}
+.ch-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.ch-item{background:#1c1917;border:1px solid #292524;border-radius:8px;padding:12px 14px}
+.ch-name{font-weight:700;font-size:13px;color:#fafaf9;margin-bottom:4px}
+.ch-meta{font-size:11px;color:#78716c;line-height:1.5}
+.chip{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;margin-top:6px}
+.p1{background:#422006;color:#fbbf24}.p2{background:#172554;color:#60a5fa}.hold{background:#1c1917;color:#57534e;border:1px solid #292524}
+.phase{border:1px solid #292524;border-radius:12px;margin:12px 0;overflow:hidden}
+.phase-head{padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.phase-body{padding:14px 16px;font-size:13px;color:#a8a29e;line-height:1.8;border-top:1px solid #292524}
+.ph1 .phase-head{background:#052e16;color:#4ade80}
+.ph2 .phase-head{background:#172554;color:#60a5fa}
+.ph3 .phase-head{background:#1e1b4b;color:#a78bfa}
+.task{background:#1c1917;border:1px solid #292524;border-radius:8px;padding:11px 14px;margin:6px 0;font-size:13px;display:flex;gap:10px}
+.task-id{color:#4ade80;font-weight:700;flex-shrink:0;font-size:12px;margin-top:1px}
+.task-body{color:#a8a29e;line-height:1.6}
+.task-body strong{color:#d6d3d1}
+.badge{display:inline-block;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:600;margin-left:3px}
+.bg{background:#052e16;color:#4ade80}.bb{background:#172554;color:#60a5fa}.by{background:#422006;color:#fbbf24}.bp{background:#1e1b4b;color:#a78bfa}
+@media(max-width:500px){.ch-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.c{padding:24px 16px 80px}.hero{padding:36px 0 32px}.hero h1{font-size:22px}.fl{font-size:11px}table{font-size:12px}td,th{padding:6px 8px}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="hero">
+  <h1>&#127807; 오가닉 채널 자동화 기획서</h1>
+  <div class="sub">논페이드(오가닉) 채널 자동화 기획<br>bscamp 정보공유 글 &#8594; AI 포맷 변환 &#8594; 멀티채널 자동 배포 파이프라인</div>
+  <div class="ver">기획 완료 &#183; 구현 전 &#183; 2026.03.09</div>
+</div>
+
+<!-- ===== 1. 채널 현황 ===== -->
+<h2><span class="sn">1</span> 채널 현황 및 발행 전략</h2>
+
+<div class="ch-grid">
+  <div class="ch-item">
+    <div class="ch-name">&#128231; 뉴스레터</div>
+    <div class="ch-meta">&#10003; 이미 자동화됨<br>기존 email_logs 활용</div>
+    <div class="chip hold">기존 유지</div>
+  </div>
+  <div class="ch-item">
+    <div class="ch-name">&#128221; 네이버 블로그</div>
+    <div class="ch-meta">&#10003; API 자동화 가능<br>writePost.json (OAuth2)</div>
+    <div class="chip p1">P1</div>
+  </div>
+  <div class="ch-item">
+    <div class="ch-name">&#9749; 네이버 카페</div>
+    <div class="ch-meta">&#10003; API 자동화 가능<br>카페 글쓰기 API (운영자)</div>
+    <div class="chip p1">P1</div>
+  </div>
+  <div class="ch-item">
+    <div class="ch-name">&#128269; 구글 SEO (서브도메인)</div>
+    <div class="ch-meta">&#10003; 자체 발행<br>bscamp 공개 페이지 + sitemap</div>
+    <div class="chip p1">P1</div>
+  </div>
+  <div class="ch-item">
+    <div class="ch-name">&#129302; GEO (AI 검색)</div>
+    <div class="ch-meta">&#10003; 마크업 추가<br>FAQ schema.org 구조화</div>
+    <div class="chip p2">P2</div>
+  </div>
+  <div class="ch-item">
+    <div class="ch-name">&#10067; 네이버 지식인 엑스퍼트</div>
+    <div class="ch-meta">&#10007; API 없음<br>수동 처리</div>
+    <div class="chip hold">보류</div>
+  </div>
+</div>
+
+<!-- ===== 2. 파이프라인 ===== -->
+<h2><span class="sn">2</span> 배포 파이프라인 설계</h2>
+
+<div class="fl">[bscamp 어드민]
+     &#8595; 글 작성/편집 완료
+[배포 설정 패널]
+     &#8595; 채널 선택 + 발행 트리거
+[AI 포맷 변환 API]  &lt;&#8212; Anthropic API
+     &#8595; 채널별 변환본 생성
+[channel_distributions 테이블에 큐잉]
+     &#8595;
++--------------------------------------+
+|  병렬 발행                            |
+|  +-- 네이버 블로그 -&gt; writePost.json  |
+|  +-- 네이버 카페  -&gt; 카페 글쓰기 API  |
+|  +-- 구글 SEO    -&gt; /insight/[slug]   |
+|  +-- GEO        -&gt; FAQ schema 마크업  |
++--------------------------------------+
+     &#8595;
+[발행 결과 업데이트 + 어드민 알림]</div>
+
+<h3>발행 순서 (권장)</h3>
+<ol>
+  <li><strong>구글 SEO 서브도메인</strong> &#8212; bscamp 자체 서버라 즉시, 실패 없음</li>
+  <li><strong>네이버 블로그</strong> &#8212; OAuth 토큰만 있으면 안정적</li>
+  <li><strong>네이버 카페</strong> &#8212; 카페 운영자 토큰 필요</li>
+  <li><strong>GEO 마크업</strong> &#8212; 구글 SEO와 동시 처리 (같은 페이지에 schema 추가)</li>
+  <li><strong>뉴스레터</strong> &#8212; 기존 흐름 유지 (별도 발행 or 연계)</li>
+</ol>
+
+<!-- ===== 3. AI 변환 ===== -->
+<h2><span class="sn">3</span> 채널별 AI 포맷 변환 규칙</h2>
+
+<h3>공통 입력 (원본 글)</h3>
+<div class="fl">{ "title": "...", "body": "...(마크다운)",
+  "tags": ["메타광고", "자사몰", ...],
+  "category": "...", "author": "Smith" }</div>
+
+<div class="bc">
+  <div class="bc-head"><span class="bi">&#128221;</span><div>
+    <div class="bn">3-1. 네이버 블로그용</div>
+    <div class="bm">네이버 SEO 최적화 + 블로그 친화적 가독성</div>
+  </div></div>
+  <div class="bd">
+    <div class="fl">어조: 친근하지만 전문적 ("~입니다", "~해요" 혼용)
+길이: 1500~2500자
+구조: 서론(문제제기) &#8594; 본론(소제목 3~5개) &#8594; 결론(핵심 요약)
+소제목: &#10003; 이모지 활용, 굵게 처리
+키워드: 제목 + 첫 문단 + 소제목에 3회 이상
+태그: 10개 (광고 관련 + 브랜드 관련 혼합)
+CTA: 마지막에 "자사몰사관학교 2기 &#8594;" 링크 멘션
+금지: 과도한 줄바꿈, 광고성 표현
+
+출력: { title, content(HTML허용), tags[], category }</div>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head"><span class="bi">&#9749;</span><div>
+    <div class="bn">3-2. 네이버 카페용</div>
+    <div class="bm">커뮤니티 참여 유도 + 정보 공유</div>
+  </div></div>
+  <div class="bd">
+    <div class="fl">어조: 구어체 ("여러분", "공유드려요")
+길이: 800~1200자 (카페는 짧게 핵심만)
+구조: 인트로(왜 공유하는지) &#8594; 핵심 3가지 &#8594; 마무리 질문
+마무리: 댓글 유도 질문 필수 ("여러분은 어떻게 운영하세요?")
+카테고리: 정보공유 or 마케팅팁
+금지: 외부 링크 과도 삽입 (카페 스팸 필터)
+
+출력: { subject, content(HTML), categoryId }</div>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head"><span class="bi">&#128269;</span><div>
+    <div class="bn">3-3. 구글 SEO 서브도메인용</div>
+    <div class="bm">구글 크롤링 최적화 + 롱테일 키워드 포지셔닝</div>
+  </div></div>
+  <div class="bd">
+    <div class="fl">어조: 명확하고 정보 중심적 ("~입니다", 3인칭 혼용)
+길이: 1200~2000자 (품질 &gt; 양)
+구조: H1(제목) &#8594; H2(소제목) &#8594; H3(세부) 계층 명확
+메타 디스크립션: 160자 이내 별도 생성
+키워드 밀도: 1~2% (과도한 반복 금지)
+내부 링크: bscamp.vercel.app 링크 1~2개
+구조화 데이터: Article schema 포함
+
+출력: { slug, title, metaDescription, ogTitle, ogDescription, body(md), structuredData }</div>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head"><span class="bi">&#129302;</span><div>
+    <div class="bn">3-4. GEO (AI 검색) 마크업용</div>
+    <div class="bm">ChatGPT / Perplexity / Google AI Overview 답변 소스 채택</div>
+  </div></div>
+  <div class="bd">
+    <div class="fl">Q&amp;A 쌍 3~5개 추출 (글의 핵심 질문-답변)
+질문: 사용자가 실제 검색할 법한 자연어
+답변: 40~120자 명확한 답변 (너무 길면 AI가 발췌 안 함)
+HowTo schema: 단계별 절차 있을 경우 생성
+Speakable: 음성 검색 대비
+출처 표시: "자사몰사관학교 bscamp" 명시
+
+출력 예시:
+{
+  "faqSchema": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "메타 광고 ROAS가 낮을 때 어떻게 해야 하나요?",
+      "acceptedAnswer": { "@type": "Answer", "text": "..." }
+    }]
+  },
+  "speakable": ["첫 번째 답변 텍스트", ...]
+}</div>
+  </div>
+</div>
+
+<!-- ===== 4. DB 스키마 ===== -->
+<h2><span class="sn">4</span> DB 스키마 추가</h2>
+
+<div class="fl">-- channel_distributions
+CREATE TABLE channel_distributions (
+  id                  UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  content_id          UUID REFERENCES contents(id) ON DELETE CASCADE,
+  channel_type        TEXT NOT NULL,
+  -- 'naver_blog' | 'naver_cafe' | 'google_seo' | 'geo' | 'newsletter'
+  status              TEXT DEFAULT 'pending',
+  -- 'pending' | 'transforming' | 'ready' | 'published' | 'failed'
+  transformed_content JSONB,       -- 채널별 변환된 컨텐츠
+  external_url        TEXT,        -- 발행된 외부 URL
+  external_id         TEXT,        -- 네이버 postId 등
+  error_message       TEXT,
+  scheduled_at        TIMESTAMPTZ, -- 예약 발행
+  published_at        TIMESTAMPTZ,
+  created_at          TIMESTAMPTZ DEFAULT NOW(),
+  updated_at          TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- channel_credentials
+CREATE TABLE channel_credentials (
+  id           UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  channel_type TEXT UNIQUE NOT NULL,
+  credentials  JSONB NOT NULL,  -- 암호화 저장 (access_token, refresh_token 등)
+  expires_at   TIMESTAMPTZ,
+  created_at   TIMESTAMPTZ DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ DEFAULT NOW()
+);</div>
+
+<div class="warn">&#9888; 기존 <strong>service_secrets</strong> 테이블 활용 가능 &#8212; channel_type별 row 추가로 대체 검토</div>
+
+<!-- ===== 5. 어드민 UI ===== -->
+<h2><span class="sn">5</span> 어드민 UI/UX 흐름</h2>
+
+<h3>5-1. 글 편집 페이지 (/admin/contents/[id]) 에 추가</h3>
+<div class="fl">+------------------------------------------+
+|  &#128228; 오가닉 채널 배포                       |
++------------------------------------------+
+|  [ ] 네이버 블로그       [미리보기]          |
+|  [ ] 네이버 카페         [미리보기]          |
+|  [v] 구글 SEO (항상 켜짐)  [미리보기]       |
+|  [v] GEO 마크업 (항상 켜짐) [자동]          |
+|  [ ] 뉴스레터            &#8594; 기존 흐름 연계  |
++------------------------------------------+
+|  발행 시점: (o) 즉시  ( ) 예약 [날짜/시간]  |
+|                                           |
+|  [AI 변환 미리보기]  [전체 발행]             |
++------------------------------------------+</div>
+
+<h3>5-2. AI 변환 미리보기 모달</h3>
+<ul>
+  <li>"AI 변환 미리보기" 클릭 &#8594; 모달 오픈</li>
+  <li>탭 구조: [블로그] [카페] [SEO] [GEO]</li>
+  <li>각 탭에서 변환된 글 확인 + 직접 수정 가능</li>
+  <li>"이대로 발행" 버튼</li>
+</ul>
+
+<h3>5-3. 발행 현황 대시보드 (/admin/distributions)</h3>
+<div class="fl">콘텐츠명      | 블로그  | 카페    | SEO | GEO | 발행일
+--------------+---------+---------+-----+-----+-------
+ROAS 최적화법 | &#10003; 발행  | &#10003; 발행  | &#10003;   | &#10003;   | 03/09
+광고세팅 팁   | &#10007; 실패  | &#8987; 대기   | &#10003;   | &#10003;   | 03/08
+              | [재발행] | [로그]  |     |     |</div>
+
+<!-- ===== 6. API ===== -->
+<h2><span class="sn">6</span> API 라우트 설계</h2>
+
+<div class="cd">
+<table>
+<tr><th>메서드</th><th>경로</th><th>설명</th></tr>
+<tr><td>POST</td><td>/api/admin/distribute</td><td>AI 변환 + 큐 등록</td></tr>
+<tr><td>POST</td><td>/api/admin/distribute/preview</td><td>변환 결과만 반환 (DB 저장 X)</td></tr>
+<tr><td>POST</td><td>/api/admin/distribute/publish</td><td>실제 발행 실행</td></tr>
+<tr><td>GET</td><td>/api/admin/distributions</td><td>발행 현황 목록</td></tr>
+<tr><td>POST</td><td>/api/cron/distribute-publish</td><td>예약 발행 처리 (Vercel Cron, 매시간)</td></tr>
+<tr><td>POST</td><td>/api/admin/naver/refresh-token</td><td>네이버 OAuth 토큰 갱신</td></tr>
+</table>
+</div>
+
+<!-- ===== 7. 구글 SEO ===== -->
+<h2><span class="sn">7</span> 구글 SEO 서브도메인 구조</h2>
+
+<p>bscamp 내 공개 접근 가능한 인사이트 페이지 생성. 비로그인도 접근 가능해야 구글 크롤링이 된다.</p>
+
+<div class="cd">
+<table>
+<tr><th>경로</th><th>설명</th></tr>
+<tr><td>/insight</td><td>목록 페이지 (SEO 최적화)</td></tr>
+<tr><td>/insight/[slug]</td><td>개별 아티클 (구조화 데이터 포함)</td></tr>
+</table>
+</div>
+
+<ul>
+  <li><strong>공개 접근</strong>: 비로그인도 접근 가능 (구글 크롤링 필수)</li>
+  <li><strong>sitemap.xml 자동 업데이트</strong>: 발행 시 sitemap에 추가</li>
+  <li><strong>robots.txt</strong>: /insight/* Allow</li>
+  <li><strong>내부 CTA</strong>: "더 배우고 싶다면 &#8594; 자사몰사관학교 2기"</li>
+</ul>
+
+<!-- ===== 8. 구현 우선순위 ===== -->
+<h2><span class="sn">8</span> 단계별 구현 우선순위</h2>
+
+<div class="phase ph1">
+  <div class="phase-head">Phase 1 &#8212; MVP (1~2일) &#183; 구글 SEO + GEO 최우선</div>
+  <div class="phase-body">
+    <div class="task">
+      <span class="task-id">T1</span>
+      <div class="task-body"><strong>공개 인사이트 페이지 + 자동 발행</strong> <span class="badge bg">4h</span><br>
+      /insight/[slug] 라우트 생성 &#183; is_public 플래그 활용 &#183; 마크다운&#8594;SEO HTML 렌더링 &#183; sitemap.xml 자동 갱신 &#183; robots.txt 수정</div>
+    </div>
+    <div class="task">
+      <span class="task-id">T2</span>
+      <div class="task-body"><strong>GEO 마크업 자동 생성</strong> <span class="badge bg">2h</span><br>
+      Anthropic API &#8594; FAQ schema.org 생성 &#183; /insight/[slug]에 JSON-LD 삽입 &#183; HowTo schema (단계별 내용 있을 때)</div>
+    </div>
+    <div class="task">
+      <span class="task-id">T3</span>
+      <div class="task-body"><strong>어드민 배포 UI 기초</strong> <span class="badge bg">3h</span><br>
+      글 편집 페이지에 "오가닉 배포" 섹션 추가 &#183; 채널 선택 체크박스 &#183; "구글 SEO에 발행" 버튼 &#8594; T1 연동 &#183; channel_distributions 테이블 생성</div>
+    </div>
+  </div>
+</div>
+
+<div class="phase ph2">
+  <div class="phase-head">Phase 2 &#8212; 네이버 연동 (2~3일) &#183; OAuth 인증 필요</div>
+="phase-body">
+    <div class="task">
+      <span class="task-id">T4</span>
+      <div class="task-body"><strong>네이버 OAuth 설정</strong> <span class="badge bb">3h</span><br>
+      Naver Developers 앱 등록 (blog.write, cafe 권한) &#183; OAuth 2.0 콜백 구현 &#183; access_token, refresh_token &#8594; channel_credentials 저장 &#183; 자동 갱신 로직</div>
+    </div>
+    <div class="task">
+      <span class="task-id">T5</span>
+      <div class="task-body"><strong>네이버 블로그 자동 발행</strong> <span class="badge bb">3h</span><br>
+      Anthropic API &#8594; 블로그 포맷 변환 &#183; POST openapi.naver.com/blog/writePost.json &#183; 결과 URL &#8594; channel_distributions.external_url 저장</div>
+    </div>
+    <div class="task">
+      <span class="task-id">T6</span>
+      <div class="task-body"><strong>네이버 카페 자동 발행</strong> <span class="badge bb">3h</span><br>
+      카페 카테고리 ID 조회 &#183; AI 포맷 변환 &#183; POST /v1/cafe/{clubid}/articles &#183; 에러 핸들링 (스팸 필터 대응)</div>
+    </div>
+  </div>
+</div>
+
+<div class="phase ph3">
+  <div class="phase-head">Phase 3 &#8212; 고도화 (1~2주 후) &#183; 데이터 쌓인 후 효과 측정</div>
+  <div class="phase-body">
+    <div class="task">
+      <span class="task-id">T7</span>
+      <div class="task-body"><strong>발행 현황 대시보드</strong> <span class="badge bp">4h</span><br>
+      /admin/distributions 페이지 &#183; 채널별 발행 상태 &#183; 실패 재발행 &#183; 로그 보기</div>
+    </div>
+    <div class="task">
+      <span class="task-id">T8</span>
+      <div class="task-body"><strong>예약 발행</strong> <span class="badge bp">2h</span><br>
+      scheduled_at 필드 활용 &#183; Vercel Cron (/api/cron/distribute-publish) 매시간 실행</div>
+    </div>
+    <div class="task">
+      <span class="task-id">T9</span>
+      <div class="task-body"><strong>성과 추적</strong> <span class="badge bp">4h</span><br>
+      채널별 트래픽 &#8594; Mixpanel &#183; bscamp 유입 source 추적 (UTM) &#183; 어드민에 "채널 기여도" 통계</div>
+    </div>
+    <div class="task">
+      <span class="task-id">T10</span>
+      <div class="task-body"><strong>뉴스레터 연계</strong> <span class="badge bp">2h</span><br>
+      기존 뉴스레터 발행 시 &#8594; 오가닉 채널도 함께 배포 옵션</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 9. 네이버 인증 ===== -->
+<h2><span class="sn">9</span> 네이버 API 인증 참고</h2>
+
+<h3>필요한 것</h3>
+<ol>
+  <li>Naver Developers에서 앱 등록</li>
+  <li>권한: <strong>blog</strong> (블로그 읽기/쓰기), <strong>cafe</strong> (카페 가입, 글쓰기)</li>
+  <li>콜백 URL: https://bscamp.vercel.app/api/admin/naver/callback</li>
+  <li>Client ID + Secret &#8594; 환경변수</li>
+</ol>
+
+<h3>환경변수 추가 (.env.local + Vercel)</h3>
+<div class="fl">NAVER_CLIENT_ID=...
+NAVER_CLIENT_SECRET=...
+NAVER_CAFE_CLUB_ID=...  # 운영 카페 ID</div>
+
+<h3>토큰 저장 (service_secrets 테이블)</h3>
+<div class="fl">key: 'naver_blog_credentials'
+value: { access_token, refresh_token, expires_at }</div>
+
+<!-- ===== 10. 핵심 결정사항 ===== -->
+<h2><span class="sn">10</span> 핵심 결정사항</h2>
+
+<div class="cd">
+<table>
+<tr><th>결정</th><th>옵션 A</th><th>옵션 B</th><th>권장</th></tr>
+<tr>
+  <td>구글 SEO 발행 시점</td>
+  <td>정보공유 글 쓸 때마다 자동</td>
+  <td>어드민이 수동 선택</td>
+  <td><span class="tg tgn">A (자동)</span></td>
+</tr>
+<tr>
+  <td>네이버 발행 시점</td>
+  <td>구글 동시</td>
+  <td>시간 차이 두기 (1~2일)</td>
+  <td><span class="tg tb">B (차이 두기)</span></td>
+</tr>
+<tr>
+  <td>인사이트 페이지 도메인</td>
+  <td>bscamp.vercel.app/insight</td>
+  <td>커스텀 도메인 (도메인 구매 후)</td>
+  <td><span class="tg ty">일단 A, 나중에 B</span></td>
+</tr>
+<tr>
+  <td>카페 카테고리</td>
+  <td>자동 매핑</td>
+  <td>수동 선택</td>
+  <td><span class="tg tb">수동 선택 (처음엔)</span></td>
+</tr>
+<tr>
+  <td>GEO 마크업</td>
+  <td>모든 글에 적용</td>
+  <td>AI가 적합 여부 판단</td>
+  <td><span class="tg tgn">모든 글에 적용</span></td>
+</tr>
+</table>
+</div>
+
+<div class="dv"></div>
+
+<div class="pq">핵심: 구글 SEO + GEO 마크업이 가장 안전하고 장기적 효과. 네이버는 OAuth 손이 많이 가지만 트래픽 빠름. Phase 1부터 순서대로.</div>
+
+<div class="ft">&#127806; bscamp &#183; 오가닉 채널 자동화 기획서 &#183; 2026.03.09</div>
+</div>
+</body>
+</html>

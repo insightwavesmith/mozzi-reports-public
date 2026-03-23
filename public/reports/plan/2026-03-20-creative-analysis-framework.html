@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>광고 소재 분석 프로세스 축 설계 v2 — 모찌리포트</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #273449;
+      --border: #334155; --accent: #6366f1; --accent2: #818cf8; --accent3: #a5b4fc;
+      --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+      --green: #22c55e; --emerald: #10b981; --amber: #f59e0b; --red: #ef4444;
+      --blue: #3b82f6; --purple: #a855f7; --cyan: #06b6d4;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+    .report-header { background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 60%); border-bottom: 1px solid var(--border); padding: 40px 48px 36px; position: relative; overflow: hidden; }
+    .report-header::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(99,102,241,.18) 0%, transparent 70%); pointer-events: none; }
+    .report-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; background: rgba(99,102,241,.15); color: var(--accent3); border: 1px solid rgba(99,102,241,.3); }
+    .badge-date { background: rgba(30,41,59,.8); color: var(--text2); border-color: var(--border); }
+    .badge-v2 { background: rgba(239,68,68,.15); color: #fca5a5; border-color: rgba(239,68,68,.4); font-size: 12px; }
+    .badge-new { background: rgba(16,185,129,.15); color: #6ee7b7; border-color: rgba(16,185,129,.3); }
+    .report-title { font-size: 28px; font-weight: 700; color: #f1f5f9; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 8px; }
+    .report-subtitle { font-size: 15px; color: var(--accent3); font-weight: 500; }
+    .report-desc { margin-top: 16px; font-size: 13px; color: var(--text2); max-width: 680px; }
+    .target-cards { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+    .target-card { background: rgba(30,41,59,.7); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; flex: 1; min-width: 160px; }
+    .target-card-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+    .target-card-type { font-size: 18px; font-weight: 700; color: var(--accent2); margin-bottom: 4px; }
+    .target-card-count { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .target-card-note { font-size: 12px; color: var(--text2); }
+
+    .tab-nav-wrap { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 48px; position: sticky; top: 0; z-index: 100; }
+    .tab-nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-btn { display: flex; align-items: center; gap: 6px; padding: 14px 14px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text3); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: color .15s, border-color .15s; }
+    .tab-btn:hover { color: var(--text2); }
+    .tab-btn.active { color: var(--accent3); border-bottom-color: var(--accent); }
+    .tnew { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; background: rgba(16,185,129,.2); color: #6ee7b7; }
+    .tvid { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; background: rgba(168,85,247,.2); color: #d8b4fe; }
+
+    .tab-content { padding: 40px 48px; display: none; }
+    .tab-content.active { display: block; }
+    .section-title { font-size: 20px; font-weight: 700; color: #f1f5f9; margin-bottom: 6px; }
+    .section-sub { font-size: 16px; font-weight: 700; color: var(--accent2); margin: 24px 0 10px; }
+    .section-desc { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 28px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { background: var(--bg3); color: var(--text2); font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 11px 16px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid rgba(51,65,85,.5); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(99,102,241,.06); }
+    tbody td { padding: 10px 16px; color: var(--text); vertical-align: top; }
+    td.row-group { font-weight: 700; color: var(--accent3); white-space: nowrap; }
+    td.sub-item { color: var(--text2); padding-left: 28px; font-size: 12.5px; }
+    .cy { color: var(--green); font-size: 16px; display: block; text-align: center; }
+    .cw { color: var(--amber); font-size: 15px; display: block; text-align: center; }
+    .cn { color: var(--red); font-size: 15px; display: block; text-align: center; }
+    td.center { text-align: center; }
+
+    .info-box { background: rgba(30,58,95,.8); border: 1px solid rgba(59,130,246,.3); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #93c5fd; margin-bottom: 20px; }
+    .warn-box { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #fca5a5; margin-bottom: 20px; }
+    .success-box { background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.3); border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #6ee7b7; margin-bottom: 20px; }
+    .quote-box { background: var(--bg2); border-left: 4px solid var(--red); border-radius: 0 10px 10px 0; padding: 16px 20px; font-size: 14px; color: var(--text); margin-bottom: 24px; }
+
+    .first3s { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 700; background: rgba(239,68,68,.2); color: #fca5a5; border: 1px solid rgba(239,68,68,.5); letter-spacing: .04em; vertical-align: middle; }
+    .nbadge { display: inline-flex; align-items: center; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); margin-left: 5px; vertical-align: middle; }
+    .vid-tag { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; background: rgba(168,85,247,.15); color: #d8b4fe; border: 1px solid rgba(168,85,247,.3); vertical-align: middle; margin-left: 5px; }
+
+    /* PE-AV */
+    .peav-wrap { background: #020617; border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 28px; }
+    .peav-input { display: flex; justify-content: center; margin-bottom: 16px; }
+    .peav-input-box { background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.4); border-radius: 8px; padding: 12px 40px; font-size: 14px; font-weight: 700; color: var(--accent3); text-align: center; }
+    .peav-down { text-align: center; color: var(--text3); font-size: 20px; line-height: 1; margin-bottom: 12px; }
+    .peav-towers { display: flex; gap: 16px; margin-bottom: 16px; }
+    .peav-tower { flex: 1; border-radius: 10px; padding: 16px; border: 1px solid; }
+    .peav-tower.vtow { background: rgba(59,130,246,.06); border-color: rgba(59,130,246,.35); }
+    .peav-tower.atow { background: rgba(16,185,129,.06); border-color: rgba(16,185,129,.35); }
+    .ptitle { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
+    .vtow .ptitle { color: #93c5fd; }
+    .atow .ptitle { color: #6ee7b7; }
+    .pstep { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 12px; color: var(--text2); }
+    .pstep span { font-weight: 600; color: var(--text); }
+    .pstep-arr { text-align: center; font-size: 11px; color: var(--text3); padding: 2px 0; }
+    .peav-fusion { background: rgba(168,85,247,.08); border: 1px solid rgba(168,85,247,.4); border-radius: 10px; padding: 16px; margin-bottom: 16px; text-align: center; }
+    .peav-fusion-title { font-size: 13px; font-weight: 700; color: #d8b4fe; margin-bottom: 4px; }
+    .peav-fusion-desc { font-size: 12px; color: var(--text2); }
+    .peav-out { display: flex; gap: 10px; flex-wrap: wrap; }
+    .peav-out-tag { background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3); border-radius: 6px; padding: 8px 16px; font-size: 12px; color: #fde68a; font-weight: 600; flex: 1; text-align: center; min-width: 140px; }
+
+    /* Entity cards */
+    .entity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .ecard { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .ecard-icon { font-size: 22px; margin-bottom: 8px; }
+    .ecard-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .ecard-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+    .ecard-ex { margin-top: 8px; font-size: 11px; color: var(--text3); font-style: italic; }
+
+    /* 3계층 패널티 */
+    .penalty-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .pen { border-radius: 10px; padding: 18px 22px; border: 1px solid; position: relative; padding-left: 26px; }
+    .pen::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; border-radius: 10px 0 0 10px; }
+    .pen1 { background: rgba(251,191,36,.07); border-color: rgba(251,191,36,.3); }
+    .pen1::before { background: var(--amber); }
+    .pen2 { background: rgba(249,115,22,.07); border-color: rgba(249,115,22,.3); }
+    .pen2::before { background: #f97316; }
+    .pen3 { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.4); }
+    .pen3::before { background: var(--red); }
+    .pen-stage { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+    .pen1 .pen-stage { color: var(--amber); }
+    .pen2 .pen-stage { color: #fb923c; }
+    .pen3 .pen-stage { color: #fca5a5; }
+    .pen-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .pen-desc { font-size: 13px; color: var(--text2); }
+    .pen-cause { margin-top: 8px; font-size: 12px; padding: 5px 12px; border-radius: 6px; display: inline-block; }
+    .pen1 .pen-cause { background: rgba(251,191,36,.1); color: #fde68a; }
+    .pen2 .pen-cause { background: rgba(249,115,22,.1); color: #fdba74; }
+    .pen3 .pen-cause { background: rgba(239,68,68,.12); color: #fca5a5; }
+
+    /* GEM */
+    .gem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .gcard { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+    .gcard-label { font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+    .gcard-title { font-size: 15px; font-weight: 700; color: var(--accent2); margin-bottom: 8px; }
+    .gcard-desc { font-size: 12.5px; color: var(--text2); line-height: 1.7; }
+    .gresult { display: flex; gap: 16px; margin-top: 12px; }
+    .gresult-item { text-align: center; flex: 1; }
+    .gresult-val { font-size: 22px; font-weight: 800; color: var(--green); }
+    .gresult-label { font-size: 11px; color: var(--text3); }
+
+    /* 파이프라인 */
+    .pl-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin: 24px 0 12px; }
+    .pl-row { display: flex; gap: 14px; align-items: stretch; margin-bottom: 14px; flex-wrap: wrap; }
+    .pl-node { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; flex: 1; min-width: 220px; }
+    .pl-node.imgn { border-color: rgba(59,130,246,.4); }
+    .pl-node.vidn { border-color: rgba(168,85,247,.4); }
+    .pl-node.comn { border-color: rgba(16,185,129,.4); }
+    .pl-node.lyrn { border-color: rgba(251,191,36,.4); }
+    .pl-node.finn { border-color: rgba(99,102,241,.5); background: rgba(99,102,241,.05); }
+    .pnb { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; margin-bottom: 8px; }
+    .nb-i { background: rgba(59,130,246,.2); color: #93c5fd; }
+    .nb-v { background: rgba(168,85,247,.2); color: #d8b4fe; }
+    .nb-c { background: rgba(16,185,129,.2); color: #6ee7b7; }
+    .nb-l { background: rgba(251,191,36,.2); color: #fde68a; }
+    .nb-f { background: rgba(99,102,241,.2); color: var(--accent3); }
+    .pntitle { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .pnmodel { font-size: 11px; color: var(--accent3); font-weight: 600; margin-bottom: 8px; }
+    .pndetail { font-size: 12px; color: var(--text2); line-height: 1.7; }
+    .pndetail b { color: var(--text); font-weight: 600; }
+    .pnout { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11.5px; color: var(--text3); }
+    .pnout b { color: var(--accent2); font-weight: 600; }
+    .pl-arr { display: flex; justify-content: center; padding: 4px 0 8px; }
+    .pl-arr-line { width: 2px; height: 24px; background: linear-gradient(to bottom, var(--border), var(--accent)); }
+    .pl-arr-head { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--accent); }
+
+    /* 코드 */
+    .code-wrap { background: #020617; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+    .code-hdr { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--bg3); border-bottom: 1px solid var(--border); }
+    .code-hdr-title { font-size: 13px; font-weight: 700; color: var(--text2); }
+    .code-lang { font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
+    .code-body { padding: 20px 24px; overflow-x: auto; }
+    .code-body pre { font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace; font-size: 12.5px; line-height: 1.8; color: #e2e8f0; }
+    .kw { color: #c084fc; font-weight: 600; }
+    .tp { color: #34d399; }
+    .cm { color: #475569; font-style: italic; }
+    .cl { color: #93c5fd; }
+
+    /* 비용 */
+    .cost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 28px; }
+    .ccard { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+    .ccard.free .camt { color: var(--emerald); }
+    .ccard.total { border-color: rgba(99,102,241,.4); background: rgba(99,102,241,.06); }
+    .ccard.total .camt { color: var(--accent2); }
+    .clabel { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: 6px; }
+    .camt { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .cnote { font-size: 12px; color: var(--text2); }
+
+    .p0 { display: inline-flex; padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+    .p1 { display: inline-flex; padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; background: rgba(245,158,11,.15); color: #fde68a; border: 1px solid rgba(245,158,11,.3); }
+    .p2 { display: inline-flex; padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+    .p3 { display: inline-flex; padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; background: rgba(100,116,139,.15); color: #94a3b8; border: 1px solid rgba(100,116,139,.3); }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    @media (max-width: 768px) {
+      .report-header, .tab-nav-wrap, .tab-content { padding-left: 20px; padding-right: 20px; }
+      .report-title { font-size: 22px; }
+      .pl-row, .peav-towers, .gem-grid { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ 헤더 ══ -->
+<header class="report-header">
+  <div class="report-meta">
+    <span class="badge">🍡 모찌리포트</span>
+    <span class="badge">기획서</span>
+    <span class="badge badge-v2">v2 업데이트</span>
+    <span class="badge badge-date">2026-03-20</span>
+    <span class="badge badge-new">★ Meta Andromeda + GEM + PE-AV</span>
+  </div>
+  <h1 class="report-title">광고 소재 분석 프로세스 축 설계 v2</h1>
+  <p class="report-subtitle">Meta Andromeda + GEM + PE-AV 기반</p>
+  <p class="report-desc">
+    이미지/동영상 광고 소재를 6축으로 분석 + Meta 내부 시스템 딥다이브.<br>
+    Entity ID · 3계층 유사도 패널티 · 첫 3초 가중치까지 커버하는 엔드-투-엔드 파이프라인.
+  </p>
+  <div class="target-cards">
+    <div class="target-card">
+      <div class="target-card-label">이미지 광고</div>
+      <div class="target-card-type">IMAGE</div>
+      <div class="target-card-count">~2,835건</div>
+      <div class="target-card-note">Gemini Vision + DeepGaze</div>
+    </div>
+    <div class="target-card">
+      <div class="target-card-label">동영상 광고</div>
+      <div class="target-card-type">VIDEO</div>
+      <div class="target-card-count">~261건</div>
+      <div class="target-card-note">Gemini 2.5 Pro + 키프레임</div>
+    </div>
+    <div class="target-card">
+      <div class="target-card-label">카탈로그</div>
+      <div class="target-card-type">CATALOG</div>
+      <div class="target-card-count">소량</div>
+      <div class="target-card-note">IMAGE와 동일</div>
+    </div>
+    <div class="target-card" style="border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.05)">
+      <div class="target-card-label">핵심 신규</div>
+      <div class="target-card-type" style="color:#fca5a5">3계층</div>
+      <div class="target-card-count">유사도</div>
+      <div class="target-card-note">Andromeda Entity ID 기반</div>
+    </div>
+    <div class="target-card" style="border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.05)">
+      <div class="target-card-label">분석 구조</div>
+      <div class="target-card-type">6축 + 5층</div>
+      <div class="target-card-count">11 탭</div>
+      <div class="target-card-note">태깅→시선→임베딩→벤치마크→코칭</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ 탭 네비 ══ -->
+<nav class="tab-nav-wrap">
+  <div class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="meta">🧠 Meta 분석 시스템 <span class="tnew">NEW</span></button>
+    <button class="tab-btn" data-tab="visual">👁 Visual</button>
+    <button class="tab-btn" data-tab="text">✍️ Text</button>
+    <button class="tab-btn" data-tab="audio">🎵 Audio <span class="tvid">VIDEO</span></button>
+    <button class="tab-btn" data-tab="structure">🎬 Structure <span class="tvid">VIDEO</span></button>
+    <button class="tab-btn" data-tab="attention">🎯 Attention</button>
+    <button class="tab-btn" data-tab="similarity">🔗 Similarity <span class="tnew">NEW</span></button>
+    <button class="tab-btn" data-tab="performance">📈 Performance</button>
+    <button class="tab-btn" data-tab="pipeline">⚙️ 파이프라인</button>
+    <button class="tab-btn" data-tab="schema">🗄 DB 스키마</button>
+    <button class="tab-btn" data-tab="cost">💰 비용/우선순위</button>
+  </div>
+</nav>
+
+<!-- ══════ TAB 1: META 분석 시스템 ══════ -->
+<section class="tab-content active" id="tab-meta">
+  <div class="section-title">Meta 내부 소재 분석 시스템</div>
+  <div class="section-desc">Andromeda · GEM · PE-AV — Meta가 소재를 어떻게 분석하는지, 우리가 어떻게 따라가는지.</div>
+
+  <div class="success-box">
+    💡 <strong>핵심 개념: Entity ID (시맨틱 지문)</strong><br>
+    Meta는 소재가 업로드되면 <strong>Entity ID</strong>를 자동 생성한다. 비슷한 Entity ID를 가진 소재끼리 클러스터링하여
+    <strong>같은 광고로 취급</strong>한다. 중복 소재가 많을수록 경매에서 불리해진다.
+  </div>
+
+  <div class="section-sub">Entity ID 생성 요소</div>
+  <div class="entity-grid">
+    <div class="ecard">
+      <div class="ecard-icon">🖼</div>
+      <div class="ecard-title">Visual Similarity</div>
+      <div class="ecard-desc">픽셀 구성, 색상 팔레트, 조명 패턴, 레이아웃 구조, 배경 요소, 인물/제품 위치·포즈·크기</div>
+      <div class="ecard-ex">→ 같은 스타일 제품 사진 전부 = 같은 Entity ID</div>
+    </div>
+    <div class="ecard">
+      <div class="ecard-icon">📐</div>
+      <div class="ecard-title">Structural Similarity</div>
+      <div class="ecard-desc">텍스트 배치 좌표, CTA 버튼 위치, 오버레이 구조, 프레임 구성</div>
+      <div class="ecard-ex">→ 사진 달라도 레이아웃 동일 = 같은 Entity ID</div>
+    </div>
+    <div class="ecard">
+      <div class="ecard-icon">💬</div>
+      <div class="ecard-title">Thematic Similarity</div>
+      <div class="ecard-desc">메시지 컨셉, 가치 제안(VP), 감정 톤, 타겟 고충(pain point)</div>
+      <div class="ecard-ex">→ 비주얼 달라도 "같은 말" = 같은 Entity ID</div>
+    </div>
+    <div class="ecard" style="border-color:rgba(168,85,247,.3)">
+      <div class="ecard-icon">🎬</div>
+      <div class="ecard-title">Motion Pattern <span class="vid-tag">VIDEO</span></div>
+      <div class="ecard-desc">동영상 내 움직임, 씬 전환 속도, 카메라 워크</div>
+      <div class="ecard-ex">→ 모션 패턴 비슷하면 유사 판정</div>
+    </div>
+    <div class="ecard" style="border-color:rgba(168,85,247,.3)">
+      <div class="ecard-icon">🎵</div>
+      <div class="ecard-title">Audio Signature <span class="vid-tag">VIDEO</span></div>
+      <div class="ecard-desc">나레이션 톤, BGM 장르, 사운드 디자인</div>
+      <div class="ecard-ex">→ 향후 더 정교해질 예정</div>
+    </div>
+    <div class="ecard" style="border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.04)">
+      <div class="ecard-icon">⏱</div>
+      <div class="ecard-title" style="color:#fca5a5">첫 3초 <span class="first3s">최중요</span></div>
+      <div class="ecard-desc">동영상 광고의 첫 3초가 비슷하면, 나머지가 달라도 <strong style="color:#fca5a5">같은 광고로 취급</strong></div>
+      <div class="ecard-ex">→ Entity ID를 결정하는 가장 중요한 구간</div>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    <strong style="color:#fca5a5">Meta 공식 확인:</strong> 동영상 광고의 첫 3초가 비슷하면, 나머지가 달라도 <strong>같은 광고로 취급</strong>한다.<br>
+    첫 3초 = 소재의 Entity ID를 결정하는 가장 중요한 구간.
+  </div>
+
+  <!-- PE-AV 아키텍처 -->
+  <div class="section-sub">PE-AV (Perception Encoder AudioVisual) 아키텍처</div>
+  <div class="info-box">Meta가 2025년 12월 오픈소스로 공개한 멀티모달 인코더. 오디오, 비디오, 텍스트를 <strong>하나의 벡터 공간</strong>에 매핑. 100M 오디오-비디오 쌍으로 학습.</div>
+
+  <div class="peav-wrap">
+    <div class="peav-input">
+      <div class="peav-input-box">🎬 동영상 입력</div>
+    </div>
+    <div class="peav-down">↓</div>
+    <div class="peav-towers">
+      <div class="peav-tower vtow">
+        <div class="ptitle">🎥 Video Tower</div>
+        <div class="pstep"><span>PE Frame Encoder</span><br>프레임별 시각 특징 추출</div>
+        <div class="pstep-arr">↓</div>
+        <div class="pstep"><span>Temporal Video Encoder</span><br>시간축 통합 처리</div>
+        <div class="pstep-arr">↓</div>
+        <div class="pstep" style="border-color:rgba(59,130,246,.3);color:#93c5fd"><span>시각 벡터 출력</span></div>
+      </div>
+      <div class="peav-tower atow">
+        <div class="ptitle">🎵 Audio Tower</div>
+        <div class="pstep"><span>DAC VAE</span><br>오디오 압축 인코딩</div>
+        <div class="pstep-arr">↓</div>
+        <div class="pstep"><span>Audio Tokenizer</span><br>40ms 단위 토큰화</div>
+        <div class="pstep-arr">↓</div>
+        <div class="pstep" style="border-color:rgba(16,185,129,.3);color:#6ee7b7"><span>오디오 벡터 출력</span></div>
+      </div>
+    </div>
+    <div class="peav-down">↓</div>
+    <div class="peav-fusion">
+      <div class="peav-fusion-title">🔀 AudioVisual Fusion Encoder</div>
+      <div class="peav-fusion-desc">비디오 + 오디오 통합 벡터 생성 · 10개 modality pair contrastive learning</div>
+    </div>
+    <div class="peav-down">↓</div>
+    <div class="peav-out">
+      <div class="peav-out-tag">✅ SigLIP2 초과<br><small style="font-weight:400;color:var(--text3)">이미지 SOTA 경신</small></div>
+      <div class="peav-out-tag">✅ InternVideo2 초과<br><small style="font-weight:400;color:var(--text3)">동영상 SOTA 경신</small></div>
+      <div class="peav-out-tag">🔢 통합 임베딩 벡터<br><small style="font-weight:400;color:var(--text3)">오디오+비디오+텍스트 통합</small></div>
+    </div>
+  </div>
+
+  <!-- GEM -->
+  <div class="section-sub">GEM (Generative Ads Model)</div>
+  <div class="info-box">Meta의 LLM 스케일 광고 추천 파운데이션 모델. 수십억 유저 행동 학습 기반.</div>
+  <div class="gem-grid">
+    <div class="gcard">
+      <div class="gcard-label">비순서 특성</div>
+      <div class="gcard-title">Wukong 아키텍처</div>
+      <div class="gcard-desc">사용자 인구통계 + 관심사 + 광고 형식/소재 내용 + 광고주 목표를 stackable factorization으로 처리</div>
+    </div>
+    <div class="gcard">
+      <div class="gcard-label">순서 특성</div>
+      <div class="gcard-title">Pyramid-Parallel</div>
+      <div class="gcard-desc">사용자 행동 시퀀스 수천 개 처리. 기존 10~20개 → 수천 개로 대폭 확장.</div>
+    </div>
+    <div class="gcard" style="border-color:rgba(99,102,241,.3)">
+      <div class="gcard-label">교차 학습</div>
+      <div class="gcard-title">InterFormer</div>
+      <div class="gcard-desc">정적 프로필 + 행동 시퀀스를 interleaving하여 교차 분석. 사용자 전체 맥락 이해.</div>
+    </div>
+    <div class="gcard" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04)">
+      <div class="gcard-label">실측 성과</div>
+      <div class="gcard-title">전환율 개선</div>
+      <div class="gresult">
+        <div class="gresult-item"><div class="gresult-val">+5%</div><div class="gresult-label">Instagram 전환</div></div>
+        <div class="gresult-item"><div class="gresult-val">+3%</div><div class="gresult-label">Facebook Feed 전환</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3계층 패널티 -->
+  <div class="section-sub">3계층 유사도 패널티</div>
+  <div class="penalty-list">
+    <div class="pen pen1">
+      <div class="pen-stage">1단계</div>
+      <div class="pen-title">도달 감소 + 내부 경쟁</div>
+      <div class="pen-desc">같은 Entity ID 소재끼리 같은 오디언스 풀에서 서로 경쟁. ROAS 분산.</div>
+      <span class="pen-cause">원인: 같은 Entity ID 클러스터 내 소재 중복</span>
+    </div>
+    <div class="pen pen2">
+      <div class="pen-stage">2단계</div>
+      <div class="pen-title">노출 제한</div>
+      <div class="pen-desc">클러스터 포화 — 같은 노드에 소재가 너무 많이 몰려 노출 자체가 줄어듦.</div>
+      <span class="pen-cause">원인: Andromeda 클러스터 포화 (노드 과밀)</span>
+    </div>
+    <div class="pen pen3">
+      <div class="pen-stage">3단계 ← 최악</div>
+      <div class="pen-title">경매 진입 차단</div>
+      <div class="pen-desc">Andromeda가 해당 클러스터를 아예 retrieval에서 제외. 경매에 올라가지조차 않음.</div>
+      <span class="pen-cause">원인: Andromeda retrieval 단계에서 클러스터 제외 처리</span>
+    </div>
+  </div>
+
+  <!-- 대응 가능 테이블 -->
+  <div class="section-sub">우리 대응 가능 여부</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Meta 기능</th><th>우리 대응 방법</th><th style="width:80px;text-align:center">가능?</th><th>적용 축</th></tr></thead>
+      <tbody>
+        <tr><td>Visual 분석</td><td>Gemini Vision</td><td><span class="cy">✅</span></td><td>축1 Visual</td></tr>
+        <tr><td>Text/NLP 분석</td><td>Gemini + 텍스트 임베딩</td><td><span class="cy">✅</span></td><td>축2 Text</td></tr>
+        <tr><td>Audio 분석</td><td>Gemini 2.5 Pro 동영상 입력</td><td><span class="cy">✅</span></td><td>축3 Audio</td></tr>
+        <tr><td>Motion Pattern</td><td>Gemini 2.5 Pro 동영상 입력</td><td><span class="cy">✅</span></td><td>축4 Structure</td></tr>
+        <tr><td>첫 3초 가중치</td><td>video_first_3s 별도 점수화</td><td><span class="cy">✅</span></td><td>축4 Structure <span class="first3s">첫 3초</span></td></tr>
+        <tr><td>Entity ID (시맨틱 지문)</td><td>embedding_3072</td><td><span class="cy">✅</span></td><td>임베딩 레이어</td></tr>
+        <tr><td>3계층 유사도 감지</td><td>Visual + Structural + Thematic 별도 측정</td><td><span class="cy">✅</span></td><td>축5.5 Similarity</td></tr>
+        <tr><td>피로도/중복 패널티 경고</td><td>클러스터링 + 유사도 임계값</td><td><span class="cy">✅</span></td><td>축5.5 Similarity</td></tr>
+        <tr><td>PE-AV 동영상+오디오 통합 벡터</td><td>Gemini Embedding 2 (동영상 직접 임베딩)</td><td><span class="cw">⚠️</span></td><td>근사 구현</td></tr>
+        <tr><td>GEM (수십억 유저 행동 학습)</td><td style="color:var(--text3)">Meta 독점 — 데이터 규모 불가</td><td><span class="cn">❌</span></td><td>—</td></tr>
+        <tr><td>InterFormer (교차 학습)</td><td style="color:var(--text3)">Meta 독점</td><td><span class="cn">❌</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════ TAB 2: VISUAL (축1) ══════ -->
+<section class="tab-content" id="tab-visual">
+  <div class="section-title">축 1: Visual (시각 요소)</div>
+  <div class="section-desc">눈에 보이는 모든 요소 — Gemini Vision 분석. IMAGE / VIDEO 공통 적용.</div>
+  <div class="info-box">📌 VIDEO의 경우 씬(scene)별로 분석하며, 색상은 대표 프레임 기준으로 집계합니다.</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:120px">요소</th><th>세부 항목</th><th style="width:90px;text-align:center">IMAGE</th><th style="width:120px;text-align:center">VIDEO</th></tr></thead>
+      <tbody>
+        <tr><td class="row-group" rowspan="3">제품 노출</td><td class="sub-item">위치 (center / side / background / none)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 각 씬별</td></tr>
+        <tr><td class="sub-item">화면 비율 (%)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 평균</td></tr>
+        <tr><td class="sub-item">클로즈업 여부</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="4">인물</td><td class="sub-item">얼굴 유무</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">신체 범위 (upper / full / none)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">표정 (smile / neutral / surprise)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 첫 등장</td></tr>
+        <tr><td class="sub-item">인물 수 (1 / 2 / 다수)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="4">색상</td><td class="sub-item">메인 색상 (hex)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 대표 프레임</td></tr>
+        <tr><td class="sub-item">팔레트 (3~5색)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">톤 (warm / cool / neutral)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">대비 (high / medium / low)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="3">레이아웃</td><td class="sub-item">텍스트 비율 (%)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 평균</td></tr>
+        <tr><td class="sub-item">여백 비율 (%)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">시각적 복잡도 (simple / moderate / complex)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group">스타일</td><td class="sub-item">ugc / professional / minimal / bold / lifestyle / before-after</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="2">브랜드</td><td class="sub-item">로고 위치</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">브랜드 색상 일관성</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════ TAB 3: TEXT (축2) ══════ -->
+<section class="tab-content" id="tab-text">
+  <div class="section-title">축 2: Text (텍스트/카피)</div>
+  <div class="section-desc">화면 위 텍스트 + 광고 카피(제목, 설명, 본문) — NLP + Gemini 분석.</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:130px">요소</th><th>세부 항목</th><th style="width:90px;text-align:center">IMAGE</th><th style="width:120px;text-align:center">VIDEO</th></tr></thead>
+      <tbody>
+        <tr><td class="row-group" rowspan="3">Hook 텍스트</td><td class="sub-item">유형 (question / shock / benefit / problem / curiosity / none)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ <span class="first3s">첫 3초</span></td></tr>
+        <tr><td class="sub-item">실제 문구</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">감정 톤 (긍정 / 부정 / 중립 / 긴급)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="4">CTA</td><td class="sub-item">유형 (button / text / overlay / none)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 마지막 씬</td></tr>
+        <tr><td class="sub-item">문구 ("지금 구매", "무료 체험" 등)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">위치 (bottom / center / end_frame)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">색상 (hex)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="3">오버레이 텍스트</td><td class="sub-item">메인 헤드라인</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 각 씬별</td></tr>
+        <tr><td class="sub-item">서브 카피</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">가격/할인 표시</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="3">광고 카피</td><td class="sub-item">제목 (headline)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">본문 (body)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">키워드 추출</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group" rowspan="4">Social Proof</td><td class="sub-item">리뷰/별점 노출</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">Before/After</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">후기/인증</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="sub-item">숫자 증거 ("98% 만족")</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════ TAB 4: AUDIO (축3) ══════ -->
+<section class="tab-content" id="tab-audio">
+  <div class="section-title">축 3: Audio (오디오) <span class="vid-tag">VIDEO 전용</span></div>
+  <div class="section-desc">동영상에서만 분석. 이미지는 해당 없음. — Gemini 2.5 Pro</div>
+  <div class="warn-box">🎬 VIDEO 전용 축입니다. IMAGE/CATALOG 소재에는 적용되지 않습니다.</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:160px">요소</th><th>세부 항목</th></tr></thead>
+      <tbody>
+        <tr><td class="row-group">나레이션</td><td>유무, 성별, 톤 (전문가 / 일상 / 열정), 속도 (fast / medium / slow)</td></tr>
+        <tr><td class="row-group">BGM</td><td>유무, 장르 (upbeat / calm / dramatic / trendy), 볼륨 레벨</td></tr>
+        <tr><td class="row-group">효과음</td><td>유무, 유형 (ding / whoosh / click / pop)</td></tr>
+        <tr><td class="row-group">자막</td><td>유무, 스타일 (auto-caption / 디자인 / hard-sub)</td></tr>
+        <tr><td class="row-group">음성 내용</td><td>핵심 대사 추출 (나레이션 STT)</td></tr>
+        <tr><td class="row-group">오디오-비주얼 싱크</td><td>음악 전환 ↔ 씬 전환 일치 여부 (PE-AV 기반 분석)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════ TAB 5: STRUCTURE (축4) ══════ -->
+<section class="tab-content" id="tab-structure">
+  <div class="section-title">축 4: Structure (영상 구조) <span class="vid-tag">VIDEO 전용</span></div>
+  <div class="section-desc">영상의 씬 구성, 페이싱, 전환 패턴 분석 — Gemini 2.5 Pro</div>
+  <div class="warn-box">🎬 VIDEO 전용 축입니다.</div>
+  <div class="quote-box">
+    <strong style="color:#fca5a5">⚠️ Meta 핵심 규칙:</strong> 첫 3초가 비슷하면 나머지가 달라도 <strong>같은 광고로 취급</strong>한다.<br>
+    → 첫 3초 분석이 이 축에서 가장 중요한 작업.
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:180px">요소</th><th>세부 항목</th><th style="width:200px">Meta 연관</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="row-group"><span class="first3s">첫 3초</span> ⭐</td>
+          <td>hook 유형 + 화면 구성 + 텍스트 + 오디오. <strong>별도 JSONB 저장 (video_first_3s)</strong></td>
+          <td style="color:#fca5a5;font-size:12px">Entity ID 결정 최중요</td>
+        </tr>
+        <tr><td class="row-group">씬 구성</td><td>각 씬별: 시작~끝 시간, 유형 (hook / problem / demo / result / cta / brand / testimonial)</td><td style="color:var(--text3);font-size:12px">Structural Similarity</td></tr>
+        <tr><td class="row-group">페이싱</td><td>전체 속도감 (fast / medium / slow), 평균 씬 길이</td><td style="color:var(--text3);font-size:12px">Motion Pattern</td></tr>
+        <tr><td class="row-group">총 길이</td><td>초 단위 전체 재생 시간</td><td>—</td></tr>
+        <tr><td class="row-group">컷 수</td><td>씬 전환 횟수</td><td style="color:var(--text3);font-size:12px">Motion Pattern</td></tr>
+        <tr><td class="row-group">전환 패턴</td><td>hook→demo→CTA / problem→solution→CTA 등 내러티브 구조</td><td style="color:var(--text3);font-size:12px">Structural Similarity</td></tr>
+        <tr><td class="row-group">마지막 3초</td><td>CTA 유형 + 브랜드 노출 여부. 별도 JSONB 저장 (video_last_3s)</td><td>—</td></tr>
+        <tr><td class="row-group">루프 구조</td><td>반복 재생 최적화 여부 (시작=끝 장면 일치)</td><td>—</td></tr>
+        <tr><td class="row-group">모션 패턴 <span class="nbadge">NEW</span></td><td>카메라 움직임 (고정 / 패닝 / 줌), 화면 내 동작 속도</td><td style="color:var(--text3);font-size:12px">Meta Motion Pattern 분석</td></tr>
+        <tr><td class="row-group">오디오-비주얼 싱크 <span class="nbadge">NEW</span></td><td>음악 전환 ↔ 씬 전환 일치도 (0~1 점수)</td><td style="color:var(--text3);font-size:12px">PE-AV Fusion</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════ TAB 6: ATTENTION (축5) ══════ -->
+<section class="tab-content" id="tab-attention">
+  <div class="section-title">축 5: Attention (시선/주목도)</div>
+  <div class="section-desc">사람이 이 소재를 봤을 때 어디를 보는지 — DeepGaze IIE + Gemini</div>
+  <div class="info-box">📌 DeepGaze IIE는 로컬 모델(무료). IMAGE는 원본 1장, VIDEO는 키프레임 3장(3초/중간/마지막)을 입력합니다.</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:150px">요소</th><th>세부 항목</th><th style="width:90px;text-align:center">IMAGE</th><th style="width:120px;text-align:center">VIDEO</th></tr></thead>
+      <tbody>
+        <tr><td class="row-group">히트맵</td><td>saliency map 이미지 URL</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 키프레임 3장</td></tr>
+        <tr><td class="row-group">Top Fixation</td><td>상위 5개 주목 좌표 + 주목도(%)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 씬별</td></tr>
+        <tr><td class="row-group">CTA 주목도</td><td>CTA 영역의 saliency 비율 (0~1)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 마지막 씬</td></tr>
+        <tr><td class="row-group">인지 부하</td><td>엔트로피 기반 (low / medium / high)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 씬별 평균</td></tr>
+        <tr><td class="row-group">시선 동선</td><td>주목 순서 (1→2→3→...)</td><td><span class="cy">✅</span></td><td style="text-align:center;font-size:12px;color:var(--text2)">✅ 씬별</td></tr>
+        <tr><td class="row-group">제품 주목도</td><td>제품 영역의 saliency 비율 (0~1)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+        <tr><td class="row-group">텍스트 주목도</td><td>텍스트 영역의 saliency 비율 (0~1)</td><td><span class="cy">✅</span></td><td><span class="cy">✅</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════ TAB 7: SIMILARITY (축5.5) ══════ -->
+<section class="tab-content" id="tab-similarity">
+  <div class="section-title">축 5.5: Similarity (유사도/중복 감지) <span class="nbadge">신규</span></div>
+  <div class="section-desc">Meta Andromeda 3계층 유사도를 우리 시스템에 적용. Entity ID 클러스터 관리.</div>
+  <div class="success-box">
+    💡 이 축은 <strong>Meta가 광고 소재를 어떻게 클러스터링하는지</strong>를 우리 시스템에서 시뮬레이션한다.<br>
+    3계층 유사도(Visual + Structural + Thematic)를 각각 측정하여 3단계 패널티 위험을 사전에 감지.
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:200px">요소</th><th>세부 항목</th><th>측정 방법</th></tr></thead>
+      <tbody>
+        <tr><td class="row-group">Visual Similarity</td><td>이미지/동영상 비주얼 유사도</td><td>embedding_3072 코사인 유사도</td></tr>
+        <tr><td class="row-group">Structural Similarity <span class="nbadge">NEW</span></td><td>레이아웃 구조 유사도 (텍스트 위치, CTA 위치, 제품 위치)</td><td>L1 태그 좌표 기반 비교</td></tr>
+        <tr><td class="row-group">Thematic Similarity <span class="nbadge">NEW</span></td><td>메시지 컨셉 유사도 (가치 제안, 감정 톤, 타겟 고충)</td><td>텍스트 임베딩 + L1 태그 비교</td></tr>
+        <tr><td class="row-group">피로도 경고</td><td>같은 클러스터에 소재 과다 → 경고 발령</td><td>클러스터 내 소재 수 임계값</td></tr>
+        <tr><td class="row-group">중복 감지</td><td>Entity ID 동일 판정 → "이 소재는 기존 X와 같은 취급됩니다"</td><td>3계층 종합 유사도 &gt; 0.85</td></tr>
+        <tr><td class="row-group">다양성 점수 <span class="nbadge">NEW</span></td><td>계정 내 소재 다양성 (Meta 권장: 8~20개 컨셉)</td><td>클러스터 수 / 총 소재 수</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3계층 패널티 시각화 -->
+  <div class="section-sub" style="font-size:16px;font-weight:700;color:var(--accent2);margin:24px 0 16px">3계층 유사도 임계값 가이드</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>유사도 범위</th><th>판정</th><th>권고 조치</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--green);font-weight:700">&lt; 0.60</td><td>✅ 독립 소재</td><td>문제 없음 — 다양한 컨셉 유지</td></tr>
+        <tr><td style="color:var(--amber);font-weight:700">0.60 ~ 0.75</td><td>⚠️ 유사 소재</td><td>1단계 패널티 위험 — 컨셉 차별화 권장</td></tr>
+        <tr><td style="color:#f97316;font-weight:700">0.75 ~ 0.85</td><td>🔴 높은 유사도</td><td>2단계 패널티 위험 — 즉시 수정 권장</td></tr>
+        <tr><td style="color:var(--red);font-weight:700">&gt; 0.85</td><td>🚫 동일 Entity ID</td><td>3단계 패널티 — 경매 차단 위험. 소재 교체 필요</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box">
+    📌 <strong>다양성 점수 목표:</strong> Meta 권장 기준은 계정당 8~20개의 독립 컨셉.<br>
+    클러스터 수 / 총 소재 수 비율로 계산. 비율이 낮을수록 소재 다양성 부족 경고.
+  </div>
+</section>
+
+<!-- ══════ TAB 8: PERFORMANCE (축6) ══════ -->
+<section class="tab-content" id="tab-performance">
+  <div class="section-title">축 6: Performance Context (성과 맥락)</div>
+  <div class="section-desc">분석이 아니라 DB에서 가져오는 성과 지표와의 연결 — daily_ad_insights 기반.</div>
+  <div class="info-box">📌 이 축은 AI가 직접 분석하는 것이 아니라, DB에 저장된 성과 데이터를 조회하여 연결하는 레이어입니다.</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:200px">성과 지표</th><th>소스 테이블/필드</th></tr></thead>
+      <tbody>
+        <tr><td class="row-group">ROAS</td><td>daily_ad_insights</td></tr>
+        <tr><td class="row-group">CTR</td><td>daily_ad_insights</td></tr>
+        <tr><td class="row-group">CPA</td><td>daily_ad_insights</td></tr>
+        <tr><td class="row-group">전환율</td><td>daily_ad_insights</td></tr>
+        <tr><td class="row-group">게재 기간 (일)</td><td>daily_ad_insights min/max date</td></tr>
+        <tr><td class="row-group">누적 광고비</td><td>daily_ad_insights SUM(spend)</td></tr>
+        <tr><td class="row-group">Meta 품질 랭킹</td><td>quality_ranking (ABOVE / AVERAGE / BELOW)</td></tr>
+        <tr><td class="row-group">Meta 참여 랭킹</td><td>engagement_ranking</td></tr>
+        <tr><td class="row-group">Meta 전환 랭킹</td><td>conversion_ranking</td></tr>
+        <tr><td class="row-group">벤치마크 대비</td><td>benchmarks 테이블 비교</td></tr>
+        <tr><td class="row-group">LP 일관성 점수</td><td>creative_lp_consistency</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════ TAB 9: 파이프라인 ══════ -->
+<section class="tab-content" id="tab-pipeline">
+  <div class="section-title">분석 파이프라인 흐름</div>
+  <div class="section-desc">수집 → L1 태깅 → L2 시선 → L3 임베딩 → L4 벤치마크 → L5 종합 코칭</div>
+
+  <div class="pl-label">수집 레이어</div>
+  <div class="pl-row">
+    <div class="pl-node comn">
+      <span class="pnb nb-c">CRON</span>
+      <div class="pntitle">collect-daily</div>
+      <div class="pnmodel">Meta Ads API</div>
+      <div class="pndetail">일별 성과 지표 수집</div>
+      <div class="pnout">→ <b>daily_ad_insights</b></div>
+    </div>
+    <div class="pl-node comn">
+      <span class="pnb nb-c">CRON</span>
+      <div class="pntitle">embed-creatives</div>
+      <div class="pnmodel">Meta Ads API</div>
+      <div class="pndetail">소재 메타데이터 + 이미지 URL 수집</div>
+      <div class="pnout">→ <b>ad_creative_embeddings</b></div>
+    </div>
+    <div class="pl-node vidn">
+      <span class="pnb nb-v">VIDEO</span>
+      <div class="pntitle">download-videos</div>
+      <div class="pnmodel">Meta Video API</div>
+      <div class="pndetail">동영상 원본 파일 다운로드</div>
+      <div class="pnout">→ <b>/data/videos/{ad_id}.mp4</b></div>
+    </div>
+  </div>
+
+  <div class="pl-arr"><div style="display:flex;flex-direction:column;align-items:center"><div class="pl-arr-line"></div><div class="pl-arr-head"></div></div></div>
+
+  <div class="pl-label">Layer 1 — 요소 태깅 (축1~4)</div>
+  <div class="pl-row">
+    <div class="pl-node imgn">
+      <span class="pnb nb-i">IMAGE</span>
+      <div class="pntitle">Gemini Vision 분석</div>
+      <div class="pnmodel">Gemini 2.5 Pro</div>
+      <div class="pndetail">축1(Visual) + 축2(Text) 태깅<br>입력: 이미지 1장</div>
+      <div class="pnout">→ <b>creative_element_analysis</b></div>
+    </div>
+    <div class="pl-node vidn">
+      <span class="pnb nb-v">VIDEO</span>
+      <div class="pntitle">Gemini 동영상 분석</div>
+      <div class="pnmodel">Gemini 2.5 Pro</div>
+      <div class="pndetail">축1~4 전부 (Visual + Text + Audio + Structure)<br>입력: 동영상 원본 파일<br><b>첫 3초 별도 추출</b></div>
+      <div class="pnout">→ <b>creative_element_analysis (확장 스키마)</b></div>
+    </div>
+  </div>
+
+  <div class="pl-arr"><div style="display:flex;flex-direction:column;align-items:center"><div class="pl-arr-line"></div><div class="pl-arr-head"></div></div></div>
+
+  <div class="pl-label">Layer 2 — 시선 예측 (축5)</div>
+  <div class="pl-row">
+    <div class="pl-node imgn">
+      <span class="pnb nb-i">IMAGE</span>
+      <div class="pntitle">DeepGaze IIE 히트맵</div>
+      <div class="pnmodel">DeepGaze IIE (로컬, 무료)</div>
+      <div class="pndetail">입력: 이미지 1장<br>saliency map + fixation 좌표</div>
+      <div class="pnout">→ <b>creative_saliency</b></div>
+    </div>
+    <div class="pl-node vidn">
+      <span class="pnb nb-v">VIDEO</span>
+      <div class="pntitle">키프레임 3장 히트맵</div>
+      <div class="pnmodel">DeepGaze IIE × 3 (로컬, 무료)</div>
+      <div class="pndetail">입력: 3초 / 중간 / 마지막 프레임 추출<br>각 프레임별 saliency map</div>
+      <div class="pnout">→ <b>creative_saliency (video_frames 배열)</b></div>
+    </div>
+  </div>
+
+  <div class="pl-arr"><div style="display:flex;flex-direction:column;align-items:center"><div class="pl-arr-line"></div><div class="pl-arr-head"></div></div></div>
+
+  <div class="pl-label">Layer 3 — 임베딩 (Entity ID 근사)</div>
+  <div class="pl-row">
+    <div class="pl-node imgn">
+      <span class="pnb nb-i">IMAGE</span>
+      <div class="pntitle">이미지 임베딩</div>
+      <div class="pnmodel">Gemini Embedding 2 (무료)</div>
+      <div class="pndetail">이미지 임베딩 3072<br>텍스트 임베딩 3072</div>
+      <div class="pnout">→ <b>embedding_3072, text_embedding_3072</b></div>
+    </div>
+    <div class="pl-node vidn">
+      <span class="pnb nb-v">VIDEO</span>
+      <div class="pntitle">동영상 직접 임베딩</div>
+      <div class="pnmodel">Gemini Embedding 2 (무료)</div>
+      <div class="pndetail">동영상 원본 파일 → API 직접 입력<br>video_embedding_3072<br>텍스트 임베딩 3072</div>
+      <div class="pnout">→ <b>video_embedding_3072, text_embedding_3072</b></div>
+    </div>
+  </div>
+
+  <div class="pl-arr"><div style="display:flex;flex-direction:column;align-items:center"><div class="pl-arr-line"></div><div class="pl-arr-head"></div></div></div>
+
+  <div class="pl-label">Layer 4 — 벤치마크 비교 (축6)</div>
+  <div class="pl-row">
+    <div class="pl-node lyrn">
+      <span class="pnb nb-l">LAYER 4</span>
+      <div class="pntitle">벤치마크 상위 소재 비교</div>
+      <div class="pndetail">축6(Performance) + 축1~5 결과<br>→ 벤치마크 상위 소재와 비교<br>→ 3부문 점수 (기반 / 참여 / 전환)</div>
+      <div class="pnout">→ <b>creative_benchmark_scores</b></div>
+    </div>
+  </div>
+
+  <div class="pl-arr"><div style="display:flex;flex-direction:column;align-items:center"><div class="pl-arr-line"></div><div class="pl-arr-head"></div></div></div>
+
+  <div class="pl-label">Layer 5 — 종합 점수 + AI 코칭</div>
+  <div class="pl-row">
+    <div class="pl-node finn">
+      <span class="pnb nb-f">FINAL</span>
+      <div class="pntitle">creative_intelligence</div>
+      <div class="pndetail">L1~L4 전부 종합<br>→ 총가치 점수 (0~100)<br>→ AI 개선 제안 (구체적 액션 아이템)<br>예: "벤치마크 상위 소재는 질문형 hook + CTA 하단 고정인데, 당신 소재는 hook 없음 + CTA 안 보임"</div>
+      <div class="pnout">→ <b>creative_intelligence</b> (점수 + 코칭 메시지)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ TAB 10: DB 스키마 ══════ -->
+<section class="tab-content" id="tab-schema">
+  <div class="section-title">DB 스키마 변경</div>
+  <div class="section-desc">v2에서 추가되는 VIDEO 전용 필드 및 임베딩 확장</div>
+
+  <div class="code-wrap">
+    <div class="code-hdr"><span class="code-hdr-title">creative_element_analysis — VIDEO 전용 필드 추가</span><span class="code-lang">SQL</span></div>
+    <div class="code-body"><pre><span class="cm">-- 기존 필드 유지 + 아래 추가</span>
+<span class="kw">ALTER TABLE</span> <span class="cl">creative_element_analysis</span> <span class="kw">ADD COLUMN IF NOT EXISTS</span>
+  <span class="cl">audio_narration</span>        <span class="tp">BOOLEAN</span>,
+  <span class="cl">audio_narration_gender</span> <span class="tp">TEXT</span>,
+  <span class="cl">audio_narration_tone</span>   <span class="tp">TEXT</span>,
+  <span class="cl">audio_narration_speed</span>  <span class="tp">TEXT</span>,
+  <span class="cl">audio_bgm</span>              <span class="tp">BOOLEAN</span>,
+  <span class="cl">audio_bgm_genre</span>        <span class="tp">TEXT</span>,
+  <span class="cl">audio_effects</span>          <span class="tp">BOOLEAN</span>,
+  <span class="cl">audio_subtitle</span>         <span class="tp">BOOLEAN</span>,
+  <span class="cl">audio_subtitle_style</span>   <span class="tp">TEXT</span>,
+  <span class="cl">audio_key_dialogue</span>     <span class="tp">TEXT</span>,
+  <span class="cl">video_scenes</span>           <span class="tp">JSONB</span>,   <span class="cm">-- [{sec: "0-3", type: "hook", desc: "..."}, ...]</span>
+  <span class="cl">video_pacing</span>           <span class="tp">TEXT</span>,    <span class="cm">-- fast/medium/slow</span>
+  <span class="cl">video_duration_sec</span>     <span class="tp">NUMERIC</span>,
+  <span class="cl">video_cut_count</span>        <span class="tp">INTEGER</span>,
+  <span class="cl">video_transition_pattern</span> <span class="tp">TEXT</span>, <span class="cm">-- hook→demo→CTA 등</span>
+  <span class="cl">video_first_3s</span>         <span class="tp">JSONB</span>,  <span class="cm">-- {hook_type, visual_desc, text, audio}</span>
+  <span class="cl">video_last_3s</span>          <span class="tp">JSONB</span>,  <span class="cm">-- {cta_type, brand_shown, text}</span>
+  <span class="cl">video_loop_friendly</span>    <span class="tp">BOOLEAN</span>,
+  <span class="cl">video_motion_pattern</span>   <span class="tp">TEXT</span>,   <span class="cm">-- 카메라 움직임 패턴</span>
+  <span class="cl">video_av_sync_score</span>    <span class="tp">NUMERIC</span>; <span class="cm">-- 오디오-비주얼 싱크 점수 (0~1)</span></pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-hdr"><span class="code-hdr-title">creative_saliency — VIDEO 키프레임 확장</span><span class="code-lang">SQL</span></div>
+    <div class="code-body"><pre><span class="kw">ALTER TABLE</span> <span class="cl">creative_saliency</span> <span class="kw">ADD COLUMN IF NOT EXISTS</span>
+  <span class="cl">video_frames</span> <span class="tp">JSONB</span>;
+  <span class="cm">-- [{frame_sec: 3, heatmap_url: "...", fixations: [...], cta_score: 0.72}, ...]</span></pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-hdr"><span class="code-hdr-title">ad_creative_embeddings — 동영상 임베딩 확장</span><span class="code-lang">SQL</span></div>
+    <div class="code-body"><pre><span class="kw">ALTER TABLE</span> <span class="cl">ad_creative_embeddings</span> <span class="kw">ADD COLUMN IF NOT EXISTS</span>
+  <span class="cl">video_url</span>             <span class="tp">TEXT</span>,              <span class="cm">-- 동영상 원본 URL (Meta source)</span>
+  <span class="cl">video_local_path</span>      <span class="tp">TEXT</span>,              <span class="cm">-- 로컬 저장 경로</span>
+  <span class="cl">video_embedding_3072</span>  <span class="tp">vector(3072)</span>;      <span class="cm">-- 동영상 직접 임베딩</span></pre></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-hdr"><span class="code-hdr-title">creative_similarity — 3계층 유사도 테이블 (신규)</span><span class="code-lang">SQL</span></div>
+    <div class="code-body"><pre><span class="kw">CREATE TABLE IF NOT EXISTS</span> <span class="cl">creative_similarity</span> (
+  <span class="cl">id</span>                    <span class="tp">SERIAL PRIMARY KEY</span>,
+  <span class="cl">ad_id_a</span>               <span class="tp">TEXT NOT NULL</span>,
+  <span class="cl">ad_id_b</span>               <span class="tp">TEXT NOT NULL</span>,
+  <span class="cl">visual_similarity</span>     <span class="tp">NUMERIC</span>,  <span class="cm">-- 임베딩 코사인 유사도</span>
+  <span class="cl">structural_similarity</span> <span class="tp">NUMERIC</span>,  <span class="cm">-- L1 태그 좌표 기반</span>
+  <span class="cl">thematic_similarity</span>   <span class="tp">NUMERIC</span>,  <span class="cm">-- 텍스트 임베딩 기반</span>
+  <span class="cl">combined_score</span>        <span class="tp">NUMERIC</span>,  <span class="cm">-- 종합 유사도 (가중 평균)</span>
+  <span class="cl">penalty_level</span>         <span class="tp">INTEGER</span>, <span class="cm">-- 0/1/2/3 (패널티 단계)</span>
+  <span class="cl">created_at</span>            <span class="tp">TIMESTAMPTZ DEFAULT now()</span>
+);</pre></div>
+  </div>
+</section>
+
+<!-- ══════ TAB 11: 비용/우선순위 ══════ -->
+<section class="tab-content" id="tab-cost">
+  <div class="section-title">비용 추정 &amp; 구현 우선순위</div>
+  <div class="section-desc">일회성 비용. 이후 신규 소재는 크론에서 자동 처리.</div>
+
+  <div class="cost-grid">
+    <div class="ccard">
+      <div class="clabel">IMAGE L1 태깅</div>
+      <div class="camt">~$27</div>
+      <div class="cnote">2,738건 미완 × Gemini 2.5 Pro $0.01/건</div>
+    </div>
+    <div class="ccard">
+      <div class="clabel">VIDEO L1+Audio+Structure</div>
+      <div class="camt">~$8</div>
+      <div class="cnote">261건 × Gemini 2.5 Pro $0.03/건 (30초 기준)</div>
+    </div>
+    <div class="ccard free">
+      <div class="clabel">IMAGE/VIDEO 임베딩</div>
+      <div class="camt">$0</div>
+      <div class="cnote">Gemini Embedding 2 무료</div>
+    </div>
+    <div class="ccard free">
+      <div class="clabel">VIDEO 키프레임 히트맵</div>
+      <div class="camt">$0</div>
+      <div class="cnote">261건 × 3장 = 783장 · DeepGaze 로컬 무료</div>
+    </div>
+    <div class="ccard total">
+      <div class="clabel">총 예상 비용</div>
+      <div class="camt">~$35</div>
+      <div class="cnote">약 4.5만원 · 일회성 일괄 처리</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:70px">우선순위</th><th>작업</th><th>의존성</th><th style="width:100px">비용</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="p0">P0</span></td>
+          <td>동영상 원본 다운로드 (261건)</td>
+          <td>Meta API 접근</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p0">P0</span></td>
+          <td>임베딩 크론 강화 (limit 200, 2시간마다)</td>
+          <td>코드 수정</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p0">P0</span></td>
+          <td>LP 크롤러 복구 + 스크린샷 100%</td>
+          <td>Railway 재배포</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p1">P1</span></td>
+          <td>DB 스키마 확장 (VIDEO 필드 + creative_similarity)</td>
+          <td>없음</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p1">P1</span></td>
+          <td>IMAGE L1 전량 (2,738건)</td>
+          <td>크론 or 배치</td>
+          <td style="color:var(--amber);font-weight:700">~$27</td>
+        </tr>
+        <tr>
+          <td><span class="p1">P1</span></td>
+          <td>VIDEO L1+Audio+Structure (261건)</td>
+          <td>동영상 다운로드 완료</td>
+          <td style="color:var(--amber);font-weight:700">~$8</td>
+        </tr>
+        <tr>
+          <td><span class="p2">P2</span></td>
+          <td>VIDEO 키프레임 히트맵</td>
+          <td>동영상 다운로드 완료</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p2">P2</span></td>
+          <td>VIDEO 동영상 직접 임베딩</td>
+          <td>동영상 다운로드 완료</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p2">P2</span></td>
+          <td>3계층 유사도 클러스터링 (creative_similarity)</td>
+          <td>임베딩 완료</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p3">P3</span></td>
+          <td>L4 종합 점수 전량 재계산</td>
+          <td>L1 전량 완료</td>
+          <td style="color:var(--emerald);font-weight:700">0원</td>
+        </tr>
+        <tr>
+          <td><span class="p3">P3</span></td>
+          <td>AI 코칭 메시지 생성</td>
+          <td>L1~L4 전량 완료</td>
+          <td style="color:var(--text3)">소량</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box">
+    💡 <strong>핵심 인사이트:</strong> 총비용 ~$35(약 4.5만원)로 전체 광고 소재 3,096건의 6축 분석이 가능하다.<br>
+    이후 신규 소재는 크론 자동 처리로 추가 비용 거의 없음. Gemini Embedding 2는 무료.
+  </div>
+</section>
+
+<script>
+  (function () {
+    const nav = document.getElementById('tabNav');
+    const tabs = document.querySelectorAll('.tab-content');
+
+    function activate(id) {
+      tabs.forEach(t => t.classList.remove('active'));
+      nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const target = document.getElementById('tab-' + id);
+      if (target) target.classList.add('active');
+      const btn = nav.querySelector('[data-tab="' + id + '"]');
+      if (btn) {
+        btn.classList.add('active');
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    nav.addEventListener('click', function (e) {
+      const btn = e.target.closest('.tab-btn');
+      if (btn) activate(btn.dataset.tab);
+    });
+
+    // URL hash 지원
+    const hash = location.hash.replace('#', '');
+    if (hash) activate(hash);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="date" content="2026-03-19"/>
+    <meta name="project" content="Data Collection Architecture"/>
+    <meta name="status" content="active"/>
+    <title>데이터 수집/분석 전체 구조 설계 — BS CAMP</title>
+    <style>
+        :root {
+            --red: #F75D5D;
+            --dark: #1a1a2e;
+            --gray: #f8f9fa;
+            --green: #27ae60;
+            --orange: #e67e22;
+            --blue: #3498db;
+            --purple: #9b59b6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #333; background: #fff; }
+        .container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+        /* Hero */
+        .hero { background: var(--dark); color: white; padding: 48px 0 28px; text-align: center; }
+        .hero h1 { font-size: 1.9em; margin-bottom: 8px; }
+        .hero .subtitle { color: #aaa; font-size: 0.95em; }
+        .badge { background: var(--red); color: white; display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.75em; font-weight: 600; margin-bottom: 14px; letter-spacing: 0.5px; }
+
+        /* Tabs */
+        .tab-bar { background: var(--dark); position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--red); }
+        .tab-bar .inner { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 980px; margin: 0 auto; padding: 0 20px; }
+        .tab-bar .inner::-webkit-scrollbar { display: none; }
+        .tab-btn { background: none; border: none; color: #888; padding: 14px 18px; font-size: 0.88em; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; font-family: inherit; }
+        .tab-btn:hover { color: #ccc; }
+        .tab-btn.active { color: white; border-bottom-color: var(--red); font-weight: 600; }
+        .tab-pane { display: none; padding: 30px 0 80px; }
+        .tab-pane.active { display: block; }
+
+        /* Typography */
+        h2 { font-size: 1.45em; color: var(--dark); margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--red); }
+        h3 { font-size: 1.15em; color: var(--dark); margin: 26px 0 10px; }
+        h4 { font-size: 0.98em; color: #444; margin: 18px 0 7px; font-weight: 600; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin: 0 0 12px 22px; }
+        li { margin-bottom: 4px; }
+        strong { color: var(--dark); }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.87em; font-family: 'SF Mono', Menlo, monospace; }
+
+        /* Callouts */
+        .callout { background: var(--gray); border-left: 4px solid var(--red); padding: 13px 17px; margin: 14px 0; border-radius: 0 8px 8px 0; }
+        .callout.blue { border-left-color: var(--blue); }
+        .callout.green { border-left-color: var(--green); }
+        .callout.orange { border-left-color: var(--orange); }
+        .callout.purple { border-left-color: var(--purple); }
+        .analogy { background: #fffde7; border-left: 4px solid #f9a825; padding: 13px 17px; margin: 14px 0; border-radius: 0 8px 8px 0; }
+        .analogy strong { color: #e65100; }
+
+        /* Flow */
+        .flow-row { display: flex; align-items: stretch; flex-wrap: wrap; gap: 6px; margin: 18px 0; }
+        .flow-box { flex: 1; min-width: 110px; background: var(--gray); border: 2px solid #ddd; border-radius: 10px; padding: 13px 10px; text-align: center; font-size: 0.85em; font-weight: 600; }
+        .flow-box small { display: block; font-weight: 400; color: #888; font-size: 0.82em; margin-top: 3px; }
+        .flow-box.highlight { border-color: var(--red); background: #fff5f5; }
+        .flow-box.db { border-color: var(--blue); background: #eff6ff; }
+        .flow-box.ai { border-color: var(--purple); background: #f5f0ff; }
+        .flow-arrow { display: flex; align-items: center; color: var(--red); font-size: 1.3em; flex-shrink: 0; padding: 0 2px; }
+
+        /* 3-axis grid */
+        .axis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; margin: 18px 0; }
+        .axis-card { border-radius: 12px; padding: 20px; border: 2px solid; }
+        .axis-card.red { border-color: var(--red); background: #fff5f5; }
+        .axis-card.blue { border-color: var(--blue); background: #eff6ff; }
+        .axis-card.green { border-color: var(--green); background: #f0fdf4; }
+        .axis-card h3 { margin-top: 0; font-size: 1.05em; }
+        .axis-steps { list-style: none; margin: 10px 0 0 0; padding: 0; }
+        .axis-steps li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.87em; padding: 4px 0; border-top: 1px solid rgba(0,0,0,0.06); }
+        .axis-steps li:first-child { border-top: none; }
+        .snum { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7em; font-weight: 700; color: white; margin-top: 2px; }
+        .snum.r { background: var(--red); }
+        .snum.b { background: var(--blue); }
+        .snum.g { background: var(--green); }
+
+        /* Stats row */
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 16px 0; }
+        .stat-box { background: var(--gray); border-radius: 10px; padding: 16px; text-align: center; }
+        .stat-box .num { font-size: 1.6em; font-weight: 800; color: var(--dark); line-height: 1.1; }
+        .stat-box .lbl { font-size: 0.77em; color: #888; margin-top: 5px; }
+
+        /* Cron table */
+        .cron-wrap { overflow-x: auto; margin: 14px 0; }
+        .cron-table { width: 100%; border-collapse: collapse; font-size: 0.84em; min-width: 600px; }
+        .cron-table th { background: var(--dark); color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+        .cron-table td { padding: 9px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .cron-table tr:hover td { background: #fafafa; }
+        .cron-name { font-family: 'SF Mono', Menlo, monospace; font-size: 0.88em; color: var(--dark); font-weight: 600; white-space: nowrap; }
+        .kst { color: var(--blue); font-weight: 600; }
+        .freq { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.72em; font-weight: 700; }
+        .f-daily { background: #e8f5e9; color: #2e7d32; }
+        .f-hourly { background: #e3f2fd; color: #1565c0; }
+        .f-weekly { background: #fff3e0; color: #e65100; }
+
+        /* Pipeline stages */
+        .stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 20px 0; }
+        .stage { border-radius: 10px; border: 2px solid #eee; padding: 18px; position: relative; }
+        .stage .stag { position: absolute; top: -1px; left: 14px; color: white; padding: 2px 10px; border-radius: 0 0 8px 8px; font-size: 0.72em; font-weight: 700; letter-spacing: 0.5px; }
+        .stage h4 { margin-top: 14px; font-size: 1em; color: var(--dark); }
+        .stage.l1 { border-color: #81c784; } .stage.l1 .stag { background: #2e7d32; }
+        .stage.l2 { border-color: #64b5f6; } .stage.l2 .stag { background: #1565c0; }
+        .stage.l3 { border-color: #ffb74d; } .stage.l3 .stag { background: #e65100; }
+        .stage.l4 { border-color: #f48fb1; } .stage.l4 .stag { background: #c62828; }
+        .stage ul { margin: 8px 0 0 16px; font-size: 0.84em; }
+        .stage .out { margin-top: 10px; font-size: 0.8em; color: #777; }
+        .warn { display: inline-block; background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; padding: 1px 7px; border-radius: 6px; font-size: 0.75em; margin: 2px 0; }
+
+        /* DB schema */
+        .schema-section { margin: 26px 0; }
+        .schema-label { font-size: 0.78em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 12px; }
+        .table-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+        .tcard { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+        .tcard-head { padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+        .tcard-head .tname { font-family: 'SF Mono', Menlo, monospace; font-size: 0.83em; font-weight: 700; color: var(--dark); }
+        .tcard-head .tcnt { margin-left: auto; font-size: 0.75em; color: #888; white-space: nowrap; }
+        .tcard-body { padding: 10px 14px; font-size: 0.82em; color: #555; border-top: 1px solid #f0f0f0; }
+        .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+        .chip { background: #f0f0f0; border-radius: 6px; padding: 1px 7px; font-size: 0.82em; font-family: 'SF Mono', Menlo, monospace; color: #444; }
+        .chip.pk { background: #ffe0e0; color: #c62828; }
+        .tcard.ad .tcard-head { background: #fff5f5; }
+        .tcard.creative .tcard-head { background: #f5f0ff; }
+        .tcard.lp .tcard-head { background: #eff6ff; }
+        .tcard.comp .tcard-head { background: #fff8e1; }
+        .tcard.cont .tcard-head { background: #f0fdf4; }
+
+        /* Improvements */
+        .improve-list { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+        .icard { border-radius: 10px; border: 1px solid #e0e0e0; overflow: hidden; }
+        .icard-head { display: flex; align-items: center; gap: 12px; padding: 11px 16px; cursor: pointer; }
+        .pbadge { flex-shrink: 0; font-size: 0.72em; font-weight: 700; padding: 3px 9px; border-radius: 10px; }
+        .p0 { background: #ffebee; color: #c62828; }
+        .p1 { background: #fff3e0; color: #e65100; }
+        .p2 { background: #e8f5e9; color: #2e7d32; }
+        .p3 { background: #f3e5f5; color: #6a1b9a; }
+        .icard-head h4 { margin: 0; font-size: 0.95em; color: var(--dark); flex: 1; }
+        .icard-body { padding: 10px 16px 14px; font-size: 0.87em; color: #555; border-top: 1px solid #f0f0f0; }
+        .from-to { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+        .fbox { flex: 1; min-width: 160px; background: #ffebee; border-radius: 8px; padding: 9px 12px; font-size: 0.88em; }
+        .tbox { flex: 1; min-width: 160px; background: #e8f5e9; border-radius: 8px; padding: 9px 12px; font-size: 0.88em; }
+        .fbox strong { color: #c62828; }
+        .tbox strong { color: #2e7d32; }
+        .arrow-mid { color: #bbb; font-size: 1.3em; flex-shrink: 0; }
+
+        /* Priority summary */
+        .pri-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 16px 0 28px; }
+        .pri-box { border-radius: 10px; padding: 16px; text-align: center; border: 2px solid; }
+        .pri-box .pnum { font-size: 2em; font-weight: 800; line-height: 1; }
+        .pri-box .plbl { font-size: 0.78em; margin-top: 5px; }
+        .pri-box.pp0 { border-color: #f44336; background: #ffebee; }
+        .pri-box.pp0 .pnum { color: #c62828; }
+        .pri-box.pp1 { border-color: #ff9800; background: #fff3e0; }
+        .pri-box.pp1 .pnum { color: #e65100; }
+        .pri-box.pp2 { border-color: #4caf50; background: #e8f5e9; }
+        .pri-box.pp2 .pnum { color: #2e7d32; }
+        .pri-box.pp3 { border-color: #9c27b0; background: #f3e5f5; }
+        .pri-box.pp3 .pnum { color: #6a1b9a; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.4em; }
+            .flow-row { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); align-self: center; margin: -2px 0; }
+            .stages { grid-template-columns: 1fr; }
+            h2 { font-size: 1.25em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="container">
+        <div class="badge">Architecture Report</div>
+        <h1>🏭 데이터 수집/분석 전체 구조 설계</h1>
+        <p class="subtitle">BS CAMP &nbsp;·&nbsp; 2026-03-19 &nbsp;·&nbsp; Vercel + Railway + Supabase</p>
+    </div>
+</div>
+
+<nav class="tab-bar">
+    <div class="inner">
+        <button class="tab-btn active" onclick="show('overview')">① 전체 구조도</button>
+        <button class="tab-btn" onclick="show('cron')">② 크론 수집</button>
+        <button class="tab-btn" onclick="show('ad-analysis')">③ 광고 분석</button>
+        <button class="tab-btn" onclick="show('lp-analysis')">④ LP 분석</button>
+        <button class="tab-btn" onclick="show('pipeline')">⑤ 파이프라인</button>
+        <button class="tab-btn" onclick="show('schema')">⑥ DB 스키마</button>
+        <button class="tab-btn" onclick="show('improve')">⑦ 개선 필요</button>
+    </div>
+</nav>
+
+<!-- ① 전체 구조도 -->
+<div id="tab-overview" class="tab-pane active">
+<div class="container">
+
+    <h2>🏭 공장 라인으로 이해하기</h2>
+
+    <div class="analogy">
+        <strong>비유:</strong> bscamp 데이터 시스템은 하나의 <strong>자동화 공장</strong>입니다.<br>
+        <strong>원료 수집</strong>(크론이 API에서 데이터를 가져옴) →
+        <strong>가공</strong>(Railway AI가 소재를 분석) →
+        <strong>포장</strong>(Supabase DB에 결과 저장) →
+        <strong>진열</strong>(프론트 대시보드에 인사이트 표시)<br><br>
+        원료가 좋아야 제품이 좋고, 공정이 정밀해야 품질이 올라갑니다.
+    </div>
+
+    <h2>전체 데이터 흐름</h2>
+
+    <div class="flow-row">
+        <div class="flow-box highlight">
+            🌐 외부 API
+            <small>Meta / YouTube / RSS<br>Mixpanel / Notion</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box highlight">
+            ⏰ Vercel 크론
+            <small>12개 수집 잡</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box db">
+            🗄️ Supabase DB
+            <small>원본 저장</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box ai">
+            🤖 Railway 분석
+            <small>L1→L2→L3→L4</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box db">
+            🗄️ DB 결과 저장
+            <small>분석 테이블</small>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">
+            📊 프론트 UI
+            <small>대시보드 / 탭</small>
+        </div>
+    </div>
+
+    <h2>3개의 데이터 축</h2>
+
+    <div class="axis-grid">
+        <div class="axis-card red">
+            <h3>📣 광고 데이터 축</h3>
+            <p style="font-size:0.85em;color:#666;margin-bottom:8px;">핵심 축. 소재 성과를 분석해 다음 소재를 더 잘 만든다.</p>
+            <ul class="axis-steps">
+                <li><span class="snum r">1</span> Meta Marketing API에서 광고 성과 수집</li>
+                <li><span class="snum r">2</span> <code>daily_ad_insights</code> 저장 (60+ 지표)</li>
+                <li><span class="snum r">3</span> Railway: L1 태깅 → L2 시선 → L3 벤치마크 → L4 점수</li>
+                <li><span class="snum r">4</span> 소재 분석 탭 → 수강생 인사이트 제공</li>
+            </ul>
+        </div>
+        <div class="axis-card blue">
+            <h3>🖥️ LP 데이터 축</h3>
+            <p style="font-size:0.85em;color:#666;margin-bottom:8px;">광고가 좋아도 LP가 별로면 구매 안 됨. 소재↔LP 일관성 측정.</p>
+            <ul class="axis-steps">
+                <li><span class="snum b">1</span> LP URL 추출 (광고 데이터에서)</li>
+                <li><span class="snum b">2</span> Puppeteer 크롤링 + 스크린샷 캡처</li>
+                <li><span class="snum b">3</span> Gemini Vision으로 구조 분석</li>
+                <li><span class="snum b">4</span> 소재↔LP 코사인 유사도 → 일관성 점수</li>
+            </ul>
+        </div>
+        <div class="axis-card green">
+            <h3>📰 콘텐츠 데이터 축</h3>
+            <p style="font-size:0.85em;color:#666;margin-bottom:8px;">마케팅 트렌드 자동 수집. 수강생에게 큐레이션 탭으로 제공.</p>
+            <ul class="axis-steps">
+                <li><span class="snum g">1</span> RSS 3개 + YouTube 6개 자동 수집</li>
+                <li><span class="snum g">2</span> <code>contents</code> 테이블 저장 (314건)</li>
+                <li><span class="snum g">3</span> AI 요약 + importance_score + 임베딩</li>
+                <li><span class="snum g">4</span> 큐레이션 탭 → 중요도 순 추천</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>인프라 구성</h2>
+
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="num">Vercel</div>
+            <div class="lbl">크론 스케줄러<br>12개 잡 운영</div>
+        </div>
+        <div class="stat-box">
+            <div class="num">Railway</div>
+            <div class="lbl">AI 분석 서버<br>creative-pipeline</div>
+        </div>
+        <div class="stat-box">
+            <div class="num">Supabase</div>
+            <div class="lbl">PostgreSQL DB<br>+ Storage</div>
+        </div>
+        <div class="stat-box">
+            <div class="num">Gemini</div>
+            <div class="lbl">2.5 Pro Vision<br>임베딩 3072차원</div>
+        </div>
+        <div class="stat-box">
+            <div class="num">DeepGaze</div>
+            <div class="lbl">시선 예측 모델<br>PyTorch CPU</div>
+        </div>
+    </div>
+
+    <div class="callout blue">
+        <strong>💡 핵심 연결 고리</strong><br>
+        <code>collect-daily</code> 크론이 매일 새벽 3시에 Meta API 수집 후 Railway <code>/pipeline</code>을 자동 호출합니다.
+        수집-분석이 하나의 흐름으로 연결되어 있어, 매일 새벽에 전날 광고 데이터가 분석까지 완료됩니다.
+    </div>
+
+</div>
+</div>
+
+<!-- ② 크론 수집 -->
+<div id="tab-cron" class="tab-pane">
+<div class="container">
+
+    <h2>⏰ 12개 크론 잡 전체 목록</h2>
+
+    <div class="analogy">
+        <strong>비유:</strong> 크론은 공장의 <strong>배송 트럭 시간표</strong>입니다. 몇 시에 어디서 원료를 가져올지 정해져 있어요.
+        UTC 기준이지만 KST 새벽에 몰려 있어 서비스 영향을 최소화합니다.
+    </div>
+
+    <div class="cron-wrap">
+    <table class="cron-table">
+        <thead>
+            <tr>
+                <th>크론명</th>
+                <th>KST</th>
+                <th>주기</th>
+                <th>역할 요약</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="cron-name">collect-daily</span></td>
+                <td><span class="kst">새벽 03:00</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>Meta API → 전 계정 광고 성과 수집 (15개 지표) → Railway /pipeline 호출 (L1→L4)</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">collect-mixpanel</span></td>
+                <td><span class="kst">새벽 03:30</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>Mixpanel API → 유저 행동 데이터 수집</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">sync-notion</span></td>
+                <td><span class="kst">새벽 04:00</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>Notion API → 콘텐츠/커리큘럼 동기화</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">cleanup-deleted</span></td>
+                <td><span class="kst">새벽 04:00</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>삭제된 레코드 정리</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">precompute</span></td>
+                <td><span class="kst">새벽 04:30</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>대시보드 사전 계산 → 로딩 속도 최적화</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">collect-content</span></td>
+                <td><span class="kst">새벽 05:00</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>RSS 3개(Neil Patel, Jon Loomer, 모비인사이드) + YouTube 6개 → contents. AI 요약+임베딩</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">collect-youtube</span></td>
+                <td><span class="kst">새벽 06:00</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>YouTube 전용 수집 (별도 처리)</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">embed-creatives</span></td>
+                <td><span class="kst">새벽 07:00</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>소재 이미지/텍스트 → Gemini 임베딩 3072차원 → ad_creative_embeddings</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">analyze-competitors</span></td>
+                <td><span class="kst">밤 23:00</span></td>
+                <td><span class="freq f-daily">매일</span></td>
+                <td>모니터링 브랜드 경쟁사 광고 수집 → competitor_ad_cache</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">crawl-lps</span></td>
+                <td><span class="kst">매시간</span></td>
+                <td><span class="freq f-hourly">매시간</span></td>
+                <td>LP 크롤링 큐 → Railway Puppeteer → 스크린샷+CTA 캡처 → Supabase Storage (20건/회)</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">collect-benchmarks</span></td>
+                <td><span class="kst">화 02:00</span></td>
+                <td><span class="freq f-weekly">주 1회</span></td>
+                <td>전 계정 재수집 → 13지표 × 랭킹 × 카테고리별 Trimmed Weighted Mean 벤치마크 117개</td>
+            </tr>
+            <tr>
+                <td><span class="cron-name">organic-benchmark</span></td>
+                <td><span class="kst">화 03:00</span></td>
+                <td><span class="freq f-weekly">주 1회</span></td>
+                <td>오가닉 벤치마크 수집</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h2>🔍 collect-daily 상세 플로우</h2>
+
+    <div class="callout">
+        <strong>왜 중요한가?</strong> 하루의 모든 것이 여기서 시작됩니다. 이 크론이 실패하면 그날의 광고 분석이 없어요.
+        수집 → 저장 → 분석 파이프라인 호출까지 한 번에 처리합니다.
+    </div>
+
+    <ol style="margin-left:22px;line-height:2.1;">
+        <li><code>ad_accounts</code> 테이블에서 <strong>활성 계정</strong> 목록 조회</li>
+        <li>계정별 Meta Marketing API 호출 — ad 기본정보 + insight <strong>15개 지표</strong> 한 번에 수집</li>
+        <li><code>daily_ad_insights</code>에 UPSERT (날짜+광고ID 기준, 중복 없이 갱신)</li>
+        <li>creative 정보 → <code>ad_creative_embeddings</code>에 UPSERT (media_url, ad_copy, lp_url 등)</li>
+        <li>Railway <code>/pipeline</code> POST → L1(태깅) → L2(시선) → L3(벤치마크) → L4(점수) 순차 실행</li>
+        <li>media_url 3단계 fallback: <code>image_url</code> → <code>video_id</code> 썸네일 → <code>image_hash</code> → null</li>
+    </ol>
+
+    <h2>🔍 collect-benchmarks 상세 플로우</h2>
+
+    <div class="analogy">
+        <strong>비유:</strong> 이건 <strong>주간 품질 감사</strong>입니다. 매주 화요일 새벽에 전체 공장 성과를 다시 측정해서
+        업계 기준값(벤치마크)을 업데이트합니다. 수강생 소재가 "평균 대비 어느 수준인지" 판단하는 기준이 돼요.
+    </div>
+
+    <ol style="margin-left:22px;line-height:2.1;">
+        <li><strong>STEP 0</strong> — 계정 카테고리 분류: profiles 매칭 → AI 자동 분류</li>
+        <li><strong>STEP 1</strong> — Meta API 원본 수집 → <code>ad_insights_classified</code> UPSERT</li>
+        <li><strong>STEP 2</strong> — creative_type × ranking_type × ranking_group × category별 <strong>Trimmed Weighted Mean</strong> → <code>benchmarks</code> UPSERT</li>
+        <li><strong>STEP 3</strong> — MEDIAN_ALL (랭킹 무관 전체 중앙값) 추가</li>
+    </ol>
+
+    <div class="callout blue">
+        <strong>수치로 보면:</strong><br>
+        13개 지표 × 3 ranking_type (engagement / conversion / quality) × 3 ranking_group (above_avg / average / below_average) = <strong>총 117개 벤치마크 포인트</strong><br><br>
+        <strong>측정 지표:</strong> <code>video_p3s_rate</code>, <code>thruplay_rate</code>, <code>retention_rate</code>,
+        <code>reactions_per_10k</code>, <code>comments_per_10k</code>, <code>shares_per_10k</code>, <code>saves_per_10k</code>, <code>engagement_per_10k</code>,
+        <code>ctr</code>, <code>click_to_checkout_rate</code>, <code>click_to_purchase_rate</code>, <code>checkout_to_purchase_rate</code>, <code>roas</code>
+    </div>
+
+</div>
+</div>
+
+<!-- ③ 광고 분석 방법 -->
+<div id="tab-ad-analysis" class="tab-pane">
+<div class="container">
+
+    <h2>📣 광고 소재 분석 — 어떻게 하나?</h2>
+
+    <div class="analogy">
+        <strong>핵심 아이디어:</strong> "잘 되는 광고"와 "내 광고"를 비교해서, <strong>왜 차이가 나는지</strong>를 알려주는 것.<br>
+        숫자만 보여주는 게 아니라 → <strong>"이 부분이 부족하니까 이렇게 고쳐"</strong>까지.
+    </div>
+
+    <h2>현재 분석 방법 (AS-IS)</h2>
+
+    <h3>1단계: 데이터 수집</h3>
+    <div class="callout">
+        <strong>매일 새벽 3시</strong> — <code>collect-daily</code> 크론<br>
+        수강생이 연결한 광고계정에서 Meta Marketing API로 <strong>전 광고 성과</strong> 자동 수집<br><br>
+        <strong>수집 항목 (15개 핵심 지표):</strong><br>
+        • 비용: <code>spend</code>, <code>impressions</code>, <code>clicks</code><br>
+        • 기반: <code>video_p3s_rate</code>(3초 시청률), <code>thruplay_rate</code>(완시청률), <code>retention_rate</code>(잔존율)<br>
+        • 참여: <code>reactions</code>, <code>comments</code>, <code>shares</code>, <code>saves</code>(만 노출 당 수치)<br>
+        • 전환: <code>ctr</code>(클릭률), <code>click_to_checkout_rate</code>(결제시작률), <code>checkout_to_purchase_rate</code>(결제→구매율), <code>roas</code>(광고수익률)<br>
+        • 랭킹: <code>quality_ranking</code>, <code>engagement_ranking</code>, <code>conversion_ranking</code> (Meta AI 자동 등급)
+    </div>
+
+    <h3>2단계: 벤치마크 수집 (비교 기준)</h3>
+    <div class="callout blue">
+        <strong>매주 화요일 새벽 2시</strong> — <code>collect-benchmarks</code> 크론<br>
+        <strong>"잘 하는 광고계정들"</strong>의 데이터를 따로 수집해서 기준값을 만듦<br><br>
+        <strong>어떻게 계산하나?</strong><br>
+        1. 전체 광고계정의 데이터를 Meta API로 재수집<br>
+        2. 동영상/이미지 × 품질등급(상/중/하) × 카테고리별로 나눔<br>
+        3. <strong>Trimmed Weighted Mean</strong>(이상치 제거 가중평균)으로 13개 지표의 기준값 산출<br>
+        4. 총 <strong>117개 벤치마크 포인트</strong> 생성<br><br>
+        <strong>3단계 구조 (총가치각도기):</strong><br>
+        🟢 <strong>기반</strong>: 3초시청률, 완시청률, 잔존율, CTR → "사람들이 보긴 하나?"<br>
+        🟡 <strong>참여</strong>: 반응, 댓글, 공유, 저장 → "관심을 갖나?"<br>
+        🔴 <strong>전환</strong>: 결제시작률, 구매전환율, ROAS → "돈이 되나?"
+    </div>
+
+    <h3>3단계: AI 소재 분석 (L1~L4)</h3>
+    <div class="callout purple">
+        <strong>collect-daily 완료 후 자동 실행</strong> — Railway <code>/pipeline</code><br><br>
+        <strong>L1 태깅</strong> (Gemini 2.5 Pro Vision):<br>
+        소재 이미지를 보고 12개 요소를 자동 추출<br>
+        → hook 유형(문제제기/질문/혜택/충격/없음), 스타일, CTA 유형/위치, 색감, 사람 유무<br><br>
+        <strong>L2 시선 예측</strong> (DeepGaze IIE):<br>
+        "사람이 이 소재를 볼 때 어디를 먼저 보는가" 히트맵 생성<br><br>
+        <strong>L3 요소별 벤치마크</strong>:<br>
+        L1에서 뽑은 요소 × 실제 성과를 연결 → "problem hook 소재의 평균 ROAS는 2.35"<br><br>
+        <strong>L4 종합 점수 + 개선 제안</strong> (Gemini 2.5 Pro):<br>
+        소재 이미지 + L1 태그 + L3 벤치마크를 종합해서 5개 영역 점수 + 구체적 제안<br>
+        → visual_impact, message_clarity, cta_effectiveness, social_proof, lp_consistency
+    </div>
+
+    <h3>4단계: 수강생에게 보여주기</h3>
+    <div class="callout green">
+        <strong>총가치각도기 → 소재 분석 탭</strong><br><br>
+        <strong>현재:</strong><br>
+        • 벤치마크 대비 "내 CTR은 상위 30%" 같은 숫자 비교<br>
+        • L4 종합 점수 + 개선 제안 텍스트<br><br>
+        <strong>추가 필요 (TO-BE):</strong><br>
+        • 소재 이미지/동영상 직접 보여주기 + 클릭 시 상세 분석<br>
+        • 3단계(기반/참여/전환) 각각에서 뭐가 부족한지 시각화<br>
+        • "이 hook 유형은 전환에 약하다 → 이런 hook으로 바꿔봐" 같은 구체 제안<br>
+        • 잘 되는 소재의 공통 패턴 요약 ("상위 20% 소재는 이런 특징이 있다")
+    </div>
+
+    <h2>🔮 발전 방향 (Smith님 구상)</h2>
+
+    <div class="callout orange">
+        <strong>벤치마크 계정의 "소재 자체"도 수집해서 분석하면?</strong><br><br>
+        지금은 벤치마크 = <strong>숫자(지표)</strong>만 수집하는데,<br>
+        벤치마크 계정의 <strong>광고 소재 이미지/동영상 + LP</strong>까지 수집하면:<br><br>
+        1. 잘 되는 소재 100개 → L1 태깅 → <strong>"성과 좋은 소재의 공통 패턴"</strong> 추출<br>
+        &nbsp;&nbsp;&nbsp;예: "상위 20% 소재의 70%는 problem hook + 사람 등장 + 하단 고정 CTA"<br><br>
+        2. 수강생 소재와 패턴 비교 → <strong>"왜 네 소재가 안 되는지"</strong> 근거 있는 진단<br>
+        &nbsp;&nbsp;&nbsp;예: "너는 hook이 없고, CTA가 안 보이고, 사람이 안 나와 — 이 3개가 성과 차이 원인"<br><br>
+        3. 숫자 비교("48% 부족") → <strong>원인 진단 + 액션 제안</strong>으로 진화
+    </div>
+
+</div>
+</div>
+
+<!-- ④ LP 분석 방법 -->
+<div id="tab-lp-analysis" class="tab-pane">
+<div class="container">
+
+    <h2>🖥️ LP(상세페이지) 분석 — 어떻게 하나?</h2>
+
+    <div class="analogy">
+        <strong>핵심 아이디어:</strong> 광고가 좋아도 LP가 별로면 구매 안 됨.<br>
+        "광고 클릭 → LP 도착 → 구매"까지의 흐름을 <strong>끊김 없이</strong> 만들어야 해요.<br>
+        그래서 소재↔LP <strong>일관성</strong>이 중요합니다.
+    </div>
+
+    <h2>현재 LP 분석 플로우 (AS-IS)</h2>
+
+    <h3>1단계: LP URL 추출</h3>
+    <div class="callout">
+        <strong>collect-daily에서 자동 추출</strong><br>
+        광고 데이터 수집할 때 각 소재의 <code>lp_url</code>(랜딩페이지 주소)도 함께 저장됩니다.<br>
+        → <code>ad_creative_embeddings</code> 테이블의 <code>lp_url</code> 컬럼
+    </div>
+
+    <h3>2단계: LP 크롤링 (스크린샷 수집)</h3>
+    <div class="callout blue">
+        <strong>매시간</strong> — <code>crawl-lps</code> 크론<br>
+        Railway의 Puppeteer 서버가 LP에 접속해서:<br><br>
+        1. <strong>풀페이지 스크린샷</strong> 캡처 (JPEG, 모바일 뷰포트)<br>
+        2. <strong>CTA 버튼 클릭 후 스크린샷</strong> — "구매하기" 버튼 누른 후 화면도 캡처<br>
+        3. Supabase Storage에 이미지 업로드<br>
+        4. 스크린샷 해시로 <strong>변경 감지</strong> — 같은 LP가 바뀌었는지 자동 감지<br><br>
+        <strong>현재 속도:</strong> 매시간 20건 → 하루 ~480건 처리<br>
+        <strong>현재 진행:</strong> 1,522건 큐 중 942건 pending (약 2일 소요)
+    </div>
+
+    <h3>3단계: LP 구조 분석 (AI Vision)</h3>
+    <div class="callout purple">
+        <strong>Gemini 2.0 Flash Vision</strong> — <code>scripts/analyze-lps.mjs</code><br>
+        크롤링된 스크린샷을 AI가 보고 LP의 구조를 자동 분석:<br><br>
+        • <strong>Hero 섹션</strong>: 메인 이미지/영상, 헤드라인 텍스트<br>
+        • <strong>CTA 버튼</strong>: 위치, 색상, 문구, 개수<br>
+        • <strong>가격/혜택</strong>: 할인율, 가격 표시 방법<br>
+        • <strong>리뷰/후기</strong>: 있는지, 몇 개, 형태<br>
+        • <strong>FAQ</strong>: 있는지, 어떤 질문들<br>
+        • <strong>전체 구조</strong>: 섹션 순서, 길이, 모바일 최적화 여부<br><br>
+        → <code>lp_structure_analysis</code> 테이블에 저장 (현재 90건 분석 완료)
+    </div>
+
+    <h3>4단계: 소재↔LP 일관성 점수</h3>
+    <div class="callout orange">
+        <strong>Gemini 임베딩 3072차원</strong> + <strong>코사인 유사도</strong><br><br>
+        광고 소재와 LP가 얼마나 <strong>일관성 있는지</strong> 자동 측정:<br><br>
+        1. 소재 이미지/텍스트 → 3072차원 벡터 (이미 <code>ad_creative_embeddings</code>에 있음)<br>
+        2. LP 스크린샷/텍스트/CTA → 3072차원 벡터<br>
+        3. 두 벡터의 코사인 유사도 계산:<br>
+        &nbsp;&nbsp;• <code>visual_similarity</code> — 소재 이미지 vs LP 이미지<br>
+        &nbsp;&nbsp;• <code>text_similarity</code> — 소재 카피 vs LP 텍스트<br>
+        &nbsp;&nbsp;• <code>cross_vt</code> — 소재 이미지 vs LP 텍스트<br>
+        &nbsp;&nbsp;• <code>cross_tv</code> — 소재 텍스트 vs LP 이미지<br>
+        &nbsp;&nbsp;• <code>total_score</code> — 가중 평균<br><br>
+        → <code>creative_lp_consistency</code> 테이블에 저장 (현재 170건 분석 완료)
+    </div>
+
+    <h2>🔮 발전 방향 (Smith님 구상)</h2>
+
+    <div class="callout green">
+        <strong>벤치마크 계정의 LP도 수집해서 비교하면?</strong><br><br>
+        지금 벤치마크 = <strong>전환율 숫자</strong>만 알고 LP 자체는 안 봄.<br>
+        전환율 상위 계정의 LP를 크롤링 + 구조 분석하면:<br><br>
+        1. <strong>"잘 되는 LP의 공통 패턴"</strong> 추출<br>
+        &nbsp;&nbsp;예: "전환율 상위 LP의 90%는 리뷰 섹션 있음, 80%는 CTA 3개 이상, 75%는 Hero에 사람 사진"<br><br>
+        2. 수강생 LP와 패턴 비교 → <strong>"왜 네 LP에서 이탈하는지"</strong> 진단<br>
+        &nbsp;&nbsp;예: "리뷰 섹션 없음 / CTA가 1개뿐 / 가격이 스크롤 3번 해야 보임"<br><br>
+        3. LP 점수 산출 → 광고 소재 점수와 함께 <strong>통합 인사이트</strong><br>
+        &nbsp;&nbsp;예: "소재는 80점인데 LP가 45점 → LP 개선이 우선"<br><br>
+        <strong>데이터 소스:</strong> 벤치마크 계정의 광고에서 LP URL 추출 가능 (<code>ad_insights_classified</code>에 이미 있음)
+    </div>
+
+    <h2>📊 현재 데이터 현황</h2>
+
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="num">1,522</div>
+            <div class="lbl">LP 크롤링 큐<br>전체</div>
+        </div>
+        <div class="stat-box">
+            <div class="num" style="color:var(--orange);">942</div>
+            <div class="lbl">pending<br>대기 중</div>
+        </div>
+        <div class="stat-box">
+            <div class="num" style="color:var(--green);">90</div>
+            <div class="lbl">구조 분석<br>완료</div>
+        </div>
+        <div class="stat-box">
+            <div class="num" style="color:var(--blue);">170</div>
+            <div class="lbl">일관성 점수<br>완료</div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- ⑤ 분석 파이프라인 -->
+<div id="tab-pipeline" class="tab-pane">
+<div class="container">
+
+    <h2>🤖 Railway Creative Pipeline</h2>
+
+    <div class="callout blue">
+        <strong>서버:</strong> <code>creative-pipeline-production.up.railway.app</code><br>
+        <strong>진입점:</strong> <code>POST /pipeline</code> — L1 → L2 → L3 → L4 순차 실행<br>
+        <strong>호출 시점:</strong> <code>collect-daily</code> 크론이 수집 완료 후 자동 호출
+    </div>
+
+    <div class="analogy">
+        <strong>비유:</strong> 크론이 원료(광고 데이터)를 배달하면, Railway 공장이 4단계 공정으로 가공합니다.<br>
+        1공정(태깅) → 2공정(시선 분석) → 3공정(성과 비교) → 4공정(종합 점수 + 개선 제안)
+    </div>
+
+    <h2>4단계 분석 파이프라인</h2>
+
+    <div class="stages">
+        <div class="stage l1">
+            <div class="stag">L1 · 1공정</div>
+            <h4>소재 요소 태깅</h4>
+            <p style="font-size:0.83em;color:#666;"><code>/analyze</code></p>
+            <ul>
+                <li>Gemini 2.5 Pro Vision</li>
+                <li>소재 이미지 + 광고 카피 전달</li>
+                <li>12개 요소 자동 추출</li>
+            </ul>
+            <div style="margin-top:10px;font-size:0.81em;color:#555;line-height:1.6;">
+                <strong>추출 요소:</strong><br>
+                format, hook_type, hook_text, style, human_presence, color_tone, color_contrast, cta_type, cta_position, cta_color, has_bgm, has_narration
+            </div>
+            <div class="out">→ <code>creative_element_analysis</code></div>
+        </div>
+
+        <div class="stage l2">
+            <div class="stag">L2 · 2공정</div>
+            <h4>시선 예측</h4>
+            <p style="font-size:0.83em;color:#666;"><code>/saliency</code></p>
+            <ul>
+                <li>DeepGaze IIE 모델</li>
+                <li>PyTorch, CPU 실행</li>
+                <li>시선 히트맵 생성</li>
+            </ul>
+            <div style="margin-top:10px;font-size:0.81em;color:#555;">
+                "사람이 이 소재를 볼 때 어디를 먼저 보는가"를 AI로 예측합니다.
+            </div>
+            <div class="out">→ <code>creative_saliency_predictions</code></div>
+        </div>
+
+        <div class="stage l3">
+            <div class="stag">L3 · 3공정</div>
+            <h4>벤치마크 계산</h4>
+            <p style="font-size:0.83em;color:#666;"><code>/benchmark</code></p>
+            <ul>
+                <li>L1 태그 + daily_ad_insights JOIN</li>
+                <li>요소별 avg_roas, avg_ctr, p75_roas</li>
+                <li>최소 광고비 10,000원 필터</li>
+            </ul>
+            <div style="margin-top:8px;">
+                <span class="warn">⚠️ 단순평균 (수정 필요)</span><br>
+                <span class="warn">⚠️ ROAS만 (지표 확장 필요)</span><br>
+                <span class="warn">⚠️ 동영상/이미지 미분리</span>
+            </div>
+            <div class="out">→ <code>creative_element_performance</code></div>
+        </div>
+
+        <div class="stage l4">
+            <div class="stag">L4 · 4공정</div>
+            <h4>종합 점수</h4>
+            <p style="font-size:0.83em;color:#666;"><code>/score</code></p>
+            <ul>
+                <li>Gemini 2.5 Pro</li>
+                <li>소재 + L1 태그 + L3 벤치마크 + LP 일관성</li>
+                <li>5개 영역 점수 + 개선 제안</li>
+            </ul>
+            <div style="margin-top:10px;font-size:0.81em;color:#555;line-height:1.6;">
+                <strong>점수 영역:</strong><br>
+                visual_impact · message_clarity · cta_effectiveness · social_proof · lp_consistency<br>
+                <strong>출력:</strong> overall_score + suggestions[]
+            </div>
+            <div class="out">→ <code>creative_intelligence_scores</code></div>
+        </div>
+    </div>
+
+    <h2>🖥️ LP 분석 플로우</h2>
+
+    <div class="callout purple">
+        <strong>별도 스크립트:</strong> <code>scripts/analyze-lps.mjs</code><br>
+        <code>crawl-lps</code> 크론이 스크린샷을 수집한 후 이 스크립트가 LP 구조 분석 + 소재 일관성 점수를 계산합니다.
+    </div>
+
+    <div class="flow-row">
+        <div class="flow-box">crawl-lps 크론<small>매시간 20건</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box highlight">Puppeteer 크롤링<small>스크린샷+CTA</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box db">Supabase Storage<small>이미지 보관</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box ai">Gemini 2.0 Flash<small>LP 구조 분석</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box ai">임베딩 비교<small>3072차원<br>코사인 유사도</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box db">일관성 점수<small>creative_lp_consistency</small></div>
+    </div>
+
+    <div class="callout orange">
+        <strong>LP 구조 분석 항목:</strong> Hero, CTA, 가격, 리뷰, FAQ 등<br>
+        <strong>임베딩 대상:</strong> LP 스크린샷 / 텍스트 / CTA 각각 3072차원 벡터화<br>
+        <strong>일관성 지표:</strong> <code>visual_similarity</code>, <code>text_similarity</code>, <code>cross_vt</code>, <code>cross_tv</code>, <code>total_score</code>
+    </div>
+
+</div>
+</div>
+
+<!-- ④ DB 스키마 -->
+<div id="tab-schema" class="tab-pane">
+<div class="container">
+
+    <h2>🗄️ 주요 테이블 구조</h2>
+
+    <div class="analogy">
+        <strong>비유:</strong> DB는 공장의 <strong>창고 시스템</strong>입니다.<br>
+        원료 창고(광고 성과) → 반제품 창고(소재 분석 중간 결과) → 완제품 창고(종합 점수) → 참고 자료실(콘텐츠/경쟁사)
+    </div>
+
+    <!-- 광고 성과 -->
+    <div class="schema-section">
+        <div class="schema-label">📣 광고 성과 (핵심 원본 데이터)</div>
+        <div class="table-grid">
+            <div class="tcard ad">
+                <div class="tcard-head">
+                    <span>📊</span>
+                    <span class="tname">daily_ad_insights</span>
+                    <span class="tcnt">60+ 컬럼</span>
+                </div>
+                <div class="tcard-body">
+                    광고별 일별 성과. 모든 분석의 원본.
+                    <div class="chips">
+                        <span class="chip pk">ad_id</span>
+                        <span class="chip pk">date</span>
+                        <span class="chip">spend</span>
+                        <span class="chip">roas</span>
+                        <span class="chip">impressions</span>
+                        <span class="chip">clicks</span>
+                        <span class="chip">purchases</span>
+                        <span class="chip">video_p3s_rate</span>
+                        <span class="chip">thruplay_rate</span>
+                        <span class="chip">retention_rate</span>
+                        <span class="chip">reactions_per_10k</span>
+                        <span class="chip">ctr</span>
+                        <span class="chip">quality_ranking</span>
+                        <span class="chip">engagement_ranking</span>
+                        <span class="chip">conversion_ranking</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard ad">
+                <div class="tcard-head">
+                    <span>🏢</span>
+                    <span class="tname">ad_accounts</span>
+                </div>
+                <div class="tcard-body">
+                    광고 계정 목록. 수집 대상.
+                    <div class="chips">
+                        <span class="chip pk">account_id</span>
+                        <span class="chip">user_id</span>
+                        <span class="chip">access_token</span>
+                        <span class="chip">active</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard ad">
+                <div class="tcard-head">
+                    <span>📈</span>
+                    <span class="tname">benchmarks</span>
+                    <span class="tcnt">117개 포인트</span>
+                </div>
+                <div class="tcard-body">
+                    주간 벤치마크. creative_type × ranking × category × 13지표 Trimmed Weighted Mean.
+                    <div class="chips">
+                        <span class="chip">creative_type</span>
+                        <span class="chip">ranking_type</span>
+                        <span class="chip">ranking_group</span>
+                        <span class="chip">category</span>
+                        <span class="chip">13개 지표값</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard ad">
+                <div class="tcard-head">
+                    <span>🏷️</span>
+                    <span class="tname">ad_insights_classified</span>
+                </div>
+                <div class="tcard-body">
+                    벤치마크 계산용 분류된 광고 데이터. collect-benchmarks 전용.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 소재 분석 -->
+    <div class="schema-section">
+        <div class="schema-label">🎨 소재 분석 — Creative Intelligence</div>
+        <div class="table-grid">
+            <div class="tcard creative">
+                <div class="tcard-head">
+                    <span>🔢</span>
+                    <span class="tname">ad_creative_embeddings</span>
+                    <span class="tcnt">3072차원</span>
+                </div>
+                <div class="tcard-body">
+                    소재 메타데이터 + 벡터 임베딩
+                    <div class="chips">
+                        <span class="chip pk">ad_id</span>
+                        <span class="chip">media_url</span>
+                        <span class="chip">ad_copy</span>
+                        <span class="chip">lp_url</span>
+                        <span class="chip">embedding_3072</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard creative">
+                <div class="tcard-head">
+                    <span>🏷️</span>
+                    <span class="tname">creative_element_analysis</span>
+                    <span class="tcnt">L1 결과</span>
+                </div>
+                <div class="tcard-body">
+                    12개 요소 태깅 결과
+                    <div class="chips">
+                        <span class="chip">hook_type</span>
+                        <span class="chip">style</span>
+                        <span class="chip">format</span>
+                        <span class="chip">cta_type</span>
+                        <span class="chip">color_tone</span>
+                        <span class="chip">human_presence</span>
+                        <span class="chip">has_bgm</span>
+                        <span class="chip">has_narration</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard creative">
+                <div class="tcard-head">
+                    <span>👁️</span>
+                    <span class="tname">creative_saliency_predictions</span>
+                    <span class="tcnt">L2 결과</span>
+                </div>
+                <div class="tcard-body">
+                    DeepGaze IIE 시선 히트맵 예측 결과
+                </div>
+            </div>
+            <div class="tcard creative">
+                <div class="tcard-head">
+                    <span>📊</span>
+                    <span class="tname">creative_element_performance</span>
+                    <span class="tcnt">L3 결과</span>
+                </div>
+                <div class="tcard-body">
+                    요소별 성과 벤치마크
+                    <div class="chips">
+                        <span class="chip">element_type</span>
+                        <span class="chip">element_value</span>
+                        <span class="chip">avg_roas</span>
+                        <span class="chip">avg_ctr</span>
+                        <span class="chip">p75_roas</span>
+                        <span class="chip">sample_count</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard creative">
+                <div class="tcard-head">
+                    <span>⭐</span>
+                    <span class="tname">creative_intelligence_scores</span>
+                    <span class="tcnt">L4 결과</span>
+                </div>
+                <div class="tcard-body">
+                    종합 점수 + 개선 제안
+                    <div class="chips">
+                        <span class="chip">overall_score</span>
+                        <span class="chip">visual_impact</span>
+                        <span class="chip">message_clarity</span>
+                        <span class="chip">cta_effectiveness</span>
+                        <span class="chip">lp_consistency</span>
+                        <span class="chip">suggestions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LP 분석 -->
+    <div class="schema-section">
+        <div class="schema-label">🖥️ LP 분석</div>
+        <div class="table-grid">
+            <div class="tcard lp">
+                <div class="tcard-head">
+                    <span>📋</span>
+                    <span class="tname">lp_crawl_queue</span>
+                    <span class="tcnt">1,522건</span>
+                </div>
+                <div class="tcard-body">
+                    LP 크롤링 대기열. pending 942건.
+                    <div class="chips">
+                        <span class="chip pk">url</span>
+                        <span class="chip">status: pending/done/error</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard lp">
+                <div class="tcard-head">
+                    <span>🔍</span>
+                    <span class="tname">lp_structure_analysis</span>
+                </div>
+                <div class="tcard-body">
+                    Gemini Vision LP 구조 분석 결과
+                    <div class="chips">
+                        <span class="chip">hero</span>
+                        <span class="chip">cta</span>
+                        <span class="chip">pricing</span>
+                        <span class="chip">reviews</span>
+                        <span class="chip">faq</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard lp">
+                <div class="tcard-head">
+                    <span>🔗</span>
+                    <span class="tname">creative_lp_consistency</span>
+                </div>
+                <div class="tcard-body">
+                    소재↔LP 일관성 점수
+                    <div class="chips">
+                        <span class="chip">visual_similarity</span>
+                        <span class="chip">text_similarity</span>
+                        <span class="chip">cross_vt</span>
+                        <span class="chip">cross_tv</span>
+                        <span class="chip">total_score</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard lp">
+                <div class="tcard-head">
+                    <span>📅</span>
+                    <span class="tname">daily_lp_metrics</span>
+                </div>
+                <div class="tcard-body">
+                    LP 일별 성과 <span style="color:#e65100;font-size:0.88em;">(비어있음 — 향후 사용 예정)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 경쟁사 + 콘텐츠 -->
+    <div class="schema-section">
+        <div class="schema-label">🥊 경쟁사 &nbsp;|&nbsp; 📰 콘텐츠</div>
+        <div class="table-grid">
+            <div class="tcard comp">
+                <div class="tcard-head">
+                    <span>🥊</span>
+                    <span class="tname">competitor_ad_cache</span>
+                    <span class="tcnt">8,613건</span>
+                </div>
+                <div class="tcard-body">
+                    경쟁사 광고 캐시. Meta Ad Library API 수집 결과.
+                </div>
+            </div>
+            <div class="tcard cont">
+                <div class="tcard-head">
+                    <span>📰</span>
+                    <span class="tname">contents</span>
+                    <span class="tcnt">314건</span>
+                </div>
+                <div class="tcard-body">
+                    큐레이션 콘텐츠
+                    <div class="chips">
+                        <span class="chip">title</span>
+                        <span class="chip">summary</span>
+                        <span class="chip">importance_score</span>
+                        <span class="chip">source_type</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tcard cont">
+                <div class="tcard-head">
+                    <span>📡</span>
+                    <span class="tname">content_sources</span>
+                    <span class="tcnt">12개</span>
+                </div>
+                <div class="tcard-body">
+                    RSS/YouTube 소스 관리
+                    <div class="chips">
+                        <span class="chip">url</span>
+                        <span class="chip">feed_type</span>
+                        <span class="chip">config</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- ⑤ 개선 필요 -->
+<div id="tab-improve" class="tab-pane">
+<div class="container">
+
+    <h2>🔧 개선 필요 사항 10선</h2>
+
+    <div class="analogy">
+        <strong>비유:</strong> 공장 설비 점검 리포트입니다.<br>
+        <strong>P0</strong>은 오늘 당장 고쳐야 할 기계 고장 &nbsp;·&nbsp;
+        <strong>P1</strong>은 이번 주 보수 &nbsp;·&nbsp;
+        <strong>P2</strong>는 다음 스프린트 &nbsp;·&nbsp;
+        <strong>P3</strong>은 백로그
+    </div>
+
+    <div class="pri-grid">
+        <div class="pri-box pp0">
+            <div class="pnum">4</div>
+            <div class="plbl" style="color:#c62828;">P0 — 즉시</div>
+        </div>
+        <div class="pri-box pp1">
+            <div class="pnum">3</div>
+            <div class="plbl" style="color:#e65100;">P1 — 이번 주</div>
+        </div>
+        <div class="pri-box pp2">
+            <div class="pnum">2</div>
+            <div class="plbl" style="color:#2e7d32;">P2 — 다음 스프린트</div>
+        </div>
+        <div class="pri-box pp3">
+            <div class="pnum">1</div>
+            <div class="plbl" style="color:#6a1b9a;">P3 — 백로그</div>
+        </div>
+    </div>
+
+    <div class="improve-list">
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p0">P0</span>
+                <h4>① 벤치마크 3단계 지표 확장</h4>
+            </div>
+            <div class="icard-body">
+                현재 L3 파이프라인이 <strong>ROAS 하나만</strong> 봐서 소재의 입체적인 성과를 알 수 없어요.
+                데이터는 <code>daily_ad_insights</code>에 이미 다 있고, <code>benchmark.mjs</code> 코드 수정만 하면 됩니다.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재 ❌</strong><br>ROAS 단일 지표만</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>
+                        기반: 3초시청률 · 완시청률 · CTR<br>
+                        참여: 반응 · 댓글 · 공유 · 저장<br>
+                        전환: 구매전환율 · ROAS
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p0">P0</span>
+                <h4>② 동영상/이미지 분리 벤치마크</h4>
+            </div>
+            <div class="icard-body">
+                현재 346개 동영상 + 12개 이미지가 섞여서 계산 중입니다.
+                동영상 전용 지표(3초시청률, 완시청률)가 이미지에 적용되면 기준값이 왜곡됩니다.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재 ❌</strong><br>동영상 346 + 이미지 12 혼합 계산</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>creative_type별 분리<br>동영상: 시청 지표 포함<br>이미지: 시청 지표 제외</div>
+                </div>
+            </div>
+        </div>
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p0">P0</span>
+                <h4>③ 가중평균 적용 (이상치 왜곡 제거)</h4>
+            </div>
+            <div class="icard-body">
+                현재 <code>benchmark.mjs</code>가 단순평균을 써서 광고비 1만원짜리와 1억원짜리가 동등한 발언권을 가집니다.
+                소규모 이상치 광고 하나가 전체 기준을 왜곡할 수 있어요.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재 ❌</strong><br>단순평균 → 소액 광고 이상치 왜곡</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>광고비 / 노출수 기반 가중평균으로 변경</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p0">P0</span>
+                <h4>④ API 403 수정 (수강생 접근 불가)</h4>
+            </div>
+            <div class="icard-body">
+                소재 분석 API가 <code>/api/admin/</code> 경로에 있어서 수강생 역할로는 403 에러가 납니다.
+                수강생이 소재 분석 탭을 쓰려면 경로 이동 또는 역할 확장이 필요합니다.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재 ❌</strong><br>/api/admin/ 경로 → 수강생 403</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>/api/protractor/ 경로로 이동<br>또는 수강생 역할에 권한 추가</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p1">P1</span>
+                <h4>⑤ media_url 누락 223건 해소</h4>
+            </div>
+            <div class="icard-body">
+                소재 이미지 URL이 없으면 L1/L2/L4 분석을 못 합니다.
+                동영상 썸네일 + 카탈로그 이미지 수집 코드는 이미 수정 완료됐고,
+                다음 <code>collect-daily</code> 크론 실행 시 자동 반영됩니다.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재</strong><br>media_url 누락 223건</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>해결</strong><br>다음 크론 실행 시 자동 채워짐<br>(코드 수정 완료)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p1">P1</span>
+                <h4>⑥ LP 크롤링 확대 (현재 5% 수준)</h4>
+            </div>
+            <div class="icard-body">
+                LP 일관성 점수가 핵심 기능인데 실제로 분석된 LP가 너무 적습니다.
+                크론 처리 속도를 높이거나 병렬 처리로 빠르게 채워야 합니다.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재 ❌</strong><br>37 / 689 LP 스크린샷 완료<br>pending 942건<br>매시간 20건 → 약 2일 소요</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>처리 속도 증가<br>또는 병렬 크롤링 도입</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p1">P1</span>
+                <h4>⑦ 미디어 Storage 캐싱 (Meta CDN URL 만료 대비)</h4>
+            </div>
+            <div class="icard-body">
+                Meta CDN URL은 시간이 지나면 만료됩니다. 소재 이미지가 사라지면 분석/표시 불가.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재 ❌</strong><br>Meta CDN URL 직접 사용<br>→ 만료 시 이미지 없음</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>자사 소재: collect-daily 시 Supabase Storage 저장<br>경쟁사 소재: 검색 시점에 캐싱</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p2">P2</span>
+                <h4>⑧ 경쟁사 L1 분석 온디맨드화</h4>
+            </div>
+            <div class="icard-body">
+                경쟁사 광고 8,613건 전체를 분석하면 비용/시간 낭비입니다.
+                모니터링 브랜드로 등록된 것만 비동기로 처리하면 됩니다.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재</strong><br>8,613건 전체 or 미분석</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>브랜드 등록 → 큐 추가 → 크론 처리<br>→ 다음날 결과 확인</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p2">P2</span>
+                <h4>⑨ collect-benchmarks와 benchmark.mjs 역할 중복 정리</h4>
+            </div>
+            <div class="icard-body">
+                두 곳에서 각각 벤치마크를 계산하는데 역할이 명확히 분리되지 않아 혼선이 있습니다.
+                <div class="from-to">
+                    <div class="fbox"><strong>현재 ⚠️</strong><br>collect-benchmarks: 전 계정 13지표 × 랭킹 × 카테고리 (주 1회)<br>benchmark.mjs: L1 요소별 ROAS (매일 /pipeline)</div>
+                    <div class="arrow-mid">→</div>
+                    <div class="tbox"><strong>목표 ✅</strong><br>통합 또는 역할 명확 분리<br>문서화로 중복 방지</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="icard">
+            <div class="icard-head">
+                <span class="pbadge p3">P3</span>
+                <h4>⑩ 비활성 콘텐츠 소스 3개 교체</h4>
+            </div>
+            <div class="icard-body">
+                현재 12개 소스 중 3개가 비활성 상태입니다. 콘텐츠 수집 품질에 영향.
+                <ul style="margin-top:8px;">
+                    <li><strong>CXL Blog</strong> — Cloudflare 차단으로 수집 불가</li>
+                    <li><strong>Shopify Blog</strong> — URL 변경으로 404 에러</li>
+                    <li><strong>AdEspresso</strong> — 2023년 이후 업데이트 없음</li>
+                </ul>
+                <div class="callout" style="margin-top:10px;">
+                    12개 소스 중 3개 비활성 = 유효 소스 9개 운영 중
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+<script>
+    function show(tab) {
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+</script>
+</body>
+</html>

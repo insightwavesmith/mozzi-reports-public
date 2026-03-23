@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="date" content="2026-03-23">
+<meta name="project" content="bscamp vs Motion">
+<title>bscamp vs Motion — 콘텐츠 분석 구조 비교 + 배울 점</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fc;color:#1a1a1a;line-height:1.8}
+.container{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+.back{display:inline-block;margin-bottom:24px;color:#64748b;text-decoration:none;font-size:14px}
+.back:hover{color:#1a1a1a}
+h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.3}
+.subtitle{font-size:16px;color:#64748b;margin-bottom:12px}
+.date{font-size:13px;color:#94a3b8;margin-bottom:32px}
+h2{font-size:22px;font-weight:700;margin:48px 0 16px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+h3{font-size:18px;font-weight:600;margin:28px 0 12px;color:#334155}
+p{margin-bottom:16px;font-size:15px;color:#374151}
+ul,ol{margin:8px 0 16px 20px;font-size:15px}
+li{margin-bottom:8px;line-height:1.7;color:#374151}
+strong{font-weight:700;color:#1a1a1a}
+code{font-family:'Fira Code','Consolas',monospace;font-size:13px;background:#f1f5f9;padding:2px 6px;border-radius:4px;color:#334155}
+
+/* Cards */
+.box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:20px 0}
+.box.bscamp{border-left:4px solid #22c55e}
+.box.motion{border-left:4px solid #8b5cf6}
+.box.both{border-left:4px solid #3b82f6}
+.box.warn{border-left:4px solid #f59e0b}
+.box.learn{border-left:4px solid #f97316}
+.box h4{font-size:15px;font-weight:700;margin-bottom:10px;color:#1a1a1a}
+.box p{margin-bottom:8px;font-size:14px}
+.box ul{margin:6px 0 0 18px;font-size:14px}
+.box li{margin-bottom:6px}
+
+/* Highlight */
+.highlight{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:20px 24px;margin:24px 0;font-size:15px;font-weight:600;color:#92400e}
+.highlight-green{background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:20px 24px;margin:24px 0;font-size:15px;font-weight:600;color:#166534}
+
+/* Arch flow */
+.arch-container{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0}
+.arch-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px}
+.arch-card.bscamp-card{border-top:4px solid #22c55e}
+.arch-card.motion-card{border-top:4px solid #8b5cf6}
+.arch-title{font-size:15px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.arch-title .brand{font-size:18px}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:16px;font-size:13px}
+.flow-step{background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:4px 10px;font-weight:600;color:#334155;white-space:nowrap}
+.flow-step.bscamp-step{background:#dcfce7;border-color:#86efac;color:#166534}
+.flow-step.motion-step{background:#ede9fe;border-color:#c4b5fd;color:#5b21b6}
+.flow-arrow{color:#94a3b8;font-weight:700;font-size:14px}
+.arch-detail{margin:0;padding:0;list-style:none}
+.arch-detail li{font-size:13px;color:#475569;padding:6px 0;border-bottom:1px solid #f1f5f9;line-height:1.6}
+.arch-detail li:last-child{border-bottom:none}
+.arch-detail li strong{color:#1a1a1a}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0}
+thead{background:#f1f5f9}
+th{padding:12px 16px;text-align:left;font-weight:700;font-size:13px;color:#475569;border-bottom:2px solid #e2e8f0}
+td{padding:12px 16px;border-bottom:1px solid #f1f5f9;color:#374151;vertical-align:middle;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+td:first-child{font-weight:600;color:#1a1a1a}
+
+/* Badge */
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.badge-bscamp{background:#dcfce7;color:#166534}
+.badge-motion{background:#ede9fe;color:#5b21b6}
+.badge-tie{background:#dbeafe;color:#1e40af}
+.badge-diff{background:#f3f4f6;color:#6b7280}
+
+/* Verdict cell */
+.verdict-bscamp{font-weight:700;color:#16a34a}
+.verdict-motion{font-weight:700;color:#7c3aed}
+.verdict-tie{font-weight:700;color:#2563eb}
+.verdict-diff{font-weight:600;color:#9ca3af}
+
+/* Check/X emoji */
+.yes{color:#22c55e;font-weight:700}
+.no{color:#94a3b8}
+
+/* Learn section cards */
+.learn-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+.learn-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px}
+.learn-card .learn-num{font-size:28px;font-weight:900;color:#f97316;margin-bottom:6px}
+.learn-card .learn-title{font-size:15px;font-weight:700;margin-bottom:8px;color:#1a1a1a}
+.learn-card .learn-desc{font-size:13px;color:#475569;line-height:1.6}
+.learn-card .learn-action{display:inline-block;margin-top:10px;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;color:#c2410c}
+
+/* Strength section */
+.strength-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+.strength-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;border-top:3px solid #22c55e}
+.strength-card .s-icon{font-size:24px;margin-bottom:8px}
+.strength-card .s-title{font-size:15px;font-weight:700;margin-bottom:8px;color:#1a1a1a}
+.strength-card .s-desc{font-size:13px;color:#475569;line-height:1.6}
+.strength-card .s-badge{display:inline-block;margin-top:8px;background:#dcfce7;border:1px solid #86efac;border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;color:#166534}
+
+/* Tags */
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.tag{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;padding:3px 10px;font-size:12px;color:#475569;font-weight:500}
+.tag.green{background:#dcfce7;border-color:#86efac;color:#166534}
+.tag.purple{background:#ede9fe;border-color:#c4b5fd;color:#5b21b6}
+.tag.orange{background:#fff7ed;border-color:#fed7aa;color:#c2410c}
+
+/* Visual format pill list */
+.format-pills{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.format-pill{background:#ede9fe;border:1px solid #c4b5fd;border-radius:6px;padding:3px 9px;font-size:12px;color:#5b21b6;font-weight:500}
+
+/* TOC */
+.toc{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:24px 0}
+.toc h3{margin:0 0 12px;font-size:16px;font-weight:700}
+.toc ol{margin:0 0 0 20px}
+.toc li{margin-bottom:6px}
+.toc a{color:#3b82f6;text-decoration:none;font-size:14px}
+.toc a:hover{text-decoration:underline}
+
+/* Stack table special */
+.stack-yes{color:#22c55e;font-weight:700;font-size:15px}
+.stack-no{color:#d1d5db;font-weight:700;font-size:15px}
+
+@media(max-width:640px){
+  .arch-container{grid-template-columns:1fr}
+  .learn-grid{grid-template-columns:1fr}
+  .strength-grid{grid-template-columns:1fr}
+  h1{font-size:22px}
+  h2{font-size:18px}
+  .flow{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a href="/reports" class="back">← 리포트 목록</a>
+
+  <h1>bscamp vs Motion</h1>
+  <p class="subtitle">콘텐츠 분석 구조 비교 + 배울 점</p>
+  <p class="date">2026-03-23 &nbsp;·&nbsp; Research &nbsp;·&nbsp; 경쟁사 분석</p>
+
+  <div class="highlight">
+    💡 한 줄 요약: Motion은 <strong>수평 확장</strong>(많은 광고주 데이터, 분류체계, UI)에 강하고, bscamp는 <strong>수직 깊이</strong>(시선예측, LP분석, 순환학습)에 강하다. 두 방향은 보완 관계다.
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>📋 목차</h3>
+    <ol>
+      <li><a href="#arch">전체 아키텍처 비교</a></li>
+      <li><a href="#feature">기능별 비교 테이블</a></li>
+      <li><a href="#learn">Motion에서 배울 것 (카카시 포인트)</a></li>
+      <li><a href="#strength">bscamp만의 강점</a></li>
+      <li><a href="#stack">기술 스택 비교</a></li>
+      <li><a href="#deep" style="color:#f97316;font-weight:700">🔥 [심화] Motion 콘텐츠 분석체계 디테일 + bscamp 적용</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. 아키텍처 비교 -->
+  <h2 id="arch">1. 전체 아키텍처 비교</h2>
+
+  <div class="arch-container">
+    <!-- bscamp -->
+    <div class="arch-card bscamp-card">
+      <div class="arch-title">
+        <span class="brand">🟢</span> bscamp
+      </div>
+      <div class="flow">
+        <span class="flow-step bscamp-step">수집</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step bscamp-step">저장</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step bscamp-step">분석:광고</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step bscamp-step">분석:LP</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step bscamp-step">순환학습</span>
+      </div>
+      <ul class="arch-detail">
+        <li><strong>수집</strong> — Meta Marketing API (collect-daily) → Supabase</li>
+        <li><strong>저장</strong> — 3계층 (member / benchmark / competitor)</li>
+        <li><strong>분석 광고</strong> — L1(요소태깅) → L2(DeepGaze 시선예측) → L3(벤치마크) → L4(종합점수)</li>
+        <li><strong>분석 LP</strong> — 눈(시선) → 뇌(Gemini 구조분석) → 탐색(Mixpanel 스크롤) → 결정(Mixpanel 클릭)</li>
+        <li><strong>순환학습</strong> — 변화감지 → 요소diff → 성과변화 → 데이터화</li>
+      </ul>
+    </div>
+
+    <!-- Motion -->
+    <div class="arch-card motion-card">
+      <div class="arch-title">
+        <span class="brand">🟣</span> Motion
+      </div>
+      <div class="flow">
+        <span class="flow-step motion-step">Meta OAuth</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step motion-step">AI 태깅</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step motion-step">리포트</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step motion-step">Runneth AI</span>
+      </div>
+      <ul class="arch-detail">
+        <li><strong>수집</strong> — Meta Marketing API OAuth 직접 연결</li>
+        <li><strong>AI 태깅</strong> — 4카테고리 (Visual Format / Persona / Messaging Angle / Hook Tactic)</li>
+        <li><strong>리포트</strong> — Top Creatives / Comparative / Launch Analysis</li>
+        <li><strong>AI 채팅</strong> — Runneth (계정 데이터 + 벤치마크 RAG)</li>
+        <li><strong>경쟁사</strong> — Inspo (Ad Library 기반 + 20개 Visual Format 분류)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box both">
+    <h4>📐 구조 차이 핵심</h4>
+    <ul>
+      <li><strong>bscamp</strong>: 파이프라인이 깊다. 광고 소재 → LP → 행동 데이터까지 수직으로 연결. 분석 깊이 우선.</li>
+      <li><strong>Motion</strong>: 파이프라인이 넓다. 많은 광고주 데이터를 가로로 연결해 벤치마크 파워를 만든다. 데이터 양 우선.</li>
+      <li>두 접근은 경쟁이 아니라 <strong>보완</strong>. bscamp가 Motion의 분류체계를 흡수하면 깊이 + 넓이 모두 확보.</li>
+    </ul>
+  </div>
+
+  <!-- 2. 기능별 비교 테이블 -->
+  <h2 id="feature">2. 기능별 비교 테이블</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:22%">기능</th>
+        <th style="width:28%">🟣 Motion</th>
+        <th style="width:28%">🟢 bscamp</th>
+        <th style="width:22%">판정</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>소재 수집</td>
+        <td>Meta API OAuth</td>
+        <td>Meta API + cron</td>
+        <td><span class="verdict-tie">동급</span></td>
+      </tr>
+      <tr>
+        <td>AI 소재 분석</td>
+        <td>4카테고리 자동 태깅</td>
+        <td>L1 요소 태깅 (Gemini 5축)</td>
+        <td><span class="verdict-bscamp">bscamp 더 깊음</span></td>
+      </tr>
+      <tr>
+        <td>시선 예측</td>
+        <td><span class="no">❌ 없음</span></td>
+        <td><span class="yes">✅ DeepGaze → Gemini 결합</span></td>
+        <td><span class="verdict-bscamp">bscamp만</span></td>
+      </tr>
+      <tr>
+        <td>LP 분석</td>
+        <td><span class="no">❌ 없음</span></td>
+        <td><span class="yes">✅ 4축 (눈→뇌→탐색→결정)</span></td>
+        <td><span class="verdict-bscamp">bscamp만</span></td>
+      </tr>
+      <tr>
+        <td>벤치마크</td>
+        <td>✅ $13억 데이터 6,000 광고주</td>
+        <td>수강생 간 + 업종 벤치마크</td>
+        <td><span class="verdict-motion">Motion 데이터 양 압도</span></td>
+      </tr>
+      <tr>
+        <td>경쟁사 분석</td>
+        <td>✅ Inspo (20개 Visual Format)</td>
+        <td>✅ Ad Library 수집</td>
+        <td><span class="verdict-motion">Motion UI 우수</span></td>
+      </tr>
+      <tr>
+        <td>AI 채팅</td>
+        <td>✅ Runneth (계정+벤치마크 RAG)</td>
+        <td>✅ qa봇 (강의+경험 RAG)</td>
+        <td><span class="verdict-diff">용도 다름</span></td>
+      </tr>
+      <tr>
+        <td>리포트 종류</td>
+        <td>Top / Comparative / Launch</td>
+        <td>총가치각도기 3축</td>
+        <td><span class="verdict-motion">Motion 더 다양함</span></td>
+      </tr>
+      <tr>
+        <td>소재-LP 일관성</td>
+        <td><span class="no">❌ 없음</span></td>
+        <td><span class="yes">✅ creative_lp_consistency</span></td>
+        <td><span class="verdict-bscamp">bscamp만</span></td>
+      </tr>
+      <tr>
+        <td>순환학습</td>
+        <td><span class="no">❌ 없음</span></td>
+        <td><span class="yes">✅ change_log 변화감지</span></td>
+        <td><span class="verdict-bscamp">bscamp만</span></td>
+      </tr>
+      <tr>
+        <td>Visual Format 분류</td>
+        <td>✅ 20개 포맷 체계</td>
+        <td><span class="no">❌ 없음</span></td>
+        <td><span class="verdict-motion">Motion만</span></td>
+      </tr>
+      <tr>
+        <td>Messaging Angle 분류</td>
+        <td>✅ 자동 분류</td>
+        <td><span class="no">❌ 없음</span></td>
+        <td><span class="verdict-motion">Motion만</span></td>
+      </tr>
+      <tr>
+        <td>Hook 유형 분류</td>
+        <td>✅ 5대 훅 포맷</td>
+        <td><span class="no">❌ 없음</span></td>
+        <td><span class="verdict-motion">Motion만</span></td>
+      </tr>
+      <tr>
+        <td>가격</td>
+        <td>$250+/월</td>
+        <td>자체 구축 (무료)</td>
+        <td><span class="verdict-bscamp">bscamp 압승</span></td>
+      </tr>
+      <tr>
+        <td>대상 고객</td>
+        <td>대형 광고주 ($50K+/월)</td>
+        <td>자사몰 교육 수강생</td>
+        <td><span class="verdict-diff">다름 (겹치지 않음)</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box bscamp">
+    <h4>🟢 bscamp 스코어카드</h4>
+    <div class="tag-list">
+      <span class="tag green">bscamp 우위 5개</span>
+      <span class="tag purple">Motion 우위 6개</span>
+      <span class="tag">동급/용도다름 4개</span>
+    </div>
+    <p style="margin-top:8px">숫자만 보면 Motion이 앞서지만, bscamp 강점 5개는 <strong>Motion이 아예 구현 못한 영역</strong>. Motion이 따라잡기 어렵다.</p>
+  </div>
+
+  <!-- 3. Motion에서 배울 것 -->
+  <h2 id="learn">3. Motion에서 배울 것 — 카카시 포인트 🥷</h2>
+
+  <p>적의 기술을 복사한다. 거부감 없이 흡수하면 bscamp가 훨씬 강해진다.</p>
+
+  <div class="learn-grid">
+    <!-- 3-1 -->
+    <div class="learn-card">
+      <div class="learn-num">01</div>
+      <div class="learn-title">AI 태깅 4카테고리 → L1 확장</div>
+      <div class="learn-desc">
+        현재 L1: 텍스트/이미지/색감/레이아웃/CTA 5축.<br><br>
+        Motion이 정의한 4개를 추가:
+        <ul style="margin:8px 0 0 14px;font-size:12px">
+          <li>Visual Format (20개 포맷)</li>
+          <li>Hook Tactic (Confession/Bold Claim/Relatability/Contrast/Curiosity)</li>
+          <li>Messaging Angle (가격/품질/사회적증거/감성/기능)</li>
+          <li>Intended Audience (자동 타겟 추정)</li>
+        </ul>
+      </div>
+      <span class="learn-action">→ L1 Gemini 프롬프트 확장</span>
+    </div>
+
+    <!-- 3-2 -->
+    <div class="learn-card">
+      <div class="learn-num">02</div>
+      <div class="learn-title">Comparative Reports — 테마별 비교</div>
+      <div class="learn-desc">
+        "UGC vs 모션그래픽 중 뭐가 ROAS 높아?" 같은 질문에 답하는 리포트.<br><br>
+        현재 bscamp에 없음. 소재를 태깅(Visual Format)하고 그룹별 성과를 비교하는 뷰 추가 필요.
+      </div>
+      <span class="learn-action">→ 소재 그룹핑 + 성과 집계 뷰</span>
+    </div>
+
+    <!-- 3-3 -->
+    <div class="learn-card">
+      <div class="learn-num">03</div>
+      <div class="learn-title">Inspo 20개 Visual Format 분류</div>
+      <div class="learn-desc">
+        Motion이 정의한 업계 표준 분류체계. bscamp 소재에 그대로 적용 가능.
+        <div class="format-pills" style="margin-top:8px">
+          <span class="format-pill">Demo</span>
+          <span class="format-pill">Headline</span>
+          <span class="format-pill">Infographic</span>
+          <span class="format-pill">Listicle</span>
+          <span class="format-pill">Testimonial</span>
+          <span class="format-pill">Montage</span>
+          <span class="format-pill">Split Screen</span>
+          <span class="format-pill">Skit</span>
+          <span class="format-pill">How To</span>
+          <span class="format-pill">Before and After</span>
+          <span class="format-pill" style="background:#f3f4f6;border-color:#d1d5db;color:#6b7280">+10개</span>
+        </div>
+      </div>
+      <span class="learn-action">→ L1 태깅에 visual_format 컬럼 추가</span>
+    </div>
+
+    <!-- 3-4 -->
+    <div class="learn-card">
+      <div class="learn-num">04</div>
+      <div class="learn-title">Launch Analysis — 신규 소재 추적</div>
+      <div class="learn-desc">
+        새 소재 올리면 초기 성과를 자동으로 추적하고, 빠르게 위너/루저를 판단하는 대시보드.<br><br>
+        현재 bscamp에 없음. 소재 등록 시점 기준으로 초기 7일/14일 성과를 별도 집계.
+      </div>
+      <span class="learn-action">→ 신규 소재 대시보드 추가</span>
+    </div>
+
+    <!-- 3-5 -->
+    <div class="learn-card" style="grid-column: span 2">
+      <div class="learn-num">05</div>
+      <div class="learn-title">Runneth AI → qa봇 소재 분석 모드</div>
+      <div class="learn-desc">
+        Motion의 Runneth: "내 광고 왜 안 되고 있어?" → 계정 데이터 + 벤치마크 RAG로 답변.<br>
+        bscamp qa봇은 현재 강의/경험 RAG. <strong>소재 분석 컨텍스트 추가</strong>하면 같은 수준 구현 가능.<br><br>
+        "내 광고 분석해줘" → 해당 계정 소재 L1~L4 데이터 + 벤치마크 + qa봇이 답변하는 흐름.
+      </div>
+      <span class="learn-action">→ qa봇에 account_id 기반 소재 데이터 컨텍스트 추가</span>
+    </div>
+  </div>
+
+  <!-- 4. bscamp 강점 -->
+  <h2 id="strength">4. bscamp만의 강점 — Motion에 없는 것</h2>
+
+  <div class="highlight-green">
+    🏆 이 5가지는 Motion이 돈을 아무리 써도 당장 따라잡기 어렵다. LP 데이터, 행동 데이터, 시선 예측 — 수집 구조 자체가 다르다.
+  </div>
+
+  <div class="strength-grid">
+    <div class="strength-card">
+      <div class="s-icon">👁️</div>
+      <div class="s-title">시선 예측 (DeepGaze + Gemini)</div>
+      <div class="s-desc">
+        소재 이미지에서 사용자 시선 흐름 예측. "어디를 먼저 보는지"를 데이터로.<br><br>
+        Motion에 아예 없는 기능. 광고 소재 최적화에서 가장 과학적인 접근.
+      </div>
+      <span class="s-badge">Motion 불가 — 기술 구조 차이</span>
+    </div>
+
+    <div class="strength-card">
+      <div class="s-icon">📄</div>
+      <div class="s-title">LP 4축 분석</div>
+      <div class="s-desc">
+        눈(시선) → 뇌(구조분석) → 탐색(스크롤) → 결정(클릭).<br><br>
+        광고 소재만 분석하는 Motion과 달리, 랜딩 페이지까지 연결해서 전환 경로 전체를 본다.
+      </div>
+      <span class="s-badge">Motion에 없음</span>
+    </div>
+
+    <div class="strength-card">
+      <div class="s-icon">🔗</div>
+      <div class="s-title">소재-LP 일관성 분석</div>
+      <div class="s-desc">
+        광고에서 약속한 것과 LP에서 보여주는 것이 일치하는지 자동 검증.<br><br>
+        불일치 = 전환율 직격. <code>creative_lp_consistency</code>로 정량화.
+      </div>
+      <span class="s-badge">Motion에 없음</span>
+    </div>
+
+    <div class="strength-card">
+      <div class="s-icon">🔄</div>
+      <div class="s-title">순환 학습 (Change Detection)</div>
+      <div class="s-desc">
+        LP/소재 변경 감지 → 변경 전후 성과 비교 → 자동 데이터화.<br><br>
+        "뭘 바꿨더니 ROAS가 올랐다/내렸다"를 사람이 아닌 시스템이 학습.
+      </div>
+      <span class="s-badge">Motion에 없음</span>
+    </div>
+
+    <div class="strength-card" style="grid-column: span 2">
+      <div class="s-icon">🎓</div>
+      <div class="s-title">교육 통합</div>
+      <div class="s-desc">
+        분석 결과 → 수강생에게 "이렇게 고치세요" 가이드 자동 제공.<br><br>
+        Motion은 분석 데이터를 주는 것으로 끝. bscamp는 그 데이터를 교육 피드백으로 변환해서 수강생 역량을 직접 향상시킨다. 가장 큰 비즈니스 차별점.
+      </div>
+      <span class="s-badge">비즈니스 모델 수준의 차이</span>
+    </div>
+  </div>
+
+  <!-- 5. 기술 스택 -->
+  <h2 id="stack">5. 기술 스택 비교</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">항목</th>
+        <th style="width:37%">🟣 Motion</th>
+        <th style="width:38%">🟢 bscamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>프론트</td>
+        <td>Vite SPA</td>
+        <td>Next.js SSR</td>
+      </tr>
+      <tr>
+        <td>API</td>
+        <td>GraphQL</td>
+        <td>REST (Next.js API Routes)</td>
+      </tr>
+      <tr>
+        <td>DB</td>
+        <td>추정: PostgreSQL</td>
+        <td>Supabase (PostgreSQL)</td>
+      </tr>
+      <tr>
+        <td>AI 모델</td>
+        <td>자체 AI (GPT wrapper 아님)</td>
+        <td>Gemini 3.1 Pro</td>
+      </tr>
+      <tr>
+        <td>시선 예측</td>
+        <td><span class="stack-no">✕</span></td>
+        <td><span class="stack-yes">✓</span> DeepGaze (PyTorch)</td>
+      </tr>
+      <tr>
+        <td>임베딩</td>
+        <td>추정: 있음</td>
+        <td>BGE-M3 (로컬)</td>
+      </tr>
+      <tr>
+        <td>모니터링</td>
+        <td>Datadog + FullStory + Clarity</td>
+        <td>Mixpanel</td>
+      </tr>
+      <tr>
+        <td>CRM</td>
+        <td>HubSpot</td>
+        <td>Solapi (카카오 알림톡)</td>
+      </tr>
+      <tr>
+        <td>피처플래그</td>
+        <td>LaunchDarkly</td>
+        <td><span class="stack-no">✕</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box warn">
+    <h4>⚠️ 기술 격차 주의사항</h4>
+    <ul>
+      <li><strong>모니터링</strong>: Motion은 Datadog(인프라) + FullStory(세션재현) + Clarity(히트맵) 3종 세트. bscamp는 Mixpanel만. 서비스 장애 감지 속도가 다르다.</li>
+      <li><strong>피처플래그</strong>: LaunchDarkly 없으면 A/B 테스트 배포가 코드 레벨에서 수동. 중장기 성장하면 도입 검토 필요.</li>
+      <li><strong>GraphQL</strong>: 프론트 개발 속도에서 장점. REST API 구조가 복잡해지면 고려.</li>
+    </ul>
+  </div>
+
+  <!-- 심화: Motion 콘텐츠 분석체계 -->
+  <h2 id="deep">6. Motion 콘텐츠 분석체계 심화 — 배울 것 디테일</h2>
+
+  <p>Motion의 핵심 경쟁력은 <strong>AI 태깅 분류체계(Taxonomy)</strong>다. 55만 개 광고를 4개 카테고리로 자동 분류해서, "어떤 <em>유형</em>의 광고가 잘 되는가"를 데이터로 답한다. 이걸 bscamp에 어떻게 흡수할지 하나씩 뜯어보자.</p>
+
+  <h3>6-1. AI 태깅 4카테고리 상세</h3>
+
+  <div class="box motion">
+    <h4>🏷️ Visual Format (시각적 형태) — 20개 분류</h4>
+    <p>광고의 "생김새"를 분류한다. 어떻게 만들었는가.</p>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;margin:8px 0">
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600;width:25%">Creator-led (UGC)</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">사람이 직접 카메라 앞에서 말하는 형태. 가장 높은 사용률.</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Product Demo</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">제품 사용 과정을 보여주는 영상/이미지</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Testimonial</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">후기/리뷰 형태</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Before & After</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">비포→애프터 변화 비교</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Split Screen</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">화면 분할 비교</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Montage</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">여러 클립을 빠르게 편집</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Infographic</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">정보/데이터 시각화</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Listicle</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">"3가지 이유" 같은 목록형</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">How To</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">사용법/튜토리얼</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Skit</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">연기/상황극</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Street Interview</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">길거리 인터뷰 형태</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Pattern Interrupt</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">스크롤 멈추게 하는 파격적 첫 프레임</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Unboxing</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">개봉기</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">BTS (Behind The Scenes)</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">제작 과정/비하인드</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Static Product Shot</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">제품 단독 이미지</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Lifestyle</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">제품 사용 라이프스타일 연출</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Carousel</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">슬라이드형</td></tr>
+      <tr><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Motion Graphics</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">애니메이션/그래픽 위주</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:6px;border-bottom:1px solid #e2e8f0;font-weight:600">Whitetext</td><td style="padding:6px;border-bottom:1px solid #e2e8f0">흰 텍스트 오버레이 중심</td></tr>
+      <tr><td style="padding:6px;font-weight:600">Mashup</td><td style="padding:6px">여러 포맷 혼합</td></tr>
+    </table>
+    <p style="margin-top:8px"><strong>bscamp 적용:</strong> <code>analysis_json.visual_format</code> 필드 추가. Gemini 5축 프롬프트에 "이 소재의 Visual Format을 위 20개 중 하나로 분류해라" 한 줄 추가면 됨. 비용 추가 $0.</p>
+  </div>
+
+  <div class="box motion">
+    <h4>🪝 Hook Tactic (훅 전략) — 5대 분류</h4>
+    <p>$1M+/월 계정에서 가장 많이 쓰이고 효과 좋은 훅 5가지. Motion 벤치마크 $13억 분석에서 추출.</p>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;margin:8px 0">
+      <tr style="background:#f8f5ff"><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:700;width:25%">Confession</td><td style="padding:8px;border-bottom:1px solid #e2e8f0">"나도 처음엔 안 믿었는데..." — 솔직한 고백으로 시작. 신뢰 형성.</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:700">Bold Claim</td><td style="padding:8px;border-bottom:1px solid #e2e8f0">"이 크림 하나로 주름이 사라졌습니다" — 강한 주장으로 주목 끌기.</td></tr>
+      <tr style="background:#f8f5ff"><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:700">Relatability</td><td style="padding:8px;border-bottom:1px solid #e2e8f0">"피부 고민 있는 사람 여기 모여라" — 공감대 형성으로 시작.</td></tr>
+      <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:700">Contrast</td><td style="padding:8px;border-bottom:1px solid #e2e8f0">"이전 vs 이후" — 대비로 변화를 시각화.</td></tr>
+      <tr><td style="padding:8px;font-weight:700">Curiosity</td><td style="padding:8px">"아무도 안 알려주는 피부관리 비밀" — 궁금증 유발. 정보 격차 이용.</td></tr>
+    </table>
+    <p style="margin-top:8px"><strong>bscamp 적용:</strong> <code>analysis_json.hook_tactic</code> 필드 추가. 첫 3초 + 카피 기반으로 Gemini가 분류. 이후 "어떤 훅이 우리 수강생한테 가장 효과적인지" 벤치마크 가능.</p>
+  </div>
+
+  <div class="box motion">
+    <h4>🎯 Messaging Angle (메시징 각도)</h4>
+    <p>같은 제품이라도 "어떤 관점으로" 말하는가. Motion은 이걸 자동 분류해서 "어떤 앵글이 ROAS 높은지" 비교한다.</p>
+    <ul>
+      <li><strong>Price/Value</strong> — 가격, 할인, 가성비 강조</li>
+      <li><strong>Quality/Premium</strong> — 품질, 성분, 프리미엄 강조</li>
+      <li><strong>Social Proof</strong> — 리뷰 수, 평점, "N만 명이 선택"</li>
+      <li><strong>Emotional</strong> — 감성, 스토리텔링, 라이프스타일</li>
+      <li><strong>Functional</strong> — 기능, 성능, 스펙 중심</li>
+      <li><strong>Problem→Solution</strong> — 고민 제시 → 해결책 제안</li>
+      <li><strong>Urgency/Scarcity</strong> — 한정 수량, 타이머, FOMO</li>
+    </ul>
+    <p style="margin-top:8px"><strong>bscamp 적용:</strong> <code>analysis_json.messaging_angle</code> 필드. 광고 카피 + 첫 프레임 분석으로 분류. "우리 수강생들은 가격 앵글에 치우쳐 있다" → "감성 앵글 테스트해보세요" 처방 가능.</p>
+  </div>
+
+  <div class="box motion">
+    <h4>👤 Intended Audience (타겟 추정)</h4>
+    <p>소재가 "누구한테" 말하고 있는지 자동 추정. 연령대, 성별, 관심사.</p>
+    <ul>
+      <li>소재 비주얼 + 카피에서 타겟 자동 추정</li>
+      <li>"이 소재는 20대 여성 / 피부관리 관심층을 타겟"</li>
+      <li>실제 Meta 타겟팅과 비교 → 불일치 감지</li>
+    </ul>
+    <p style="margin-top:8px"><strong>bscamp 적용:</strong> <code>analysis_json.intended_audience</code> 필드. Meta API에서 가져온 실제 adset 타겟팅과 비교해서 "소재 톤이 타겟과 안 맞다" 피드백 가능.</p>
+  </div>
+
+  <h3>6-2. Andromeda 호환 신호 — Motion이 강조하는 핵심</h3>
+
+  <div class="box learn">
+    <h4>🤖 Andromeda = Meta의 광고 배포 AI</h4>
+    <p>Motion Bootcamp Week 1의 핵심 메시지: <strong>"Andromeda는 오가닉 피드에 자연스러운 광고를 더 많이 노출시킨다."</strong></p>
+    <ul>
+      <li><strong>첫 3초가 전부</strong> — 첫 3초가 비슷하면 나머지 달라도 같은 광고로 취급 (Meta 공식)</li>
+      <li><strong>피드 네이티브</strong> — 유저의 오가닉 피드 미학과 비슷할수록 노출 ↑</li>
+      <li><strong>시각적 훅 > 카피</strong> — Andromeda는 비주얼을 먼저 평가</li>
+      <li><strong>과제</strong>: 내 타겟 오가닉 피드 스크린샷 캡처 → 내 광고 첫 프레임과 비교 → 유사도 판단</li>
+    </ul>
+    <p style="margin-top:10px"><strong>bscamp 적용: 이미 구현됨!</strong></p>
+    <ul>
+      <li>Andromeda 유사도 계산: <code>compute-andromeda-similarity.mjs</code> — DB 496건 존재</li>
+      <li>DeepGaze 시선 예측이 "시각적 훅 효과"를 객관적으로 측정</li>
+      <li><strong>추가할 것:</strong> 오가닉 피드 레퍼런스 이미지와 소재 첫 프레임 임베딩 유사도 계산 → "피드 네이티브 점수" 신규 지표</li>
+    </ul>
+  </div>
+
+  <h3>6-3. Comparative Reports — 포맷별 성과 비교</h3>
+
+  <div class="box motion">
+    <h4>📊 Motion의 킬러 기능: "어떤 유형이 이기고 있는가?"</h4>
+    <p>개별 광고가 아니라, <strong>태그별 그룹</strong>으로 묶어서 성과를 비교하는 리포트.</p>
+    <ul>
+      <li>"UGC vs 모션그래픽 — 어느 쪽 ROAS가 높아?" → 데이터로 답</li>
+      <li>"Confession 훅 vs Bold Claim 훅 — 어느 쪽이 CTR 높아?" → 데이터로 답</li>
+      <li>"가격 앵글 vs 감성 앵글 — 어느 쪽이 구매까지 가?" → 데이터로 답</li>
+    </ul>
+    <p style="margin-top:10px"><strong>bscamp에 없는 것.</strong> 개별 소재 분석은 되는데, "유형별 비교"가 안 됨.</p>
+    <p><strong>구현 방법:</strong></p>
+    <ol style="margin:4px 0 0 18px;font-size:14px">
+      <li>위 4카테고리 태깅 추가 (Visual Format, Hook Tactic, Messaging Angle, Audience)</li>
+      <li>태그별 성과 집계 뷰: <code>SELECT visual_format, AVG(ctr), AVG(roas), COUNT(*) FROM ... GROUP BY visual_format</code></li>
+      <li>프론트에 "비교 분석" 탭 추가 — 두 그룹 선택해서 나란히 비교</li>
+    </ol>
+    <p style="margin-top:8px"><strong>예상 효과:</strong> 수강생이 "UGC만 만들고 있었는데, 데이터 보니까 Product Demo가 ROAS 2배 높네요" → 바로 전략 전환. 지금까지 감으로 하던 걸 데이터로.</p>
+  </div>
+
+  <h3>6-4. Naming Convention — 자동 분석의 기반</h3>
+
+  <div class="box motion">
+    <h4>📛 소재 이름 = 자동 분류의 핵심</h4>
+    <p>Motion은 <strong>광고 이름 규칙(Naming Convention)</strong>으로 소재를 자동 분류한다.</p>
+    <p>예: <code>UGC_Confession_PriceFocus_Creator-Kim_V2</code> → 자동으로:</p>
+    <ul>
+      <li>Visual Format = UGC</li>
+      <li>Hook Tactic = Confession</li>
+      <li>Messaging Angle = Price</li>
+      <li>Creator = Kim</li>
+      <li>Version = V2</li>
+    </ul>
+    <p style="margin-top:8px"><strong>bscamp 상황:</strong> 수강생들은 광고 이름을 체계적으로 안 지음. "봄세일_0320" 같은 식.</p>
+    <p><strong>bscamp 적용 방법 (2단계):</strong></p>
+    <ol style="margin:4px 0 0 18px;font-size:14px">
+      <li><strong>지금</strong>: Gemini AI가 소재 비주얼+카피 보고 자동 분류 (이름 안 봄) → 정확도 80%+</li>
+      <li><strong>나중</strong>: 수강생한테 네이밍 컨벤션 교육 → 이름 기반 자동 태깅 → 정확도 100%</li>
+    </ol>
+    <p style="margin-top:8px"><em>→ 단계 1만으로도 충분. AI 태깅이 네이밍보다 더 유연하고 수강생한테 부담이 없다.</em></p>
+  </div>
+
+  <h3>6-5. Launch Analysis — 신규 소재 성과 추적</h3>
+
+  <div class="box motion">
+    <h4>🚀 새 광고 올리면 첫 7일이 승부</h4>
+    <p>Motion은 소재 등록 시점 기준으로 D+1, D+3, D+7, D+14 성과를 자동 추적해서 "이거 위너야 루저야" 빠르게 판단.</p>
+    <ul>
+      <li><strong>위너 기준</strong>: 벤치마크 CTR/ROAS 상위 20% 진입</li>
+      <li><strong>루저 기준</strong>: D+3까지 벤치마크 하위 30% → "이거 끄세요" 알림</li>
+      <li><strong>보류</strong>: 중간 → "D+7까지 지켜보세요"</li>
+    </ul>
+    <p style="margin-top:10px"><strong>bscamp 적용:</strong></p>
+    <ul>
+      <li><code>creative_media.first_served_at</code> 컬럼 이미 있음 (collect-daily에서 최초 집행일 기록)</li>
+      <li>D+1/3/7/14 성과 집계 뷰 추가 → 프론트에 "신규 소재 추적" 카드</li>
+      <li>벤치마크 대비 위너/루저 자동 판정 → 슬랙/카톡 알림</li>
+    </ul>
+    <p style="margin-top:8px"><strong>예상 효과:</strong> 수강생이 "어제 올린 광고 어떻게 됐어요?" → "D+1 CTR 2.3%, 벤치마크 상위 15%입니다. 위너 가능성 높으니 예산 올리세요."</p>
+  </div>
+
+  <h3>6-6. Runneth AI — 소재 분석 대화형 인터페이스</h3>
+
+  <div class="box motion">
+    <h4>🤖 "내 광고 왜 안 돼?" → AI가 데이터 기반 답변</h4>
+    <p>Motion의 Runneth: 계정 전체 데이터 + 벤치마크를 RAG로 물고, 자연어로 대화.</p>
+    <ul>
+      <li>"지난달 가장 효과 좋았던 훅 유형은?" → 데이터에서 즉시 답변</li>
+      <li>"내 경쟁사 A랑 비교해줘" → Inspo 데이터 + 내 계정 비교</li>
+      <li>"다음주 만들 광고 아이디어 5개" → 성과 데이터 기반 제안</li>
+    </ul>
+    <p style="margin-top:10px"><strong>bscamp 적용:</strong></p>
+    <ul>
+      <li>qa봇에 account_id 기반 L1~L4 분석 데이터 + 벤치마크 컨텍스트 추가</li>
+      <li>"내 광고 분석해줘" → 해당 수강생의 소재 전체 분석 + 벤치마크 비교 + 처방</li>
+      <li><strong>bscamp 차별점:</strong> Runneth는 분석으로 끝. bscamp qa봇은 분석 + <em>교육 피드백</em>까지. "이 광고의 Hook이 약한 이유는 ~ 이고, 수업 3주차에서 배운 ~ 기법을 적용하면 ~"</li>
+    </ul>
+  </div>
+
+  <h3>6-7. 적용 우선순위 매트릭스</h3>
+
+  <div class="box both">
+    <h4>📋 구현 난이도 × 임팩트</h4>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;margin:8px 0">
+      <thead>
+        <tr style="background:#f1f5f9"><th style="padding:8px;text-align:left;border-bottom:2px solid #e2e8f0">항목</th><th style="padding:8px;text-align:center;border-bottom:2px solid #e2e8f0;width:15%">난이도</th><th style="padding:8px;text-align:center;border-bottom:2px solid #e2e8f0;width:15%">임팩트</th><th style="padding:8px;text-align:center;border-bottom:2px solid #e2e8f0;width:15%">우선순위</th></tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0">4카테고리 태깅 (Gemini 프롬프트 확장)</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#22c55e;font-weight:700">낮음</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#ef4444;font-weight:700">최고</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;font-weight:800">🥇 1순위</td></tr>
+        <tr style="background:#f8fafc"><td style="padding:8px;border-bottom:1px solid #e2e8f0">태그별 성과 비교 뷰 (Comparative)</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#f59e0b;font-weight:700">중간</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#ef4444;font-weight:700">최고</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;font-weight:800">🥈 2순위</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0">신규 소재 D+7 추적</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#22c55e;font-weight:700">낮음</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#f59e0b;font-weight:700">높음</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;font-weight:800">🥉 3순위</td></tr>
+        <tr style="background:#f8fafc"><td style="padding:8px;border-bottom:1px solid #e2e8f0">qa봇 소재 분석 컨텍스트</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#f59e0b;font-weight:700">중간</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#f59e0b;font-weight:700">높음</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0">4순위</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0">피드 네이티브 점수 (Andromeda)</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#f59e0b;font-weight:700">중간</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0;color:#f59e0b;font-weight:700">높음</td><td style="padding:8px;text-align:center;border-bottom:1px solid #e2e8f0">5순위</td></tr>
+        <tr style="background:#f8fafc"><td style="padding:8px">네이밍 컨벤션 교육</td><td style="padding:8px;text-align:center;color:#22c55e;font-weight:700">낮음</td><td style="padding:8px;text-align:center;color:#64748b;font-weight:700">보통</td><td style="padding:8px;text-align:center">6순위</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:10px;font-size:14px"><strong>1순위가 가장 빠르게 가장 큰 효과.</strong> Gemini 프롬프트에 4카테고리 분류 지시를 추가하는 것만으로 — 추가 비용 $0, 코드 변경 최소 — Motion의 핵심 분류체계를 흡수할 수 있다.</p>
+  </div>
+
+  <!-- 결론 -->
+  <h2>결론 — 지금 당장 할 것</h2>
+
+  <div class="box learn">
+    <h4>🥷 우선순위 액션 (Motion에서 훔칠 것)</h4>
+    <ol style="margin:8px 0 0 18px;font-size:14px">
+      <li style="margin-bottom:10px"><strong>L1 태깅에 visual_format 컬럼 추가</strong> — Motion 20개 분류 그대로. Gemini 프롬프트 한 줄 추가로 가능.</li>
+      <li style="margin-bottom:10px"><strong>Hook Tactic + Messaging Angle 태깅</strong> — L1 확장. 같은 Gemini 호출에 추가.</li>
+      <li style="margin-bottom:10px"><strong>Visual Format별 성과 비교 뷰</strong> — Comparative Report 최소 버전. "UGC vs 영상 중 ROAS 높은 건?" 답할 수 있게.</li>
+      <li style="margin-bottom:10px"><strong>신규 소재 추적 대시보드</strong> — 소재 최초 집행일 기준 D+7/D+14 성과 자동 집계.</li>
+      <li><strong>qa봇 소재 분석 컨텍스트</strong> — account_id 기반 L1~L4 데이터 연결. Runneth 수준의 답변 가능.</li>
+    </ol>
+  </div>
+
+  <div class="highlight-green">
+    🎯 bscamp의 방향: Motion 분류체계 흡수 (수평) + 시선예측·LP분석 심화 (수직) → 두 방향 동시에. 경쟁사 기능은 빠르게 흡수하고, 핵심 차별점은 계속 깊어지게.
+  </div>
+
+  <p style="margin-top:40px;font-size:13px;color:#94a3b8;text-align:center">
+    리서치 완료: 2026-03-23 &nbsp;·&nbsp; 모찌리포트
+  </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="date" content="2026-02-19"/>
+    <meta name="project" content="BS CAMP RAG"/>
+    <meta name="status" content="pending"/>
+    <title>BS CAMP RAG Layer 0 Architecture Report v1.0</title>
+    <style>
+        :root {
+            --red: #F75D5D;
+            --dark: #1a1a2e;
+            --gray: #f8f9fa;
+            --tier1: #F75D5D;
+            --tier2: #e67e22;
+            --tier3: #3498db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            background: var(--red);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--gray);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .toc h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .toc a {
+            color: var(--dark);
+            text-decoration: none;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--red);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: var(--dark);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 4px solid var(--red);
+        }
+
+        .section h3 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 24px 0 16px 0;
+        }
+
+        /* Callout boxes */
+        .callout {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .callout-red {
+            background: #fff5f5;
+            border-color: var(--red);
+        }
+
+        .callout-blue {
+            background: #f0f9ff;
+            border-color: #3b82f6;
+        }
+
+        .callout-green {
+            background: #f0fdf4;
+            border-color: #10b981;
+        }
+
+        .callout-orange {
+            background: #fffbeb;
+            border-color: #f59e0b;
+        }
+
+        /* Diagrams */
+        .diagram {
+            background: var(--dark);
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            margin: 20px 0;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--dark);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) td {
+            background: #fafafa;
+        }
+
+        /* Tier badges */
+        .tier-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .tier-1a { background: var(--tier1); }
+        .tier-1b { background: var(--tier2); }
+        .tier-2 { background: var(--tier3); }
+        .tier-3 { background: #95a5a6; }
+
+        /* Flow cards */
+        .flow-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .flow-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        /* Step numbers */
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--red);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin: 16px 0;
+        }
+
+        /* Progress bars */
+        .progress-bar {
+            background: #e5e7eb;
+            border-radius: 4px;
+            height: 20px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--red);
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Code blocks */
+        .code {
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+
+        /* Checklist */
+        .checklist {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .checklist input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+
+        .checklist li {
+            margin: 8px 0;
+            list-style: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .meta-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .flow-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .diagram {
+                font-size: 11px;
+            }
+        }
+
+        /* ADR Cards */
+        .adr-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+
+        .adr-header {
+            background: var(--dark);
+            color: white;
+            padding: 12px 16px;
+            font-weight: 600;
+        }
+
+        .adr-content {
+            padding: 16px;
+        }
+
+        .adr-section {
+            margin: 12px 0;
+        }
+
+        .adr-section strong {
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">ARCHITECTURE v1.0</div>
+            <h1>BS CAMP RAG Layer 0</h1>
+            <p class="subtitle">Knowledge Base 아키텍처 재설계 보고서</p>
+            <div class="meta-info">
+                <span>📅 2026-02-19</span>
+                <span>👤 Smith (메타 광고 교육)</span>
+                <span>🏗️ Layer 0 Foundation</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Table of Contents -->
+        <section class="toc">
+            <h2>📋 목차</h2>
+            <ul>
+                <li><a href="#overview">1. 한 눈에 보는 전체 구조</a></li>
+                <li><a href="#comparison">2. 현재(AS-IS) vs 목표(TO-BE) 비교</a></li>
+                <li><a href="#sources">3. 소스 8종과 우선순위 체계</a></li>
+                <li><a href="#data-flow">4. 데이터가 흘러가는 과정</a></li>
+                <li><a href="#multimodal">5. 멀티모달 RAG — 이미지도 검색된다</a></li>
+                <li><a href="#search-algorithm">6. 검색 알고리즘 — "내 강의가 먼저" 보장</a></li>
+                <li><a href="#consumers">7. 5개 Consumer — KB를 어디에 쓰나</a></li>
+                <li><a href="#content-automation">7-1. 콘텐츠 자동화 파이프라인</a></li>
+                <li><a href="#api-map">8. API 연결 맵</a></li>
+                <li><a href="#schema">9. DB 스키마 변경</a></li>
+                <li><a href="#decisions">10. 주요 결정 사항 (ADR 1~12)</a></li>
+                <li><a href="#roadmap">11. 구현 로드맵</a></li>
+                <li><a href="#checklist-section">12. Smith님 확인 필요</a></li>
+            </ul>
+        </section>
+
+        <!-- Section 1: Overview -->
+        <section id="overview" class="section">
+            <h2>1. 한 눈에 보는 전체 구조</h2>
+            
+            <div class="callout callout-blue">
+                <strong>🏛️ "디지털 도서관" 비유</strong><br>
+                Tier 1A/1B는 서가 맨 앞쪽의 핵심 도서, Tier 3은 뒤쪽 참고서적입니다. 
+                사서(AI)가 질문을 받으면 앞쪽 서가를 먼저 확인하되, 뒤쪽에 더 관련성 높은 자료가 있으면 그것도 가져옵니다.
+            </div>
+
+            <div class="diagram">┌─────────────────── BS CAMP RAG ARCHITECTURE ──────────────────┐
+│                                                               │
+│  LAYER 2: Distribution                                        │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │  📧 Email   🌐 Web   📱 Mobile   📺 Webinar   💬 Chat  │  │
+│  └─────────────────────────────────────────────────────────┘  │
+│                              ▲                               │
+│  LAYER 1: Content Creation                                    │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │  ✍️ Blog   📮 Newsletter   🎯 QA   📋 Webinar Planning   │  │
+│  └─────────────────────────────────────────────────────────┘  │
+│                              ▲                               │
+│  LAYER 0: Knowledge Foundation                                │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │                 5개 Consumer 서비스                      │  │
+│  │    🔍 search_knowledge RPC (가중 점수 검색)               │  │
+│  │                       ▲                                 │  │
+│  │  ┌─────────────── knowledge_chunks ──────────────────┐   │  │
+│  │  │  🧠 768d 벡터 임베딩 + 메타데이터 + 우선순위      │   │  │
+│  │  └─────────────────────▲─────────────────────────────┘   │  │
+│  │                       │                                 │  │
+│  │  ┌─────────────────── contents ──────────────────────┐   │  │
+│  │  │  📝 원본 텍스트 + 이미지 + 메타데이터              │   │  │
+│  │  └─────────────────────▲─────────────────────────────┘   │  │
+│  │                       │                                 │  │
+│  │         8종 데이터 소스 (우선순위별)                     │  │
+│  │  ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┐   │  │
+│  │  │Tier1A│Tier1B│ Tier2 │  Tier3 │               │   │  │
+│  │  │강의  │과제  │ Q&A  │ 크롤링 │ ... (총 8종)     │   │  │
+│  │  │블루프린트│피드백│미팅 │유튜브 │               │   │  │
+│  │  └──────┴──────┴──────┴──────┴──────┴──────┴──────┘   │  │
+│  └─────────────────────────────────────────────────────────┘  │
+└───────────────────────────────────────────────────────────────┘
+
+📊 현재 상태: 664 강의 청크 + 43 크롤링 → 2000+ 청크 예상
+🔄 처리량: ~100 검색/일, 5개 서비스 동시 사용
+💰 예상 비용: ~$100/월 (Gemini + Anthropic + Supabase + Vercel)</div>
+        </section>
+
+        <!-- Section 2: Comparison -->
+        <section id="comparison" class="section">
+            <h2>2. 현재(AS-IS) vs 목표(TO-BE) 비교</h2>
+
+            <h3>🚨 현재 문제점</h3>
+            <table>
+                <thead>
+                    <tr><th>문제</th><th>현재 상황</th><th>수강생에게 미치는 영향</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>우선순위 없음</strong></td>
+                        <td>강의와 외부 블로그가 동일한 가중치</td>
+                        <td>질문에 외부 블로그가 먼저 나올 수 있음</td>
+                    </tr>
+                    <tr>
+                        <td><strong>데이터 단절</strong></td>
+                        <td>contents의 43개 크롤링 미연결</td>
+                        <td>수집한 자료를 검색에서 활용 못함</td>
+                    </tr>
+                    <tr>
+                        <td><strong>단일 경로 없음</strong></td>
+                        <td>강의→chunks 직접, 크롤링→contents만</td>
+                        <td>일관성 없는 검색 품질</td>
+                    </tr>
+                    <tr>
+                        <td><strong>메타데이터 부족</strong></td>
+                        <td>topic_tags, priority 없음</td>
+                        <td>맥락 부족한 답변</td>
+                    </tr>
+                    <tr>
+                        <td><strong>이미지 미지원</strong></td>
+                        <td>텍스트만 임베딩</td>
+                        <td>스크린샷 질문에 답변 불가</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🎯 주요 변경 사항</h3>
+            <div class="flow-cards">
+                <div class="flow-card">
+                    <h4>📋 테이블 통합</h4>
+                    <p><strong>lecture_chunks → knowledge_chunks</strong></p>
+                    <p>모든 소스가 하나의 테이블에 저장되어 일관된 검색 가능</p>
+                </div>
+                
+                <div class="flow-card">
+                    <h4>🔍 검색 알고리즘</h4>
+                    <p><strong>match_lecture_chunks → search_knowledge RPC</strong></p>
+                    <p>가중 점수로 "내 강의 먼저" 보장</p>
+                </div>
+                
+                <div class="flow-card">
+                    <h4>📊 소스 확장</h4>
+                    <p><strong>2종 → 8종</strong></p>
+                    <p>강의, 블루프린트, 과제, 피드백, Q&A, 미팅, 크롤링, 유튜브</p>
+                </div>
+                
+                <div class="flow-card">
+                    <h4>🏆 우선순위 체계</h4>
+                    <p><strong>Tier 1A/1B/2/3</strong></p>
+                    <p>Smith님 설계를 더 세분화하여 정교한 우선순위</p>
+                </div>
+                
+                <div class="flow-card">
+                    <h4>🖼️ 멀티모달</h4>
+                    <p><strong>이미지 임베딩 추가</strong></p>
+                    <p>스크린샷 질문도 답변 가능</p>
+                </div>
+                
+                <div class="flow-card">
+                    <h4>🛤️ 데이터 경로</h4>
+                    <p><strong>모든소스 → contents → chunks</strong></p>
+                    <p>단일화된 파이프라인으로 일관성 보장</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Sources -->
+        <section id="sources" class="section">
+            <h2>3. 소스 8종과 우선순위 체계</h2>
+
+            <div class="callout callout-red">
+                <strong>🎯 핵심 아이디어</strong><br>
+                Smith님의 원래 설계에서 Tier 1을 <strong>1A(공식 교육자료)</strong>와 <strong>1B(실전 데이터)</strong>로 세분화했습니다. 
+                "근거가 명확하고 자료가 가장 많은" 소스인 자사몰사관학교 강의와 메타 블루프린트를 최우선으로 설정했습니다.
+            </div>
+
+            <h3><span class="tier-badge tier-1a">Tier 1A</span>최우선 — 공식 교육 자료 (boost +0.15)</h3>
+            <table>
+                <thead>
+                    <tr><th>소스</th><th>현재 상태</th><th>수집 방식</th><th>특징</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>자사몰사관학교 강의</strong></td>
+                        <td>664 청크</td>
+                        <td>수동 업로드, 기수별 관리</td>
+                        <td>Smith님 직접 검증한 핵심 교육 콘텐츠</td>
+                    </tr>
+                    <tr>
+                        <td><strong>메타 블루프린트</strong></td>
+                        <td>미구축</td>
+                        <td>Meta 공식 교육자료</td>
+                        <td>광고 플랫폼 공식 가이드라인</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3><span class="tier-badge tier-1b">Tier 1B</span>높은 우선순위 — 실전 데이터 (boost +0.10)</h3>
+            <table>
+                <thead>
+                    <tr><th>소스</th><th>현재 상태</th><th>수집 방식</th><th>특징</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>강의 과제</strong></td>
+                        <td>미구축</td>
+                        <td>수동 업로드</td>
+                        <td>실제 수강생 과제와 피드백</td>
+                    </tr>
+                    <tr>
+                        <td><strong>피드백반 스프린트</strong></td>
+                        <td>미구축</td>
+                        <td>Notion API 동기화</td>
+                        <td>개인별 맞춤 피드백 데이터</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="callout callout-orange">
+                <strong>⚠️ 피드백반 개인정보 주의:</strong> 수강생 이름+성과 데이터가 임베딩되면, 다른 수강생 QA 답변에 "A수강생은 월매출 3억 달성" 같은 내용이 노출될 수 있습니다. 임베딩 전 <strong>익명화</strong>(이름→"수강생A") 또는 QA 서빙 시 feedback 소스 <strong>필터링</strong>이 필요합니다. → 섹션 12에서 Smith님 확인 대기.
+            </div>
+            <table style="display:none">
+                <tbody>
+                    <tr><td>placeholder</td></tr>
+                </tbody>
+            </table>
+
+            <h3><span class="tier-badge tier-2">Tier 2</span>보조 — 내부 히스토리 (boost +0.05)</h3>
+            <table>
+                <thead>
+                    <tr><th>소스</th><th>현재 상태</th><th>수집 방식</th><th>특징</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Q&A 이력</strong></td>
+                        <td>knowledge_usage 테이블</td>
+                        <td>실시간 자동 저장</td>
+                        <td>실제 질문-답변 패턴</td>
+                    </tr>
+                    <tr>
+                        <td><strong>미팅 기록</strong></td>
+                        <td>12 청크</td>
+                        <td>수동 업로드</td>
+                        <td>내부 의사결정 맥락</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3><span class="tier-badge tier-3">Tier 3</span>참고 — 외부 자료 (boost +0.00)</h3>
+            <table>
+                <thead>
+                    <tr><th>소스</th><th>현재 상태</th><th>수집 방식</th><th>특징</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>블로그 크롤링</strong></td>
+                        <td>43개 (미연결)</td>
+                        <td>크론 자동 수집</td>
+                        <td>최신 트렌드와 외부 인사이트</td>
+                    </tr>
+                    <tr>
+                        <td><strong>유튜브 자막</strong></td>
+                        <td>미구축</td>
+                        <td>yt-dlp 자동화</td>
+                        <td>영상 기반 교육 콘텐츠</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🎚️ 가중치 시각화</h3>
+            <div style="margin: 20px 0;">
+                <div style="margin: 12px 0;">
+                    <span class="tier-badge tier-1a">Tier 1A</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%">+0.15 boost</div>
+                    </div>
+                </div>
+                <div style="margin: 12px 0;">
+                    <span class="tier-badge tier-1b">Tier 1B</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 67%">+0.10 boost</div>
+                    </div>
+                </div>
+                <div style="margin: 12px 0;">
+                    <span class="tier-badge tier-2">Tier 2</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 33%">+0.05 boost</div>
+                    </div>
+                </div>
+                <div style="margin: 12px 0;">
+                    <span class="tier-badge tier-3">Tier 3</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 15%">+0.00 boost</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="callout callout-orange">
+                <strong>❓ 왜 "무조건 Tier 1 먼저"가 아닌가?</strong><br>
+                Smith님의 원안 <code>ORDER BY priority ASC</code>는 Tier 1에 유사도 0.71인 약한 매칭이 Tier 3의 0.95 강한 매칭보다 무조건 먼저 나옵니다.
+                <br><br>
+                🎯 <strong>가중 점수 방식</strong>은 Tier 1에 가산점을 주되, 정말 관련없는 내용이 올라오는 것은 방지합니다.
+                <br>
+                예: Tier 1 (0.71 + 0.15 = 0.86) vs Tier 3 (0.95 + 0.00 = 0.95) → Tier 3이 더 관련성 높으면 Tier 3가 우선
+            </div>
+        </section>
+
+        <!-- Section 4: Data Flow -->
+        <section id="data-flow" class="section">
+            <h2>4. 데이터가 흘러가는 과정 (비개발자용)</h2>
+
+            <div class="callout callout-blue">
+                <strong>🏭 "자동차 공장" 비유</strong><br>
+                원자재(소스) → 부품 가공(청킹) → 조립라인(임베딩) → 완성품(검색 가능한 지식) → 고객(5개 Consumer)에게 배송
+            </div>
+
+            <div class="diagram">┌─────────────────── 데이터 파이프라인 ───────────────────┐
+│                                                      │
+│  [8종 소스] ──→ [contents] ──→ [청킹] ──→ [임베딩]     │
+│      │              │           │          │         │
+│      │              │           │          ▼         │
+│   수집 방식      원본 저장     의미 단위   좌표 변환     │
+│   자동/수동       메타데이터    분할      768개 숫자    │
+│      │              │           │          │         │
+│      ▼              ▼           ▼          ▼         │
+│                                                      │
+│  강의: 관리자     텍스트+이미지  주제별    "의미의 지도" │
+│  크롤링: 크론     +우선순위     800자     비슷한 의미=  │
+│  유튜브: yt-dlp   +태그         +100겹침  가까운 좌표   │
+│  Q&A: 실시간      +URL          1쌍=1청크             │
+│  Notion: API      +embedded_at  과제=1청크            │
+│                                                      │
+│  ──→ [knowledge_chunks] ──→ [search_knowledge RPC]   │
+│           │                        │                 │
+│      벡터 저장                   가중 점수             │
+│      +메타데이터                 검색 알고리즘         │
+│      +이미지 URL                     │                 │
+│           │                        ▼                 │
+│           └──────────────→ [5개 Consumer]             │
+│                                   답변                │
+└──────────────────────────────────────────────────────┘</div>
+
+            <h3>📋 단계별 세부 설명</h3>
+            
+            <div class="step">
+                <span class="step-num">1</span>
+                <div>
+                    <strong>소스 수집 단계</strong><br>
+                    각 소스가 contents 테이블에 저장됩니다:
+                    <ul style="margin-top: 8px;">
+                        <li><strong>강의:</strong> 관리자가 수동 업로드, 기수별로 구분 관리</li>
+                        <li><strong>크롤링:</strong> 크론 작업으로 매일 자동 수집</li>
+                        <li><strong>유튜브:</strong> yt-dlp로 자막 자동 추출</li>
+                        <li><strong>Q&A:</strong> 답변 완료 시 실시간 자동 저장</li>
+                        <li><strong>Notion:</strong> API를 통한 주기적 동기화</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-num">2</span>
+                <div>
+                    <strong>청킹 (의미 단위로 분할)</strong><br>
+                    소스별로 다른 전략으로 검색하기 좋은 크기로 나눕니다:
+                    <ul style="margin-top: 8px;">
+                        <li><strong>강의:</strong> 주제/슬라이드 단위 (주제 맥락 보존)</li>
+                        <li><strong>과제:</strong> 1과제=1청크 (쪼개면 의미 손실)</li>
+                        <li><strong>Q&A:</strong> 질문+답변 1쌍=1청크 (완결된 대화)</li>
+                        <li><strong>크롤링:</strong> 800자 + 100자 겹침</li>
+                    </ul>
+                    
+                    <div class="callout callout-green" style="margin-top: 12px;">
+                        <strong>🧩 "겹침"이 뭔가요?</strong><br>
+                        책을 찢어서 나눈다면 문장이 중간에 끊어질 수 있습니다. 
+                        "겹침"은 앞 페이지의 마지막 100자를 다음 페이지 시작에 포함시켜서, 
+                        경계에서 맥락이 끊기는 것을 방지하는 기법입니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-num">3</span>
+                <div>
+                    <strong>임베딩 (텍스트→숫자 좌표 변환)</strong><br>
+                    Gemini gemini-embedding-001을 사용해 텍스트를 768개 숫자로 변환합니다.
+                    
+                    <div class="callout callout-blue" style="margin-top: 12px;">
+                        <strong>🗺️ "의미의 지도" 비유</strong><br>
+                        "페이스북 광고"와 "Meta 캠페인"은 비슷한 의미이므로 지도상에서 가까운 위치에 놓입니다.
+                        "광고 예산"과 "요리 레시피"는 전혀 다른 의미이므로 멀리 떨어진 위치에 놓입니다.
+                        <br>월 비용: ~$2 (검색량에 따라 변동)
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-num">4</span>
+                <div>
+                    <strong>벡터 저장 → 검색 가능</strong><br>
+                    knowledge_chunks 테이블에 벡터와 메타데이터가 함께 저장되어 "의미 기반 검색"이 가능해집니다.
+                    단순 키워드 매칭이 아닌, 진짜 의미가 비슷한 내용을 찾을 수 있습니다.
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-num">5</span>
+                <div>
+                    <strong>Consumer가 활용</strong><br>
+                    5개 서비스(QA 헬프데스크, 블로그, 뉴스레터, 웨비나, 챗봇)가 모두 같은 
+                    <code>search_knowledge RPC</code>를 호출해서 지식을 활용합니다.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Multimodal -->
+        <section id="multimodal" class="section">
+            <h2>5. 멀티모달 RAG — 이미지도 검색된다</h2>
+
+            <div class="callout callout-red">
+                <strong>💡 Smith님 요청사항</strong><br>
+                "이미지 올리면 임베딩해뒀다가 비슷한 질문 오면 이미지 쓸 수 있으니까"
+                <br>→ 텍스트뿐만 아니라 이미지도 검색해서 답변에 활용하는 시스템을 만듭니다.
+            </div>
+
+            <div class="diagram">┌────────── 멀티모달 검색 프로세스 ──────────┐
+│                                         │
+│  수강생 질문 + 스크린샷                   │
+│           │                            │
+│           ▼                            │
+│  ┌─────────────┬─────────────────────┐  │
+│  │ 텍스트 임베딩 │    이미지 임베딩     │  │
+│  │ gemini-      │  gemini-vision +    │  │
+│  │ embedding    │  gemini-embedding   │  │
+│  └─────────────┴─────────────────────┘  │
+│           │                            │
+│           ▼                            │
+│  ┌─────────────────────────────────────┐  │
+│  │     동시 검색 (텍스트 + 이미지)      │  │
+│  │  knowledge_chunks에서 유사도 계산   │  │
+│  └─────────────────────────────────────┘  │
+│           │                            │
+│           ▼                            │
+│  ┌─────────────────────────────────────┐  │
+│  │       검색 결과 합산 & 순위        │  │
+│  │   텍스트 매칭 + 이미지 매칭        │  │
+│  └─────────────────────────────────────┘  │
+│           │                            │
+│           ▼                            │
+│    Opus 4.6이 답변 생성                 │
+│    (텍스트 + 관련 이미지 URL 포함)        │
+└─────────────────────────────────────────┘</div>
+
+            <h3>🎯 3가지 주요 시나리오</h3>
+            <div class="flow-cards">
+                <div class="flow-card">
+                    <h4>📱 Q&A에서 이미지 질문</h4>
+                    <p><strong>상황:</strong> 수강생이 광고 관리자 스크린샷과 함께 "여기서 뭐가 잘못됐나요?" 질문</p>
+                    <p><strong>처리:</strong></p>
+                    <ol style="margin-top: 8px; padding-left: 20px;">
+                        <li>이미지 → Gemini Vision → 설명 텍스트 추출</li>
+                        <li>설명 텍스트 + 원본 이미지 URL 임베딩</li>
+                        <li>knowledge_chunks에 저장</li>
+                    </ol>
+                    <p><strong>결과:</strong> 향후 비슷한 스크린샷 질문에 재활용 가능</p>
+                </div>
+
+                <div class="flow-card">
+                    <h4>📊 강의 슬라이드 이미지</h4>
+                    <p><strong>상황:</strong> 강의에 포함된 차트, 도표, 스크린샷</p>
+                    <p><strong>처리:</strong></p>
+                    <ol style="margin-top: 8px; padding-left: 20px;">
+                        <li>슬라이드 이미지에서 텍스트/도표 내용 추출</li>
+                        <li>추출된 설명을 강의 청크에 포함</li>
+                        <li>이미지 임베딩도 함께 저장</li>
+                    </ol>
+                    <p><strong>결과:</strong> "ROAS 계산 차트"같은 시각적 질문에도 답변 가능</p>
+                </div>
+
+                <div class="flow-card">
+                    <h4>🔄 이미지 재활용</h4>
+                    <p><strong>상황:</strong> 과거 Q&A의 이미지가 새로운 질문에도 도움됨</p>
+                    <p><strong>처리:</strong></p>
+                    <ol style="margin-top: 8px; padding-left: 20px;">
+                        <li>새 질문의 텍스트로 검색</li>
+                        <li>과거 Q&A 청크가 매칭됨</li>
+                        <li>해당 청크의 이미지 URL도 함께 반환</li>
+                    </ol>
+                    <p><strong>결과:</strong> 답변에 참고용 이미지 자동 첨부</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 기술적 구현</h3>
+            <div class="code">-- knowledge_chunks에 이미지 관련 컬럼 추가
+ALTER TABLE knowledge_chunks ADD COLUMN image_url TEXT;
+ALTER TABLE knowledge_chunks ADD COLUMN image_description TEXT;
+ALTER TABLE knowledge_chunks ADD COLUMN image_embedding VECTOR(768);</div>
+
+            <div class="callout callout-blue">
+                <strong>🔍 [F-03 반영] 이미지 검색 방식 — 별도 벡터 없이 텍스트 통합</strong><br>
+                Gemini는 이미지를 직접 벡터로 변환하지 못합니다. 대신:<br><br>
+                ① <strong>저장 시:</strong> 이미지 → Gemini Vision → 설명 텍스트 추출 → <code>image_description</code>에 저장 → <code>content</code>에 합침 → 텍스트 임베딩<br>
+                ② <strong>검색 시:</strong> 질문에 이미지가 첨부되면 → Gemini Vision → 설명 텍스트 추출 → 텍스트로 search_knowledge 호출<br><br>
+                <strong>장점:</strong> 별도 image_embedding 컬럼/인덱스 불필요. 기존 검색 파이프라인 그대로 활용.<br>
+                <strong>단점:</strong> 이미지의 시각적 유사도(색상, 레이아웃)는 못 잡음. 의미적 유사도만 가능.
+            </div>
+        </section>
+
+        <!-- Section 6: Search Algorithm -->
+        <section id="search-algorithm" class="section">
+            <h2>6. 검색 알고리즘 — "내 강의가 먼저" 보장</h2>
+
+            <h3>🚨 기존 문제점</h3>
+            <div class="flow-cards">
+                <div class="flow-card">
+                    <h4>❌ match_lecture_chunks</h4>
+                    <p><strong>문제:</strong> 순수 유사도만으로 정렬</p>
+                    <p><strong>결과:</strong> 외부 블로그의 고도로 최적화된 SEO 글이 Smith님의 강의보다 먼저 나올 수 있음</p>
+                    <div class="code">-- 기존 방식: 우선순위 무시
+SELECT * FROM lecture_chunks 
+ORDER BY similarity DESC;</div>
+                </div>
+
+                <div class="flow-card">
+                    <h4>⚠️ Smith님 원안의 한계</h4>
+                    <p><strong>원안:</strong> <code>ORDER BY priority ASC</code> (무조건 Tier 1 먼저)</p>
+                    <p><strong>문제:</strong> Tier 1에 유사도 0.71인 약한 매칭이 Tier 3의 유사도 0.95 강한 매칭보다 무조건 먼저</p>
+                    <div class="code">-- Smith님 원안의 한계
+-- Tier 1 (0.71 유사도) > Tier 3 (0.95 유사도)
+-- 관련성 낮아도 우선순위만으로 결정</div>
+                </div>
+            </div>
+
+            <h3>✅ 제안: 가중 점수 방식</h3>
+            <div class="callout callout-green">
+                <strong>🎯 핵심 아이디어</strong><br>
+                <code>final_score = similarity + tier_boost</code><br>
+                Tier 1에 가산점을 주되, 정말 관련없는 내용이 올라오는 것은 방지합니다.<br>
+                전체 SQL은 <a href="#schema">섹션 9. DB 스키마 변경</a>에서 확인하세요.
+            </div>
+
+            <div class="code">-- 핵심 공식
+final_score = (1 - cosine_distance) + tier_boost
+
+-- tier_boost 값:
+-- Tier 1A (강의, 블루프린트): +0.15
+-- Tier 1B (과제, 피드백):     +0.10
+-- Tier 2  (Q&amp;A, 미팅):       +0.05
+-- Tier 3  (크롤링, 유튜브):   +0.00
+
+-- 정렬: ORDER BY final_score DESC</div>
+
+            <h3>📊 실제 검색 예시: "카탈로그 광고 ROAS가 3 이하"</h3>
+            <table>
+                <thead>
+                    <tr><th>순위</th><th>소스</th><th>유사도</th><th>가중치</th><th>최종점수</th><th>내용 요약</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🥇</td>
+                        <td><span class="tier-badge tier-1a">강의</span></td>
+                        <td>0.84</td>
+                        <td>+0.15</td>
+                        <td><strong>0.99</strong></td>
+                        <td>카탈로그 광고 ROAS 최적화 전략 (15강)</td>
+                    </tr>
+                    <tr>
+                        <td>🥈</td>
+                        <td><span class="tier-badge tier-1a">강의</span></td>
+                        <td>0.82</td>
+                        <td>+0.15</td>
+                        <td><strong>0.97</strong></td>
+                        <td>저성과 캠페인 진단 체크리스트 (12강)</td>
+                    </tr>
+                    <tr>
+                        <td>🥉</td>
+                        <td><span class="tier-badge tier-1a">블루프린트</span></td>
+                        <td>0.79</td>
+                        <td>+0.15</td>
+                        <td><strong>0.94</strong></td>
+                        <td>Meta 공식 카탈로그 광고 가이드</td>
+                    </tr>
+                    <tr>
+                        <td>4위</td>
+                        <td><span class="tier-badge tier-2">Q&A</span></td>
+                        <td>0.88</td>
+                        <td>+0.05</td>
+                        <td><strong>0.93</strong></td>
+                        <td>"ROAS 2.5에서 멈춰있어요" - 김○○님 질문</td>
+                    </tr>
+                    <tr>
+                        <td>5위</td>
+                        <td><span class="tier-badge tier-3">크롤링</span></td>
+                        <td>0.91</td>
+                        <td>+0.00</td>
+                        <td><strong>0.91</strong></td>
+                        <td>[외부 블로그] 카탈로그 광고 최신 트렌드</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-blue">
+                <strong>🎯 검색 결과 분석</strong><br>
+                • 강의 콘텐츠가 1-2위를 차지하여 "내 강의가 먼저" 원칙 달성<br>
+                • Q&A의 높은 유사도(0.88)가 가중치로 인해 적절한 4위 배치<br>
+                • 외부 블로그는 유사도가 가장 높지만(0.91) 가중치 없어 5위<br>
+                • 수강생은 Smith님의 전문 지식을 우선적으로 받으면서, 보충 자료도 함께 제공받음
+            </div>
+        </section>
+
+        <!-- Section 7: Consumers -->
+        <section id="consumers" class="section">
+            <h2>7. 5개 Consumer — KB를 어디에 쓰나</h2>
+
+            <div class="callout callout-green">
+                <strong>🏢 "회사 도서관" 비유</strong><br>
+                하나의 도서관(Knowledge Base)을 5개 부서(Consumer)가 각각 다른 용도로 활용합니다. 
+                마케팅팀은 블로그 자료를, 고객지원팀은 FAQ를, 기획팀은 전략 자료를 주로 찾습니다.
+            </div>
+
+            <div class="flow-cards">
+                <div class="flow-card">
+                    <h4>🎯 QA 헬프데스크</h4>
+                    <table style="font-size: 13px;">
+                        <tr><td><strong>검색 개수</strong></td><td>5개</td></tr>
+                        <tr><td><strong>우선 소스</strong></td><td>Tier 1A + 1B + 2</td></tr>
+                        <tr><td><strong>임계값</strong></td><td>0.4</td></tr>
+                        <tr><td><strong>AI 모델</strong></td><td>Opus 4.6 (Smith님 말투)</td></tr>
+                        <tr><td><strong>특징</strong></td><td>이미지 검색 병행</td></tr>
+                    </table>
+                    <div class="callout callout-blue" style="margin-top: 12px; font-size: 13px;">
+                        <strong>데이터 흐름:</strong><br>
+                        수강생 질문 → search_knowledge → 강의+Q&A 히스토리 우선 → Smith님 스타일 답변
+                    </div>
+                </div>
+
+                <div class="flow-card">
+                    <h4>✍️ 블로그 콘텐츠</h4>
+                    <table style="font-size: 13px;">
+                        <tr><td><strong>검색 개수</strong></td><td>5개</td></tr>
+                        <tr><td><strong>우선 소스</strong></td><td>Tier 1A + 3</td></tr>
+                        <tr><td><strong>임계값</strong></td><td>0.4</td></tr>
+                        <tr><td><strong>AI 모델</strong></td><td>Opus 4.6 (전문 교육 톤)</td></tr>
+                        <tr><td><strong>특징</strong></td><td>강의 기반 + 최신 트렌드</td></tr>
+                    </table>
+                    <div class="callout callout-orange" style="margin-top: 12px; font-size: 13px;">
+                        <strong>전략:</strong><br>
+                        Smith님의 강의 내용을 베이스로, 외부 트렌드로 보충하여 신선한 블로그 포스트 작성
+                    </div>
+                </div>
+
+                <div class="flow-card">
+                    <h4>📮 뉴스레터</h4>
+                    <table style="font-size: 13px;">
+                        <tr><td><strong>검색 개수</strong></td><td>5개</td></tr>
+                        <tr><td><strong>우선 소스</strong></td><td>Tier 1A + 3</td></tr>
+                        <tr><td><strong>임계값</strong></td><td>0.4</td></tr>
+                        <tr><td><strong>AI 모델</strong></td><td>Opus 4.6</td></tr>
+                        <tr><td><strong>특징</strong></td><td>블로그 콘텐츠 재활용</td></tr>
+                    </table>
+                    <div class="callout callout-green" style="margin-top: 12px; font-size: 13px;">
+                        <strong>워크플로우:</strong><br>
+                        블로그 콘텐츠 생성 → email_summary 생성 시 KB에서 추가 맥락 검색 → 이메일 최적화
+                    </div>
+                </div>
+
+                <div class="flow-card">
+                    <h4>🎥 웨비나 기획</h4>
+                    <table style="font-size: 13px;">
+                        <tr><td><strong>검색 개수</strong></td><td>3개</td></tr>
+                        <tr><td><strong>우선 소스</strong></td><td>Tier 1A + 3</td></tr>
+                        <tr><td><strong>임계값</strong></td><td>0.4</td></tr>
+                        <tr><td><strong>AI 모델</strong></td><td>미정</td></tr>
+                        <tr><td><strong>특징</strong></td><td>주제별 심화 콘텐츠</td></tr>
+                    </table>
+                    <div class="callout callout-blue" style="margin-top: 12px; font-size: 13px;">
+                        <strong>용도:</strong><br>
+                        웨비나 주제 선정, 세부 목차 구성, 참고 자료 수집
+                    </div>
+                </div>
+
+                <div class="flow-card">
+                    <h4>💬 챗봇 (향후 계획)</h4>
+                    <table style="font-size: 13px;">
+                        <tr><td><strong>검색 개수</strong></td><td>5개</td></tr>
+                        <tr><td><strong>우선 소스</strong></td><td>전체 (Tier 1A~3)</td></tr>
+                        <tr><td><strong>임계값</strong></td><td>0.3 (더 관대)</td></tr>
+                        <tr><td><strong>AI 모델</strong></td><td>미정</td></tr>
+                        <tr><td><strong>특징</strong></td><td>범용 질의응답</td></tr>
+                    </table>
+                    <div class="callout callout-red" style="margin-top: 12px; font-size: 13px;">
+                        <strong>미래 확장:</strong><br>
+                        웹사이트 방문자용 실시간 챗봇, 더 넓은 범위의 질문 처리
+                    </div>
+                </div>
+            </div>
+
+            <h3>🔄 Consumer별 데이터 활용 패턴</h3>
+            <div class="diagram">┌─────────────── Consumer 활용 패턴 ───────────────┐
+│                                               │
+│  QA 헬프데스크: 즉석 답변 (실시간)               │
+│  ├─ 수강생 질문 → KB 검색 → 즉시 답변           │
+│  └─ 이미지 질문도 처리 가능                    │
+│                                               │
+│  블로그: 콘텐츠 제작 (주 1-2회)                 │
+│  ├─ 주제 선정 → KB에서 관련 자료 수집            │
+│  └─ 강의 베이스 + 외부 트렌드 보강              │
+│                                               │
+│  뉴스레터: 요약 배포 (주 1회)                  │
+│  ├─ 블로그 글 → 이메일용 요약                  │
+│  └─ KB에서 추가 팁과 사례 보강                 │
+│                                               │
+│  웨비나: 기획 지원 (월 1-2회)                  │
+│  ├─ 심화 주제 발굴                           │
+│  └─ 상세 목차와 참고자료 구성                  │
+│                                               │
+│  챗봇: 범용 지원 (24/7, 향후)                 │
+│  └─ 웹사이트 방문자 실시간 질의응답            │
+└───────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Section 7.5: Content Automation Pipeline -->
+        <section id="content-automation" class="section">
+            <h2>7-1. 콘텐츠 자동화 파이프라인</h2>
+
+            <div class="callout callout-red">
+                <strong>🎯 핵심 원칙:</strong> 정보공유 콘텐츠는 소스 수집부터 블로그 글 + 뉴스레터까지 <strong>완전 자동화</strong>. 성과/공지는 Smith님이 필요할 때 호출.
+            </div>
+
+            <h3>📋 콘텐츠 유형별 자동화 수준</h3>
+            <table>
+                <thead>
+                    <tr><th>유형</th><th>소스</th><th>자동화</th><th>Smith님 역할</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="4"><strong>정보공유</strong><br><span style="color:#27ae60;font-weight:bold">완전 자동</span></td>
+                        <td>① 블로그 크롤링</td>
+                        <td>RSS 수집 → 관련성 필터 → 한국어 가공 → 블로그 + 뉴스레터 자동 생성</td>
+                        <td>발행 전 최종 확인만</td>
+                    </tr>
+                    <tr>
+                        <td>② 유튜버 스크립트</td>
+                        <td>yt-dlp 자막 → 핵심 요약 → 정보공유 글 + 뉴스레터 자동 생성</td>
+                        <td>발행 전 최종 확인만</td>
+                    </tr>
+                    <tr>
+                        <td>③ 강의자료</td>
+                        <td>강의 청크 기반 → 주제별 정보공유 글 + 뉴스레터 자동 생성</td>
+                        <td>발행 전 최종 확인만</td>
+                    </tr>
+                    <tr>
+                        <td>④ 블루프린트 자료</td>
+                        <td>메타 공식 자료 → 한국어 해설 → 정보공유 글 + 뉴스레터 자동 생성</td>
+                        <td>발행 전 최종 확인만</td>
+                    </tr>
+                    <tr>
+                        <td><strong>성과</strong></td>
+                        <td>수강생 성과 데이터</td>
+                        <td colspan="2"><span style="color:#e67e22;font-weight:bold">수동</span> — Smith님이 필요할 때 모찌 호출</td>
+                    </tr>
+                    <tr>
+                        <td><strong>공지</strong></td>
+                        <td>공지사항</td>
+                        <td colspan="2"><span style="color:#e67e22;font-weight:bold">수동</span> — Smith님이 필요할 때 모찌 호출</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🔄 정보공유 자동화 플로우</h3>
+            <div class="diagram">┌─────────────── 정보공유 자동화 파이프라인 ───────────────┐
+│                                                       │
+│  [소스 수집] ─── 크론 자동 ───────────────────────────  │
+│   ├─ RSS 피드 (블로그)          매일 03:00             │
+│   ├─ yt-dlp (유튜브 자막)       매일 04:00             │
+│   ├─ 강의자료 (업로드 트리거)    수동 업로드 시         │
+│   └─ 블루프린트 (수동/크롤)      업로드 시              │
+│          │                                            │
+│          ▼                                            │
+│  [관련성 필터] ─── AI 자동 ────────────────────────── │
+│   ├─ 0.7+ → 가공 대상 ✅                              │
+│   ├─ 0.5~0.7 → 보관 (수동 판단)                       │
+│   └─ 0.5 미만 → 스킵 ❌                               │
+│          │                                            │
+│          ▼                                            │
+│  [중복 체크] ─── 임베딩 비교 ─────────────────────── │
+│   └─ 기존 contents와 유사도 > 0.85 → 스킵              │
+│          │                                            │
+│          ▼                                            │
+│  [한국어 가공] ─── Opus 4.6 ──────────────────────── │
+│   ├─ 마켓핏랩 스타일 정보공유 글 (body_md)              │
+│   ├─ 뉴스레터 이메일 요약 (email_summary)              │
+│   └─ contents 테이블 저장 (type: education)            │
+│          │                                            │
+│          ▼                                            │
+│  [임베딩] ─── embed-pipeline ────────────────────── │
+│   └─ knowledge_chunks에 자동 저장 (Tier 3)             │
+│          │                                            │
+│          ▼                                            │
+│  [큐레이션 대기] ─── Smith님 확인 ───────────────── │
+│   └─ 콘텐츠 허브에서 "발행 대기" 상태로 표시            │
+│      Smith님이 확인 후 발행                            │
+└───────────────────────────────────────────────────────┘</div>
+
+            <h3>📊 소스별 예상 물량</h3>
+            <table>
+                <thead>
+                    <tr><th>소스</th><th>수집 빈도</th><th>예상 수집량</th><th>관련성 필터 후</th><th>최종 발행 예상</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>블로그 RSS (10개 피드)</td>
+                        <td>매일</td>
+                        <td>~20개/주</td>
+                        <td>~8개/주</td>
+                        <td>3~5개/주</td>
+                    </tr>
+                    <tr>
+                        <td>유튜브 (7채널)</td>
+                        <td>매일</td>
+                        <td>~10개/주</td>
+                        <td>~5개/주</td>
+                        <td>2~3개/주</td>
+                    </tr>
+                    <tr>
+                        <td>강의자료</td>
+                        <td>기수별</td>
+                        <td>기수당 ~20개</td>
+                        <td>전부</td>
+                        <td>주제별 묶어서</td>
+                    </tr>
+                    <tr>
+                        <td>블루프린트</td>
+                        <td>수동</td>
+                        <td>~5개/월</td>
+                        <td>전부</td>
+                        <td>전부</td>
+                    </tr>
+                    <tr style="font-weight:bold;background:#f8f8f8">
+                        <td colspan="4">정보공유 합계</td>
+                        <td>주 5~8개 발행 가능</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-green">
+                <strong>💡 자동화의 핵심 가치:</strong><br>
+                Smith님은 "발행 버튼"만 누르면 됩니다. 소스 발굴 → 크롤링 → 필터링 → 한국어 가공 → 블로그 글 → 뉴스레터 → KB 임베딩까지 전부 자동.
+                <br>기존: 수동으로 URL 복붙 → 요약 요청 → 편집 → 발행 (1시간/건)
+                <br>목표: 크론이 자동 처리 → Smith님은 발행 확인만 (5분/건)
+            </div>
+        </section>
+
+        <!-- Section 8: API Map -->
+        <section id="api-map" class="section">
+            <h2>8. API 연결 맵</h2>
+
+            <div class="diagram">┌──────────────────── BS CAMP 플랫폼 ──────────────────────┐
+│                                                          │
+│  ┌─────────────┬──────────────┬───────────────────────┐  │
+│  │ QA 헬프데스크 │  콘텐츠 허브  │   뉴스레터 시스템      │  │
+│  └──────┬──────┴──────┬───────┴───────────┬───────────┘  │
+│         └─────────────┼───────────────────┘              │
+│                       ▼                                  │
+│         ┌──────────────────────────┐                     │
+│         │    KnowledgeService      │                     │
+│         │   search_knowledge RPC   │                     │
+│         └────────────┬─────────────┘                     │
+│                      │                                   │
+│         ┌────────────┼────────────┐                      │
+│         ▼            ▼            ▼                      │
+│  ┌───────────┐ ┌──────────┐ ┌───────────┐               │
+│  │ Supabase  │ │  Gemini  │ │ Anthropic │               │
+│  │ DB+Vector │ │ Embed+   │ │ Opus 4.6  │               │
+│  │ +Storage  │ │ Vision   │ │           │               │
+│  └─────┬─────┘ └──────────┘ └───────────┘               │
+│        │                                                 │
+│  ┌─────┴──────────────────────────────────┐              │
+│  │  Notion API · yt-dlp · Web Crawl · Vercel             │
+│  └────────────────────────────────────────┘              │
+└──────────────────────────────────────────────────────────┘</div>
+
+            <h3>💰 API별 비용 및 사용량</h3>
+            <table>
+                <thead>
+                    <tr><th>API/서비스</th><th>용도</th><th>예상 비용/월</th><th>호출 빈도</th><th>인증</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Gemini Embedding</strong></td><td>텍스트/이미지→벡터(768d)</td><td>~$2</td><td>질문당 1회 + 파이프라인</td><td>GEMINI_API_KEY</td></tr>
+                    <tr><td><strong>Gemini Vision</strong></td><td>이미지→텍스트 설명</td><td>~$1</td><td>이미지 업로드 시</td><td>GEMINI_API_KEY</td></tr>
+                    <tr><td><strong>Anthropic Opus 4.6</strong></td><td>QA 답변, 콘텐츠 생성</td><td>~$50</td><td>질문/생성당 1회</td><td>ANTHROPIC_API_KEY</td></tr>
+                    <tr><td><strong>Supabase</strong></td><td>DB, 벡터검색, 스토리지</td><td>$25</td><td>상시</td><td>Service Role Key</td></tr>
+                    <tr><td><strong>Notion API</strong></td><td>피드백반 동기화</td><td>무료</td><td>2주 1회</td><td>Integration Token</td></tr>
+                    <tr><td><strong>yt-dlp</strong></td><td>유튜브 자막</td><td>무료</td><td>주 1회</td><td>없음</td></tr>
+                    <tr><td><strong>Vercel</strong></td><td>호스팅+크론</td><td>$20</td><td>상시</td><td>VERCEL_TOKEN</td></tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-orange">
+                <strong>💰 총 예상 비용: ~$100/월</strong><br>
+                Opus 4.6이 대부분 차지. 임베딩/크롤링은 미미. 질문량 증가 시 Opus 비용이 주요 변수.
+            </div>
+        </section>
+
+        <!-- Section 9: DB Schema -->
+        <section id="schema" class="section">
+            <h2>9. DB 스키마 변경</h2>
+
+            <h3>핵심 변경 1: 테이블 이름 변경 (무중단 마이그레이션)</h3>
+            <div class="callout callout-red">
+                <strong>⚠️ [F-01 반영] 무중단 마이그레이션 필수:</strong> 테이블 rename과 코드 배포가 동시에 안 되면 서비스가 다운됩니다. VIEW + RPC 래퍼 패턴으로 해결합니다.
+            </div>
+            <div class="diagram">
+-- Step 1: 테이블 rename
+ALTER TABLE lecture_chunks RENAME TO knowledge_chunks;
+
+-- Step 2: 기존 이름으로 VIEW 생성 (하위 호환)
+CREATE VIEW lecture_chunks AS SELECT * FROM knowledge_chunks;
+
+-- Step 3: 기존 RPC를 래퍼로 교체 (내부에서 knowledge_chunks 참조)
+-- → match_lecture_chunks는 search_knowledge를 내부 호출
+-- → 코드 배포 전에도 기존 RPC가 정상 작동
+
+-- Step 4: 코드 배포 (knowledge_chunks 직접 참조)
+-- Step 5: VIEW 제거 (안정화 1주일 후)
+-- DROP VIEW lecture_chunks;
+            </div>
+            <div class="callout callout-blue">
+                <strong>[F-02 반영] supabase.ts 타입 재생성:</strong> 테이블 rename 후 반드시 <code>supabase gen types typescript</code>을 실행하여 TypeScript 타입 정의를 업데이트해야 합니다. P0 체크리스트에 추가됨.
+            </div>
+
+            <h3>핵심 변경 2: knowledge_chunks 새 컬럼</h3>
+            <div class="diagram">
+knowledge_chunks (기존 lecture_chunks에서 이름 변경)
+├── id (uuid, PK)              ← 기존 유지
+├── content (text)             ← 기존 유지 (텍스트 청크)
+├── embedding (vector 768d)    ← 기존 유지
+├── lecture_name (text)        ← 기존 유지
+├── week (text)                ← 기존 유지
+├── chunk_index (int)          ← 기존 유지
+├── source_type (text)         ← 기존 유지 (lecture, blueprint, crawl 등)
+├── metadata (jsonb)           ← 기존 유지
+├── created_at (timestamptz)   ← 기존 유지
+├── priority (int)             ★ 신규: 1=Tier1A, 2=Tier1B, 3=Tier2, 4=Tier3
+├── topic_tags (text[])        ★ 신규: ["메타광고","카탈로그","ROAS"]
+├── source_ref (text)          ★ 신규: 원본 URL 또는 파일 경로
+├── content_id (uuid FK)       ★ 신규: contents 테이블 참조
+├── chunk_total (int)          ★ 신규: 해당 문서의 전체 청크 수
+├── image_url (text)           ★ 신규: 이미지 Storage 경로
+└── image_description (text)   ★ 신규: Gemini Vision 설명 → content에 합쳐서 임베딩
+  [F-03] image_embedding 컬럼 제거 — Gemini는 이미지 직접 벡터화 불가
+  대신: 이미지 → Gemini Vision → 설명 텍스트 → content에 합침 → 텍스트 임베딩
+            </div>
+
+            <h3>핵심 변경 3: contents 테이블 확장</h3>
+            <div class="diagram">
+contents (기존 + 확장)
+├── ... 기존 컬럼 유지 ...
+├── embedding_status (text)    ★ 신규: pending → processing → done → error
+├── chunks_count (int)         ★ 신규: 생성된 청크 수
+├── embedded_at (timestamptz)  ★ 신규: 임베딩 완료 시각
+├── priority (int)             ★ 신규: 소스 우선순위
+└── access_level (text)        ★ 신규: public / student_only (기본값 public)
+
+-- type 제약 확장 (기존 5종 + 소스 타입 호환)
+-- source_type과 type을 별도 축으로 관리
+-- type: 배포용 (education, case_study, webinar, notice, promo)
+-- source_type: 수집용 (lecture, blueprint, assignment, feedback, qa, meeting, crawl, youtube)
+-- access_level: 콘텐츠 접근 권한 (public=전체공개, student_only=수강생전용)
+            </div>
+            <div class="callout callout-green">
+                <strong>🔒 수강생 전용 콘텐츠:</strong> 토스페이 혜택입점, 비즈니스포트폴리오 인증서류 가이드 등 수강생만 볼 수 있는 정보. 콘텐츠 허브에 "수강생 전용" 탭으로 분리. 로그인 + student 권한 체크 후 표시.
+            </div>
+
+            <h3>핵심 변경 4: search_knowledge RPC</h3>
+            <div class="diagram">
+CREATE OR REPLACE FUNCTION search_knowledge(
+  query_embedding vector(768),
+  match_threshold float DEFAULT 0.4,
+  match_count int DEFAULT 10,
+  filter_source_types text[] DEFAULT NULL
+) RETURNS TABLE (
+  id uuid, content text, similarity float,
+  tier_boost float, final_score float,
+  source_type text, priority int,
+  lecture_name text, topic_tags text[],
+  source_ref text, image_url text
+) LANGUAGE SQL AS $$
+  SELECT
+    kc.id, kc.content,
+    1 - (kc.embedding &lt;=&gt; query_embedding) AS similarity,
+    CASE kc.priority
+      WHEN 1 THEN 0.15  WHEN 2 THEN 0.10
+      WHEN 3 THEN 0.05  ELSE 0.00
+    END AS tier_boost,
+    (1 - (kc.embedding &lt;=&gt; query_embedding)) +
+    CASE kc.priority
+      WHEN 1 THEN 0.15  WHEN 2 THEN 0.10
+      WHEN 3 THEN 0.05  ELSE 0.00
+    END AS final_score,
+    kc.source_type, kc.priority,
+    kc.lecture_name, kc.topic_tags,
+    kc.source_ref, kc.image_url
+  FROM knowledge_chunks kc
+  WHERE 1 - (kc.embedding &lt;=&gt; query_embedding) &gt; match_threshold
+    AND (filter_source_types IS NULL
+         OR kc.source_type = ANY(filter_source_types))
+  ORDER BY final_score DESC
+  LIMIT match_count;
+$$;
+            </div>
+
+            <h3>핵심 변경 5: HNSW 인덱스 (벡터 검색 성능)</h3>
+            <div class="callout callout-blue">
+                <strong>왜 필요한가:</strong> 2000+ 청크가 되면 벡터 검색이 느려질 수 있습니다. HNSW 인덱스는 "빠른 근사 검색"을 가능하게 합니다. 정확도 99%를 유지하면서 속도를 10배 이상 높입니다.
+            </div>
+            <div class="diagram">
+-- 벡터 검색 성능 인덱스 (P0에서 생성)
+CREATE INDEX idx_knowledge_chunks_embedding
+  ON knowledge_chunks
+  USING hnsw (embedding vector_cosine_ops)
+  WITH (m = 16, ef_construction = 64);
+
+-- [F-03] image_embedding 인덱스 불필요
+-- 이미지는 Gemini Vision → 설명 텍스트 → content에 합침 → 기존 embedding 벡터로 검색
+            </div>
+
+            <h3>마이그레이션: 기존 664 청크</h3>
+            <div class="diagram">
+-- 기존 데이터에 priority 일괄 설정
+UPDATE knowledge_chunks SET priority = 1 WHERE source_type = 'lecture';
+UPDATE knowledge_chunks SET priority = 3 WHERE source_type = 'meeting';
+-- 기존 match_lecture_chunks RPC는 유지 (롤백용)
+-- knowledge.ts에서 search_knowledge로 전환
+            </div>
+
+            <h3>재임베딩 배치 전략</h3>
+            <div class="callout callout-orange">
+                <strong>⚠️ Gemini API Rate Limit 대응:</strong> 664개를 한꺼번에 보내면 rate limit에 걸립니다.
+            </div>
+            <div class="diagram">
+재임베딩 배치 전략:
+├── 배치 크기: 10개/요청
+├── 요청 간 대기: 1초
+├── 실패 시 백오프: 2초 → 4초 → 8초 (3회 재시도)
+├── 예상 소요: 664개 ÷ 10 = 67배치 × 1초 ≈ 2분
+├── 재임베딩 중 서비스: 기존 벡터로 정상 운영
+└── 완료 후: 새 벡터로 교체 + 품질 테스트
+            </div>
+        </section>
+
+        <!-- Section 10: ADR -->
+        <section id="adr" class="section">
+            <h2>10. 주요 결정 사항 (ADR)</h2>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-1: 단일 벡터 테이블 유지</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> knowledge_chunks 하나에 모든 소스 저장 (테이블 분리 안 함)
+                </div>
+                <p><strong>이유:</strong> 664개 + 예상 ~2000개 = 스케일 문제 없음. 단일 테이블이 검색 단순.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 5000+ 넘으면 소스별 분리 검토. HNSW 인덱스 추가 필요할 수 있음.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-2: Gemini 임베딩 유지</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> gemini-embedding-001 (768d) 유지, 로컬(bge-m3) 전환 안 함
+                </div>
+                <p><strong>이유:</strong> 이미 사용 중, 한국어 품질 충분, $2/월, 이미지 임베딩도 지원.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> Gemini API 장애 시 임베딩/검색 불가 → 로컬 fallback 향후 검토.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-3: 가중 점수 검색 (ORDER BY priority ASC 대신)</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> final_score = similarity + tier_boost 방식
+                </div>
+                <p><strong>이유:</strong> 순수 우선순위 정렬은 약한 Tier1이 강한 Tier3를 밀어냄. 가중 점수는 Tier1 가산점 + 관련성 보장.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> boost 값 튜닝 필요. 기존 QA 질문 10개로 비교 테스트 후 확정.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-4: Tier 1A/1B 분리</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> 메타 블루프린트 + 자사몰사관학교 = Tier 1A (최우선), 과제+피드백 = Tier 1B
+                </div>
+                <p><strong>이유:</strong> "근거가 명확하고 자료가 가장 많은" 두 소스. 공식 교육 자료와 자체 교육 자료가 수강생에게 가장 신뢰도 높음.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 블루프린트 자료 수집 방법 확정 필요. 크롤링 가능한지 or 수동 업로드만인지.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-5: 멀티모달 RAG — 텍스트 통합 방식 [F-03 반영]</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> Gemini Vision → 설명 텍스트 → content에 합쳐서 텍스트 임베딩. image_embedding 별도 컬럼 없음.
+                </div>
+                <p><strong>이유:</strong> Gemini embedding API는 이미지 직접 벡터화를 지원하지 않음. 설명 텍스트를 content에 합치면 기존 파이프라인 변경 없이 이미지 검색 가능.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 시각적 유사도(색상/레이아웃)는 못 잡음, 의미적 유사도만 가능. Vision 처리 시간 ~2초.
+                </div>
+            </div>
+        </section>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-6: Hybrid Search 도입 (벡터 + 키워드 병행)</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> P1에서 벡터 검색 + PostgreSQL Full-Text Search(tsvector) 병행. <code>final_score = α × vector_score + (1-α) × bm25_score + tier_boost</code>
+                </div>
+                <p><strong>이유:</strong> "메타 광고", "ROAS", "전환 API" 같은 정확한 용어 검색은 벡터만으로 약함. 키워드 매칭을 병행하면 정확한 용어가 포함된 청크가 확실히 올라옴.</p>
+                <p><strong>구현:</strong> knowledge_chunks에 <code>search_vector tsvector</code> 컬럼 추가 + GIN 인덱스. search_knowledge RPC에서 벡터 유사도와 ts_rank를 합산.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> α 값 튜닝 필요 (권장 시작값 0.6). 한국어 형태소 분석기 설정 필요.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-7: Reranking 검토 (P2)</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> P2에서 Cohere Rerank 또는 Cross-encoder 도입 검토. 초기 검색 top-20 → 재정렬 → top-5 반환.
+                </div>
+                <p><strong>이유:</strong> 소스가 8종으로 늘어나면 초기 검색 정확도만으로 부족할 수 있음. 재정렬은 "진짜 관련 있는 것"을 한 번 더 걸러줌.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 추가 API 호출 비용 + 200ms 지연. 현재 규모에서는 과도할 수 있으므로 P2 이후 데이터 평가 결과 보고 결정.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-8: 검색 품질 평가 체계 (Gold Standard Set)</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> P1에서 최소 50개 Gold Standard 질문-답변-소스 세트 구축. Recall@5 &gt; 0.8, MRR &gt; 0.5 목표.
+                </div>
+                <p><strong>이유:</strong> "QA 질문 10개 테스트"는 통계적으로 불충분. 변경 전후 비교, A/B 테스트, 튜닝 효과 측정에 최소 50개 필요.</p>
+                <p><strong>구축 방식:</strong></p>
+                <ul>
+                    <li>기존 QA 이력에서 대표 질문 30개 선별</li>
+                    <li>Smith님이 "이 질문에는 이 강의 내용이 나와야 한다" 정답 매핑</li>
+                    <li>엣지 케이스 20개 추가 (다중 소스 관련, 이미지 포함, 애매한 질문)</li>
+                    <li>분기별 업데이트</li>
+                </ul>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 정답 매핑에 Smith님 시간 필요. 자동 생성(LLM)은 품질 보장 어려움.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-9: 검색 품질 모니터링 대시보드</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> P1에서 knowledge_usage 테이블에 모니터링 지표 추가, P2에서 대시보드 시각화.
+                </div>
+                <p><strong>추적 지표:</strong></p>
+                <table>
+                    <thead><tr><th>지표</th><th>설명</th><th>알림 기준</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>avg_similarity</strong></td><td>검색 결과 평균 유사도</td><td>&lt; 0.5 → 임베딩 품질 점검</td></tr>
+                        <tr><td><strong>empty_result_rate</strong></td><td>검색 결과 0건 비율</td><td>&gt; 5% → threshold 하향 또는 데이터 보강</td></tr>
+                        <tr><td><strong>retrieval_latency_p95</strong></td><td>검색 응답시간 95퍼센타일</td><td>&gt; 3초 → 인덱스 점검</td></tr>
+                        <tr><td><strong>source_distribution</strong></td><td>검색 결과의 소스별 비율</td><td>Tier 3만 나오면 데이터 부족 신호</td></tr>
+                        <tr><td><strong>user_feedback</strong></td><td>답변 만족도 (👍/👎)</td><td>👎 &gt; 20% → 검색 튜닝 필요</td></tr>
+                    </tbody>
+                </table>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 로깅 오버헤드 미미 (JSON 1행/쿼리). 대시보드는 기존 mozzi-reports에 통합 가능.
+                </div>
+            </div>
+        </section>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-10: 디버깅 플레이북</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> 검색 품질 이슈 발생 시 따르는 표준 진단 절차 수립
+                </div>
+                <table>
+                    <thead><tr><th>증상</th><th>진단 순서</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>엉뚱한 문서 검색됨</strong></td>
+                            <td>① 질문 임베딩 품질 확인 (너무 짧거나 모호?) → ② 해당 청크 내용 점검 (잘못 청킹?) → ③ Hybrid Search 키워드 매칭 추가 → ④ tier_boost 값 조정</td>
+                        </tr>
+                        <tr>
+                            <td><strong>관련 문서가 있는데 안 나옴</strong></td>
+                            <td>① 해당 문서가 임베딩됐는지 확인 (embedded_at) → ② threshold 낮춰서 테스트 (0.4→0.3) → ③ top_k 늘려서 확인 → ④ 청크에 핵심 키워드가 포함됐는지 점검</td>
+                        </tr>
+                        <tr>
+                            <td><strong>전반적으로 유사도 낮음</strong></td>
+                            <td>① 임베딩 모델 변경됐는지 확인 → ② 도메인 용어가 임베딩에 반영되는지 테스트 → ③ 재임베딩 검토</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tier 3만 나옴</strong></td>
+                            <td>① Tier 1A/1B 데이터 부족 신호 → ② 해당 주제의 강의 청크 존재 여부 확인 → ③ 강의 자료 보강 필요</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-11: Query Expansion (질문 확장)</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> P2에서 도입. 애매한 질문을 구체적 검색어로 확장 후 검색.
+                </div>
+                <p><strong>비유:</strong> 도서관에서 "광고 안 돼요"라고 하면 사서가 "어떤 광고요? 메타? 구글? 성과가 안 나온다는 건가요?"라고 되물어서 정확한 책을 찾아주는 것.</p>
+                <p><strong>구현:</strong></p>
+                <ul>
+                    <li>"광고가 안 돼요" → LLM이 확장 → "메타 광고 성과 저하 원인 진단 ROAS 하락"</li>
+                    <li>원본 질문 + 확장 질문 모두로 검색 → 결과 합산</li>
+                    <li>비용: 확장용 LLM 호출 1회 추가 (Sonnet으로 처리하면 ~$0.01/건)</li>
+                </ul>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 확장이 잘못되면 오히려 노이즈 증가. 확장 전후 검색 품질 비교 필수.
+                </div>
+            </div>
+
+            <div class="adr-card" style="background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0">
+                <h4>ADR-12: A/B 테스트 프레임워크</h4>
+                <div style="background:#e8f5e9;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>결정:</strong> P2에서 도입. 검색 설정 변경 시 Gold Standard Set으로 전후 비교.
+                </div>
+                <p><strong>테스트 대상:</strong></p>
+                <table>
+                    <thead><tr><th>변수</th><th>테스트 범위</th><th>측정 지표</th></tr></thead>
+                    <tbody>
+                        <tr><td>청크 크기</td><td>400 vs 800 vs 1200자</td><td>Recall@5, MRR</td></tr>
+                        <tr><td>겹침 비율</td><td>0% vs 10% vs 20%</td><td>Recall@5</td></tr>
+                        <tr><td>Hybrid α 값</td><td>0.5 vs 0.6 vs 0.7</td><td>MRR, Precision@5</td></tr>
+                        <tr><td>tier_boost 값</td><td>현재 vs ×2 vs ×0.5</td><td>소스 분포, 만족도</td></tr>
+                        <tr><td>threshold</td><td>0.3 vs 0.4 vs 0.5</td><td>empty_result_rate, noise</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>최소 샘플:</strong> Gold Standard 50개 기준. 통계적 유의미성을 위해 각 설정별 전체 50개 실행 후 비교.</p>
+                <div style="background:#fff3e0;padding:8px 12px;border-radius:4px;margin:8px 0">
+                    <strong>리스크:</strong> 테스트 시 임베딩 비용 발생 (청크 크기 변경 시 재임베딩 필요). 한 번에 하나씩 변경 원칙.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 11: Roadmap -->
+        <section id="roadmap" class="section">
+            <h2>11. 구현 로드맵</h2>
+
+            <div class="flow-card" style="border-left:4px solid #F75D5D">
+                <h4 style="color:#F75D5D">P0: 기반 구축 (1-2일)</h4>
+                <ul>
+                    <li>lecture_chunks → knowledge_chunks rename</li>
+                    <li><strong>[F-01]</strong> lecture_chunks VIEW 생성 (하위 호환)</li>
+                    <li><strong>[F-01]</strong> match_lecture_chunks RPC를 래퍼로 교체 (내부에서 search_knowledge 호출)</li>
+                    <li>새 컬럼 추가 (priority, topic_tags, source_ref, content_id, image_url, image_description, access_level)</li>
+                    <li>search_knowledge RPC 생성 (가중 점수 검색)</li>
+                    <li><strong>[F-02]</strong> <code>supabase gen types typescript</code> 실행 → supabase.ts 재생성</li>
+                    <li>QA 헬프데스크 knowledge.ts에서 search_knowledge 전환</li>
+                    <li>기존 664 청크에 priority=1 일괄 업데이트</li>
+                    <li>HNSW 인덱스 생성</li>
+                </ul>
+            </div>
+
+            <div class="flow-card" style="border-left:4px solid #e67e22">
+                <h4 style="color:#e67e22">P1: 임베딩 파이프라인 + 콘텐츠 자동화 (4-5일)</h4>
+                <ul>
+                    <li>embed-pipeline 스크립트 작성</li>
+                    <li>contents → 소스별 청킹 → 임베딩 → knowledge_chunks 연결</li>
+                    <li>기존 664 청크 gemini-embedding-001로 재임베딩</li>
+                    <li>기존 43개 크롤링 contents → 관련성 필터 → 한국어 가공 일괄 처리</li>
+                    <li><strong>정보공유 자동화 크론:</strong> RSS 수집 → 관련성 필터(0.7+) → 중복 체크 → 한국어 가공 → 블로그 + 뉴스레터 자동 생성</li>
+                    <li><strong>유튜브 자막 크론:</strong> yt-dlp → 핵심 요약 → 정보공유 글 + 뉴스레터 자동 생성</li>
+                    <li>크론: 블로그 03:00, 유튜브 04:00, 임베딩 05:00</li>
+                    <li><strong>[ADR-6]</strong> Hybrid Search: tsvector 컬럼 + GIN 인덱스 + 벡터+키워드 합산 검색</li>
+                    <li><strong>[ADR-8]</strong> Gold Standard Set 50개 구축 (Smith님 정답 매핑 필요)</li>
+                    <li><strong>[ADR-8]</strong> 검색 품질 테스트: Recall@5, MRR 측정 + 변경 전후 비교</li>
+                    <li><strong>[ADR-9]</strong> knowledge_usage에 모니터링 지표 로깅 추가 (similarity, latency, source분포)</li>
+                </ul>
+            </div>
+
+            <div class="flow-card" style="border-left:4px solid #3498db">
+                <h4 style="color:#3498db">P2: 소스 확장 + 멀티모달 + 고도화 (5-7일)</h4>
+                <ul>
+                    <li>유튜브 자막 수집 (yt-dlp + Sonnet 요약)</li>
+                    <li>Notion 피드백반 연동</li>
+                    <li>이미지 처리 (Gemini Vision → 설명 텍스트 → content 합침)</li>
+                    <li>강의 과제 수집 경로 확정 + 스크립트</li>
+                    <li>Q&A 이력 → knowledge_chunks 연동</li>
+                    <li>메타 블루프린트 수집 방법 확정 + 처리</li>
+                    <li><strong>[ADR-7]</strong> Reranking 도입 검토 (Cohere Rerank 또는 Cross-encoder, top-20→top-5)</li>
+                    <li><strong>[ADR-9]</strong> 모니터링 대시보드 시각화 (mozzi-reports 통합)</li>
+                    <li><strong>[ADR-11]</strong> Query Expansion: 애매한 질문 → LLM 확장 → 재검색</li>
+                    <li><strong>[ADR-12]</strong> A/B 테스트: Gold Standard 50개로 설정 변수별 전후 비교</li>
+                    <li>전체 소스 통합 검색 테스트 (Gold Standard 50개 기준)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 12: Checklist -->
+        <section id="checklist" class="section">
+            <h2>12. Smith님 확인 필요</h2>
+
+            <div class="callout callout-red">
+                <strong>아래 항목을 확인해주시면 P0 작업을 시작합니다.</strong>
+            </div>
+
+            <table>
+                <thead><tr><th>항목</th><th>질문</th><th>상태</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>강의 과제</strong></td><td>파일 위치/형태? (iCloud? Notion? PDF?)</td><td>❓ 대기</td></tr>
+                    <tr><td><strong>메타 블루프린트</strong></td><td>자료 수집 방법? (URL 크롤링? 수동 업로드?)</td><td>❓ 대기</td></tr>
+                    <tr><td><strong>피드백반 Notion</strong></td><td>워크스페이스 ID 또는 페이지 링크</td><td>❓ 대기</td></tr>
+                    <tr><td><strong>피드백반 구조</strong></td><td>수강생이름, 기간, 목표, 달성, 과정 맞나요?</td><td>❓ 대기</td></tr>
+                    <tr><td><strong>재임베딩 승인</strong></td><td>기존 664 청크 재임베딩 (일시적 검색 품질 변동)</td><td>❓ 대기</td></tr>
+                    <tr><td><strong>유튜브 채널</strong></td><td>7개 확정? (Ben Heath, Andrew Hubbard, Dara Denney, Nick Theriot, Charley T, 포뮬러마케팅, 그로스해킹)</td><td>❓ 대기</td></tr>
+                    <tr><td><strong>개인정보</strong></td><td>피드백반 수강생 데이터 → 익명화? 필터링?</td><td>❓ 대기</td></tr>
+                    <tr><td><strong>가중치 확인</strong></td><td>1A:+0.15, 1B:+0.10, 2:+0.05, 3:+0.00 괜찮은지</td><td>❓ 대기</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Footer -->
+        <div style="text-align:center;padding:40px 24px;color:#999;font-size:13px;border-top:1px solid #eee;margin-top:40px">
+            <p>BS CAMP RAG Layer 0 Architecture v1.0 — 2026-02-19</p>
+            <p>Architect: 모찌 | Skills: knowledge-pipeline-architect, architecture-designer, rag, adr</p>
+            <p>Review: 에이전트팀 아키텍처 리뷰 대기</p>
+        </div>
+
+    </div>
+</body>
+</html>

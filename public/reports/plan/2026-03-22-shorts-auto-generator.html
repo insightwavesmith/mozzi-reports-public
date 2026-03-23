@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="date" content="2026-03-22">
+<meta name="project" content="Shorts Auto Generator">
+<title>숏츠 + 카드뉴스 자동생성 도구 기획서 — 롱폼 영상 → 쇼츠 5개 + 카드뉴스 자동 변환</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fc;color:#1a1a1a;line-height:1.8}
+.container{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.back{display:inline-block;margin-bottom:24px;color:#64748b;text-decoration:none;font-size:14px}
+.back:hover{color:#1a1a1a}
+h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.3}
+.subtitle{font-size:16px;color:#64748b;margin-bottom:12px}
+.date{font-size:13px;color:#94a3b8;margin-bottom:32px}
+h2{font-size:22px;font-weight:700;margin:48px 0 16px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+h3{font-size:18px;font-weight:600;margin:28px 0 12px;color:#334155}
+p{margin-bottom:16px;font-size:15px;color:#374151}
+ul,ol{margin:8px 0 16px 20px;font-size:15px}
+li{margin-bottom:8px;line-height:1.7;color:#374151}
+strong{font-weight:700;color:#1a1a1a}
+
+/* Cards */
+.box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:20px 0}
+.box.key{border-left:4px solid #F75D5D}
+.box.insight{border-left:4px solid #3b82f6}
+.box.action{border-left:4px solid #10b981}
+.box.warn{border-left:4px solid #f59e0b}
+.box.purple{border-left:4px solid #8b5cf6}
+.box.card-news{border-left:4px solid #ec4899}
+.box h4{font-size:15px;font-weight:700;margin-bottom:10px;color:#1a1a1a}
+.box p{margin-bottom:8px;font-size:14px}
+.box ul{margin:6px 0 0 18px;font-size:14px}
+.box li{margin-bottom:6px}
+
+/* Highlight summary */
+.highlight{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:20px 24px;margin:24px 0;font-size:15px;font-weight:600;color:#92400e}
+.highlight.pink{background:#fdf2f8;border-color:#f9a8d4;color:#9d174d}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0}
+thead{background:#f1f5f9}
+th{padding:12px 16px;text-align:left;font-weight:700;font-size:13px;color:#475569;border-bottom:2px solid #e2e8f0}
+td{padding:12px 16px;border-bottom:1px solid #f1f5f9;color:#374151;vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+td:first-child{font-weight:700;color:#1a1a1a}
+.badge-high{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.badge-mid{background:#fef9c3;color:#854d0e;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.badge-low{background:#f3f4f6;color:#6b7280;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap}
+
+/* TOC */
+.toc{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:24px 0}
+.toc h3{margin:0 0 12px;font-size:16px;font-weight:700}
+.toc ol{margin:0 0 0 20px}
+.toc li{margin-bottom:6px}
+.toc a{color:#3b82f6;text-decoration:none;font-size:14px}
+.toc a:hover{text-decoration:underline}
+
+/* Logic grid */
+.logic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.logic-item{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px}
+.logic-item .lg-num{font-size:22px;font-weight:900;color:#3b82f6;margin-bottom:6px}
+.logic-item .lg-title{font-size:15px;font-weight:700;margin-bottom:6px;color:#1a1a1a}
+.logic-item .lg-desc{font-size:13px;color:#475569;line-height:1.6}
+
+/* Phase Roadmap */
+.phase-list{list-style:none;margin:0;padding:0}
+.phase-item{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:flex-start;padding:20px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:12px;transition:box-shadow .15s}
+.phase-item:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.phase-badge{display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;padding:6px 10px;border-radius:8px;text-align:center;line-height:1.3}
+.phase-1{background:#dbeafe;color:#1d4ed8}
+.phase-2{background:#dcfce7;color:#166534}
+.phase-3{background:#fef3c7;color:#92400e}
+.phase-4{background:#f3e8ff;color:#6b21a8}
+.phase-5{background:#fce7f3;color:#9d174d}
+.phase-6{background:#fee2e2;color:#991b1b}
+.phase-body .phase-title{font-size:15px;font-weight:700;margin-bottom:6px;color:#1a1a1a}
+.phase-body .phase-desc{font-size:13px;color:#475569;line-height:1.6}
+
+/* Flow diagram */
+.flow{display:flex;flex-direction:column;gap:0;margin:24px 0}
+.flow-step{display:flex;align-items:stretch;gap:0}
+.flow-node{flex:1;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px 20px;position:relative}
+.flow-node .fn-icon{font-size:22px;margin-bottom:6px}
+.flow-node .fn-label{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.flow-node .fn-desc{font-size:12px;color:#64748b;line-height:1.5}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:4px 0;color:#94a3b8;font-size:20px;font-weight:700}
+.flow-node.inp{border-color:#bfdbfe;background:#eff6ff}
+.flow-node.ai{border-color:#c4b5fd;background:#faf5ff}
+.flow-node.proc{border-color:#bbf7d0;background:#f0fdf4}
+.flow-node.out{border-color:#fde68a;background:#fffbeb}
+.flow-node.card{border-color:#fbcfe8;background:#fdf2f8}
+
+/* Code block */
+pre{background:#1e293b;color:#e2e8f0;border-radius:10px;padding:20px;font-size:13px;line-height:1.7;overflow-x:auto;margin:16px 0;font-family:'JetBrains Mono','Fira Code','Courier New',monospace}
+code{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:12px;background:#f1f5f9;color:#334155;padding:2px 6px;border-radius:4px}
+.code-comment{color:#64748b}
+.code-key{color:#93c5fd}
+.code-val{color:#86efac}
+.code-str{color:#fca5a5}
+
+/* Scenario cards */
+.scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.scenario-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px}
+.scenario-card .sc-num{font-size:28px;font-weight:900;color:#f1f5f9;margin-bottom:4px}
+.scenario-card .sc-title{font-size:15px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.scenario-card .sc-desc{font-size:13px;color:#475569;line-height:1.6}
+.sc-badge{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px}
+
+/* Resource table check */
+.check-ok{color:#22c55e;font-weight:700}
+.check-opt{color:#f59e0b;font-weight:700}
+
+/* Prompt box */
+.prompt-box{background:#1e293b;border-radius:12px;padding:24px;margin:16px 0;color:#e2e8f0;font-size:13px;line-height:1.8;font-family:'Pretendard Variable',-apple-system,sans-serif}
+.prompt-box .pb-title{font-size:11px;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.prompt-box .pb-body{color:#cbd5e1}
+.prompt-box .pb-highlight{color:#93c5fd;font-weight:600}
+.prompt-box .pb-criteria{color:#86efac;margin-left:16px}
+.prompt-box .pb-pink{color:#f9a8d4;font-weight:600}
+
+/* Design system grid */
+.design-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.design-item{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px}
+.design-item .di-label{font-size:11px;font-weight:700;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.design-item .di-value{font-size:15px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.design-item .di-desc{font-size:12px;color:#64748b;line-height:1.5}
+
+/* Mode toggle visual */
+.mode-toggle{display:flex;gap:0;margin:20px 0;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;width:fit-content}
+.mode-btn{padding:10px 24px;font-size:14px;font-weight:700;background:#f8f9fc;color:#64748b;cursor:pointer;border-right:1px solid #e2e8f0}
+.mode-btn:last-child{border-right:none}
+.mode-btn.active{background:#F75D5D;color:#fff}
+.mode-btn.active-blue{background:#3b82f6;color:#fff}
+.mode-btn.active-purple{background:#8b5cf6;color:#fff}
+
+@media(max-width:640px){
+  .logic-grid{grid-template-columns:1fr}
+  .scenario-grid{grid-template-columns:1fr}
+  .design-grid{grid-template-columns:1fr}
+  .phase-item{grid-template-columns:1fr}
+  h1{font-size:22px}
+  h2{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a href="/reports" class="back">← 리포트 목록</a>
+
+  <h1>숏츠 + 카드뉴스 자동생성 도구 기획서</h1>
+  <p class="subtitle">롱폼 영상 → 쇼츠 5개 + 카드뉴스 자동 변환</p>
+  <p class="date">2026-03-22 &nbsp;·&nbsp; Plan</p>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>📋 목차</h3>
+    <ol>
+      <li><a href="#overview">개요</a></li>
+      <li><a href="#flow">핵심 플로우 (숏츠 모드)</a></li>
+      <li><a href="#stack">기술 스택</a></li>
+      <li><a href="#prompt">AI 프롬프트 설계 (숏츠)</a></li>
+      <li><a href="#ffmpeg">ffmpeg 처리 파이프라인</a></li>
+      <li><a href="#ui">웹 UI 구성</a></li>
+      <li><a href="#cardnews">카드뉴스 자동생성 모드 ✨ NEW</a></li>
+      <li><a href="#scenario">bscamp 활용 시나리오</a></li>
+      <li><a href="#roadmap">구현 로드맵</a></li>
+      <li><a href="#resources">필요 리소스</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. 개요 -->
+  <h2 id="overview">1. 개요</h2>
+  <p>
+    롱폼 유튜브 영상 + SRT 자막 파일을 입력하면 <strong>AI가 하이라이트 구간을 선정</strong>하고
+    자동으로 쇼츠 5개를 생성하는 <strong>로컬 웹앱</strong>.
+    별도 서버 없이 Mac/PC에서 바로 실행 가능.
+    <strong>카드뉴스 모드</strong>를 통해 같은 입력으로 인스타그램 카드뉴스 이미지도 동시 생성.
+  </p>
+
+  <div class="box insight">
+    <h4>🎬 레퍼런스: 커리어해커 알렉스</h4>
+    <p>
+      <a href="https://www.youtube.com/watch?v=EUi09O_b7so" target="_blank" style="color:#3b82f6">
+        youtube.com/watch?v=EUi09O_b7so
+      </a>
+      — Claude Code로 1시간 만에 라이브 개발. 같은 방식으로 우리 버전 구현 가능.
+    </p>
+  </div>
+
+  <div class="highlight">
+    💡 핵심 가치: 영상 1개 업로드 → 클릭 1번 → <strong>쇼츠 5개 + 카드뉴스 7장</strong> 자동 생성. 편집 시간 90% 절감.
+  </div>
+
+  <!-- 2. 핵심 플로우 -->
+  <h2 id="flow">2. 핵심 플로우 (숏츠 모드)</h2>
+  <p>입력부터 결과 확인까지 5단계 파이프라인.</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-node inp">
+        <div class="fn-icon">📁</div>
+        <div class="fn-label">입력</div>
+        <div class="fn-desc">롱폼 영상(.mp4) + 자막(.srt) 드래그앤드롭</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-node inp">
+        <div class="fn-icon">📄</div>
+        <div class="fn-label">SRT 파싱</div>
+        <div class="fn-desc">자막 텍스트 + 타임스탬프 추출 → 구조화된 데이터</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-node ai">
+        <div class="fn-icon">🤖</div>
+        <div class="fn-label">Claude API 분석</div>
+        <div class="fn-desc">자막 전체 분석 → 하이라이트 5개 구간 선정 (JSON 반환)</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-node proc">
+        <div class="fn-icon">✂️</div>
+        <div class="fn-label">ffmpeg 처리</div>
+        <div class="fn-desc">구간 클리핑 → 세로(9:16) 크롭 → 인코딩</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-node out">
+        <div class="fn-icon">🎞️</div>
+        <div class="fn-label">결과 확인</div>
+        <div class="fn-desc">웹 UI에서 5개 쇼츠 미리보기 + 다운로드/업로드</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 기술 스택 -->
+  <h2 id="stack">3. 기술 스택</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>기술</th>
+        <th>용도</th>
+        <th>선택 이유</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Python + FastAPI</td>
+        <td>백엔드 서버</td>
+        <td>빠른 프로토타이핑, async 지원</td>
+      </tr>
+      <tr>
+        <td>ffmpeg</td>
+        <td>영상 클리핑 + 세로 변환 + 인코딩</td>
+        <td>업계 표준, homebrew 설치 완료</td>
+      </tr>
+      <tr>
+        <td>Claude API (Sonnet)</td>
+        <td>자막 분석 → 하이라이트 구간 선정 / 카드뉴스 인사이트 추출</td>
+        <td>긴 자막 컨텍스트 처리, JSON 출력 안정적</td>
+      </tr>
+      <tr>
+        <td>HTML/JS + Canvas API</td>
+        <td>드래그앤드롭 웹 UI + 결과 미리보기 + 카드뉴스 렌더링</td>
+        <td>별도 프레임워크 불필요, Canvas로 PNG 내보내기 가능</td>
+      </tr>
+      <tr>
+        <td>SRT 파서</td>
+        <td>자막 타임스탬프 → 영상 구간 매핑</td>
+        <td>Python 라이브러리 (srt 또는 pysrt)</td>
+      </tr>
+      <tr>
+        <td>JSZip</td>
+        <td>카드뉴스 PNG 묶어서 ZIP 다운로드</td>
+        <td>브라우저 내 ZIP 생성, 서버 불필요</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 4. AI 프롬프트 설계 (숏츠) -->
+  <h2 id="prompt">4. AI 프롬프트 설계 (숏츠)</h2>
+
+  <h3>하이라이트 선정 프롬프트</h3>
+
+  <div class="prompt-box">
+    <div class="pb-title">System Prompt → Claude Sonnet</div>
+    <div class="pb-body">
+      <span class="pb-highlight">이 자막에서 숏폼 영상으로 만들기 좋은 구간 5개를 골라줘.</span><br><br>
+      선정 기준:<br>
+      <span class="pb-criteria">- 흥미로운 도입부 (호기심 유발)</span><br>
+      <span class="pb-criteria">- 핵심 인사이트 (한 문장으로 배울 수 있는 것)</span><br>
+      <span class="pb-criteria">- 임팩트 있는 한 마디 (공유하고 싶은 말)</span><br>
+      <span class="pb-criteria">- 독립적으로 이해 가능한 구간 (맥락 없이도 통하는)</span><br>
+      <span class="pb-criteria">- 30초-60초 길이</span><br><br>
+      각 구간의 시작 타임스탬프, 끝 타임스탬프, 제목, 선정 이유를 <span class="pb-highlight">JSON으로 반환.</span>
+    </div>
+  </div>
+
+  <h3>응답 포맷</h3>
+
+  <pre><span class="code-comment">// Claude API 응답 스키마</span>
+{
+  <span class="code-key">"clips"</span>: [
+    {
+      <span class="code-key">"title"</span>: <span class="code-str">"프롬프트 엔지니어링은 끝났다"</span>,
+      <span class="code-key">"start"</span>: <span class="code-str">"00:02:15"</span>,
+      <span class="code-key">"end"</span>: <span class="code-str">"00:03:05"</span>,
+      <span class="code-key">"reason"</span>: <span class="code-str">"강한 도입부 + 핵심 메시지"</span>
+    },
+    <span class="code-comment">// ... 총 5개</span>
+  ]
+}</pre>
+
+  <div class="box action">
+    <h4>✅ 프롬프트 설계 포인트</h4>
+    <ul>
+      <li><strong>선정 기준 5가지</strong>를 명시 → 다양한 유형의 클립 확보 (도입부, 인사이트, 명언 등)</li>
+      <li><strong>30~60초 길이 제약</strong> → 숏츠 플랫폼 최적 길이</li>
+      <li><strong>독립 이해 가능</strong> 조건 → 맥락 없이도 통하는 클립만 선정</li>
+      <li><strong>JSON 반환</strong> → ffmpeg 파이프라인 직접 연결 가능</li>
+    </ul>
+  </div>
+
+  <!-- 5. ffmpeg 파이프라인 -->
+  <h2 id="ffmpeg">5. ffmpeg 처리 파이프라인</h2>
+
+  <div class="logic-grid">
+    <div class="logic-item" style="border-top:3px solid #3b82f6">
+      <div class="lg-num" style="color:#3b82f6">1</div>
+      <div class="lg-title">구간 추출</div>
+      <div class="lg-desc">Claude가 선정한 시작/끝 타임스탬프로 원본 영상에서 클립 추출. 재인코딩 없이 복사 → 빠른 처리.</div>
+    </div>
+    <div class="logic-item" style="border-top:3px solid #22c55e">
+      <div class="lg-num" style="color:#22c55e">2</div>
+      <div class="lg-title">세로 크롭</div>
+      <div class="lg-desc">16:9 가로 영상 → 9:16 세로 변환. 중앙 크롭 방식 (ih*9/16:ih). 얼굴/자막이 중앙에 있으면 OK.</div>
+    </div>
+    <div class="logic-item" style="border-top:3px solid #f59e0b">
+      <div class="lg-num" style="color:#f59e0b">3</div>
+      <div class="lg-title">자막 하드코딩 (선택)</div>
+      <div class="lg-desc">원본 SRT에서 해당 구간만 추출해서 영상에 소각. 쇼츠 자막 효과로 시청 유지율 향상.</div>
+    </div>
+    <div class="logic-item" style="border-top:3px solid #8b5cf6">
+      <div class="lg-num" style="color:#8b5cf6">4</div>
+      <div class="lg-title">최종 출력</div>
+      <div class="lg-desc">YouTube Shorts / TikTok / Instagram Reels 업로드 가능한 MP4 포맷. H.264, AAC 인코딩.</div>
+    </div>
+  </div>
+
+  <h3>ffmpeg 명령어</h3>
+
+  <pre><span class="code-comment"># 1단계: 구간 추출 (빠른 복사)</span>
+ffmpeg -ss {start} -to {end} -i input.mp4 -c copy clip_{n}.mp4
+
+<span class="code-comment"># 2단계: 세로 크롭 (9:16)</span>
+ffmpeg -i clip_{n}.mp4 -vf <span class="code-str">"crop=ih*9/16:ih"</span> -c:a copy shorts_{n}.mp4
+
+<span class="code-comment"># 3단계: (선택) 자막 하드코딩</span>
+ffmpeg -i shorts_{n}.mp4 -vf <span class="code-str">"subtitles=clip_{n}.srt"</span> final_{n}.mp4</pre>
+
+  <div class="box warn">
+    <h4>⚠️ 주의사항</h4>
+    <ul>
+      <li>1단계에서 <code>-c copy</code>는 재인코딩 없이 복사 → 빠르지만 정확한 타임스탬프 컷은 2패스 필요</li>
+      <li>세로 크롭 시 피사체가 중앙에 없으면 얼굴이 잘릴 수 있음 → Phase 4에서 스마트 크롭(얼굴 감지) 옵션 추가 가능</li>
+      <li>자막 하드코딩 시 폰트 설정 필요 (한글 깨짐 방지)</li>
+    </ul>
+  </div>
+
+  <!-- 6. 웹 UI -->
+  <h2 id="ui">6. 웹 UI 구성</h2>
+
+  <h3>모드 선택 토글</h3>
+  <p>상단에 모드 선택 토글을 배치하여 숏츠/카드뉴스/둘 다 모드를 전환 가능.</p>
+
+  <div class="mode-toggle">
+    <div class="mode-btn active-blue">🎬 숏츠 모드</div>
+    <div class="mode-btn active" style="background:#ec4899">🃏 카드뉴스 모드</div>
+    <div class="mode-btn active-purple">✨ 둘 다</div>
+  </div>
+  <p style="font-size:13px;color:#64748b;margin-top:-8px">↑ 실제 UI에서는 한 개만 활성화. 시각적 참고용.</p>
+
+  <div class="box insight">
+    <h4>📱 UI 컴포넌트 목록</h4>
+    <ul>
+      <li><strong>모드 선택 토글</strong> — 숏츠 모드 / 카드뉴스 모드 / 둘 다 (3선택)</li>
+      <li><strong>드래그앤드롭 영역</strong> — mp4 + srt 파일 동시 수용. 텍스트 입력 / URL 입력 탭도 제공.</li>
+      <li><strong>Claude API 키 입력 필드</strong> — localStorage 저장 (매번 입력 불필요)</li>
+      <li><strong>분석 시작 버튼</strong> — 파일/텍스트 + API 키 있을 때 활성화</li>
+      <li><strong>진행률 표시</strong> — 파싱 → AI 분석 → 클리핑/렌더링 → 완료 (단계별 표시)</li>
+      <li><strong>[숏츠] 결과 카드 5개</strong> — 썸네일 + 제목 + 길이 + 선정 이유 + 다운로드</li>
+      <li><strong>[카드뉴스] 캐러셀 미리보기</strong> — 7장 슬라이드 + 전체 ZIP 다운로드</li>
+      <li><strong>전체 다운로드 버튼</strong> — 숏츠 ZIP or 카드뉴스 ZIP</li>
+    </ul>
+  </div>
+
+  <h3>UI 흐름</h3>
+  <ol>
+    <li>모드 선택 → 입력 영역 변경 (영상+SRT / 텍스트 붙여넣기 / URL 입력)</li>
+    <li>파일/텍스트 입력 → 유효성 검증 표시</li>
+    <li>API 키 입력 (처음 한 번 → 이후 자동 불러오기)</li>
+    <li>"분석 시작" 클릭 → 로딩 스피너 + 단계별 진행 메시지</li>
+    <li>완료 → 결과 카드(숏츠) 또는 캐러셀(카드뉴스) 애니메이션 등장</li>
+    <li>카드별 미리보기 + 개별/전체 다운로드</li>
+  </ol>
+
+  <!-- 7. 카드뉴스 자동생성 모드 (NEW) -->
+  <h2 id="cardnews">7. 카드뉴스 자동생성 모드 ✨</h2>
+  <p>
+    기존 숏츠 모드와 동일한 입력(롱폼 영상 + SRT 또는 텍스트만)으로
+    <strong>인스타그램 카드뉴스 이미지 7장</strong>을 자동 생성.
+    영상 없이 텍스트나 URL만으로도 동작.
+  </p>
+
+  <div class="highlight pink">
+    🃏 카드뉴스 가치: 강의 1개 → 카드뉴스 7장 자동 완성. 인스타 피드 1주일치 콘텐츠 10분 만에 해결.
+  </div>
+
+  <h3>카드뉴스 플로우</h3>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-node inp">
+        <div class="fn-icon">📥</div>
+        <div class="fn-label">입력 (3가지)</div>
+        <div class="fn-desc">① 영상+SRT &nbsp;② 텍스트 붙여넣기 (블로그·스크립트) &nbsp;③ URL (웹페이지 자동 추출)</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-node ai">
+        <div class="fn-icon">🤖</div>
+        <div class="fn-label">Claude 핵심 인사이트 추출</div>
+        <div class="fn-desc">콘텐츠 전체 분석 → 카드뉴스용 핵심 포인트 7개 추출 → 카드별 제목+본문 JSON 반환</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-node card">
+        <div class="fn-icon">🎨</div>
+        <div class="fn-label">HTML Canvas 렌더링</div>
+        <div class="fn-desc">브랜드 컬러 + Pretendard 폰트 + 레이아웃 → 1080×1350px 카드 이미지 생성</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-node out">
+        <div class="fn-icon">📦</div>
+        <div class="fn-label">PNG 7장 다운로드</div>
+        <div class="fn-desc">캐러셀 미리보기 확인 후 개별 PNG 또는 전체 ZIP 다운로드</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>카드뉴스 AI 프롬프트</h3>
+
+  <div class="prompt-box">
+    <div class="pb-title">Card News Prompt → Claude Sonnet</div>
+    <div class="pb-body">
+      <span class="pb-pink">이 콘텐츠에서 인스타그램 카드뉴스로 만들기 좋은 핵심 포인트 7개를 뽑아줘.</span><br><br>
+      각 카드 구성:<br>
+      <span class="pb-criteria">- 카드 1: 표지 (후킹 제목 1줄)</span><br>
+      <span class="pb-criteria">- 카드 2-6: 본문 (각각 제목 1줄 + 설명 2-3줄)</span><br>
+      <span class="pb-criteria">- 카드 7: 마무리 (CTA 또는 요약)</span><br><br>
+      <span class="pb-highlight">JSON으로 반환:</span>
+    </div>
+  </div>
+
+  <pre><span class="code-comment">// 카드뉴스 Claude API 응답 스키마</span>
+{
+  <span class="code-key">"cards"</span>: [
+    {<span class="code-key">"type"</span>: <span class="code-str">"cover"</span>, <span class="code-key">"title"</span>: <span class="code-str">"체험단 소재, 승인해야 할까?"</span>},
+    {
+      <span class="code-key">"type"</span>: <span class="code-str">"content"</span>,
+      <span class="code-key">"title"</span>: <span class="code-str">"기준은 딱 3가지"</span>,
+      <span class="code-key">"body"</span>: <span class="code-str">"1. 제품이 메인으로 보이는지\n2. 실사용 느낌이 나는지\n3. 광고 소재로 가공 가능한지"</span>
+    },
+    {
+      <span class="code-key">"type"</span>: <span class="code-str">"cta"</span>,
+      <span class="code-key">"title"</span>: <span class="code-str">"일단 돌려보세요"</span>,
+      <span class="code-key">"body"</span>: <span class="code-str">"70점짜리 10개가 100점짜리 1개보다 낫습니다"</span>
+    }
+  ]
+}</pre>
+
+  <h3>카드 디자인 시스템</h3>
+
+  <div class="design-grid">
+    <div class="design-item">
+      <div class="di-label">크기</div>
+      <div class="di-value">1080 × 1350px</div>
+      <div class="di-desc">Instagram 세로 포맷 (4:5). Reels 커버로도 활용 가능.</div>
+    </div>
+    <div class="design-item">
+      <div class="di-label">배경</div>
+      <div class="di-value">브랜드 컬러 그라데이션</div>
+      <div class="di-desc">표지: #F75D5D → #ff8a5b 그라데이션. 본문: 화이트 + 레드 포인트 라인.</div>
+    </div>
+    <div class="design-item">
+      <div class="di-label">폰트</div>
+      <div class="di-value">Pretendard</div>
+      <div class="di-desc">제목: Bold 56px. 본문: Regular 36px. Canvas FontFace API로 로드.</div>
+    </div>
+    <div class="design-item">
+      <div class="di-label">레이아웃</div>
+      <div class="di-value">상단 제목 + 중앙 본문 + 하단 로고</div>
+      <div class="di-desc">좌우 패딩 80px. 줄간격 1.6. bscamp 워터마크 우하단.</div>
+    </div>
+    <div class="design-item">
+      <div class="di-label">bscamp 브랜드</div>
+      <div class="di-value">#F75D5D 포인트</div>
+      <div class="di-desc">포인트 컬러: #F75D5D. 배경: 화이트. 로고 워터마크: 반투명 15%.</div>
+    </div>
+    <div class="design-item">
+      <div class="di-label">카드 타입</div>
+      <div class="di-value">cover / content / cta</div>
+      <div class="di-desc">표지(풀 컬러 배경), 본문(화이트 + 포인트 라인), 마무리(CTA 버튼 강조).</div>
+    </div>
+  </div>
+
+  <h3>추가 입력 지원</h3>
+
+  <div class="box card-news">
+    <h4>📌 3가지 입력 방식</h4>
+    <ul>
+      <li><strong>영상 + SRT (기존)</strong> — 롱폼 영상 + 자막 파일로 숏츠와 카드뉴스 동시 생성</li>
+      <li><strong>텍스트만</strong> — 블로그 글, 강의 스크립트, 강의 Q&A 텍스트 직접 붙여넣기. 영상 없이도 OK.</li>
+      <li><strong>URL</strong> — 웹페이지 URL 입력 → 본문 자동 추출 → 카드뉴스 변환. 블로그·뉴스·노션 공개 링크 지원.</li>
+    </ul>
+  </div>
+
+  <!-- 8. bscamp 활용 시나리오 -->
+  <h2 id="scenario">8. bscamp 활용 시나리오</h2>
+
+  <h3>숏츠 시나리오</h3>
+  <div class="scenario-grid">
+    <div class="scenario-card" style="border-top:3px solid #3b82f6">
+      <div class="sc-num" style="color:#dbeafe">01</div>
+      <div class="sc-title">강의 영상 → SNS 홍보</div>
+      <div class="sc-desc">Smith님 강의 영상에서 핵심 인사이트 구간 추출 → YouTube Shorts + Instagram Reels 자동 배포. 마케팅 비용 0.</div>
+      <span class="sc-badge" style="background:#dbeafe;color:#1d4ed8">즉시 적용</span>
+    </div>
+    <div class="scenario-card" style="border-top:3px solid #22c55e">
+      <div class="sc-num" style="color:#dcfce7">02</div>
+      <div class="sc-title">웨비나 녹화 → 하이라이트 클립</div>
+      <div class="sc-desc">웨비나 1시간 녹화 → 30초짜리 하이라이트 5개 → 수강생 복습용 공유. 참여율 향상 기대.</div>
+      <span class="sc-badge" style="background:#dcfce7;color:#166534">즉시 적용</span>
+    </div>
+    <div class="scenario-card" style="border-top:3px solid #f59e0b">
+      <div class="sc-num" style="color:#fef3c7">03</div>
+      <div class="sc-title">수강생 성공사례 → 숏폼</div>
+      <div class="sc-desc">수강생 인터뷰 영상 → 감동적인 성과 구간만 추출 → 소셜 증거 콘텐츠. 전환율 직결.</div>
+      <span class="sc-badge" style="background:#fef3c7;color:#92400e">기획 필요</span>
+    </div>
+    <div class="scenario-card" style="border-top:3px solid #8b5cf6">
+      <div class="sc-num" style="color:#f3e8ff">04</div>
+      <div class="sc-title">bscamp 플랫폼 통합</div>
+      <div class="sc-desc">콘텐츠 큐레이션 탭 내 기능으로 통합. 강사가 직접 업로드 → 자동 숏츠 생성 → 마케팅 자동화.</div>
+      <span class="sc-badge" style="background:#f3e8ff;color:#6b21a8">Phase 4 이후</span>
+    </div>
+  </div>
+
+  <h3>카드뉴스 시나리오</h3>
+  <div class="scenario-grid">
+    <div class="scenario-card" style="border-top:3px solid #ec4899">
+      <div class="sc-num" style="color:#fce7f3">05</div>
+      <div class="sc-title">강의 핵심 → 인스타 홍보</div>
+      <div class="sc-desc">Smith님 강의 핵심 내용 → 인스타그램 카드뉴스 7장으로 변환 → 수강 전환 유도. 1강 = 1세트 카드뉴스.</div>
+      <span class="sc-badge" style="background:#fce7f3;color:#9d174d">즉시 적용</span>
+    </div>
+    <div class="scenario-card" style="border-top:3px solid #f43f5e">
+      <div class="sc-num" style="color:#ffe4e6">06</div>
+      <div class="sc-title">Q&A 베스트 → 카드뉴스</div>
+      <div class="sc-desc">수강생 Q&A 베스트 질문+답변 텍스트 → 카드뉴스 공유. "이런 고민 있으면 클릭" 형식. 유입 직결.</div>
+      <span class="sc-badge" style="background:#ffe4e6;color:#be123c">즉시 적용</span>
+    </div>
+    <div class="scenario-card" style="border-top:3px solid #d946ef">
+      <div class="sc-num" style="color:#fae8ff">07</div>
+      <div class="sc-title">블로그 → 카드뉴스 리사이클링</div>
+      <div class="sc-desc">블로그 글 URL 입력 → 카드뉴스 7장 자동 변환. 기존 콘텐츠 인스타 재활용. 창작 없이 SNS 피드 채우기.</div>
+      <span class="sc-badge" style="background:#fae8ff;color:#86198f">Phase 6 (URL 지원)</span>
+    </div>
+    <div class="scenario-card" style="border-top:3px solid #a855f7">
+      <div class="sc-num" style="color:#f3e8ff">08</div>
+      <div class="sc-title">공지사항 → 비주얼 카드</div>
+      <div class="sc-desc">bscamp 공지, 이벤트 안내 텍스트 → 브랜드 카드뉴스로 변환. 텍스트 공지 대신 시각적 전달. 열람률 향상.</div>
+      <span class="sc-badge" style="background:#f3e8ff;color:#7e22ce">즉시 적용</span>
+    </div>
+  </div>
+
+  <!-- 9. 구현 로드맵 -->
+  <h2 id="roadmap">9. 구현 로드맵</h2>
+  <p>총 예상 개발 시간: <strong>9시간</strong> (Phase 5~6 포함, Phase 4 제외)</p>
+
+  <ul class="phase-list">
+    <li class="phase-item">
+      <div>
+        <span class="phase-badge phase-1">Phase 1<br>2시간</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-title">FastAPI 서버 + SRT 파서 + Claude API 연동</div>
+        <div class="phase-desc">
+          서버 뼈대 구축. SRT 파일 파싱 → 텍스트+타임스탬프 추출.
+          Claude API 호출 → 하이라이트 5개 JSON 반환 → 로컬 저장.
+          기본 API 엔드포인트: <code>POST /analyze</code>
+        </div>
+      </div>
+    </li>
+    <li class="phase-item">
+      <div>
+        <span class="phase-badge phase-2">Phase 2<br>2시간</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-title">ffmpeg 클리핑 + 세로 변환</div>
+        <div class="phase-desc">
+          Phase 1 결과(JSON) → ffmpeg 명령어 생성 → 자동 실행.
+          구간 추출 → 9:16 크롭 → MP4 출력.
+          API 엔드포인트: <code>POST /process</code>, SSE로 진행률 스트리밍.
+        </div>
+      </div>
+    </li>
+    <li class="phase-item">
+      <div>
+        <span class="phase-badge phase-3">Phase 3<br>1시간</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-title">웹 UI (드래그앤드롭 + 결과 표시)</div>
+        <div class="phase-desc">
+          단일 HTML 파일. 드래그앤드롭 → API 호출 → 진행률 표시.
+          완료 시 결과 카드 5개 + video 미리보기 + 다운로드 버튼.
+          모드 선택 토글 (숏츠 / 카드뉴스 / 둘 다) UI 포함.
+          FastAPI에서 static 파일로 서빙.
+        </div>
+      </div>
+    </li>
+    <li class="phase-item">
+      <div>
+        <span class="phase-badge phase-4">Phase 4<br>선택</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-title">자막 하드코딩 + YouTube 업로드 API</div>
+        <div class="phase-desc">
+          자막 소각으로 시청 유지율 향상. YouTube Data API v3로 자동 업로드.
+          스마트 크롭(얼굴 감지) 옵션. bscamp 플랫폼 통합.
+        </div>
+      </div>
+    </li>
+    <li class="phase-item">
+      <div>
+        <span class="phase-badge phase-5">Phase 5<br>2시간</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-title">카드뉴스 모드 — Claude 프롬프트 + HTML Canvas 렌더링 + PNG 내보내기</div>
+        <div class="phase-desc">
+          카드뉴스용 Claude 프롬프트 구현 → JSON 카드 데이터 반환.
+          HTML Canvas API로 1080×1350px 카드 렌더링 (표지/본문/CTA 타입별 레이아웃).
+          Pretendard 폰트 + bscamp 브랜드 컬러 적용.
+          PNG 개별 다운로드 + JSZip으로 전체 ZIP 내보내기.
+          캐러셀 미리보기 UI (좌우 화살표 슬라이드).
+        </div>
+      </div>
+    </li>
+    <li class="phase-item">
+      <div>
+        <span class="phase-badge phase-6">Phase 6<br>1시간</span>
+      </div>
+      <div class="phase-body">
+        <div class="phase-title">텍스트 / URL 입력 지원</div>
+        <div class="phase-desc">
+          텍스트 붙여넣기 입력 탭 추가 (영상 없이 카드뉴스 생성 가능).
+          URL 입력 → 서버에서 웹페이지 본문 추출 (BeautifulSoup) → 카드뉴스 변환.
+          블로그 글, 강의 스크립트, Q&A 텍스트 직접 입력 지원.
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <!-- 10. 필요 리소스 -->
+  <h2 id="resources">10. 필요 리소스</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>항목</th>
+        <th>상태</th>
+        <th>비고</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Python 3.9+</td>
+        <td><span class="check-ok">✅ 준비됨</span></td>
+        <td>FastAPI, srt, anthropic, beautifulsoup4 패키지 pip 설치</td>
+      </tr>
+      <tr>
+        <td>ffmpeg</td>
+        <td><span class="check-ok">✅ 준비됨</span></td>
+        <td>homebrew 설치 완료</td>
+      </tr>
+      <tr>
+        <td>Claude API Key</td>
+        <td><span class="check-ok">✅ 준비됨</span></td>
+        <td>ANTHROPIC_API_KEY 환경변수 (숏츠 + 카드뉴스 공용)</td>
+      </tr>
+      <tr>
+        <td>Node.js (웹 UI)</td>
+        <td><span class="check-ok">✅ 준비됨</span></td>
+        <td>빌드 도구 필요 시 (현재는 순수 HTML + Canvas API로 충분)</td>
+      </tr>
+      <tr>
+        <td>JSZip 라이브러리</td>
+        <td><span class="check-ok">✅ CDN 사용</span></td>
+        <td>카드뉴스 PNG → ZIP 묶기. CDN 1줄로 해결.</td>
+      </tr>
+      <tr>
+        <td>Pretendard 폰트</td>
+        <td><span class="check-ok">✅ CDN 사용</span></td>
+        <td>Canvas FontFace API로 로드. 한글 카드 렌더링 필수.</td>
+      </tr>
+      <tr>
+        <td>YouTube Data API</td>
+        <td><span class="check-opt">⬜ Phase 4</span></td>
+        <td>자동 업로드 기능 구현 시 필요</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box action">
+    <h4>🚀 시작하려면</h4>
+    <pre style="background:#f1f5f9;color:#334155;margin:8px 0 0;font-size:12px">pip install fastapi uvicorn srt anthropic python-multipart beautifulsoup4 requests
+uvicorn main:app --reload --port 8000</pre>
+    <p style="margin-top:8px;font-size:13px;color:#475569">브라우저에서 <code>http://localhost:8000</code> 접속 → 드래그앤드롭 UI + 모드 선택 토글 확인</p>
+  </div>
+
+  <div class="highlight">
+    🎯 목표: Claude Code로 9시간 내 완성. Phase 1~3 끝나면 숏츠 테스트, Phase 5 끝나면 카드뉴스 테스트.
+  </div>
+
+  <p style="margin-top:40px;font-size:13px;color:#94a3b8;text-align:center">
+    기획 완료: 2026-03-22 &nbsp;·&nbsp; 모찌리포트
+  </p>
+
+</div>
+</body>
+</html>

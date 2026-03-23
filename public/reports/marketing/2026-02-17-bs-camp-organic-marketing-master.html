@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="date" content="2026-02-17">
+<meta name="project" content="BS CAMP">
+<meta name="status" content="pending">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자사몰 사관학교 — 오가닉 마케팅 마스터 플랜</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+  :root{--r:#F75D5D;--rl:#FEE8E8;--rd:#D94444;--dk:#1A1A2E;--dk2:#16213E;--g9:#212529;--g7:#495057;--g5:#868E96;--g3:#DEE2E6;--g1:#F8F9FA;--w:#FFF;--b:#3B82F6;--bl:#DBEAFE;--gn:#10B981;--gnl:#D1FAE5;--p:#8B5CF6;--pl:#EDE9FE;--o:#F59E0B;--ol:#FEF3C7}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans KR',-apple-system,sans-serif;color:var(--g9);background:var(--g1);line-height:1.75;font-size:9.5pt;-webkit-font-smoothing:antialiased}
+  .doc{max-width:210mm;margin:0 auto;background:var(--w);box-shadow:0 2px 24px rgba(0,0,0,.06)}
+  @media print{body{background:#fff;font-size:9pt}.doc{box-shadow:none;max-width:100%}.page{page-break-after:always;page-break-inside:avoid}.no-break{page-break-inside:avoid}}
+
+  /* Cover */
+  .cover{min-height:290mm;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(155deg,#0F0F1A 0%,var(--dk) 40%,var(--dk2) 70%,#0F3460 100%);color:var(--w);text-align:center;padding:35mm 30mm;position:relative;overflow:hidden}
+  .cover::before{content:'';position:absolute;top:-30%;right:-20%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(247,93,93,.08) 0%,transparent 60%)}
+  .cover::after{content:'';position:absolute;bottom:-25%;left:-15%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.06) 0%,transparent 60%)}
+  .cover *{position:relative;z-index:1}
+  .c-badge{display:inline-block;border:1.5px solid rgba(247,93,93,.5);color:var(--r);padding:5px 20px;border-radius:24px;font-size:8pt;font-weight:600;letter-spacing:4px;text-transform:uppercase;margin-bottom:28px}
+  .cover h1{font-size:28pt;font-weight:900;line-height:1.25;margin-bottom:10px;letter-spacing:-0.5px}
+  .cover h1 em{font-style:normal;color:var(--r)}
+  .c-sub{font-size:13pt;font-weight:300;color:rgba(255,255,255,.55);margin-bottom:45px;line-height:1.6}
+  .c-stats{display:flex;gap:32px;margin-bottom:40px}
+  .c-stat{text-align:center}
+  .c-stat b{display:block;font-size:22pt;font-weight:900;color:var(--r)}
+  .c-stat span{font-size:7.5pt;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase}
+  .c-meta{display:flex;gap:36px;font-size:8pt;color:rgba(255,255,255,.35);border-top:1px solid rgba(255,255,255,.08);padding-top:28px}
+  .c-meta div span:first-child{display:block;font-size:7pt;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+  .c-meta div span:last-child{color:rgba(255,255,255,.7);font-weight:500}
+
+  /* Pages */
+  .page{padding:18mm 24mm}
+  .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .sec-num{background:var(--r);color:#fff;min-width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:10pt}
+  .sec-label{font-size:7.5pt;color:var(--r);font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+  h2{font-size:15pt;font-weight:900;color:var(--dk);margin-bottom:16px;letter-spacing:-0.3px}
+  h3{font-size:11pt;font-weight:700;color:var(--dk);margin:18px 0 8px}
+  h4{font-size:9.5pt;font-weight:700;color:var(--g7);margin:12px 0 6px}
+  p{margin-bottom:8px;color:var(--g7)}
+  .line{width:40px;height:3px;background:var(--r);margin-bottom:20px}
+
+  /* Components */
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:8.5pt}
+  th{background:var(--dk);color:#fff;padding:7px 10px;text-align:left;font-weight:600;font-size:8pt}
+  td{padding:7px 10px;border-bottom:1px solid var(--g3);vertical-align:top}
+  tr:nth-child(even){background:var(--g1)}
+  .box{background:var(--g1);border:1px solid var(--g3);border-radius:10px;padding:14px 16px;margin:10px 0}
+  .hl{border-left:4px solid var(--r);padding:12px 16px;border-radius:0 8px 8px 0;margin:10px 0;background:var(--rl)}
+  .hl-b{border-left-color:var(--b);background:var(--bl)}
+  .hl-p{border-left-color:var(--p);background:var(--pl)}
+  .hl-g{border-left-color:var(--gn);background:var(--gnl)}
+  .dark{background:linear-gradient(135deg,var(--dk),var(--dk2));color:#fff;padding:18px;border-radius:10px;margin:12px 0}
+  .dark h4{color:var(--r);margin-top:0}
+  .dark p,.dark li{color:rgba(255,255,255,.75)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+  .card{border:1px solid var(--g3);border-radius:10px;padding:14px;background:var(--w)}
+  .card h4{margin-top:0}
+  .card ul{list-style:none;padding:0;font-size:8.5pt;color:var(--g7)}
+  .card ul li{padding:3px 0;padding-left:16px;position:relative}
+  .card ul li::before{content:'→';position:absolute;left:0;color:var(--g5);font-size:8pt}
+  .tag{display:inline-block;font-size:7pt;font-weight:700;padding:2px 8px;border-radius:10px}
+  .t-auto{background:var(--gnl);color:#065F46}
+  .t-semi{background:var(--ol);color:#92400E}
+  .t-setup{background:var(--bl);color:#1E40AF}
+  .t-social{background:var(--rl);color:var(--rd)}
+  .t-seo{background:var(--bl);color:var(--b)}
+  .t-geo{background:var(--pl);color:var(--p)}
+  .sm{font-size:8pt;color:var(--g5)}
+  .num-big{font-size:20pt;font-weight:900;color:var(--r)}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="c-badge">Master Plan 2026</div>
+  <h1>오가닉 마케팅<br><em>완전 자동화</em> 마스터 플랜</h1>
+  <div class="c-sub">1개 콘텐츠 → 7개 채널 → 4개 검색엔진<br>Smith님 투입 = 세팅 45분, 이후 0</div>
+  <div class="c-stats">
+    <div class="c-stat"><b>441억</b><span>수강생 총매출</span></div>
+    <div class="c-stat"><b>255%</b><span>평균 ROAS</span></div>
+    <div class="c-stat"><b>80%</b><span>지인추천 유입</span></div>
+    <div class="c-stat"><b>78명</b><span>5기 수강생</span></div>
+  </div>
+  <div class="c-meta">
+    <div><span>서비스</span><span>자사몰 사관학교 (bsschool)</span></div>
+    <div><span>작성일</span><span>2026년 2월 17일</span></div>
+    <div><span>작성</span><span>마케팅팀 · 모찌</span></div>
+    <div><span>버전</span><span>Master v1.0</span></div>
+  </div>
+</div>
+
+<!-- ===== 목차 ===== -->
+<div class="page">
+  <h2 style="margin-bottom:24px;">목차</h2>
+  <div class="line"></div>
+  <table style="font-size:9.5pt">
+    <tbody style="background:transparent">
+      <tr><td style="width:40px;font-weight:900;color:var(--r)">01</td><td><strong>왜 오가닉인가</strong> — 현황 진단 + 경쟁 레퍼런스</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">02</td><td><strong>전략 프레임워크</strong> — 퍼널 구조 + 채널별 역할</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">03</td><td><strong>아키텍처</strong> — Layer 0~3 전체 구조 + DB 설계</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">04</td><td><strong>[SEO] 네이버 + 구글</strong> — 상위노출 전략 + 키워드 20개 + 글 작성 규칙</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">05</td><td><strong>[바이럴] 경쟁 분석</strong> — 바이럴 업계 실전 수법 vs 우리의 접근법</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">06</td><td><strong>[GEO] AI 검색</strong> — ChatGPT · Gemini · Perplexity 최적화</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">07</td><td><strong>[소셜] 유튜브 + 인스타 + 카카오</strong> — 상위노출 + 리드 전환</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">08</td><td><strong>완전 자동화 설계</strong> — API 7개 + 크론 8개 + 변환 엔진</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">09</td><td><strong>실행 로드맵 + 개발 변경사항 + 세팅 체크리스트</strong></td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">10</td><td><strong>KPI + 성과 목표</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 01. 왜 오가닉인가 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">1</span><span class="sec-label">Why Organic</span></div>
+  <h2>왜 오가닉인가</h2>
+  <div class="line"></div>
+
+  <h3>현재 마케팅 구조</h3>
+  <div class="box">
+    <table>
+      <thead><tr><th>채널</th><th>현황</th><th>한계</th></tr></thead>
+      <tbody>
+        <tr><td><strong>무료 웨비나</strong></td><td>6기 모객 중, 주요 전환 채널</td><td>매 기수마다 광고비 or 수동 모객 필요</td></tr>
+        <tr><td><strong>뉴스레터</strong></td><td>Stibee + bsschool 내부 발송</td><td>기존 리드(1,095명)에게만 도달</td></tr>
+        <tr><td><strong>유튜브</strong></td><td>@1bpluschool 수강생 인터뷰 시리즈</td><td>교육 콘텐츠 부재, 검색 유입 거의 없음</td></tr>
+        <tr><td><strong>인스타</strong></td><td>@1bpluschool 존재</td><td>정기 콘텐츠 없음</td></tr>
+        <tr><td><strong>네이버</strong></td><td>없음</td><td>검색 자산 = 0</td></tr>
+        <tr><td><strong>AI 검색</strong></td><td>없음</td><td>"메타 광고 교육 추천" → 미노출</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="dark">
+    <h4>핵심 문제: 콘텐츠는 있는데, 세상에 안 나가고 있다</h4>
+    <p>강의 스크립트 6주치(2MB+), RAG 664청크, 벤치마크 7,366 rows — 이 자산이 bsschool 내부에만 갇혀 있음.<br>
+    검색에도 안 걸리고, AI에게도 안 알려져 있고, 소셜에도 안 나감.<br>
+    <strong>배포 레이어가 없는 것</strong>이 유일한 문제.</p>
+  </div>
+
+  <h3>경쟁 레퍼런스 — 교육 사업에서 오가닉이 되는 구조</h3>
+  <table>
+    <thead><tr><th>채널</th><th>모델</th><th>핵심 전략</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr><td><strong>엠타트업 (M군)</strong></td><td>유튜브 → 정규강의</td><td>이커머스 본질 콘텐츠 대량 무료 공개, 1300명 세미나</td><td>19기+ 운영, 커뮤니티 자생</td></tr>
+      <tr><td><strong>이상한마케팅</strong></td><td>유튜브 → 아카데미</td><td>"매출 200% 상승" 실증 사례 기반, 7년 노하우 공개</td><td>1:1 밀착 코칭 프리미엄</td></tr>
+      <tr><td><strong>신사임당</strong></td><td>유튜브 100만 → MKYU</td><td>무료 가치 폭탄 → "더 깊은 건 강의에서"</td><td>플랫폼(MKYU) 교육 확장</td></tr>
+      <tr><td><strong>Alex Hormozi</strong></td><td>유튜브+팟캐스트 → 컨설팅</td><td>"$100M 벌었다"는 데이터로 권위 → 무료 콘텐츠 대량</td><td>acquisition.com 생태계</td></tr>
+    </tbody>
+  </table>
+
+  <div class="hl">
+    <strong>공통 패턴:</strong> 핵심 지식의 70%를 무료로 공개 → 전문성 증명 → "직접 배우면 더 빠르다"로 전환.<br>
+    Smith님은 이미 70%(강의 스크립트)를 가지고 있음. <strong>공개 채널에 올리기만 하면 됨.</strong>
+  </div>
+
+  <h3>자사몰사관학교의 강점 — 남들이 못 하는 것</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>실전 데이터</h4>
+      <ul>
+        <li>수강생 총매출 441억, 광고비 40.6억</li>
+        <li>벤치마크 DB 7,366 rows (업종별 실측치)</li>
+        <li>ROAS 255% — 말이 아니라 숫자로 증명</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>독자적 프레임워크</h4>
+      <ul>
+        <li>총가치 공식, 배수효과 진단, 곱셈의 법칙</li>
+        <li>RCS·CV·총가치 — Smith님만의 용어 체계</li>
+        <li>"왜 이런 결과인지" 설명하는 구조적 교육</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>80% 지인추천</h4>
+      <ul>
+        <li>5기 수강생의 80%가 추천으로 유입</li>
+        <li>= 제품력(교육 품질) 이미 검증됨</li>
+        <li>구조화만 하면 스케일 가능</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>AI 인프라 (bsschool)</h4>
+      <ul>
+        <li>KnowledgeService (Opus 4.6 + RAG)</li>
+        <li>콘텐츠 허브 + 뉴스레터 에디터</li>
+        <li>벤치마크 대시보드 + 진단 엔진</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 02. 전략 프레임워크 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">2</span><span class="sec-label">Strategy</span></div>
+  <h2>전략 프레임워크</h2>
+  <div class="line"></div>
+
+  <h3>퍼널 구조 — 인지 → 신뢰 → 전환</h3>
+  <div class="dark" style="text-align:center;">
+    <p style="font-size:10pt;line-height:2.2;color:rgba(255,255,255,.9)">
+      <strong style="color:var(--r);font-size:11pt">TOFU</strong> 인지 — 유튜브 쇼츠 · 인스타 릴스 · 네이버 검색<br>
+      <span style="color:rgba(255,255,255,.3)">↓ 클릭 / 프로필 방문</span><br>
+      <strong style="color:var(--b);font-size:11pt">MOFU</strong> 신뢰 — 블로그 심층 글 · 유튜브 롱폼 · AI 검색 추천 · 뉴스레터<br>
+      <span style="color:rgba(255,255,255,.3)">↓ 구독 / 리드 수집</span><br>
+      <strong style="color:var(--gn);font-size:11pt">BOFU</strong> 전환 — 무료 웨비나 · 카카오 상담 · 수강생 후기<br>
+      <span style="color:rgba(255,255,255,.3)">↓ 결제</span><br>
+      <strong style="color:var(--o);font-size:11pt">RETAIN</strong> 유지 — QA 헬프데스크 · 커뮤니티 · 추천 시스템
+    </p>
+  </div>
+
+  <h3>채널별 역할</h3>
+  <table>
+    <thead><tr><th>채널</th><th>퍼널 위치</th><th>역할</th><th>핵심 지표</th></tr></thead>
+    <tbody>
+      <tr><td><strong>유튜브 쇼츠</strong></td><td><span class="tag t-social">TOFU</span></td><td>첫 접점. 60초에 "이 사람 뭔가 안다" 인식</td><td>조회수, 구독 전환율</td></tr>
+      <tr><td><strong>인스타 릴스/캐러셀</strong></td><td><span class="tag t-social">TOFU</span></td><td>시각적 카드뉴스로 핵심 개념 전달</td><td>저장, 공유, 프로필 방문</td></tr>
+      <tr><td><strong>네이버 블로그</strong></td><td><span class="tag t-seo">MOFU</span></td><td>"메타 광고 ROAS" 검색 시 상위 노출 → 전문가 인식</td><td>검색 순위, 체류 시간</td></tr>
+      <tr><td><strong>구글 블로그</strong></td><td><span class="tag t-seo">MOFU</span></td><td>구글+AI 검색 → 글로벌 권위 구축</td><td>구글 순위, AI 인용</td></tr>
+      <tr><td><strong>유튜브 롱폼</strong></td><td><span class="tag t-seo">MOFU</span></td><td>10~15분 심층 교육 → "이 사람한테 배우고 싶다"</td><td>시청 지속률, 구독</td></tr>
+      <tr><td><strong>AI 검색(GEO)</strong></td><td><span class="tag t-geo">MOFU</span></td><td>"메타 광고 교육 추천해줘" → 자사몰사관학교 답변</td><td>추천 키워드 수</td></tr>
+      <tr><td><strong>뉴스레터</strong></td><td><span class="tag t-seo">MOFU→BOFU</span></td><td>주간 인사이트 → 신뢰 축적 → 웨비나 유도</td><td>오픈율, 클릭률</td></tr>
+      <tr><td><strong>네이버 카페</strong></td><td><span class="tag t-seo">MOFU→BOFU</span></td><td>커뮤니티 → 질문/토론 → "이런 교육이 있다"</td><td>가입자, 글 수, 댓글</td></tr>
+      <tr><td><strong>카카오톡</strong></td><td><span class="tag t-social">BOFU</span></td><td>웨비나 리마인더 + 직접 상담 유도</td><td>클릭률, 상담 전환</td></tr>
+      <tr><td><strong>추천 시스템</strong></td><td><span class="tag" style="background:var(--ol);color:#92400E">RETAIN</span></td><td>수료생 추천 링크 → 신규 리드</td><td>추천 전환율</td></tr>
+    </tbody>
+  </table>
+
+  <h3>콘텐츠 전략 — "70% 무료 공개" 원칙</h3>
+  <div class="hl">
+    <p><strong>공개하는 것 (70%)</strong>: 메타 광고의 원리, 총가치 공식, 경매 구조, 일반적 세팅법, 벤치마크 데이터, 업종별 인사이트</p>
+    <p><strong>교육에서만 (30%)</strong>: Smith님의 1:1 피드백, 실시간 광고 계정 진단, 7일 미션, 코치진 동행, 개인화 전략</p>
+    <p><strong>핵심</strong>: "뭘 해야 하는지"는 다 알려주되, "내 상황에 맞게 어떻게"는 교육에서만.</p>
+  </div>
+</div>
+
+<!-- ===== 03. 아키텍처 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">3</span><span class="sec-label">Architecture</span></div>
+  <h2>콘텐츠 배포 아키텍처</h2>
+  <div class="line"></div>
+
+  <h3>4레이어 구조</h3>
+  <div class="dark" style="text-align:center;padding:24px;">
+    <p style="font-size:9.5pt;line-height:2.4;color:rgba(255,255,255,.85)">
+      <strong style="color:var(--r);font-size:10pt">Layer 0 — 지식 저장소</strong><br>
+      <span style="font-size:8pt;color:rgba(255,255,255,.5)">lecture_chunks 664+ · contents 테이블 · benchmarks 7,366 · 강의 스크립트 6주</span><br>
+      <span style="color:rgba(255,255,255,.25)">↓ KnowledgeService (Opus 4.6 + RAG)</span><br><br>
+      <strong style="color:var(--r);font-size:10pt">Layer 1 — 콘텐츠 팩토리</strong><br>
+      <span style="font-size:8pt;color:rgba(255,255,255,.5)">원본 1개 → 키워드 분석 → 채널별 7개 변환 → 이미지 생성 → 품질 검수</span><br>
+      <span style="color:rgba(255,255,255,.25)">↓ API 자동 배포</span><br><br>
+      <strong style="color:var(--b);font-size:10pt">Layer 2 — 채널 배포</strong><br>
+      <span style="font-size:8pt;">
+        <span style="color:var(--r)">네이버 블로그</span> ·
+        <span style="color:var(--r)">네이버 카페</span> ·
+        <span style="color:var(--b)">구글 블로그</span> ·
+        <span style="color:var(--r)">인스타그램</span> ·
+        <span style="color:var(--r)">유튜브</span> ·
+        <span style="color:var(--o)">카카오톡</span> ·
+        <span style="color:var(--gn)">뉴스레터</span>
+      </span><br>
+      <span style="color:rgba(255,255,255,.25)">↓ 성과 수집 + 분석</span><br><br>
+      <strong style="color:var(--p);font-size:10pt">Layer 3 — 모니터링 & 피드백</strong><br>
+      <span style="font-size:8pt;color:rgba(255,255,255,.5)">네이버/구글 순위 추적 · GEO(ChatGPT/Gemini/Perplexity) 추천 모니터링 · 고성과 패턴 학습 → Layer 1 피드백</span>
+    </p>
+  </div>
+
+  <h3>DB 확장 — distributions 테이블</h3>
+  <div class="box">
+    <table>
+      <thead><tr><th>컬럼</th><th>타입</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid PK</td><td>배포 ID</td></tr>
+        <tr><td>content_id</td><td>uuid → contents</td><td>원본 콘텐츠 FK</td></tr>
+        <tr><td><strong>channel</strong></td><td>enum</td><td>naver_blog · naver_cafe · google_blog · instagram · youtube · kakao · newsletter</td></tr>
+        <tr><td><strong>channel_format</strong></td><td>enum</td><td>seo_article · community_post · carousel · shorts_script · reel_caption · kakao_msg · email</td></tr>
+        <tr><td><strong>transformed_body</strong></td><td>text</td><td>채널별 변환된 본문</td></tr>
+        <tr><td><strong>metadata</strong></td><td>jsonb</td><td>키워드, 해시태그, 메타디스크립션, Schema.org 데이터</td></tr>
+        <tr><td>status</td><td>enum</td><td>draft → queued → published → failed</td></tr>
+        <tr><td><strong>external_url</strong></td><td>text</td><td>게시된 URL (추적용)</td></tr>
+        <tr><td>published_at</td><td>timestamptz</td><td>게시 시각</td></tr>
+        <tr><td><strong>performance</strong></td><td>jsonb</td><td>{views, likes, comments, shares, ctr} — 일별 수집</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>KnowledgeService 확장 — 채널별 Consumer 추가</h3>
+  <table>
+    <thead><tr><th>Consumer</th><th>용도</th><th>톤</th><th>길이</th><th>특수 규칙</th></tr></thead>
+    <tbody>
+      <tr><td><strong>naver_blog</strong></td><td>네이버 블로그</td><td>전문적 + 경험 기반</td><td>2,000자+</td><td>H2/H3 필수, 공식 출처 2+, FAQ 3+</td></tr>
+      <tr><td><strong>google_blog</strong></td><td>구글 SEO</td><td>전문적 + 정의문</td><td>2,500자+</td><td>Schema.org, 정의문 패턴, FAQ</td></tr>
+      <tr><td><strong>cafe_post</strong></td><td>네이버 카페</td><td>친근 + 질문 유도</td><td>1,500자+</td><td>"여러분은?" 마무리, 토론 유도</td></tr>
+      <tr><td><strong>instagram</strong></td><td>인스타 캡션</td><td>짧고 임팩트</td><td>500자</td><td>후킹 첫줄, 해시태그 30</td></tr>
+      <tr><td><strong>youtube_meta</strong></td><td>유튜브 메타</td><td>검색 최적화</td><td>설명 500자+</td><td>챕터 마커, 태그 30</td></tr>
+      <tr><td><strong>shorts_script</strong></td><td>쇼츠 스크립트</td><td>후킹 + 핵심</td><td>150자(60초)</td><td>질문 오프닝, 반전 구조</td></tr>
+      <tr><td><strong>kakao_msg</strong></td><td>카카오 친구톡</td><td>핵심 한 줄</td><td>200자</td><td>1줄 요약 + 링크 + CTA</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 04. SEO ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">4</span><span class="sec-label">SEO</span></div>
+  <h2>[SEO] 네이버 + 구글 상위노출</h2>
+  <div class="line"></div>
+
+  <h3>네이버 — 2026 신뢰도 통합 랭킹 대응</h3>
+  <div class="hl">
+    <p><strong>2025.11 네이버 공식 발표</strong>: AI 기반 '신뢰도 중심 통합 랭킹 모델' 도입.<br>
+    블로그·카페·웹 통합 경쟁 시작. 키워드 뽀려서 올리는 시대 끝. 전문성·경험·출처 투명성이 핵심.</p>
+  </div>
+
+  <table>
+    <thead><tr><th>AI 신뢰도 요소</th><th>자사몰사관학교 대응</th><th>자동화</th></tr></thead>
+    <tbody>
+      <tr><td><strong>공신력</strong></td><td>수강생 총매출 441억 + ROAS 255% 데이터 전면 배치</td><td>벤치마크 DB 자동 업데이트</td></tr>
+      <tr><td><strong>전문성</strong></td><td>Smith 대표 프로필 (경희대 경영학원, 스킨스쿨 50억, 5기 운영)</td><td>고정 템플릿 자동 삽입</td></tr>
+      <tr><td><strong>경험 기반</strong></td><td>수강생 before/after 사례, 광고 관리자 실제 스크린샷</td><td>벤치마크 차트 자동 생성</td></tr>
+      <tr><td><strong>출처 투명성</strong></td><td>Meta 공식 문서, 광고 라이브러리, 통계청 링크</td><td>출처 DB에서 자동 삽입</td></tr>
+      <tr><td><strong>구조화</strong></td><td>H2/H3 소제목, 리스트, 표, FAQ</td><td>프롬프트 강제</td></tr>
+    </tbody>
+  </table>
+
+  <h3>네이버 블로그 글 작성 규칙 (자동 적용)</h3>
+  <div class="box">
+    <p>✓ 2,000자+ · H2 3~5개, H3 각 2~3개 · 이미지 3장+ (벤치마크 차트/스크린샷) · 공식 출처 링크 2+ · FAQ 3~5개 · 저자 프로필 삽입 · 키워드 제목 앞배치 + 본문 3~5회 · 주 2회 (화/금) 자동 게시</p>
+  </div>
+
+  <h3>구글 — 1bpluschool.com/blog (SSG)</h3>
+  <div class="box">
+    <p>Next.js SSG 블로그 페이지 추가. Schema.org (Article + FAQPage + HowTo) · sitemap.xml 자동 · robots.txt · Open Graph 메타태그 · Core Web Vitals (Vercel Edge) · canonical URL.</p>
+    <p>네이버 블로그 글의 확장 버전(2,500자+)을 구글용으로 재변환. 정의문 패턴("X는 Y이다") 강제 → AI 검색 인용 최적화 겸용.</p>
+  </div>
+
+  <h3>타겟 키워드 20개</h3>
+  <table>
+    <thead><tr><th>카테고리</th><th>키워드</th><th>의도</th><th>우선</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="5"><strong>메타 광고</strong></td><td>메타 광고 ROAS 올리는 법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>메타 광고 세팅 방법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>페이스북 광고 시작하기</td><td>정보</td><td>P0</td></tr>
+      <tr><td>전환 API 설정 방법</td><td>정보</td><td>P1</td></tr>
+      <tr><td>메타 픽셀 설치</td><td>정보</td><td>P1</td></tr>
+      <tr><td rowspan="5"><strong>자사몰</strong></td><td>자사몰 매출 올리는 법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>자사몰 광고 대행사 vs 직접</td><td>비교</td><td>P0</td></tr>
+      <tr><td>자사몰 마케팅 교육</td><td>거래</td><td>P0</td></tr>
+      <tr><td>쇼핑몰 광고비 얼마</td><td>정보</td><td>P1</td></tr>
+      <tr><td>자사몰 트래픽 늘리기</td><td>정보</td><td>P1</td></tr>
+      <tr><td rowspan="5"><strong>성과 분석</strong></td><td>광고 ROAS 계산법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>메타 광고 성과 분석</td><td>정보</td><td>P1</td></tr>
+      <tr><td>CPA CPM CPC 차이</td><td>정보</td><td>P1</td></tr>
+      <tr><td>광고 예산 설정 방법</td><td>정보</td><td>P1</td></tr>
+      <tr><td>리타겟팅 광고 하는 법</td><td>정보</td><td>P1</td></tr>
+      <tr><td rowspan="5"><strong>브랜드</strong></td><td>자사몰 사관학교</td><td>네비</td><td>P0</td></tr>
+      <tr><td>자사몰 사관학교 후기</td><td>거래</td><td>P0</td></tr>
+      <tr><td>메타 광고 교육 추천</td><td>거래</td><td>P0</td></tr>
+      <tr><td>온라인 마케팅 강의 추천</td><td>거래</td><td>P1</td></tr>
+      <tr><td>광고 코칭 프로그램</td><td>거래</td><td>P1</td></tr>
+    </tbody>
+  </table>
+
+  <h3>상위노출 자동 분석 크론</h3>
+  <div class="box">
+    <p><strong>매주 월요일 09:00 자동</strong>: 20개 키워드 → 네이버/구글 상위 10개 글 크롤링 → 글 길이, H태그 수, 이미지 수, 출처 링크 수, 댓글 수 추출 → 2주 전 비교 → 알고리즘 변화 감지 → 우리 글 순위 변동 추적 → Slack 리포트 + 다음 글 전략 자동 반영</p>
+  </div>
+</div>
+
+<!-- ===== 05. 바이럴 경쟁 분석 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">5</span><span class="sec-label">Viral Analysis</span></div>
+  <h2>[바이럴] 경쟁 분석 — 업계 수법 vs 우리의 접근</h2>
+  <div class="line"></div>
+
+  <div class="hl">
+    <p>네이버 바이럴 업계는 "상위노출"을 두고 싸우는 전쟁터. 대행사들이 쓰는 실전 수법을 분석하고, 우리가 어떻게 다르게 이길 수 있는지 정리.</p>
+  </div>
+
+  <h3>바이럴 업계의 블로그 상위노출 수법</h3>
+  <table>
+    <thead><tr><th>수법</th><th>방법</th><th>비용</th><th>리스크</th></tr></thead>
+    <tbody>
+      <tr><td><strong>블로그 팜</strong></td><td>한 주제만 파는 최적화 블로그 수십 개 육성. "건강식품 전용", "인테리어 전용" 등 C-Rank 특화</td><td>블로그 1개 3~6개월</td><td>대량 운영 적발 시 일괄 제재</td></tr>
+      <tr><td><strong>텍스트 마이닝</strong></td><td>상위 1~10위 글의 공통 속성 키워드 추출 → 본문에 전부 삽입. D.I.A 관련도 극대화</td><td>전문 대행 건당 5~30만원</td><td>낮음 (정당한 기법)</td></tr>
+      <tr><td><strong>체험단/기자단</strong></td><td>최적화 블로거 20~50명에게 제품 제공 → 동시 다발 포스팅 → VIEW탭 도배</td><td>건당 3~10만원</td><td>광고 표시 의무, 네이버 감지 강화</td></tr>
+      <tr><td><strong>체류시간 조작</strong></td><td>긴 글(3,000자+) + 영상 삽입 + 이미지 30~40장 → D.I.A 체류시간 신호 극대화</td><td>노하우</td><td>낮음 (콘텐츠 자체 품질이면 OK)</td></tr>
+      <tr><td><strong>공감/댓글 어뷰징</strong></td><td>초반 공감+댓글 인위 생성 → 인기도 신호 부스트</td><td>대행</td><td>높음 (2026 모니터링 강화)</td></tr>
+      <tr><td><strong>AI 대량 생산</strong></td><td>ChatGPT로 글 대량 생성 → 약간 수정 후 게시</td><td>거의 0</td><td>매우 높음 (네이버 AI 패턴 감지 시 검색 제외)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>카페 바이럴 수법</h3>
+  <table>
+    <thead><tr><th>수법</th><th>방법</th><th>리스크</th></tr></thead>
+    <tbody>
+      <tr><td><strong>맘카페/커뮤니티 배포</strong></td><td>대형 카페(맘카페, 자영업 카페)에 후기/정보성으로 위장한 홍보 글 배포</td><td>카페 관리자 적발 시 강퇴 + 브랜드 이미지 하락</td></tr>
+      <tr><td><strong>대표 카페 전략</strong></td><td>네이버 "신통검" 이후 대표 카페만 검색 노출 → 직접 카페를 대표 카페로 키움</td><td>낮음 (정당한 전략)</td></tr>
+      <tr><td><strong>질문형 자작극</strong></td><td>카페에 질문 올리고 → 다른 계정으로 답변하며 자연스럽게 브랜드 언급</td><td>중간 (패턴 반복 시 적발)</td></tr>
+      <tr><td><strong>카페 글 SEO</strong></td><td>카페 글도 네이버 검색에 노출됨 → 키워드 최적화된 카페 글 대량 발행</td><td>낮음</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2026년 네이버의 대응 — 판이 바뀌고 있다</h3>
+  <div class="dark">
+    <h4>네이버 공식 발표 3가지</h4>
+    <p>① <strong>AI 글 감지 시스템</strong>: "자동 포스팅 프로그램으로 작성된 문서는 특유의 작성 패턴을 보이며, 이 패턴을 감지하는 시스템에 의해 검색 결과에서 제외" — 네이버 블로그팀<br>
+    ② <strong>신뢰도 통합 랭킹</strong>: 블로그·카페·웹 통합 경쟁. AI가 출처의 공신력·전문성·경험 기반 여부를 판별<br>
+    ③ <strong>트래픽 어뷰징 제재 강화</strong>: 대행사·마케터까지 제재 대상 포함. "실제 유입 보장" "적발 안 됨" 홍보 업체 경고</p>
+  </div>
+
+  <h3>핵심: 그들의 무기 vs 우리의 무기</h3>
+  <table>
+    <thead><tr><th>바이럴 업체의 무기</th><th>우리의 무기</th><th>2026 랭킹에서 누가 이기나</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>블로그 팜 수십 개</td>
+        <td><strong>브랜드블로그 1개 집중</strong> — "메타 광고" 주제 only</td>
+        <td>C-Rank는 한 주제 집중을 보상. 수십 개 분산보다 1개 전문 블로그가 유리</td>
+      </tr>
+      <tr>
+        <td>텍스트 마이닝 대행 (건당 수십만원)</td>
+        <td><strong>모찌 크론 자동 추출</strong> — 매주 상위 10개 글 속성 키워드 분석</td>
+        <td>대행사는 1회 납품. 우리는 매주 최신 데이터 자동 갱신. 비용 0.</td>
+      </tr>
+      <tr>
+        <td>체험단 20~50명 동원 (가짜 후기)</td>
+        <td><strong>수강생 78명 리얼 성과</strong> — 441억 총매출, ROAS 255%</td>
+        <td>2026 신뢰도 랭킹 = 진짜 경험 기반 콘텐츠 우대. 가짜 후기 제재 강화.</td>
+      </tr>
+      <tr>
+        <td>이미지 40장 + 체류시간 조작</td>
+        <td><strong>벤치마크 차트 자동 생성</strong> — DB 7,366 rows에서 실측 데이터</td>
+        <td>D.I.A "원본성·현장성" = 자체 데이터 차트 > 스톡 이미지 나열</td>
+      </tr>
+      <tr>
+        <td>AI 글 복붙</td>
+        <td><strong>AI + 강의 RAG + 독자적 프레임워크</strong></td>
+        <td>순수 AI 복붙 = 패턴 감지 → 제외. 우리는 "총가치", "배수효과" 등 원본 용어 = 원본성 증명</td>
+      </tr>
+      <tr>
+        <td>카페 자작극 (가짜 Q&A)</td>
+        <td><strong>자체 카페 + 수강생 커뮤니티</strong></td>
+        <td>진짜 질문/답변이 오가는 카페 = 자연 트래픽 + 검색 노출</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>우리의 실행 전략</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>텍스트 마이닝 자동화</h4>
+      <ul>
+        <li>타겟 키워드 20개 → 상위 10개 글 크롤링</li>
+        <li>공통 속성 키워드(텍스트 마이닝) 자동 추출</li>
+        <li>우리 글 작성 시 자동 반영</li>
+        <li>매주 갱신 → 알고리즘 변화 자동 대응</li>
+        <li>대행사 비용 0원, 정확도는 더 높음</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>C-Rank 속성 빌딩</h4>
+      <ul>
+        <li>브랜드블로그: "메타 광고" 주제로만 주 2회 발행</li>
+        <li>3개월 = 해당 주제 전문 블로그로 C-Rank 인식</li>
+        <li>프로필: Smith 대표 실적 + 5기 운영 경력</li>
+        <li>블로그 카테고리: 메타 광고 세팅 / 성과 분석 / 자사몰 전략 / 수강생 사례</li>
+        <li>다른 주제 글 절대 안 씀 → 주제 집중도 극대화</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>D.I.A 원본성 무기</h4>
+      <ul>
+        <li>벤치마크 DB에서 업종별 차트 자동 생성</li>
+        <li>"건강식품 업종 평균 ROAS 187%" 같은 실측 데이터</li>
+        <li>광고 관리자 실제 스크린샷 (수강생 동의)</li>
+        <li>수강생 before/after 성과 자동 콘텐츠화</li>
+        <li>어떤 블로거도 못 만드는 "진짜 데이터" = 최강 원본성</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>카페 정공법</h4>
+      <ul>
+        <li>"자사몰 마케팅 연구소" 카페 직접 육성</li>
+        <li>주간 인사이트 + 무료 벤치마크 리포트 배포</li>
+        <li>수강생 커뮤니티 → 진짜 Q&A → 자연 검색 노출</li>
+        <li>대표 카페 등급 목표 (네이버 신통검 대응)</li>
+        <li>자작극 X — 진짜 가치 제공으로 자연 성장</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dark">
+    <h4>결론: 가짜를 진짜처럼 보이게 하는 싸움 vs 진짜를 구조적으로 뿌리는 싸움</h4>
+    <p>바이럴 업체들은 가짜 후기, 가짜 트래픽, AI 복붙으로 상위노출을 먹어왔음.<br>
+    2026년 네이버는 이걸 잡겠다고 AI 감지 + 신뢰도 랭킹을 도입했음.<br>
+    <strong>우리는 진짜 전문가(Smith) + 진짜 데이터(441억) + 진짜 커뮤니티(수강생 78명)가 있음.</strong><br>
+    판이 바뀌면 진짜가 이김. 지금이 기회.</p>
+  </div>
+</div>
+
+<!-- ===== 06. GEO ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">6</span><span class="sec-label">GEO</span></div>
+  <h2>[GEO] AI 검색 상위노출</h2>
+  <div class="line"></div>
+
+  <div class="hl-p">
+    <p><strong>GEO = Generative Engine Optimization.</strong> SEO가 "검색 결과 1페이지"를 노리는 거라면, GEO는 "AI가 추천하는 답변"에 들어가는 것. "메타 광고 교육 추천해줘"라고 ChatGPT에 물었을 때 자사몰사관학교가 나와야 함.</p>
+  </div>
+
+  <table>
+    <thead><tr><th>AI 엔진</th><th>데이터 소스</th><th>잡는 법</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ChatGPT</strong></td><td>Bing 인덱스 + 웹 브라우징</td><td>구글/Bing SEO + FAQ 구조 + 외부 권위 언급(기고, 인터뷰)</td></tr>
+      <tr><td><strong>Gemini</strong></td><td>구글 인덱스 + <strong>유튜브</strong> (높은 가중치)</td><td>구글 SEO + 유튜브 자막/설명 최적화 + 구글 비즈니스 프로필</td></tr>
+      <tr><td><strong>Perplexity</strong></td><td>다중 검색엔진 + 자체 크롤링</td><td>전체 SEO + <strong>최신 콘텐츠</strong> (최근 발행 우대) + 출처 명시</td></tr>
+    </tbody>
+  </table>
+
+  <h3>GEO 콘텐츠 규칙 (모든 글에 자동 적용)</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>정의문 패턴</h4>
+      <ul>
+        <li>모든 H2 아래 첫 문장: "X는 Y이다"</li>
+        <li>예: "ROAS는 광고비 대비 매출 비율이다. 자사몰사관학교 수강생 평균 255%."</li>
+        <li>AI가 인용하기 좋은 명확한 정의</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>FAQ 섹션 + Schema.org</h4>
+      <ul>
+        <li>모든 블로그 글 하단에 FAQ 3~5개</li>
+        <li>FAQPage 구조화 데이터 자동 삽입</li>
+        <li>"~란?" "~하는 법" 질문 형식</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>수치 데이터 삽입</h4>
+      <ul>
+        <li>"수강생 78명 중 평균 ROAS 255%"</li>
+        <li>"총매출 441억, 광고비 40.6억"</li>
+        <li>AI는 구체적 수치가 있는 글을 신뢰</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>유튜브 → Gemini 직접 인용</h4>
+      <ul>
+        <li>Gemini는 유튜브 자막을 직접 읽음</li>
+        <li>영상 설명에 키워드 + 정의 포함</li>
+        <li>자막(CC) 활성화 필수</li>
+        <li>챕터 마커 → 구조화 정보</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>GEO 타겟 쿼리 10개 + 모니터링 크론</h3>
+  <div class="box">
+    <p><strong>매주 수요일 09:00 자동</strong>: ① 메타 광고 교육 추천 ② 페이스북 광고 강의 어디가 좋아 ③ 자사몰 마케팅 배우는 곳 ④ ROAS 올리는 교육 ⑤ 메타 광고 코칭 프로그램 ⑥ 온라인 쇼핑몰 광고 교육 ⑦ 퍼포먼스 마케팅 실전 강의 ⑧ 광고 대행사 대신 직접 배우기 ⑨ 메타 광고 초보 교육 ⑩ 자사몰 매출 올리는 강의</p>
+    <p>→ ChatGPT/Gemini/Perplexity에 질문 → 자사몰사관학교 언급 여부 체크 → 미추천 키워드 → 해당 콘텐츠 생성 우선순위 ↑ → Slack 리포트</p>
+  </div>
+</div>
+
+<!-- ===== 06. 소셜 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">7</span><span class="sec-label">Social</span></div>
+  <h2>[소셜] 유튜브 + 인스타 + 카카오</h2>
+  <div class="line"></div>
+
+  <div class="grid">
+    <div class="card" style="border-top:3px solid var(--r)">
+      <h4>유튜브 — @1bpluschool</h4>
+      <ul>
+        <li><strong>롱폼</strong>: "다 알고 하는 메타 광고" 시리즈 (10~15분) — 강의 핵심 개념</li>
+        <li><strong>쇼츠</strong>: 60초 핵심 클립, 주 3~5개</li>
+        <li><strong>인터뷰</strong>: 수강생 성공 사례 (기존 유지)</li>
+        <li><strong>쇼츠 완전 자동</strong>: TTS 나레이션 + 슬라이드 이미지 → ffmpeg MP4 합성 → YouTube API 업로드</li>
+        <li>제목: 검색 키워드 앞배치 + 호기심 ("진짜 ROAS가 뭔지 아세요?")</li>
+        <li>설명: 500자+ 키워드 포함 + 챕터 타임스탬프</li>
+        <li>태그: 핵심 5 + 관련 15 + 롱테일 10</li>
+        <li>자막(CC) 자동 생성 → Gemini GEO 가중치</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--r)">
+      <h4>인스타그램 — @1bpluschool</h4>
+      <ul>
+        <li><strong>캐러셀</strong>: 블로그 글 → 10장 카드뉴스 자동 변환</li>
+        <li>표지(질문) → 본문 8장(핵심+데이터) → 마지막(CTA+저장 유도)</li>
+        <li><strong>릴스</strong>: 유튜브 쇼츠 동시 업로드</li>
+        <li>캡션: 후킹 첫줄 → 본문 요약 → CTA → 해시태그 30</li>
+        <li>해시태그: 대(50만+) 5개 + 중(5~50만) 15개 + 소(<5만) 10개</li>
+        <li>게시: 화/목/토 08:00, 18:00 자동</li>
+        <li>Instagram Graph API로 캐러셀 + 릴스 전부 자동 게시</li>
+        <li>이미지: Gemini 생성 or 벤치마크 차트 자동</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--o)">
+      <h4>카카오톡 채널</h4>
+      <ul>
+        <li>새 콘텐츠 발행 시 자동 친구톡 발송</li>
+        <li>핵심 1줄 요약 + 블로그 링크 + CTA</li>
+        <li>웨비나 D-7, D-1 리마인더 자동</li>
+        <li>솔라피 API 연동 (건당 22원)</li>
+        <li>주 2회 발송 (콘텐츠 동기화)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gn)">
+      <h4>수강생 추천 시스템</h4>
+      <ul>
+        <li>수료 시 개인 추천 링크 자동 발급</li>
+        <li>추천 성공 시 혜택 (1:1 추가 세션, 다음 기수 할인 등)</li>
+        <li>이미 80% 지인추천 → 구조화만 하면 스케일</li>
+        <li>bsschool에 추천 트래킹 기능 추가</li>
+        <li>추천 현황 대시보드 (수강생별 추천 수)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 07. 완전 자동화 설계 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">8</span><span class="sec-label">Automation</span></div>
+  <h2>완전 자동화 설계</h2>
+  <div class="line"></div>
+
+  <h3>API 연동 7개</h3>
+  <table>
+    <thead><tr><th>채널</th><th>API</th><th>인증</th><th>한도</th><th>자동 범위</th></tr></thead>
+    <tbody>
+      <tr><td><strong>네이버 블로그</strong></td><td>네이버 블로그 글쓰기 API</td><td>OAuth 2.0</td><td>200/일</td><td>글 작성 + 이미지 첨부 + 게시</td></tr>
+      <tr><td><strong>네이버 카페</strong></td><td>네이버 카페 글쓰기 API</td><td>OAuth 2.0</td><td>충분</td><td>게시판 선택 + 글 게시</td></tr>
+      <tr><td><strong>구글 블로그</strong></td><td>내부 /api/blog/publish</td><td>CRON_SECRET</td><td>무제한</td><td>SSG 빌드 + sitemap 갱신</td></tr>
+      <tr><td><strong>인스타그램</strong></td><td>Instagram Graph API</td><td>Meta OAuth</td><td>25/일</td><td>캐러셀 + 릴스 + 스토리</td></tr>
+      <tr><td><strong>유튜브</strong></td><td>YouTube Data API v3</td><td>Google OAuth</td><td>6/일</td><td>업로드 + 메타 + 자막 + 썸네일</td></tr>
+      <tr><td><strong>카카오톡</strong></td><td>솔라피 친구톡 API</td><td>API Key</td><td>건당 22원</td><td>메시지 + 링크 + CTA</td></tr>
+      <tr><td><strong>뉴스레터</strong></td><td>Gmail SMTP (기존)</td><td>Google Workspace</td><td>2,000/일</td><td>email_summary + 배너 + 발송</td></tr>
+    </tbody>
+  </table>
+
+  <h3>크론 8개 — 전체 마케팅 자동 운영</h3>
+  <table>
+    <thead><tr><th>크론</th><th>주기</th><th>KST</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td><strong>① 콘텐츠 생성</strong></td><td>화/금</td><td>09:00</td><td>키워드 선정 → 원본 생성 → 7채널 변환 → 이미지 → 품질 검수</td></tr>
+      <tr><td><strong>② 채널 배포</strong></td><td>화/금</td><td>10:00</td><td>네이버/구글/인스타/카카오 API 일괄 게시</td></tr>
+      <tr><td><strong>③ 유튜브 쇼츠</strong></td><td>월/수/금</td><td>11:00</td><td>스크립트 → TTS → 영상 합성 → 업로드</td></tr>
+      <tr><td><strong>④ 네이버 분석</strong></td><td>월</td><td>09:00</td><td>20개 키워드 상위글 크롤링 → 패턴 변화 감지</td></tr>
+      <tr><td><strong>⑤ GEO 모니터링</strong></td><td>수</td><td>09:00</td><td>ChatGPT/Gemini/Perplexity 10개 쿼리 추천 체크</td></tr>
+      <tr><td><strong>⑥ 순위 추적</strong></td><td>금</td><td>09:00</td><td>네이버/구글 우리 글 순위 변동</td></tr>
+      <tr><td><strong>⑦ 성과 수집</strong></td><td>매일</td><td>12:00</td><td>각 채널 조회수/좋아요/댓글 → performance 업데이트</td></tr>
+      <tr><td><strong>⑧ 벤치마크 리포트</strong></td><td>매월 1일</td><td>09:00</td><td>업종별 요약 → 리드 마그넷 PDF + 블로그 게시</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dark">
+    <h4>자동 생산량</h4>
+    <p>주간: 원본 2 × 채널 7 = <strong>14건</strong> + 쇼츠 3건 = <strong>17건/주</strong><br>
+    월간: <strong>~70건</strong> 콘텐츠 자동 생산 + 배포 + 모니터링<br>
+    Smith님 투입: <strong>0시간</strong> (세팅 완료 후). 유튜브 롱폼 촬영 시 주 30분 추가.</p>
+  </div>
+</div>
+
+<!-- ===== 08. 로드맵 + 세팅 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">9</span><span class="sec-label">Roadmap</span></div>
+  <h2>실행 로드맵 + 세팅 체크리스트</h2>
+  <div class="line"></div>
+
+  <h3>Smith님 1회 세팅 (총 45분)</h3>
+  <table>
+    <thead><tr><th>#</th><th>작업</th><th>소요</th><th>상세</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>네이버 개발자센터 앱 등록</strong></td><td>10분</td><td>developers.naver.com → 앱 → 블로그+카페 API 권한 → 콜백 URL</td></tr>
+      <tr><td>2</td><td><strong>네이버 OAuth 로그인</strong></td><td>1분</td><td>모찌가 만든 URL 클릭 → 로그인 → 토큰 자동 저장</td></tr>
+      <tr><td>3</td><td><strong>네이버 브랜드블로그 + 카페 개설</strong></td><td>10분</td><td>"자사몰사관학교 공식" 블로그 + "자사몰 마케팅 연구소" 카페</td></tr>
+      <tr><td>4</td><td><strong>인스타 비즈니스 계정 전환</strong></td><td>3분</td><td>@1bpluschool 설정 → 비즈니스 계정</td></tr>
+      <tr><td>5</td><td><strong>Meta 개발자 앱 등록</strong></td><td>5분</td><td>developers.facebook.com → Instagram Graph API 권한</td></tr>
+      <tr><td>6</td><td><strong>Google Cloud YouTube API</strong></td><td>5분</td><td>YouTube Data API v3 활성화 + OAuth (기존 프로젝트 활용 가능)</td></tr>
+      <tr><td>7</td><td><strong>카카오 비즈 + 솔라피</strong></td><td>10분</td><td>카카오 비즈니스 채널 연동 + 솔라피 가입 + API 키</td></tr>
+      <tr><td>8</td><td><strong>구글 비즈니스 프로필</strong></td><td>5분</td><td>자사몰사관학교 등록 (Gemini GEO 가중치)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>bsschool 개발 변경사항</h3>
+  <table>
+    <thead><tr><th>Phase</th><th>#</th><th>영역</th><th>변경 내용</th><th>상세</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="6"><strong>P0</strong></td><td>1</td><td>DB</td><td><strong>distributions 테이블 확장</strong></td><td>channel(enum 7종), channel_format, transformed_body, metadata(jsonb), external_url, published_at, performance(jsonb) 컬럼 추가. 마이그레이션 1개.</td></tr>
+      <tr><td>2</td><td>백엔드</td><td><strong>KnowledgeService Consumer 확장</strong></td><td>기존 6종 → 13종. naver_blog, google_blog, cafe_post, instagram, youtube_meta, shorts_script, kakao_msg 추가. 각 Consumer별 톤/길이/구조 규칙 정의.</td></tr>
+      <tr><td>3</td><td>API</td><td><strong>/api/content/distribute</strong></td><td>콘텐츠 ID → KnowledgeService로 7채널 변환 → distributions 테이블 INSERT. 이미지 생성(Gemini) + 품질 검수(SEO 체크리스트) 포함.</td></tr>
+      <tr><td>4</td><td>페이지</td><td><strong>/blog + /blog/[slug]</strong></td><td>퍼블릭 블로그 목록 + 개별 글 (SSG, ISR 1시간). Schema.org Article + FAQPage 구조화 데이터. OG 메타태그.</td></tr>
+      <tr><td>5</td><td>API</td><td><strong>/api/sitemap.xml</strong></td><td>동적 사이트맵 자동 생성 (published 상태 글만). robots.txt 추가.</td></tr>
+      <tr><td>6</td><td>API</td><td><strong>/api/blog/publish</strong></td><td>contents → google_blog distribution 생성 + ISR 재빌드 트리거.</td></tr>
+      <tr><td rowspan="4"><strong>P1</strong></td><td>7</td><td>API</td><td><strong>/api/distribute/naver</strong></td><td>네이버 OAuth 토큰 관리 + 블로그 글쓰기 API(openapi.naver.com/blog/writePost) + 카페 글쓰기 API(/cafe/{id}/articles). 이미지 multipart 첨부 지원.</td></tr>
+      <tr><td>8</td><td>API</td><td><strong>/api/distribute/instagram</strong></td><td>Instagram Graph API 연동. 캐러셀(이미지 URL → container → publish) + 릴스. Meta OAuth 토큰 관리.</td></tr>
+      <tr><td>9</td><td>API</td><td><strong>/api/distribute/kakao</strong></td><td>솔라피 친구톡 API 연동. 템플릿 메시지 + 웹 링크 버튼. API 키 환경변수.</td></tr>
+      <tr><td>10</td><td>크론</td><td><strong>vercel.json 크론 추가</strong></td><td>/api/cron/seo-analysis (주 1회 월): 상위글 크롤링 + 텍스트 마이닝 자동 추출. /api/cron/geo-monitor (주 1회 수): AI 검색 추천 체크.</td></tr>
+      <tr><td rowspan="4"><strong>P2</strong></td><td>11</td><td>API</td><td><strong>/api/distribute/youtube</strong></td><td>YouTube Data API v3. 쇼츠 업로드(TTS MP4) + 메타데이터(제목/설명/태그/자막) 자동. Google OAuth.</td></tr>
+      <tr><td>12</td><td>페이지</td><td><strong>/admin/distributions</strong></td><td>배포 현황 대시보드. 채널별 상태(draft/queued/published/failed), 성과(조회/좋아요/댓글), 필터/정렬.</td></tr>
+      <tr><td>13</td><td>크론</td><td><strong>/api/cron/collect-performance</strong></td><td>매일: 각 채널 API로 게시물 성과 수집 → distributions.performance 업데이트.</td></tr>
+      <tr><td>14</td><td>크론</td><td><strong>/api/cron/rank-tracker</strong></td><td>주 1회 금: 네이버/구글에서 우리 글 순위 추적 → Slack 알림.</td></tr>
+      <tr><td rowspan="3"><strong>P3</strong></td><td>15</td><td>백엔드</td><td><strong>피드백 루프 엔진</strong></td><td>performance 데이터 분석 → 고성과 콘텐츠 패턴 추출 → 다음 생성 시 Consumer 프롬프트에 반영.</td></tr>
+      <tr><td>16</td><td>페이지</td><td><strong>추천 시스템</strong></td><td>수료생 추천 링크 생성 + 추천 트래킹 + /admin/referrals 대시보드.</td></tr>
+      <tr><td>17</td><td>크론</td><td><strong>/api/cron/benchmark-report</strong></td><td>매월 1일: 벤치마크 DB → 업종별 요약 리포트 자동 생성 → 블로그 게시 + 리드 마그넷.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>환경변수 추가 필요</h3>
+  <div class="box">
+    <table>
+      <thead><tr><th>변수</th><th>용도</th><th>Phase</th></tr></thead>
+      <tbody>
+        <tr><td><strong>NAVER_CLIENT_ID / SECRET</strong></td><td>네이버 OAuth (블로그+카페 API)</td><td>P1</td></tr>
+        <tr><td><strong>NAVER_ACCESS_TOKEN / REFRESH_TOKEN</strong></td><td>네이버 로그인 토큰 (자동 갱신)</td><td>P1</td></tr>
+        <tr><td><strong>NAVER_BLOG_ID</strong></td><td>브랜드블로그 ID</td><td>P1</td></tr>
+        <tr><td><strong>NAVER_CAFE_ID / MENU_IDS</strong></td><td>카페 ID + 게시판 ID들</td><td>P1</td></tr>
+        <tr><td><strong>META_APP_ID / SECRET</strong></td><td>Instagram Graph API (Meta 앱)</td><td>P1</td></tr>
+        <tr><td><strong>IG_USER_ID / ACCESS_TOKEN</strong></td><td>인스타그램 비즈니스 계정 토큰</td><td>P1</td></tr>
+        <tr><td><strong>SOLAPI_API_KEY / SECRET</strong></td><td>솔라피 친구톡 API</td><td>P1</td></tr>
+        <tr><td><strong>KAKAO_CHANNEL_ID</strong></td><td>카카오 비즈니스 채널</td><td>P1</td></tr>
+        <tr><td><strong>GOOGLE_YT_CLIENT_ID / SECRET</strong></td><td>YouTube Data API v3 OAuth</td><td>P2</td></tr>
+        <tr><td><strong>GOOGLE_YT_REFRESH_TOKEN</strong></td><td>유튜브 채널 접근 토큰</td><td>P2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>실행 플래닝 — 오늘부터 순서대로</h3>
+
+  <div class="hl">
+    <p><strong>Phase 0 — 기반 구축 (Day 1~3)</strong></p>
+  </div>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>작업</th><th>누가</th><th>시간</th><th>링크 / 가이드</th></tr></thead>
+    <tbody>
+      <tr style="background:#fff3cd">
+        <td colspan="5"><strong>▶ Smith님 세팅 (25분) — 에이전트팀 개발과 병렬 진행</strong></td>
+      </tr>
+      <tr>
+        <td>0-1</td>
+        <td><strong>네이버 개발자센터 앱 등록</strong><br>블로그+카페 API 권한 체크 → 콜백 URL: <code>https://1bpluschool.com/api/auth/naver/callback</code></td>
+        <td>Smith님</td>
+        <td>10분</td>
+        <td><a href="https://developers.naver.com/apps/#/register" target="_blank">developers.naver.com</a><br>① 앱 등록 → ② API 권한: 블로그, 카페 체크 → ③ 콜백 URL 입력</td>
+      </tr>
+      <tr>
+        <td>0-2</td>
+        <td><strong>네이버 브랜드블로그 개설</strong><br>블로그명: "자사몰사관학교 공식"<br>카테고리: 메타 광고 세팅 / 성과 분석 / 자사몰 전략 / 수강생 사례</td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td><a href="https://section.blog.naver.com/BlogHome.naver" target="_blank">네이버 블로그 개설</a><br>① 블로그 만들기 → ② 블로그명 입력 → ③ 카테고리 4개 생성</td>
+      </tr>
+      <tr>
+        <td>0-3</td>
+        <td><strong>네이버 카페 개설</strong><br>카페명: "자사몰 마케팅 연구소"<br>게시판: 자유게시판, 메타 광고 Q&A, 성과 공유, 자료실</td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td><a href="https://section.cafe.naver.com/" target="_blank">네이버 카페 만들기</a><br>① 카페 만들기 → ② 카페명·주제 입력 → ③ 게시판 4개 생성</td>
+      </tr>
+      <tr>
+        <td>0-4</td>
+        <td><strong>구글 비즈니스 프로필 등록</strong><br>"자사몰사관학교" — Gemini GEO 가중치용</td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td><a href="https://business.google.com/create" target="_blank">Google Business</a><br>① 비즈니스 이름 입력 → ② 카테고리: 교육 서비스 → ③ 웹사이트 URL 입력</td>
+      </tr>
+      <tr style="background:#d4edda">
+        <td colspan="5"><strong>▶ 에이전트팀 개발 (~2일) — Smith님 세팅과 병렬</strong></td>
+      </tr>
+      <tr>
+        <td>0-5</td>
+        <td><strong>DB: distributions 테이블 확장</strong><br>channel(7종), transformed_body, metadata, external_url, performance 컬럼</td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>Supabase 마이그레이션 — 선행 없음</td>
+      </tr>
+      <tr>
+        <td>0-6</td>
+        <td><strong>KnowledgeService Consumer 7종 추가</strong><br>naver_blog, google_blog, cafe_post, instagram, youtube_meta, shorts_script, kakao_msg</td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>선행: 0-5</td>
+      </tr>
+      <tr>
+        <td>0-7</td>
+        <td><strong>/blog + /blog/[slug] 페이지 (SSG)</strong><br>퍼블릭 블로그 목록 + 개별 글, Schema.org Article+FAQPage, OG 메타태그</td>
+        <td>에이전트팀</td>
+        <td>4시간</td>
+        <td>선행: 0-5</td>
+      </tr>
+      <tr>
+        <td>0-8</td>
+        <td><strong>sitemap.xml + robots.txt</strong><br>동적 사이트맵 (published 상태 글만)</td>
+        <td>에이전트팀</td>
+        <td>1시간</td>
+        <td>선행: 0-7</td>
+      </tr>
+      <tr>
+        <td>0-9</td>
+        <td><strong>/api/content/distribute</strong><br>콘텐츠 ID → 7채널 변환 → distributions INSERT + Gemini 이미지 + SEO 검수</td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>선행: 0-6</td>
+      </tr>
+      <tr>
+        <td>0-10</td>
+        <td><strong>/api/blog/publish</strong><br>google_blog distribution 생성 + ISR 재빌드 트리거</td>
+        <td>에이전트팀</td>
+        <td>1시간</td>
+        <td>선행: 0-7</td>
+      </tr>
+      <tr style="background:#e8f4fd">
+        <td colspan="5">✅ <strong>P0 완료 시</strong>: 구글 블로그 자동 게시 가능</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hl" style="margin-top:24px">
+    <p><strong>Phase 1 — 네이버 + 소셜 연동 (Day 4~7)</strong></p>
+  </div>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>작업</th><th>누가</th><th>시간</th><th>링크 / 가이드</th></tr></thead>
+    <tbody>
+      <tr style="background:#fff3cd">
+        <td colspan="5"><strong>▶ Smith님 세팅 (19분)</strong></td>
+      </tr>
+      <tr>
+        <td>1-1</td>
+        <td><strong>네이버 OAuth 로그인</strong><br>모찌가 생성한 URL 클릭 → 로그인 → 토큰 자동 저장</td>
+        <td>Smith님</td>
+        <td>1분</td>
+        <td>모찌가 URL 생성 후 슬랙으로 전달 — 선행: 0-1</td>
+      </tr>
+      <tr>
+        <td>1-2</td>
+        <td><strong>인스타 비즈니스 계정 전환</strong><br>@1bpluschool → 비즈니스 계정</td>
+        <td>Smith님</td>
+        <td>3분</td>
+        <td><a href="https://help.instagram.com/502981923235522" target="_blank">Instagram 비즈니스 전환 가이드</a><br>설정 → 계정 → 비즈니스 계정으로 전환</td>
+      </tr>
+      <tr>
+        <td>1-3</td>
+        <td><strong>Meta 개발자 앱 등록</strong><br>Instagram Graph API 권한</td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td><a href="https://developers.facebook.com/apps/create/" target="_blank">Meta for Developers</a><br>① 앱 만들기 → ② 비즈니스 → ③ Instagram Graph API 추가</td>
+      </tr>
+      <tr>
+        <td>1-4</td>
+        <td><strong>카카오 비즈 채널 + 솔라피 가입</strong><br>카카오 비즈니스 채널 연동 + 솔라피 API 키 발급</td>
+        <td>Smith님</td>
+        <td>10분</td>
+        <td><a href="https://center-pf.kakao.com/" target="_blank">카카오 비즈니스</a> + <a href="https://solapi.com/" target="_blank">솔라피</a><br>① 카카오 채널 만들기 → ② 솔라피 가입 → ③ API 키 복사</td>
+      </tr>
+      <tr style="background:#d4edda">
+        <td colspan="5"><strong>▶ 에이전트팀 개발</strong></td>
+      </tr>
+      <tr>
+        <td>1-5</td>
+        <td><strong>/api/distribute/naver</strong><br>OAuth 토큰 관리 + 블로그 글쓰기 API + 카페 글쓰기 API + 이미지 첨부</td>
+        <td>에이전트팀</td>
+        <td>4시간</td>
+        <td><a href="https://developers.naver.com/docs/blog/post/" target="_blank">네이버 블로그 API</a> · <a href="https://developers.naver.com/docs/cafe/api/" target="_blank">카페 API</a><br>선행: 0-9 + 1-1</td>
+      </tr>
+      <tr>
+        <td>1-6</td>
+        <td><strong>/api/distribute/instagram</strong><br>캐러셀(이미지→container→publish) + 릴스. Meta OAuth 토큰 관리</td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td><a href="https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/content-publishing" target="_blank">Instagram Graph API</a><br>선행: 0-9 + 1-3</td>
+      </tr>
+      <tr>
+        <td>1-7</td>
+        <td><strong>/api/distribute/kakao</strong><br>솔라피 친구톡 API + 템플릿 메시지 + 웹 링크 버튼</td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td><a href="https://docs.solapi.com/api-reference/kakao" target="_blank">솔라피 친구톡 API</a><br>선행: 0-9 + 1-4</td>
+      </tr>
+      <tr>
+        <td>1-8</td>
+        <td><strong>콘텐츠 생성 크론</strong> (화/금 09:00)<br>키워드 선정 → 원본 생성 → 7채널 변환 → 이미지 → 품질 검수</td>
+        <td>모찌</td>
+        <td>1시간</td>
+        <td>vercel.json 크론 + /api/cron/content-factory<br>선행: 0-9</td>
+      </tr>
+      <tr>
+        <td>1-9</td>
+        <td><strong>채널 배포 크론</strong> (화/금 10:00)<br>네이버/구글/인스타/카카오 API 일괄 게시</td>
+        <td>모찌</td>
+        <td>1시간</td>
+        <td>선행: 1-5, 1-6, 1-7</td>
+      </tr>
+      <tr>
+        <td>1-10</td>
+        <td><strong>SEO 분석 크론</strong> (매주 월 09:00)<br>20개 키워드 상위글 크롤링 + 텍스트 마이닝 자동 추출</td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>/api/cron/seo-analysis<br>선행: 1-5</td>
+      </tr>
+      <tr>
+        <td>1-11</td>
+        <td><strong>GEO 모니터링 크론</strong> (매주 수 09:00)<br>ChatGPT/Gemini/Perplexity 10개 쿼리 추천 체크</td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>/api/cron/geo-monitor</td>
+      </tr>
+      <tr style="background:#e8f4fd">
+        <td colspan="5">✅ <strong>P1 완료 시</strong>: 7채널 자동 배포 + 모니터링 — 주 14건</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hl" style="margin-top:24px">
+    <p><strong>Phase 2 — 유튜브 + 성과 측정 (Day 8~14)</strong></p>
+  </div>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>작업</th><th>누가</th><th>시간</th><th>링크 / 가이드</th></tr></thead>
+    <tbody>
+      <tr style="background:#fff3cd">
+        <td colspan="5"><strong>▶ Smith님 세팅 (5분)</strong></td>
+      </tr>
+      <tr>
+        <td>2-1</td>
+        <td><strong>Google Cloud YouTube API 활성화</strong><br>YouTube Data API v3 + OAuth 클라이언트 (기존 프로젝트 활용 가능)</td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td><a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank">Google Cloud Console</a><br>① API 라이브러리 → YouTube Data API v3 활성화 → ② OAuth 동의 화면 → ③ 사용자 인증정보 생성</td>
+      </tr>
+      <tr style="background:#d4edda">
+        <td colspan="5"><strong>▶ 에이전트팀 개발</strong></td>
+      </tr>
+      <tr>
+        <td>2-2</td>
+        <td><strong>/api/distribute/youtube</strong><br>TTS 나레이션 + 슬라이드 이미지 → ffmpeg MP4 합성 → YouTube API 업로드 + 메타데이터 + 자막</td>
+        <td>에이전트팀</td>
+        <td>6시간</td>
+        <td><a href="https://developers.google.com/youtube/v3/docs/videos/insert" target="_blank">YouTube Data API v3</a><br>선행: 0-9 + 2-1</td>
+      </tr>
+      <tr>
+        <td>2-3</td>
+        <td><strong>유튜브 쇼츠 크론</strong> (월/수/금 11:00)<br>스크립트 → TTS → 영상 합성 → 업로드</td>
+        <td>모찌</td>
+        <td>1시간</td>
+        <td>선행: 2-2</td>
+      </tr>
+      <tr>
+        <td>2-4</td>
+        <td><strong>순위 추적 크론</strong> (매주 금 09:00)<br>네이버/구글에서 우리 글 순위 변동 추적</td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>/api/cron/rank-tracker</td>
+      </tr>
+      <tr>
+        <td>2-5</td>
+        <td><strong>성과 수집 크론</strong> (매일 12:00)<br>각 채널 API로 게시물 조회수/좋아요/댓글 → distributions.performance 업데이트</td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>/api/cron/collect-performance<br>선행: 1-9</td>
+      </tr>
+      <tr>
+        <td>2-6</td>
+        <td><strong>/admin/distributions 대시보드</strong><br>채널별 상태(draft/queued/published/failed), 성과(조회/좋아요/댓글), 필터/정렬</td>
+        <td>에이전트팀</td>
+        <td>4시간</td>
+        <td>선행: 0-5 + 2-5</td>
+      </tr>
+      <tr style="background:#e8f4fd">
+        <td colspan="5">✅ <strong>P2 완료 시</strong>: 유튜브 쇼츠 자동 + 전체 모니터링 — 주 17건 + 성과 측정</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hl" style="margin-top:24px">
+    <p><strong>Phase 3 — 자동 최적화 (Day 15~30)</strong></p>
+  </div>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>작업</th><th>누가</th><th>링크 / 가이드</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>3-1</td>
+        <td><strong>피드백 루프 엔진</strong><br>performance 데이터 분석 → 고성과 콘텐츠 패턴 추출 → Consumer 프롬프트에 자동 반영</td>
+        <td>에이전트팀</td>
+        <td>선행: 2-5</td>
+      </tr>
+      <tr>
+        <td>3-2</td>
+        <td><strong>수강생 추천 시스템</strong><br>수료 시 개인 추천 링크 발급 + 추천 트래킹 + /admin/referrals 대시보드</td>
+        <td>에이전트팀</td>
+        <td>bsschool 기능 추가</td>
+      </tr>
+      <tr>
+        <td>3-3</td>
+        <td><strong>벤치마크 리포트 자동 발행</strong> (매월 1일)<br>벤치마크 DB → 업종별 요약 → 블로그 게시 + 리드 마그넷 PDF</td>
+        <td>에이전트팀</td>
+        <td>/api/cron/benchmark-report</td>
+      </tr>
+      <tr>
+        <td>3-4</td>
+        <td><strong>A/B 테스트</strong><br>제목, 이미지, CTA 변형 → 성과 비교 → 자동 최적화</td>
+        <td>에이전트팀</td>
+        <td>선행: 3-1</td>
+      </tr>
+      <tr style="background:#e8f4fd">
+        <td colspan="5">✅ <strong>P3 완료 시</strong>: 자동 최적화 + 리드 마그넷 — 월 70건+ 완전 자동</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="dark" style="margin-top:20px">
+    <h4>Smith님 총 투입</h4>
+    <table>
+      <thead><tr><th>Phase</th><th>작업</th><th>시간</th></tr></thead>
+      <tbody>
+        <tr><td>P0</td><td>네이버 앱 + 블로그 + 카페 + 구글 비즈</td><td>25분</td></tr>
+        <tr><td>P1</td><td>네이버 로그인 + 인스타 + Meta앱 + 솔라피</td><td>19분</td></tr>
+        <tr><td>P2</td><td>YouTube API</td><td>5분</td></tr>
+        <tr><td><strong>합계</strong></td><td></td><td><strong>49분 (1회)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 09. KPI ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">10</span><span class="sec-label">KPI</span></div>
+  <h2>성과 목표</h2>
+  <div class="line"></div>
+
+  <table>
+    <thead><tr><th>지표</th><th>현재</th><th>1개월</th><th>3개월</th><th>6개월</th></tr></thead>
+    <tbody>
+      <tr><td><strong>콘텐츠 생산량 (월)</strong></td><td>수동 2~3건</td><td>70건 (자동)</td><td>70건</td><td>70건+</td></tr>
+      <tr><td><strong>네이버 블로그 글 수</strong></td><td>0</td><td>8+</td><td>24+</td><td>48+</td></tr>
+      <tr><td><strong>구글 인덱싱 페이지</strong></td><td>1 (랜딩)</td><td>10+</td><td>30+</td><td>60+</td></tr>
+      <tr><td><strong>유튜브 구독자</strong></td><td>소수</td><td>300+</td><td>1,000+</td><td>3,000+</td></tr>
+      <tr><td><strong>인스타 팔로워</strong></td><td>소수</td><td>500+</td><td>2,000+</td><td>5,000+</td></tr>
+      <tr><td><strong>뉴스레터 구독자</strong></td><td>~1,095</td><td>1,300+</td><td>2,000+</td><td>3,500+</td></tr>
+      <tr><td><strong>네이버 P0 키워드 순위</strong></td><td>미노출</td><td>상위 30</td><td>상위 10</td><td>상위 5</td></tr>
+      <tr><td><strong>AI 검색 추천 키워드</strong></td><td>0</td><td>3+</td><td>5+</td><td>10+</td></tr>
+      <tr><td><strong>월 오가닉 리드</strong></td><td>거의 0</td><td>20+</td><td>50+</td><td>100+</td></tr>
+      <tr><td><strong>Smith님 월 투입</strong></td><td>-</td><td>0시간</td><td>0시간</td><td>0시간</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dark" style="margin-top:20px;text-align:center;">
+    <h4 style="font-size:13pt;margin-bottom:12px;">핵심 메시지</h4>
+    <p style="font-size:10.5pt;line-height:1.9;">
+      강의 콘텐츠는 이미 있다. 배포 구조만 없었다.<br>
+      <strong>크론 8개 + API 7개</strong>로 월 70건 자동 생산 + 배포 + 모니터링.<br>
+      Smith님은 세팅 45분, 이후 투입 0.<br><br>
+      <strong style="color:var(--r);font-size:12pt">다음 단계: 세팅 체크리스트 진행 → P0 구현 시작</strong>
+    </p>
+  </div>
+
+  <div style="margin-top:30px;text-align:center;color:var(--g5);font-size:8.5pt;">
+    <p>자사몰 사관학교 마케팅팀 · 2026년 2월 17일</p>
+    <p style="margin-top:3px;">Master Plan v1.0 · Prepared by 모찌</p>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영상 소재 분석 — 에어무드 히알루론산 크림 (실제 데이터)</title>
+<style>
+:root{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--bd:#475569;--ac:#6366f1;--ac2:#818cf8;--t:#f8fafc;--t2:#cbd5e1;--t3:#64748b;--g:#10b981;--a:#f59e0b;--r:#ef4444;--p:#8b5cf6;--cy:#06b6d4;--b:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,sans-serif;background:var(--bg);color:var(--t);line-height:1.7;font-size:14px}
+.c{max-width:1200px;margin:0 auto;padding:2rem}
+.hd{text-align:center;padding:2rem;background:linear-gradient(135deg,#1b1025,#1e1b4b,var(--bg));border-radius:14px;border:1px solid var(--bd);margin-bottom:2rem}
+.hd h1{font-size:1.6rem;background:linear-gradient(135deg,var(--r),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
+.hd .sub{color:var(--t3);font-size:.82rem;margin-top:.4rem}
+.s{background:var(--bg2);border-radius:12px;padding:1.5rem;margin-bottom:1.2rem;border:1px solid var(--bd)}
+.s h2{color:var(--ac2);font-size:1.1rem;font-weight:700;margin-bottom:.8rem}
+.tag{display:inline-flex;padding:3px 10px;border-radius:16px;font-size:.7rem;font-weight:600;margin:2px}
+.tag-v{background:rgba(99,102,241,.12);color:var(--ac2);border:1px solid rgba(99,102,241,.25)}
+.tag-t{background:rgba(6,182,212,.12);color:var(--cy);border:1px solid rgba(6,182,212,.25)}
+.tag-p{background:rgba(139,92,246,.12);color:var(--p);border:1px solid rgba(139,92,246,.25)}
+.tag-a{background:rgba(245,158,11,.12);color:var(--a);border:1px solid rgba(245,158,11,.25)}
+details{margin-bottom:1rem}
+details>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border-radius:10px;padding:.8rem 1.2rem;border:1px solid var(--bd);font-weight:600;color:var(--t)}
+details>summary::after{content:'▼';font-size:.7rem;color:var(--t3)}
+details[open]>summary::after{content:'▲'}
+details>.inner{background:var(--bg2);border-radius:0 0 10px 10px;padding:1.2rem;border:1px solid var(--bd);border-top:none}
+.scene{background:var(--bg);border-radius:8px;padding:.8rem;margin-bottom:.5rem;position:relative}
+.scene-bar{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}
+.scene .sec{font-size:.72rem;font-weight:700;margin-bottom:.2rem}
+.scene .desc{font-size:.78rem;color:var(--t2)}
+.scene .eye{font-size:.68rem;color:var(--t3);margin-top:.2rem}
+.rx-card{background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:.6rem;border-left:4px solid var(--a)}
+.rx-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem}
+.rx-title b{font-size:.88rem}
+.rx-badge{font-size:.65rem;padding:2px 8px;border-radius:10px}
+.rx-desc{font-size:.78rem;color:var(--t2)}
+.rx-meta{font-size:.68rem;color:var(--t3);margin-top:.3rem}
+@media(max-width:768px){.c{padding:1rem}.main-grid{grid-template-columns:1fr!important}.scene-row{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="hd">
+  <h1>🎬 영상 소재 분석 — 에어무드 히알루론산 크림</h1>
+  <div class="sub">실제 Gemini 5축 분석 데이터 기반 · 31초 · ad_id: 120241760856630479</div>
+</div>
+
+<!-- ═══ 1. 처방 (1순위 — 가장 먼저) ═══ -->
+<div class="s" style="border:2px solid rgba(245,158,11,.4)">
+  <h2 style="color:var(--a)">💊 이렇게 바꾸세요</h2>
+  <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+    <span style="font-size:.75rem;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--t3)">약한 축: 🟢 기반(시선 잡는 힘) 67/100</span>
+    <span style="font-size:.75rem;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--t3)">종합 79/100 · 상위 4%</span>
+    <span style="font-size:.75rem;background:rgba(239,68,68,.1);padding:4px 10px;border-radius:6px;color:var(--r)">⚠️ 피로도 HIGH (유사도 0.978)</span>
+  </div>
+
+  <div class="rx-card" style="border-color:var(--r)">
+    <div class="rx-title"><b>❶ 소재 다양화 시급 — 피로도 위험</b><span class="rx-badge" style="background:rgba(239,68,68,.15);color:var(--r)">긴급</span></div>
+    <div class="rx-desc">같은 계정 유사 소재와 유사도 0.978 — Meta Andromeda가 같은 광고로 인식할 수 있음. 씬 구성·색감·모델을 바꿔서 새 소재 제작 필요.</div>
+    <div class="rx-meta">근거: quality.similarity_score 0.978 (임계값 0.92 초과) · 난이도: ●●● 어려움</div>
+  </div>
+
+  <div class="rx-card">
+    <div class="rx-title"><b>❷ 첫 3초 훅 강화 — 시각적 임팩트 부족</b><span class="rx-badge" style="background:rgba(16,185,129,.15);color:var(--g)">예상 +25%</span></div>
+    <div class="rx-desc">현재 훅(0-3초)이 텍스트 오버레이 + 문제 제기인데, visual_impact 67점으로 기반 축이 약함. 벤치마크 상위 훅은 제품 클로즈업 or 극적 before/after가 74%.</div>
+    <div class="rx-meta">근거: visual_impact 67 (벤치마크 중위값 72) · 난이도: ●● 보통</div>
+  </div>
+
+  <div class="rx-card">
+    <div class="rx-title"><b>❸ 긴급성 장치 추가</b><span class="rx-badge" style="background:rgba(16,185,129,.15);color:var(--g)">예상 +15%</span></div>
+    <div class="rx-desc">psychology.urgency = "none". "40% 할인"은 있지만 기한이 없어서 급하지 않음. 타이머/재고 한정/기간 표시 추가하면 전환율 개선.</div>
+    <div class="rx-meta">근거: 벤치마크 전환 상위 68%가 urgency 장치 사용 · 난이도: ● 쉬움</div>
+  </div>
+
+  <div class="rx-card" style="border-color:var(--ac)">
+    <div class="rx-title"><b>❹ CTA 시점 분산</b><span class="rx-badge" style="background:rgba(16,185,129,.15);color:var(--g)">예상 +18%</span></div>
+    <div class="rx-desc">CTA가 28-31초(마지막 3초)에만 있음. 15초쯤 자막 미니 CTA("링크는 아래↓") 넣으면 중간 이탈 시에도 전환 기회 확보.</div>
+    <div class="rx-meta">근거: 전환 상위 영상 64%가 중간+끝 2회 CTA · 난이도: ● 쉬움</div>
+  </div>
+</div>
+
+<!-- ═══ 2. 핵심 레이아웃: 영상 + 히트맵 + 타임라인 ═══ -->
+<div class="s">
+  <h2>▶ 영상 + 시선 + 타임라인</h2>
+
+  <div class="main-grid" style="display:grid;grid-template-columns:200px 200px 1fr;gap:1.2rem">
+
+    <!-- 영상 (9:16) -->
+    <div>
+      <div style="font-size:.75rem;font-weight:600;color:var(--t);margin-bottom:.4rem">원본 영상 (9:16)</div>
+      <div style="position:relative;width:200px;border-radius:10px;overflow:hidden;background:#000">
+        <video id="vid" style="width:200px;display:block" controls preload="metadata"
+          src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/1440411543944393/video/120241760856630479.mp4"
+          poster="">
+        </video>
+      </div>
+      <div style="font-size:.65rem;color:var(--t3);margin-top:.3rem">31초 · semi · fast pacing</div>
+    </div>
+
+    <!-- 히트맵 (9:16) -->
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+        <span style="font-size:.75rem;font-weight:600;color:var(--t)">👁 시선</span>
+        <div style="display:flex;gap:2px">
+          <button onclick="setHeatMode('heat')" id="btn-heat" style="background:var(--ac);color:#fff;border:none;padding:2px 8px;border-radius:3px;font-size:.6rem;cursor:pointer">히트맵</button>
+          <button onclick="setHeatMode('fog')" id="btn-fog" style="background:var(--bg);color:var(--t3);border:none;padding:2px 8px;border-radius:3px;font-size:.6rem;cursor:pointer">Fogmap</button>
+        </div>
+      </div>
+      <div style="position:relative;width:200px;height:356px;background:#111;border-radius:10px;overflow:hidden">
+        <canvas id="heatCanvas" width="200" height="356" style="width:200px;height:356px"></canvas>
+        <div id="heatInfo" style="position:absolute;bottom:6px;left:6px;right:6px;font-size:.6rem;color:rgba(255,255,255,.7);text-align:center;background:rgba(0,0,0,.5);padding:3px;border-radius:4px"></div>
+      </div>
+    </div>
+
+    <!-- 타임라인 (시간축 5축 분석) -->
+    <div>
+      <div style="font-size:.75rem;font-weight:600;color:var(--t);margin-bottom:.4rem">🎬 시간축 5축 분석</div>
+      <div id="timeline" style="max-height:356px;overflow-y:auto;padding-right:4px">
+
+        <div class="scene" id="sc0"><div class="scene-bar" style="background:var(--r)"></div>
+          <div class="sec" style="color:var(--r);padding-left:10px">0-3초 · 훅 (problem)</div>
+          <div class="desc" style="padding-left:10px">화장이 무너지는 피부 고민 — 클로즈업 + 텍스트</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:10px;margin-top:4px">
+            <span class="tag tag-v">hook: problem</span>
+            <span class="tag tag-v">UGC</span>
+            <span class="tag tag-p">감정: trust</span>
+          </div>
+          <div class="eye" style="padding-left:10px">👁 인물(90%) → 텍스트(80%)</div>
+        </div>
+
+        <div class="scene" id="sc1"><div class="scene-bar" style="background:var(--b)"></div>
+          <div class="sec" style="color:var(--b);padding-left:10px">4-6초 · 결과 미리보기</div>
+          <div class="desc" style="padding-left:10px">들뜸 없이 반짝이는 물광 피부 결과 제시</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:10px;margin-top:4px">
+            <span class="tag tag-v">before/after: ✅</span>
+            <span class="tag tag-t">소셜프루프: 임상수치</span>
+          </div>
+          <div class="eye" style="padding-left:10px">👁 인물(90%) → 텍스트(70%)</div>
+        </div>
+
+        <div class="scene" id="sc2"><div class="scene-bar" style="background:var(--p)"></div>
+          <div class="sec" style="color:var(--p);padding-left:10px">7-9초 · 브랜드 소개</div>
+          <div class="desc" style="padding-left:10px">"전직 승무원 대표가 만든 크림" — 권위 설득</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:10px;margin-top:4px">
+            <span class="tag tag-p">설득: authority</span>
+            <span class="tag tag-v">제품: center 30%</span>
+          </div>
+          <div class="eye" style="padding-left:10px">👁 제품(90%) → 텍스트(80%)</div>
+        </div>
+
+        <div class="scene" id="sc3"><div class="scene-bar" style="background:var(--b)"></div>
+          <div class="sec" style="color:var(--b);padding-left:10px">10-18초 · 데모 (제형+사용법)</div>
+          <div class="desc" style="padding-left:10px">손등→얼굴 직접 사용. 히알루론산 흡수 시연</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:10px;margin-top:4px">
+            <span class="tag tag-v">composition: center</span>
+            <span class="tag tag-a">BGM: pop upbeat</span>
+            <span class="tag tag-t">나레이션: "속건조가 안 느껴져서"</span>
+          </div>
+          <div class="eye" style="padding-left:10px">👁 인물(90%) → 텍스트(60%)</div>
+        </div>
+
+        <div class="scene" id="sc4"><div class="scene-bar" style="background:var(--g)"></div>
+          <div class="sec" style="color:var(--g);padding-left:10px">19-22초 · 임상 결과</div>
+          <div class="desc" style="padding-left:10px">수분 108.41% 증가, 외부자극 80.50% 완화 — 텍스트</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:10px;margin-top:4px">
+            <span class="tag tag-t">numbers: 임상수치</span>
+            <span class="tag tag-p">소셜프루프: expert</span>
+          </div>
+          <div class="eye" style="padding-left:10px">👁 제품(90%) → 텍스트(80%)</div>
+        </div>
+
+        <div class="scene" id="sc5"><div class="scene-bar" style="background:var(--b)"></div>
+          <div class="sec" style="color:var(--b);padding-left:10px">23-27초 · 수정화장 팁</div>
+          <div class="desc" style="padding-left:10px">크림으로 녹이고 쿠션 톡톡 — 활용도 어필</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:10px;margin-top:4px">
+            <span class="tag tag-v">demo: 활용팁</span>
+            <span class="tag tag-t">"처음 메이크업 했을 때처럼"</span>
+          </div>
+          <div class="eye" style="padding-left:10px">👁 인물(90%) → 텍스트(80%)</div>
+        </div>
+
+        <div class="scene" id="sc6"><div class="scene-bar" style="background:var(--g)"></div>
+          <div class="sec" style="color:var(--g);padding-left:10px">28-31초 · CTA</div>
+          <div class="desc" style="padding-left:10px">"자사몰에서 최대 40% 할인 중~"</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:10px;margin-top:4px">
+            <span class="tag tag-a">오퍼: discount 40%</span>
+            <span class="tag tag-p">urgency: none ⚠️</span>
+            <span class="tag tag-v">CTA: overlay</span>
+          </div>
+          <div class="eye" style="padding-left:10px">👁 CTA 주목도: 70%</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 씬 타임라인 바 -->
+  <div style="display:flex;height:20px;border-radius:6px;overflow:hidden;font-size:.55rem;font-weight:700;margin-top:.8rem">
+    <div style="flex:3;background:rgba(239,68,68,.3);color:#fca5a5;display:flex;align-items:center;justify-content:center">훅 0-3</div>
+    <div style="flex:3;background:rgba(59,130,246,.25);color:#93c5fd;display:flex;align-items:center;justify-content:center">결과 4-6</div>
+    <div style="flex:3;background:rgba(139,92,246,.25);color:#c4b5fd;display:flex;align-items:center;justify-content:center">브랜드 7-9</div>
+    <div style="flex:9;background:rgba(59,130,246,.3);color:#93c5fd;display:flex;align-items:center;justify-content:center">데모 10-18</div>
+    <div style="flex:4;background:rgba(16,185,129,.25);color:#6ee7b7;display:flex;align-items:center;justify-content:center">임상 19-22</div>
+    <div style="flex:5;background:rgba(59,130,246,.2);color:#93c5fd;display:flex;align-items:center;justify-content:center">팁 23-27</div>
+    <div style="flex:4;background:rgba(16,185,129,.3);color:#6ee7b7;display:flex;align-items:center;justify-content:center">CTA 28-31</div>
+  </div>
+</div>
+
+<!-- ═══ 3. 총가치 3축 ═══ -->
+<div class="s">
+  <h2>📊 총가치각도기 3축</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;text-align:center;border-top:3px solid var(--g)">
+      <div style="font-size:.75rem;color:var(--t3)">🟢 기반</div>
+      <div style="font-size:2rem;font-weight:800;color:var(--g)">67</div>
+      <div style="font-size:.68rem;color:var(--t3)">visual_impact</div>
+      <div style="background:var(--bg2);height:6px;border-radius:3px;margin-top:.5rem"><div style="background:var(--g);width:67%;height:100%;border-radius:3px"></div></div>
+    </div>
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;text-align:center;border-top:3px solid var(--a)">
+      <div style="font-size:.75rem;color:var(--t3)">🟡 참여</div>
+      <div style="font-size:2rem;font-weight:800;color:var(--a)">80</div>
+      <div style="font-size:.68rem;color:var(--t3)">social_proof</div>
+      <div style="background:var(--bg2);height:6px;border-radius:3px;margin-top:.5rem"><div style="background:var(--a);width:80%;height:100%;border-radius:3px"></div></div>
+    </div>
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;text-align:center;border-top:3px solid var(--r)">
+      <div style="font-size:.75rem;color:var(--t3)">🔴 전환</div>
+      <div style="font-size:2rem;font-weight:800;color:var(--r)">70</div>
+      <div style="font-size:.68rem;color:var(--t3)">cta_effectiveness</div>
+      <div style="background:var(--bg2);height:6px;border-radius:3px;margin-top:.5rem"><div style="background:var(--r);width:70%;height:100%;border-radius:3px"></div></div>
+    </div>
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;text-align:center;border-top:3px solid var(--ac)">
+      <div style="font-size:.75rem;color:var(--t3)">⭐ 종합</div>
+      <div style="font-size:2rem;font-weight:800;color:var(--ac2)">79</div>
+      <div style="font-size:.68rem;color:var(--g)">상위 4%</div>
+      <div style="background:var(--bg2);height:6px;border-radius:3px;margin-top:.5rem"><div style="background:var(--ac);width:79%;height:100%;border-radius:3px"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 4. 오디오 (접기) ═══ -->
+<details>
+  <summary>🔊 오디오 분석</summary>
+  <div class="inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div>
+        <div style="color:var(--t3);font-size:.72rem;margin-bottom:.2rem">타입</div>
+        <div style="font-size:.85rem">mixed (나레이션 + BGM)</div>
+      </div>
+      <div>
+        <div style="color:var(--t3);font-size:.72rem;margin-bottom:.2rem">BGM</div>
+        <div style="font-size:.85rem">pop · upbeat · 효과음: sparkle, swoosh</div>
+      </div>
+    </div>
+    <div style="margin-top:.8rem">
+      <div style="color:var(--t3);font-size:.72rem;margin-bottom:.2rem">나레이션 전사 (Gemini STT)</div>
+      <div style="font-size:.78rem;color:var(--t2);background:var(--bg);padding:.8rem;border-radius:8px;line-height:1.8;font-style:italic;max-height:150px;overflow-y:auto">
+        "어떤 파데를 써도 피부 화장이 금방 무너진다면 딱 이거 하나만 바꿔봐. 이렇게 화장이 무너지지 않으려면 기초 공사가 진짜 중요한 거 알지? 그래서 선택한 게 승무원 대표가 만든 이 수분 크림이거든. 긴 비행시간 동안에도 예쁜 화장을 유지하는 비결이 바로 여기 있더라고. 이렇게 메이크업 전에 발라주면 히알루론산이 피부 속까지 깊이 흡수돼서 속건조가 안 느껴져서 너무 좋은 거야. 이 위에 파데를 올리니까 광도 예쁘게 올라오고 화장도 확실히 안 무너지는 거 있지? 피부 화장 수정할 때는 크림으로 살짝 녹여준 뒤에 쿠션으로 눌러주면 자극 없이 예쁘게 수정된다? 요거 지금 할인 행사 중이니까 꼭 사 봐."
+      </div>
+    </div>
+    <div style="margin-top:.8rem">
+      <div style="color:var(--t3);font-size:.72rem;margin-bottom:.4rem">감정 흐름</div>
+      <div style="display:flex;gap:.4rem;align-items:center;font-size:.78rem;flex-wrap:wrap">
+        <span style="background:rgba(239,68,68,.15);padding:4px 10px;border-radius:12px;color:#fca5a5">공감 (0-3초)</span>
+        <span style="color:var(--t3)">→</span>
+        <span style="background:rgba(139,92,246,.15);padding:4px 10px;border-radius:12px;color:#c4b5fd">신뢰 (4-9초)</span>
+        <span style="color:var(--t3)">→</span>
+        <span style="background:rgba(59,130,246,.15);padding:4px 10px;border-radius:12px;color:#93c5fd">기대 (10-22초)</span>
+        <span style="color:var(--t3)">→</span>
+        <span style="background:rgba(16,185,129,.15);padding:4px 10px;border-radius:12px;color:#6ee7b7">행동 (23-31초)</span>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- ═══ 5. 태그 (접기) ═══ -->
+<details>
+  <summary>📋 소재 태그 요약</summary>
+  <div class="inner">
+    <div style="display:flex;flex-wrap:wrap;gap:4px">
+      <span class="tag tag-v">훅: problem</span>
+      <span class="tag tag-v">스타일: UGC</span>
+      <span class="tag tag-v">구도: text_overlay</span>
+      <span class="tag tag-v">모션: fast</span>
+      <span class="tag tag-v">전환속도: fast</span>
+      <span class="tag tag-v">인물: 1명 · 상반신 · 미소</span>
+      <span class="tag tag-v">제품: center 30%</span>
+      <span class="tag tag-v">색상: warm neutral · #F0EBE8</span>
+      <span class="tag tag-t">헤드라인: question</span>
+      <span class="tag tag-t">CTA: "최대 40% 할인 중~"</span>
+      <span class="tag tag-p">감정: trust</span>
+      <span class="tag tag-p">설득: authority (전직 승무원)</span>
+      <span class="tag tag-p">오퍼: discount</span>
+      <span class="tag tag-p">긴급성: none ⚠️</span>
+      <span class="tag tag-p">소셜프루프: expert (임상)</span>
+      <span class="tag tag-a">오디오: narration + pop BGM</span>
+      <span class="tag tag-a">오디오감정: upbeat</span>
+      <span class="tag tag-v">텍스트비율: 15%</span>
+      <span class="tag tag-v">품질: semi</span>
+      <span class="tag tag-v">가독성: high</span>
+    </div>
+    <div style="margin-top:.8rem;padding:.6rem;background:var(--bg);border-radius:8px;font-size:.75rem">
+      <div style="font-weight:600;color:var(--p);margin-bottom:.3rem">🌀 Andromeda Fingerprint</div>
+      <div style="color:var(--t2)">
+        Visual: <span style="color:var(--ac2)">skincare-demo-ugc-text-overlay-glowy-skin</span><br>
+        Text: <span style="color:var(--ac2)">problem-solution-authority-benefit-cta</span><br>
+        Audio: <span style="color:var(--ac2)">narration-upbeat-pop</span><br>
+        Structure: <span style="color:var(--ac2)">hook-demo-result-cta</span><br>
+        P.D.A: <span style="color:var(--a)">office_worker</span> × <span style="color:var(--a)">beauty</span> × <span style="color:var(--a)">solution_aware</span>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- ═══ 6. 광고 카피 (접기) ═══ -->
+<details>
+  <summary>📝 광고 카피 원문</summary>
+  <div class="inner">
+    <div style="font-size:.82rem;color:var(--t2);line-height:1.9;white-space:pre-wrap">점심만 지나면 파데 무너지는 분들 많으시죠 ㅠㅠ
+아침엔 괜찮은데 오후만 되면
+끼이고 들뜨고 수정할수록 더 망가지는 피부요..
+
+저도 원래 그랬는데 기초 하나 바꿔주니까 다르긴하더라구요!
+
+그래서 요즘 계속 쓰고 있는 게
+에어무드 히알루로닉 스노우크림인데요 ✨
+
+사하라 사막보다 건조한 기내에서 비행하던
+전직 승무원 대표님이 직접 만들고
+현직 승무원들이 쓰는</div>
+  </div>
+</details>
+
+<div style="text-align:center;padding:1rem;color:var(--t3);font-size:.75rem;margin-top:1rem">
+  🍡 모찌 직접 작성 · 실제 Gemini 5축 분석 데이터 기반<br>
+  2026-03-23 14:40 KST · 에어무드 ad_id: 120241760856630479
+</div>
+
+</div>
+
+<script>
+// 시선 데이터 (Gemini eye_tracking)
+const eyeData = [
+  {t:0, fixes:[{x:.5,y:.7,w:.8,l:'텍스트'},{x:.5,y:.4,w:.9,l:'인물'}]},
+  {t:3, fixes:[{x:.5,y:.5,w:.9,l:'인물'},{x:.5,y:.8,w:.7,l:'텍스트'}]},
+  {t:6, fixes:[{x:.5,y:.5,w:.9,l:'제품'},{x:.5,y:.8,w:.8,l:'텍스트'}]},
+  {t:9, fixes:[{x:.5,y:.5,w:.9,l:'인물'},{x:.5,y:.8,w:.6,l:'텍스트'}]},
+  {t:12,fixes:[{x:.5,y:.6,w:.9,l:'제품'},{x:.5,y:.8,w:.8,l:'텍스트'}]},
+  {t:15,fixes:[{x:.5,y:.5,w:.9,l:'인물'},{x:.5,y:.7,w:.8,l:'텍스트'}]}
+];
+const scenes = [
+  {start:0,end:3},{start:4,end:6},{start:7,end:9},
+  {start:10,end:18},{start:19,end:22},{start:23,end:27},{start:28,end:31}
+];
+let heatMode = 'heat';
+const canvas = document.getElementById('heatCanvas');
+const ctx = canvas.getContext('2d');
+
+function setHeatMode(m){
+  heatMode=m;
+  document.getElementById('btn-heat').style.background=m==='heat'?'var(--ac)':'var(--bg)';
+  document.getElementById('btn-heat').style.color=m==='heat'?'#fff':'var(--t3)';
+  document.getElementById('btn-fog').style.background=m==='fog'?'var(--ac)':'var(--bg)';
+  document.getElementById('btn-fog').style.color=m==='fog'?'#fff':'var(--t3)';
+  drawHeat(lastT);
+}
+
+let lastT=0;
+function drawHeat(t){
+  lastT=t;
+  const W=200,H=356;
+  ctx.clearRect(0,0,W,H);
+  // interpolate
+  let frame=eyeData[0];
+  for(let i=0;i<eyeData.length;i++){
+    if(eyeData[i].t<=t) frame=eyeData[i];
+  }
+  if(heatMode==='fog'){
+    ctx.fillStyle='rgba(255,255,255,.85)';
+    ctx.fillRect(0,0,W,H);
+    for(const f of frame.fixes){
+      const r=40*f.w;
+      const grd=ctx.createRadialGradient(f.x*W,f.y*H,0,f.x*W,f.y*H,r);
+      grd.addColorStop(0,'rgba(255,255,255,0)');
+      grd.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.globalCompositeOperation='destination-out';
+      const grd2=ctx.createRadialGradient(f.x*W,f.y*H,0,f.x*W,f.y*H,r*1.5);
+      grd2.addColorStop(0,'rgba(0,0,0,'+f.w+')');
+      grd2.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=grd2;
+      ctx.fillRect(0,0,W,H);
+    }
+    ctx.globalCompositeOperation='source-over';
+  } else {
+    ctx.fillStyle='rgba(0,0,0,.3)';
+    ctx.fillRect(0,0,W,H);
+    for(const f of frame.fixes){
+      const r=35*f.w;
+      const grd=ctx.createRadialGradient(f.x*W,f.y*H,0,f.x*W,f.y*H,r);
+      const alpha=f.w*.7;
+      if(f.w>.8) grd.addColorStop(0,'rgba(239,68,68,'+alpha+')');
+      else grd.addColorStop(0,'rgba(245,158,11,'+alpha+')');
+      grd.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=grd;
+      ctx.fillRect(0,0,W,H);
+      // label
+      ctx.fillStyle='rgba(255,255,255,.8)';
+      ctx.font='9px sans-serif';
+      ctx.fillText(f.l+' '+(f.w*100).toFixed(0)+'%',f.x*W-15,f.y*H+r+12);
+    }
+  }
+  document.getElementById('heatInfo').textContent=
+    t.toFixed(0)+'초 · '+frame.fixes.map(f=>f.l+'('+Math.round(f.w*100)+'%)').join(' · ');
+}
+
+// video sync
+const vid=document.getElementById('vid');
+vid.addEventListener('timeupdate',()=>{
+  drawHeat(vid.currentTime);
+  // highlight active scene
+  const t=vid.currentTime;
+  scenes.forEach((s,i)=>{
+    const el=document.getElementById('sc'+i);
+    if(el){
+      if(t>=s.start && t<=s.end) el.style.background='rgba(99,102,241,.08)';
+      else el.style.background='var(--bg)';
+    }
+  });
+});
+drawHeat(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "buildCommand": "node scripts/build-index.js",
+  "outputDirectory": "public",
+  "cleanUrls": true
+}

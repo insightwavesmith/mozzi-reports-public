@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="date" content="2026-03-07">
+<meta name="project" content="QA Helpdesk">
+<title>블루프린트 커리큘럼 매핑 결과</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background: #f8f9fc; color: #1a1a1a; line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+  a.back { display: inline-block; margin-bottom: 20px; color: #F75D5D; text-decoration: none; font-size: 14px; font-weight: 500; }
+  a.back:hover { text-decoration: underline; }
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; color: #1a1a1a; }
+  .subtitle { font-size: 15px; color: #64748b; margin-bottom: 24px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0 32px; }
+  .stat-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; border: 1px solid #e2e8f0; }
+  .stat-num { font-size: 28px; font-weight: 800; }
+  .stat-num.green { color: #16a34a; }
+  .stat-num.red { color: #dc2626; }
+  .stat-num.orange { color: #ea580c; }
+  .stat-num.blue { color: #2563eb; }
+  .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+  h2 { font-size: 20px; font-weight: 700; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #F75D5D; }
+  h3 { font-size: 16px; font-weight: 600; margin: 20px 0 12px; color: #334155; }
+  .level-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #fff; margin-right: 8px; }
+  .l1 { background: #16a34a; }
+  .l2 { background: #2563eb; }
+  .l3 { background: #ea580c; }
+  .l4 { background: #dc2626; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 24px; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+  th { background: #f1f5f9; font-size: 13px; font-weight: 600; color: #475569; text-align: left; padding: 10px 14px; }
+  td { font-size: 13px; padding: 10px 14px; border-top: 1px solid #f1f5f9; vertical-align: top; }
+  tr:hover td { background: #fafbfc; }
+  .ep-num { font-weight: 700; color: #F75D5D; white-space: nowrap; }
+  .gap { color: #dc2626; font-style: italic; }
+  .id-mono { font-family: 'SF Mono', monospace; font-size: 11px; color: #64748b; }
+  .dup-list { font-size: 11px; color: #64748b; line-height: 1.8; }
+  .dup-list span { display: inline-block; background: #f1f5f9; padding: 1px 6px; border-radius: 4px; margin: 1px 0; }
+  .remove-badge { display: inline-block; background: #fef2f2; color: #dc2626; font-size: 11px; padding: 2px 8px; border-radius: 8px; font-weight: 500; }
+  .gap-badge { display: inline-block; background: #fff7ed; color: #ea580c; font-size: 11px; padding: 2px 8px; border-radius: 8px; font-weight: 500; }
+  .section { background: #fff; border-radius: 12px; padding: 20px 24px; margin: 16px 0; border: 1px solid #e2e8f0; }
+  .note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back" href="/">← 목록으로</a>
+<h1>🎓 블루프린트 커리큘럼 매핑 결과</h1>
+<div class="subtitle">DB 68건 → EP01~30 매핑 분석 · 2026-03-07</div>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-num blue">68</div><div class="stat-label">전체 항목</div></div>
+  <div class="stat-card"><div class="stat-num green">15</div><div class="stat-label">대표 선정</div></div>
+  <div class="stat-card"><div class="stat-num orange">42</div><div class="stat-label">중복 제거 후보</div></div>
+  <div class="stat-card"><div class="stat-num red">11</div><div class="stat-label">제거 (시험·커뮤니티)</div></div>
+  <div class="stat-card"><div class="stat-num red">15</div><div class="stat-label">커리큘럼 갭</div></div>
+</div>
+
+<!-- Level 1 -->
+<h2><span class="level-badge l1">Level 1</span> 입문: 메타 광고 시작하기 (EP01~10)</h2>
+<table>
+<tr><th style="width:60px">EP</th><th style="width:80px">대표 ID</th><th>대표 제목</th><th>중복 제거 후보</th></tr>
+<tr>
+  <td class="ep-num">EP01</td>
+  <td class="id-mono">cf16496b</td>
+  <td>Meta 광고 최적화: 목표, 위치, 성과 목표 완벽 가이드</td>
+  <td class="dup-list"><span>b435dc55</span> 미디어 바잉 전략 마스터<br><span>521f11cf</span> 미디어 플래닝 전략 마스터<br><span>64e1d986</span> 고객 연결 및 브랜드 구축</td>
+</tr>
+<tr>
+  <td class="ep-num">EP02</td>
+  <td class="id-mono">71714a6a</td>
+  <td>Meta Business Suite & Ads Manager 활용 전략</td>
+  <td class="dup-list"><span>3e3aeb3c</span> Business Suite 마스터<br><span>5feca495</span> 인스타그램 비즈니스 전환<br><span>8bad0978</span> 비즈니스 관리자<br><span>2904d988</span> 비즈니스 솔루션<br><span>84626292</span> 페이지 구축<br><span>8ad994f2</span> 페이지 활용 전략</td>
+</tr>
+<tr>
+  <td class="ep-num">EP03</td>
+  <td class="id-mono">e1f2b7a9</td>
+  <td>Meta 광고 캠페인 구조 & Advantage 활용법</td>
+  <td class="dup-list">—</td>
+</tr>
+<tr>
+  <td class="ep-num">EP04</td>
+  <td class="id-mono">3b49a5c0</td>
+  <td>Meta 광고 캠페인 목표 설정 및 최적화</td>
+  <td class="dup-list"><span>0da82d3e</span> 퍼널 전략 연계<br><span>c21dcf48</span> 구매 유형 최적화<br><span>24788f23</span> 목표 + 퍼널 전략<br><span>68c3da61</span> 구조 + 목표 가이드</td>
+</tr>
+<tr>
+  <td class="ep-num">EP05</td>
+  <td class="id-mono">2e555033</td>
+  <td>Meta 광고 타겟팅: 좁게 vs 넓게, Advantage+ 활용</td>
+  <td class="dup-list"><span>03e290ba</span> 맞춤/유사/상세 타겟 설정<br><span>280629c0</span> 타겟 활용법<br><span>b44ba752</span> 타겟팅 전략<br><span>34e9da15</span> 목표+타겟+크리에이티브</td>
+</tr>
+<tr>
+  <td class="ep-num">EP06</td>
+  <td class="id-mono">8daa84ed</td>
+  <td>Meta 모바일 광고 크리에이티브 전략</td>
+  <td class="dup-list"><span>6f1e4603</span> 모바일 + 리드<br><span>c2f8cf55</span> 포맷 + Advantage+<br><span>727eeaa7</span> 포맷 최적화<br><span>b86dbdd5</span> 모바일 + 목표 기반<br><span>758317f5</span> 크리에이티브 다양화<br><span>6c8c0932</span> 배치와 형식<br><span>c181bf82</span> 피드/스토리/릴스</td>
+</tr>
+<tr>
+  <td class="ep-num">EP07</td>
+  <td class="id-mono">69152c7d</td>
+  <td>Meta 광고 예산 최적화 및 게재 위치 전략</td>
+  <td class="dup-list"><span>91cdbe1a</span> 캠페인 예산 최적화 (CBO)</td>
+</tr>
+<tr>
+  <td class="ep-num">EP08</td>
+  <td class="id-mono">50efad8c</td>
+  <td>Meta 광고 효과 측정: 핵심 지표와 인사이트</td>
+  <td class="dup-list"><span>3756167f</span> 리프트 테스트<br><span>43cef362</span> A/B 테스트 전략<br><span>778f36cb</span> 성과 분석 보고서<br><span>0436a9aa</span> 가설 + 핵심 지표<br><span>5930051e</span> 비즈니스 목표 + KPI<br><span>3d3f6fbb</span> 도달/참여/전환율</td>
+</tr>
+<tr>
+  <td class="ep-num">EP09</td>
+  <td class="id-mono">31704b8a</td>
+  <td>Meta 픽셀 & 전환 API 설정 및 활용</td>
+  <td class="dup-list"><span>39d7887e</span> 픽셀+CAPI 연동<br><span>d1838a35</span> 픽셀+CAPI 성과 극대화<br><span>3a5459ce</span> 예약구매+전환API+Advantage+</td>
+</tr>
+<tr>
+  <td class="ep-num">EP10</td>
+  <td class="id-mono">73699422</td>
+  <td>Meta 광고 정책, 포트폴리오, Advantage+ 캠페인</td>
+  <td class="dup-list"><span>7ac1e91c</span> 정책 핵심 규정<br><span>c4a4ea39</span> 개인속성+성적콘텐츠<br><span>5c5bcd55</span> 정책+최적화<br><span>8d6e1a94</span> 프라이버시+GDPR<br><span>a462f53b</span> 브랜드 보호<br><span>5dec4a2e</span> 심사 가이드</td>
+</tr>
+</table>
+
+<!-- Level 2 -->
+<h2><span class="level-badge l2">Level 2</span> 실전: 광고 집행과 최적화 (EP11~20)</h2>
+<table>
+<tr><th style="width:60px">EP</th><th style="width:80px">대표 ID</th><th>대표 제목</th><th>비고</th></tr>
+<tr>
+  <td class="ep-num">EP11</td>
+  <td class="id-mono">949db718</td>
+  <td>Meta 광고 구매 방식: Auction vs Reservation</td>
+  <td class="dup-list"><span>ec4c8fcb</span> 동일 주제 중복</td>
+</tr>
+<tr><td class="ep-num">EP12</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 주인공 정의 & 시나리오 — 자사몰 특화 기획, Blueprint DB 없음</td></tr>
+<tr><td class="ep-num">EP13</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 입찰 전략 심화 — 예산/입찰 클러스터가 EP07에서 소진</td></tr>
+<tr><td class="ep-num">EP14</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> ASC (Advantage+ Shopping Campaign) — 전용 항목 DB 없음</td></tr>
+<tr><td class="ep-num">EP15</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 타겟팅 심화 (Andromeda) — 타겟팅 클러스터가 EP05에서 소진</td></tr>
+<tr><td class="ep-num">EP16</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 크리에이티브 전략 (pitch-play-plunge) — 크리에이티브 클러스터가 EP06에서 소진</td></tr>
+<tr><td class="ep-num">EP17</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 릴스 광고 최적화 — 크리에이티브 클러스터가 EP06에서 소진</td></tr>
+<tr><td class="ep-num">EP18</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 카탈로그 광고 — 커머스 매니저 전용 항목 DB 없음</td></tr>
+<tr><td class="ep-num">EP19</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 러닝 페이즈 관리 — 러닝 페이즈 전용 항목 DB 없음</td></tr>
+<tr>
+  <td class="ep-num">EP20</td>
+  <td class="id-mono">911689e6</td>
+  <td>Meta 광고 게재 위치: Advantage+ vs. 수동 설정</td>
+  <td class="dup-list">—</td>
+</tr>
+</table>
+
+<!-- Level 3 -->
+<h2><span class="level-badge l3">Level 3</span> 분석: 데이터 기반 의사결정 (EP21~26)</h2>
+<table>
+<tr><th style="width:60px">EP</th><th style="width:80px">대표 ID</th><th>대표 제목</th><th>비고</th></tr>
+<tr>
+  <td class="ep-num">EP21</td>
+  <td class="id-mono">f577153a</td>
+  <td>데이터 분석 기반 어트리뷰션 모델 선택 및 검증</td>
+  <td class="dup-list">—</td>
+</tr>
+<tr><td class="ep-num">EP22</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 전환 리프트 테스트 — 측정 클러스터가 EP21에서 소진</td></tr>
+<tr>
+  <td class="ep-num">EP23</td>
+  <td class="id-mono">39d3650c</td>
+  <td>Meta 광고 A/B 테스트 가설 설정 전략</td>
+  <td class="dup-list">—</td>
+</tr>
+<tr><td class="ep-num">EP24</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 브랜드 리프트 — 측정 클러스터가 EP21에서 소진</td></tr>
+<tr><td class="ep-num">EP25</td><td colspan="3" class="gap"><span class="gap-badge">갭</span> 성과 진단 프레임워크 — 성과측정 클러스터가 EP08에서 소진</td></tr>
+<tr>
+  <td class="ep-num">EP26</td>
+  <td class="id-mono">7d514947</td>
+  <td>Meta 광고: 개인 정보 보호 및 데이터 활용 전략</td>
+  <td class="dup-list"><span>f1843bef</span> 데이터 인사이트 활용</td>
+</tr>
+</table>
+
+<!-- Level 4 -->
+<h2><span class="level-badge l4">Level 4</span> 전문: 기술 구현 & AI 활용 (EP27~30)</h2>
+<table>
+<tr><th style="width:60px">EP</th><th colspan="3">상태</th></tr>
+<tr><td class="ep-num">EP27</td><td class="gap"><span class="gap-badge">갭</span> 픽셀 심화 — 픽셀/CAPI 클러스터가 EP09에서 소진</td></tr>
+<tr><td class="ep-num">EP28</td><td class="gap"><span class="gap-badge">갭</span> CAPI 완전 정복 — 픽셀/CAPI 클러스터가 EP09에서 소진</td></tr>
+<tr><td class="ep-num">EP29</td><td class="gap"><span class="gap-badge">갭</span> Meta AI 엔진 이해 — AI/기술 심화 전용 항목 DB 없음</td></tr>
+<tr><td class="ep-num">EP30</td><td class="gap"><span class="gap-badge">갭</span> Advantage+ 전체 마스터 — Advantage+ 전용 항목 DB 없음</td></tr>
+</table>
+
+<!-- 제거 후보 -->
+<h2>🗑️ 제거 후보 (11건)</h2>
+<table>
+<tr><th style="width:80px">ID</th><th>제목</th><th style="width:200px">사유</th></tr>
+<tr><td class="id-mono">ef735a2a</td><td>메신저 마케팅: 고객 소통 및 자동화 전략</td><td><span class="remove-badge">메신저 — 범위 외</span></td></tr>
+<tr><td class="id-mono">87c24c06</td><td>WhatsApp Business: 고객 연결 및 비즈니스 프로필 설정</td><td><span class="remove-badge">WhatsApp — 범위 외</span></td></tr>
+<tr><td class="id-mono">b0ec2a0c</td><td>Meta 인증 커뮤니티 관리자 시험 대비 가이드</td><td><span class="remove-badge">시험 + 커뮤니티</span></td></tr>
+<tr><td class="id-mono">5dd35af2</td><td>Meta 커뮤니티 구축 및 관리 전략</td><td><span class="remove-badge">커뮤니티 — 범위 외</span></td></tr>
+<tr><td class="id-mono">93ecb942</td><td>커뮤니티 성장 전략: 오가닉 & 페이드 마케팅 활용</td><td><span class="remove-badge">커뮤니티 — 범위 외</span></td></tr>
+<tr><td class="id-mono">832463d6</td><td>Meta 디지털 마케팅 어소시에이트 시험 대비</td><td><span class="remove-badge">시험 대비</span></td></tr>
+<tr><td class="id-mono">8c07f232</td><td>Meta 광고 크리에이티브 전략 전문가 자격증 대비</td><td><span class="remove-badge">자격증 시험</span></td></tr>
+<tr><td class="id-mono">0e5fbf46</td><td>Meta 커뮤니티 콘텐츠 전략: 미션, 플랫폼, 멤버 활용</td><td><span class="remove-badge">커뮤니티 — 범위 외</span></td></tr>
+<tr><td class="id-mono">ffa81e5b</td><td>커뮤니티 신규 멤버 온보딩 전략 및 실전 가이드</td><td><span class="remove-badge">커뮤니티 — 범위 외</span></td></tr>
+<tr><td class="id-mono">2481ef8b</td><td>Meta 마케팅 사이언스 전문가 시험 대비 가이드</td><td><span class="remove-badge">시험 대비</span></td></tr>
+<tr><td class="id-mono">ce4be086</td><td>커뮤니티 맞춤 페르소나 구축 및 활용 전략</td><td><span class="remove-badge">커뮤니티 — 범위 외</span></td></tr>
+</table>
+
+<!-- 갭 대응 방안 -->
+<h2>🔧 갭 대응 방안</h2>
+<div class="section">
+<h3>클러스터 소진형 갭 (10EP)</h3>
+<p style="font-size:13px; color:#64748b; margin-bottom:12px;">입문 EP에서 중복 항목이 다 소진됨 → 해당 항목의 body_md에서 심화 내용 분할 추출로 대응 가능</p>
+<table>
+<tr><th>갭 EP</th><th>소진된 곳</th><th>대응</th></tr>
+<tr><td>EP13 입찰 심화</td><td>EP07 예산 최적화</td><td>EP07 중복(91cdbe1a CBO)에서 심화 분할</td></tr>
+<tr><td>EP15 타겟팅 심화</td><td>EP05 타겟팅 기초</td><td>EP05 중복 4건에서 Andromeda 관련 분할</td></tr>
+<tr><td>EP16 크리에이티브 심화</td><td>EP06 크리에이티브 기초</td><td>EP06 중복 7건에서 전략/3장면 분할</td></tr>
+<tr><td>EP17 릴스</td><td>EP06</td><td>EP06 중복(c181bf82 피드/스토리/릴스)에서 분할</td></tr>
+<tr><td>EP22 전환 리프트</td><td>EP21 어트리뷰션</td><td>EP08 중복(3756167f 리프트)에서 분할</td></tr>
+<tr><td>EP24 브랜드 리프트</td><td>EP21</td><td>EP08 중복에서 브랜드 측정 분할</td></tr>
+<tr><td>EP25 성과 진단</td><td>EP08</td><td>EP08 중복(0436a9aa 가설+지표)에서 분할</td></tr>
+<tr><td>EP27 픽셀 심화</td><td>EP09</td><td>EP09 중복 3건에서 심화 섹션 분할</td></tr>
+<tr><td>EP28 CAPI 심화</td><td>EP09</td><td>EP09 중복(39d7887e CAPI 연동)에서 분할</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h3>DB 미보유형 갭 (6EP)</h3>
+<p style="font-size:13px; color:#64748b; margin-bottom:12px;">블루프린트 데이터에 아예 없는 주제 → 외부 소스 크롤 또는 자체 제작 필요</p>
+<table>
+<tr><th>갭 EP</th><th>대응 방안</th></tr>
+<tr><td>EP12 주인공 정의 & 시나리오</td><td>자사몰 특화 → 자체 제작 (자사몰사관학교 0주차 활용)</td></tr>
+<tr><td>EP14 ASC 마스터</td><td>Meta 공식 문서 + Crawl: Advantage+ 과정</td></tr>
+<tr><td>EP18 카탈로그 광고</td><td>Commerce Manager 가이드 Crawl</td></tr>
+<tr><td>EP19 러닝 페이즈</td><td>Meta 지원 문서 + File: 러닝 페이즈 가이드</td></tr>
+<tr><td>EP29 Meta AI 엔진</td><td>Meta 기술 블로그 Crawl (GEM, Andromeda 등 일부 보유)</td></tr>
+<tr><td>EP30 Advantage+ 마스터</td><td>Blueprint: AI퍼포먼스 + Crawl: Advantage+ 과정</td></tr>
+</table>
+</div>
+
+<div class="note">
+  <strong>📌 다음 단계:</strong> Smith님 매핑 리뷰 → 중복 항목 심화 분할 → DB UPDATE (category + ep_number) → curriculum-view.tsx 수정 (category 기반 그룹핑)
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="date" content="2026-03-14">
+<meta name="project" content="bscamp">
+<title>bscamp 오가닉 마케팅 2분기 로드맵 (블로그+카페)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--p:#F75D5D;--pl:#fff0f0;--bg:#f8f9fc;--card:#fff;--b:#e2e8f0;--t:#1a1a1a;--m:#64748b;--g:#10b981;--bl:#3b82f6;--r:12px;--s:0 2px 12px rgba(0,0,0,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',-apple-system,sans-serif;background:var(--bg);color:var(--t);line-height:1.7;font-size:15px}
+.back{display:inline-block;padding:10px 20px;color:var(--m);text-decoration:none;font-size:14px}.back:hover{color:var(--p)}
+header{background:linear-gradient(135deg,#1a1a1a,#2d1515,#3a1111);color:#fff;padding:60px 40px;text-align:center}
+.hlabel{display:inline-block;background:var(--p);color:#fff;padding:4px 14px;border-radius:100px;font-size:12px;font-weight:600;margin-bottom:20px}
+header h1{font-size:2.1rem;font-weight:800;margin-bottom:12px;letter-spacing:-.02em}
+header p{color:rgba(255,255,255,.65);max-width:560px;margin:0 auto}
+header .meta{margin-top:16px;font-size:13px;color:rgba(255,255,255,.4)}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+section{margin:48px 0}
+.stitle{font-size:1.25rem;font-weight:800;margin-bottom:22px;display:flex;align-items:center;gap:10px}
+.stitle .n{background:var(--p);color:#fff;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.card{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:24px;box-shadow:var(--s)}
+.kpi-g{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kpi{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:22px;box-shadow:var(--s);text-align:center}
+.kpi .ico{font-size:1.8rem;margin-bottom:10px}.kpi .lbl{font-size:13px;color:var(--m);margin-bottom:8px}
+.kpi .val{font-size:1.7rem;font-weight:800;color:var(--p);line-height:1.2}.kpi .sub{font-size:12px;color:var(--m);margin-top:5px}
+.kpi .trg{margin-top:10px;padding-top:10px;border-top:1px solid var(--b);font-size:12px;color:var(--m)}.kpi .trg span{font-weight:600;color:var(--g)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--bg);padding:9px 13px;text-align:left;font-size:12px;font-weight:600;color:var(--m);border-bottom:2px solid var(--b)}
+td{padding:11px 13px;border-bottom:1px solid var(--b);font-size:14px}tr:last-child td{border-bottom:none}
+.bdg{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:700}
+.ba{background:#fef3c7;color:#92400e}.bb{background:#dbeafe;color:#1e40af}.bc{background:#dcfce7;color:#166534}.bd{background:#f3e8ff;color:#6b21a8}
+.rk{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;background:var(--pl);color:var(--p)}
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mo{background:var(--card);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;box-shadow:var(--s)}
+.moh{padding:14px 18px;font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:space-between}
+.mtag{background:rgba(255,255,255,.25);padding:2px 8px;border-radius:100px;font-size:11px;font-weight:600}
+.ma{background:linear-gradient(90deg,#F75D5D,#ff8080);color:#fff}
+.mb{background:linear-gradient(90deg,#3b82f6,#6ba3ff);color:#fff}
+.mc2h{background:linear-gradient(90deg,#8b5cf6,#b088f9);color:#fff}
+.mot{padding:14px 18px;display:flex;flex-direction:column;gap:8px}
+.tr2{display:flex;gap:8px;align-items:flex-start}
+.tw{font-size:11px;color:var(--m);font-weight:600;min-width:26px;padding-top:3px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--p);margin-top:7px;flex-shrink:0}.dot.g{background:var(--g)}
+.tt{font-size:13px;line-height:1.5}.tt.b{font-weight:600}
+.tg{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.tc{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:20px;box-shadow:var(--s)}
+.th2{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tlet{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;flex-shrink:0}
+.la{background:#fef3c7;color:#92400e}.lb{background:#dbeafe;color:#1e40af}.lc{background:#dcfce7;color:#166534}.ld{background:#f3e8ff;color:#6b21a8}
+.tn{font-weight:700;font-size:15px}.tsub{font-size:12px;color:var(--m)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.tag{background:var(--bg);border:1px solid var(--b);padding:2px 9px;border-radius:100px;font-size:12px}
+.sbox{background:var(--bg);border-radius:8px;padding:11px;font-size:12px;line-height:1.9}.sbox strong{color:var(--p)}
+.imeta{display:flex;gap:12px;font-size:12px;color:var(--m);margin-bottom:8px;flex-wrap:wrap}
+.sp{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cc{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:22px;box-shadow:var(--s)}
+.cc h3{font-size:1rem;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ci{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.blo{background:#e8f5e9}.caf{background:#fff3e0}
+.rl{list-style:none;display:flex;flex-direction:column;gap:8px}
+.rl li{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.5}
+.rl li::before{content:'✓';color:var(--g);font-weight:700;flex-shrink:0;padding-top:1px}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.dc{text-align:center;padding:11px 5px;border-radius:10px;border:1px solid var(--b);background:var(--card)}
+.dc .dn{font-size:11px;font-weight:700;color:var(--m);margin-bottom:5px}.dc .dt{font-size:13px;font-weight:800;margin-bottom:3px}
+.dc .dd{font-size:10px;color:var(--m);line-height:1.3}
+.dc.on{border-color:var(--p);background:var(--pl)}.dc.on .dt{color:var(--p)}
+.dc.off{background:var(--bg)}.dc.off .dt{color:#cbd5e1}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mc3{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:18px;box-shadow:var(--s)}
+.mc3 .mi{font-size:1.4rem;margin-bottom:8px}.mc3 h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.mc3 p{font-size:12px;color:var(--m);line-height:1.6}
+.ttgs{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px}
+.ttg{background:var(--bg);border:1px solid var(--b);padding:2px 8px;border-radius:100px;font-size:11px;color:var(--m)}
+.pl{display:flex;align-items:stretch}
+.ps{flex:1;background:var(--card);border:1px solid var(--b);padding:14px 10px;text-align:center;position:relative}
+.ps:first-child{border-radius:var(--r) 0 0 var(--r)}.ps:last-child{border-radius:0 var(--r) var(--r) 0}
+.ps+.ps{border-left:none}
+.ps+.ps::before{content:'→';position:absolute;left:-9px;top:50%;transform:translateY(-50%);color:var(--p);font-weight:900;font-size:15px;z-index:1}
+.ps .si{font-size:1.3rem;margin-bottom:5px}.ps .sn{font-size:11px;font-weight:700;margin-bottom:3px}.ps .sd{font-size:10px;color:var(--m)}
+.hb{background:var(--pl);border:1px solid rgba(247,93,93,.2);border-left:4px solid var(--p);border-radius:0 var(--r) var(--r) 0;padding:12px 16px;margin:12px 0;font-size:14px;line-height:1.6}
+.hb strong{color:var(--p)}
+.ib{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--bl);border-radius:0 var(--r) var(--r) 0;padding:12px 16px;margin:12px 0;font-size:13px;color:#1e3a8a;line-height:1.6}
+.toc{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:18px 22px;margin:28px 0;box-shadow:var(--s)}
+.toc h3{font-size:13px;font-weight:700;color:var(--m);margin-bottom:10px}
+.toc ol{padding-left:18px}.toc li{font-size:14px;padding:3px 0}.toc a{color:var(--t);text-decoration:none}.toc a:hover{color:var(--p)}
+footer{margin:60px 0 28px;text-align:center;color:var(--m);font-size:13px}
+@media(max-width:768px){
+  header{padding:36px 18px}header h1{font-size:1.4rem}
+  .kpi-g,.tl,.tg,.sp,.mg{grid-template-columns:1fr}
+  .pl{flex-direction:column}.ps{border-radius:var(--r)!important;border:1px solid var(--b)!important;margin-bottom:4px}
+  .ps+.ps::before{display:none}.wk{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+<body>
+<a class="back" href="/">← 목록으로</a>
+<header>
+  <div class="hlabel">📣 오가닉 마케팅</div>
+  <h1>bscamp 오가닉 마케팅<br>2분기 로드맵</h1>
+  <p>블로그+카페 채널 중심 · SEO 기반 콘텐츠 전략 &amp; 실행 계획</p>
+  <div class="meta">2026.03.14 · Q2 (2026.04~06) · 자사몰사관학교 (bscamp)</div>
+</header>
+<div class="wrap">
+  <div class="toc"><h3>목차</h3><ol>
+    <li><a href="#kpi">2분기 목표 (KPI)</a></li>
+    <li><a href="#roadmap">월별 로드맵 (4~6월)</a></li>
+    <li><a href="#content">콘텐츠 전략 (키워드 티어별)</a></li>
+    <li><a href="#channel">블로그 vs 카페 역할 분담</a></li>
+    <li><a href="#schedule">최적 발행 일정</a></li>
+    <li><a href="#measurement">성과 측정</a></li>
+    <li><a href="#automation">7일 주기 자동화</a></li>
+  </ol></div>
+  <!-- 1. KPI -->
+  <section id="kpi">
+    <div class="stitle"><div class="n">1</div>2분기 목표 (KPI)</div>
+    <div class="kpi-g">
+      <div class="kpi"><div class="ico">🔍</div><div class="lbl">오가닉 트래픽 (6월 말 월간)</div><div class="val">3,000+</div><div class="sub">블로그+카페 합산 월 방문자</div><div class="trg">4월 <span>300</span> → 5월 <span>1,000</span> → 6월 <span>3,000</span></div></div>
+      <div class="kpi"><div class="ico">🏆</div><div class="lbl">상위노출 목표 (키워드별 순위)</div><div class="val">TOP 3</div><div class="sub">C·D 티어 핵심 키워드 기준</div><div class="trg">A티어 <span>TOP 10</span> · B티어 <span>TOP 5</span> · C/D <span>TOP 3</span></div></div>
+      <div class="kpi"><div class="ico">🎯</div><div class="lbl">블로그 → bscamp 유입 전환율</div><div class="val">5%+</div><div class="sub">CTA 링크 클릭률 기준</div><div class="trg">4월 <span>기준선 측정</span> · 5월 <span>3%</span> · 6월 <span>5%</span></div></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:14px;color:var(--m)">📊 키워드별 상위노출 목표</h3>
+      <table><thead><tr><th>키워드</th><th>티어</th><th>월 검색량</th><th>4월 목표</th><th>5월 목표</th><th>6월 목표</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td><strong>상세페이지제작</strong></td><td><span class="bdg bb">B</span></td><td>6,120</td><td>—</td><td><span class="rk">TOP 20</span></td><td><span class="rk">TOP 10</span></td><td>주력 공략 키워드</td></tr>
+        <tr><td><strong>메타광고</strong></td><td><span class="bdg bc">C</span></td><td>5,960</td><td>—</td><td><span class="rk">TOP 15</span></td><td><span class="rk">TOP 5</span></td><td>경쟁 높음, 롱테일 연계</td></tr>
+        <tr><td><strong>상세페이지</strong></td><td><span class="bdg bc">C</span></td><td>4,640</td><td><span class="rk">TOP 30</span></td><td><span class="rk">TOP 10</span></td><td><span class="rk">TOP 5</span></td><td>볼륨+전환 균형</td></tr>
+        <tr><td><strong>ROAS</strong></td><td><span class="bdg bb">B</span></td><td>3,040</td><td>—</td><td><span class="rk">TOP 20</span></td><td><span class="rk">TOP 10</span></td><td>전환 의도 높음</td></tr>
+        <tr><td><strong>메타광고 세팅법</strong></td><td><span class="bdg bd">D</span></td><td>~500</td><td><span class="rk">TOP 10</span></td><td><span class="rk">TOP 5</span></td><td><span class="rk">TOP 3</span></td><td>롱테일 초기 필수</td></tr>
+        <tr><td><strong>자사몰 마케팅 방법</strong></td><td><span class="bdg bd">D</span></td><td>~200</td><td><span class="rk">TOP 5</span></td><td><span class="rk">TOP 3</span></td><td><span class="rk">TOP 1</span></td><td>타겟 정확, 볼륨 소</td></tr>
+      </tbody></table>
+      <div class="ib">💡 "검색광고"(월 56,700)는 경쟁 극심 → 직접 타겟 불가. C/D 롱테일로 연관 클러스터 확보 → 단계적 연결 전략.</div>
+    </div>
+  </section>
+  <!-- 2. 로드맵 -->
+  <section id="roadmap">
+    <div class="stitle"><div class="n">2</div>월별 로드맵 (4~6월)</div>
+    <div class="tl">
+      <div class="mo">
+        <div class="moh ma"><span>4월 · 기반 구축</span><span class="mtag">Phase 1</span></div>
+        <div class="mot">
+          <div class="tr2"><div class="tw">W1</div><div class="dot"></div><div class="tt b">채널 계정 최적화<br><span style="font-weight:400;color:var(--m);font-size:12px">블로그 프로필·카테고리 정비. 카페 소개글 SEO 최적화.</span></div></div>
+          <div class="tr2"><div class="tw">W1</div><div class="dot"></div><div class="tt">D/C 티어 롱테일 1차 6편 배치</div></div>
+          <div class="tr2"><div class="tw">W2</div><div class="dot"></div><div class="tt">블로그 자동 발행 파이프라인 가동 확인</div></div>
+          <div class="tr2"><div class="tw">W2</div><div class="dot"></div><div class="tt">카페 발행 루틴 셋업 (카테고리별)</div></div>
+          <div class="tr2"><div class="tw">W3</div><div class="dot g"></div><div class="tt b">첫 B 티어 발행 (상세페이지제작, ROAS)</div></div>
+          <div class="tr2"><div class="tw">W3</div><div class="dot"></div><div class="tt">7일 검색량 크론 첫 실행 → 데이터 확인</div></div>
+          <div class="tr2"><div class="tw">W4</div><div class="dot"></div><div class="tt">4월 성과 baseline 수립 (순위·유입·클릭)</div></div>
+          <div class="tr2"><div class="tw">W4</div><div class="dot"></div><div class="tt">AI 초안 생성 → 어드민 연동 테스트</div></div>
+        </div>
+      </div>
+      <div class="mo">
+        <div class="moh mb"><span>5월 · 상위노출 테스트</span><span class="mtag">Phase 2</span></div>
+        <div class="mot">
+          <div class="tr2"><div class="tw">W1</div><div class="dot"></div><div class="tt">4월 순위 기반 A/B 글 구조 테스트<br><span style="color:var(--m);font-size:12px">(이미지·소제목·CTA 위치 비교)</span></div></div>
+          <div class="tr2"><div class="tw">W1</div><div class="dot g"></div><div class="tt b">B 티어 "ROAS 올리는 법" 시리즈 3편</div></div>
+          <div class="tr2"><div class="tw">W2</div><div class="dot"></div><div class="tt">내부 링크 구조 점검 · CTA 최적화</div></div>
+          <div class="tr2"><div class="tw">W2</div><div class="dot"></div><div class="tt">카페: 블로그 핵심 압축 + 토론 유도</div></div>
+          <div class="tr2"><div class="tw">W3</div><div class="dot g"></div><div class="tt b">A 티어 1편 발행 (메타광고 완전 정복)</div></div>
+          <div class="tr2"><div class="tw">W3</div><div class="dot"></div><div class="tt">상위 5위 블로그 벤치마킹 분석</div></div>
+          <div class="tr2"><div class="tw">W4</div><div class="dot"></div><div class="tt">5월 성과 리뷰 → 6월 계획 확정</div></div>
+          <div class="tr2"><div class="tw">W4</div><div class="dot"></div><div class="tt">전환율 3% 점검 + CTA 문구 최적화</div></div>
+        </div>
+      </div>
+      <div class="mo">
+        <div class="moh mc2h"><span>6월 · 스케일업</span><span class="mtag">Phase 3</span></div>
+        <div class="mot">
+          <div class="tr2"><div class="tw">W1</div><div class="dot g"></div><div class="tt b">주 4회 발행으로 증가</div></div>
+          <div class="tr2"><div class="tw">W1</div><div class="dot"></div><div class="tt">성과 좋은 글 리라이팅 (최신화)</div></div>
+          <div class="tr2"><div class="tw">W2</div><div class="dot"></div><div class="tt">A 티어 2편 추가 발행</div></div>
+          <div class="tr2"><div class="tw">W2</div><div class="dot"></div><div class="tt">카페: 주제별 시리즈 게시판 운영</div></div>
+          <div class="tr2"><div class="tw">W3</div><div class="dot g"></div><div class="tt b">자동화 전 채널 완전 가동<br><span style="font-weight:400;font-size:12px">AI 초안 → 검수 → 자동 발행</span></div></div>
+          <div class="tr2"><div class="tw">W3</div><div class="dot"></div><div class="tt">bscamp 유입 UTM 추적 강화</div></div>
+          <div class="tr2"><div class="tw">W4</div><div class="dot"></div><div class="tt">Q2 전체 성과 리포트 작성</div></div>
+          <div class="tr2"><div class="tw">W4</div><div class="dot g"></div><div class="tt b">Q3 키워드 확장 계획 수립</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hb" style="margin-top:16px">🗓️ <strong>Q2 총 발행 목표</strong>: 4월 12편 + 5월 12편 + 6월 18~24편 = 약 <strong>42~48편</strong> (블로그+카페 합산)</div>
+  </section>
+  <!-- 3. 콘텐츠 전략 -->
+  <section id="content">
+    <div class="stitle"><div class="n">3</div>콘텐츠 전략 (키워드 티어별)</div>
+    <div class="ib">📌 4개 티어: <strong>A = 신뢰축적 롱폼</strong> · <strong>B = 중간다리 전환</strong> · <strong>C = 대량 트래픽 유입</strong> · <strong>D = 롱테일 초기 노출</strong></div>
+    <div class="tg" style="margin-top:16px">
+      <div class="tc">
+        <div class="th2"><div class="tlet la">A</div><div><div class="tn">A 티어 — 신뢰 축적형</div><div class="tsub">월 1~2편 · 금요일 발행 · 3,000자+</div></div></div>
+        <div class="imeta"><span>🔍 검색량 낮음~중간 (전환 의도 최고)</span><span>📝 3,000~5,000자</span><span>🎯 브랜드 신뢰</span></div>
+        <div class="tags"><span class="tag">메타광고 완전 정복</span><span class="tag">ROAS 계산법</span><span class="tag">자사몰 광고비 최적화</span><span class="tag">CPA 낮추는 방법</span></div>
+        <div class="sbox"><strong>글 구조:</strong><br>
+1. 문제 제기 (왜 이게 중요한가)<br>
+2. 핵심 개념 정의 (용어 정리)<br>
+3. 단계별 실전 가이드 (3~5단계)<br>
+4. 실제 사례 + 수치 (bscamp 수강생 데이터)<br>
+5. bscamp CTA ("더 배우고 싶다면 →")</div>
+      </div>
+      <div class="tc">
+        <div class="th2"><div class="tlet lb">B</div><div><div class="tn">B 티어 — 전환 연결형</div><div class="tsub">주 1편 · 수요일 발행 · 1,800~2,500자</div></div></div>
+        <div class="imeta"><span>🔍 검색량 3,000~7,000 (중간)</span><span>📝 1,800~2,500자</span><span>🎯 수요 포착</span></div>
+        <div class="tags"><span class="tag">상세페이지제작</span><span class="tag">ROAS 올리는 방법</span><span class="tag">메타광고 성과 개선</span><span class="tag">광고계정 최적화</span></div>
+        <div class="sbox"><strong>글 구조:</strong><br>
+1. 인트로: 현실 문제 공감 (2~3문장)<br>
+2. 핵심 3가지 포인트 (소제목 구분)<br>
+3. 실전 팁 + bscamp 연관 언급<br>
+4. 요약 박스 (핵심만 정리)<br>
+5. CTA: "자사몰사관학교에서 더 배우기 →"</div>
+      </div>
+      <div class="tc">
+        <div class="th2"><div class="tlet lc">C</div><div><div class="tn">C 티어 — 트래픽 유입형</div><div class="tsub">월 3~4편 · 월요일 발행 · 1,200~1,800자</div></div></div>
+        <div class="imeta"><span>🔍 검색량 4,000~6,000 (높음)</span><span>📝 1,200~1,800자</span><span>🎯 초기 유입</span></div>
+        <div class="tags"><span class="tag">메타광고</span><span class="tag">상세페이지</span><span class="tag">페이스북 광고</span><span class="tag">인스타 광고</span></div>
+        <div class="sbox"><strong>글 구조:</strong><br>
+1. 제목에 키워드 2회 포함 (SEO 필수)<br>
+2. 첫 문단에 핵심 키워드 3회 자연스럽게<br>
+3. 소제목 4~5개 (이모지 포함)<br>
+4. 체크리스트 또는 번호 목록<br>
+5. 내부링크 + CTA 링크</div>
+      </div>
+      <div class="tc">
+        <div class="th2"><div class="tlet ld">D</div><div><div class="tn">D 티어 — 롱테일 초기형</div><div class="tsub">월 2~3편 · 월요일 발행 · 800~1,200자</div></div></div>
+        <div class="imeta"><span>🔍 검색량 100~700 (낮음)</span><span>📝 800~1,200자</span><span>🎯 초기 노출 확보</span></div>
+        <div class="tags"><span class="tag">메타광고 세팅법</span><span class="tag">자사몰 마케팅 방법</span><span class="tag">상세페이지 작성법</span><span class="tag">ROAS 뜻</span></div>
+        <div class="sbox"><strong>글 구조:</strong><br>
+1. 질문형 제목 (검색 의도 정확히 반영)<br>
+2. 답변 즉시 제공 (첫 문단에서 결론)<br>
+3. 부가 설명 2~3단락<br>
+4. 관련 B/A 티어 글 내부링크<br>
+5. 짧은 CTA 1줄</div>
+      </div>
+    </div>
+    <div class="hb" style="margin-top:16px">💡 <strong>톤앤매너 공통</strong>: 친근 전문가. "~해요", "~거든요" 혼용. 수강생 입장에서 말하는 구어체. 과도한 광고성 문구 금지. bscamp 언급은 글당 1~2회.</div>
+  </section>
+
+  <!-- 4. 채널 분담 -->
+  <section id="channel">
+    <div class="stitle"><div class="n">4</div>블로그 vs 카페 역할 분담</div>
+    <div class="sp">
+      <div class="cc">
+        <h3><div class="ci blo">📝</div>네이버 블로그 (insight-wave)</h3>
+        <ul class="rl">
+          <li><strong>SEO 주력 채널</strong>: 네이버 검색 상위노출 메인 전장. A/B/C/D 전 티어 발행.</li>
+          <li><strong>긴 글 위주</strong>: 1,200자 이상. 소제목·이미지·이모지 구조화.</li>
+          <li><strong>키워드 최적화</strong>: 제목·첫 문단·소제목에 핵심 키워드 자연 배치.</li>
+          <li><strong>내부 링크</strong>: 관련 글 3~5개 하이퍼링크 + bscamp URL 1~2개.</li>
+          <li><strong>태그 10개</strong>: 핵심 키워드 + 브랜드 태그 혼합.</li>
+          <li><strong>CTA 위치</strong>: 본문 중간 + 마지막 2곳.</li>
+        </ul>
+      </div>
+      <div class="cc">
+        <h3><div class="ci caf">☕</div>네이버 카페 (자사몰 관련 카페)</h3>
+        <ul class="rl">
+          <li><strong>커뮤니티 신뢰 채널</strong>: 블로그 핵심 내용을 800~1,000자로 압축 재가공.</li>
+          <li><strong>토론 유도</strong>: 마지막에 "여러분은 어떻게 하세요?" 질문 필수.</li>
+          <li><strong>외부 링크 최소화</strong>: 카페 스팸 필터 대응 — bscamp 링크 1개만.</li>
+          <li><strong>카테고리</strong>: 정보공유, 마케팅팁, 광고/SEO 관련 카테고리 활용.</li>
+          <li><strong>발행 시점</strong>: 블로그 발행 후 1~2일 뒤 동일 주제로 발행 (중복 방지).</li>
+          <li><strong>댓글 관리</strong>: 질문 댓글에 48시간 내 답변 (신뢰도 구축).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ib" style="margin-top:16px">📋 <strong>채널별 KPI 분리</strong>: 블로그 = 순위+클릭수 중심 · 카페 = 댓글수+공감수 중심. 카페는 트래픽보다 커뮤니티 신뢰 지표로 평가.</div>
+  </section>
+  <!-- 5. 발행 일정 -->
+  <section id="schedule">
+    <div class="stitle"><div class="n">5</div>최적 발행 일정</div>
+    <div class="wk">
+      <div class="dc on"><div class="dn">월</div><div class="dt">C/D</div><div class="dd">트래픽·롱테일<br>블로그+카페</div></div>
+      <div class="dc off"><div class="dn">화</div><div class="dt">—</div><div class="dd">휴식</div></div>
+      <div class="dc on"><div class="dn">수</div><div class="dt">B</div><div class="dd">전환 연결형<br>블로그 주발행</div></div>
+      <div class="dc off"><div class="dn">목</div><div class="dt">—</div><div class="dd">휴식</div></div>
+      <div class="dc on"><div class="dn">금</div><div class="dt">A</div><div class="dd">신뢰 롱폼<br>블로그 주발행</div></div>
+      <div class="dc off"><div class="dn">토</div><div class="dt">—</div><div class="dd">휴식</div></div>
+      <div class="dc off"><div class="dn">일</div><div class="dt">—</div><div class="dd">휴식</div></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:14px;color:var(--m)">📅 주간 발행 루틴 상세</h3>
+      <table><thead><tr><th>요일</th><th>채널</th><th>티어</th><th>키워드 예시</th><th>발행 시간</th><th>목적</th></tr></thead>
+      <tbody>
+        <tr><td><strong>월요일</strong></td><td>블로그+카페</td><td><span class="bdg bc">C</span> <span class="bdg bd">D</span></td><td>메타광고 세팅법, 상세페이지 작성법</td><td>오전 8~10시</td><td>주간 초기 트래픽 선점</td></tr>
+        <tr><td><strong>수요일</strong></td><td>블로그 (카페 선택)</td><td><span class="bdg bb">B</span></td><td>ROAS 올리는 방법, 상세페이지제작</td><td>오전 9~11시</td><td>중반 전환 연결</td></tr>
+        <tr><td><strong>금요일</strong></td><td>블로그</td><td><span class="bdg ba">A</span></td><td>메타광고 완전 정복, CPA 계산법</td><td>오전 8~10시</td><td>주말 신뢰 콘텐츠</td></tr>
+      </tbody></table>
+    </div>
+    <div class="hb">🕐 <strong>발행 시간 근거</strong>: 자사몰 운영자 주요 활동 시간 = 오전 9~11시 (업무 시작 전), 오후 9~11시 (퇴근 후). 아침 발행이 당일 지수에 유리.</div>
+  </section>
+
+  <!-- 6. 성과 측정 -->
+  <section id="measurement">
+    <div class="stitle"><div class="n">6</div>성과 측정</div>
+    <div class="mg">
+      <div class="mc3">
+        <div class="mi">📈</div><h4>순위 추적</h4>
+        <p>키워드별 네이버 블로그 순위 주 1회 수동 + 7일 주기 자동 API 조회. 상위 10위 진입 시 알림.</p>
+        <div class="ttgs"><span class="ttg">네이버 검색광고 API</span><span class="ttg">Supabase 저장</span></div>
+      </div>
+      <div class="mc3">
+        <div class="mi">👆</div><h4>클릭수 · 유입</h4>
+        <p>블로그 방문자 수, bscamp URL 클릭수 (UTM 파라미터). 주간 집계 → Supabase 대시보드.</p>
+        <div class="ttgs"><span class="ttg">네이버 블로그 통계</span><span class="ttg">UTM 파라미터</span><span class="ttg">Mixpanel</span></div>
+      </div>
+      <div class="mc3">
+        <div class="mi">🎯</div><h4>전환율</h4>
+        <p>블로그 방문 → bscamp 클릭 → 가입 신청 퍼널. 월별 전환율 계산. 4월 baseline 확립 후 개선.</p>
+        <div class="ttgs"><span class="ttg">Mixpanel 이벤트</span><span class="ttg">Supabase leads</span></div>
+      </div>
+      <div class="mc3">
+        <div class="mi">📊</div><h4>키워드 검색량</h4>
+        <p>네이버 검색광고 API로 7일마다 주요 20개 키워드 검색량 자동 갱신. 신규 유망 키워드 발굴.</p>
+        <div class="ttgs"><span class="ttg">SearchAd API</span><span class="ttg">scripts/blog-seo/</span></div>
+      </div>
+      <div class="mc3">
+        <div class="mi">☕</div><h4>카페 반응</h4>
+        <p>게시글별 조회수, 공감수, 댓글수 주 1회 수동 집계. 카테고리별 반응 비교.</p>
+        <div class="ttgs"><span class="ttg">카페 관리자 통계</span><span class="ttg">수동 기록</span></div>
+      </div>
+      <div class="mc3">
+        <div class="mi">🏅</div><h4>상위노출 달성률</h4>
+        <p>목표 순위 달성 키워드 수 / 전체 타겟 키워드 수. 월별 달성률 계산. 미달성 키워드 글 리라이팅.</p>
+        <div class="ttgs"><span class="ttg">수동 순위 체크</span><span class="ttg">월별 리포트</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:14px;color:var(--m)">📋 월별 성과 리뷰 체크리스트</h3>
+      <table><thead><tr><th>지표</th><th>4월 기준</th><th>5월 목표</th><th>6월 목표</th></tr></thead>
+      <tbody>
+        <tr><td>블로그 월 방문자</td><td>baseline 측정</td><td>1,000+</td><td>3,000+</td></tr>
+        <tr><td>bscamp 유입 클릭</td><td>baseline 측정</td><td>30+</td><td>150+</td></tr>
+        <tr><td>상위노출 달성 키워드</td><td>D티어 1~2개</td><td>C/D 3~4개</td><td>B/C/D 6+개</td></tr>
+        <tr><td>카페 게시글 평균 조회</td><td>baseline</td><td>500+</td><td>1,000+</td></tr>
+        <tr><td>CTA 클릭률</td><td>baseline</td><td>3%</td><td>5%</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+  <!-- 7. 자동화 -->
+  <section id="automation">
+    <div class="stitle"><div class="n">7</div>7일 주기 자동화 계획</div>
+    <div class="ib">⚙️ Phase 1 MVP 완료 (블로그+카페 채널 오가닉 발행 관리). 자동화는 단계적으로 추가.</div>
+    <div class="pl" style="margin-top:16px">
+      <div class="ps"><div class="si">🔧</div><div class="sn">검색량 갱신</div><div class="sd">네이버 SearchAd API<br>7일 주기 자동 조회</div></div>
+      <div class="ps"><div class="si">📊</div><div class="sn">순위 분석</div><div class="sd">상위 글 구조 분석<br>갭 키워드 발굴</div></div>
+      <div class="ps"><div class="si">🤖</div><div class="sn">AI 초안 생성</div><div class="sd">Anthropic API<br>티어별 포맷 적용</div></div>
+      <div class="ps"><div class="si">👀</div><div class="sn">어드민 검수</div><div class="sd">제목·CTA 확인<br>Smith님 최종 OK</div></div>
+      <div class="ps"><div class="si">🚀</div><div class="sn">자동 발행</div><div class="sd">블로그 API<br>카페 API 동시 발행</div></div>
+      <div class="ps"><div class="si">📈</div><div class="sn">성과 수집</div><div class="sd">7일 후 순위+클릭<br>Supabase 저장</div></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:14px;color:var(--m)">🗓️ 단계별 자동화 구현 계획</h3>
+      <table><thead><tr><th>단계</th><th>시기</th><th>자동화 항목</th><th>상태</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1단계</strong></td><td>4월 W1</td><td>네이버 SearchAd API 검색량 7일 자동 갱신 (scripts/blog-seo/)</td><td><span class="bdg bc">완료</span></td></tr>
+        <tr><td><strong>2단계</strong></td><td>4월 W2</td><td>블로그 자동 발행 API 파이프라인 (SmartEditor / Naver OpenAPI)</td><td><span class="bdg bb">진행중</span></td></tr>
+        <tr><td><strong>3단계</strong></td><td>4월 W3</td><td>카페 자동 발행 API 연동</td><td><span class="bdg bd">예정</span></td></tr>
+        <tr><td><strong>4단계</strong></td><td>5월 W1</td><td>AI 초안 자동 생성 → 어드민 검수 UI</td><td><span class="bdg bd">예정</span></td></tr>
+        <tr><td><strong>5단계</strong></td><td>5월 W3</td><td>7일 성과 자동 수집 → Supabase + 어드민 대시보드</td><td><span class="bdg bd">예정</span></td></tr>
+        <tr><td><strong>6단계</strong></td><td>6월 W1</td><td>전체 파이프라인 통합: 갱신→분석→생성→발행→수집 완전 자동화</td><td><span class="bdg bd">예정</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="hb" style="margin-top:16px">🔑 <strong>자동화 핵심 원칙</strong>: 어드민 검수 단계는 <strong>절대 자동화하지 않는다</strong>. AI 초안 → Smith님 확인 → 발행. 품질 보장을 위한 인간 검수 게이트 유지.</div>
+  </section>
+
+  <!-- 요약 -->
+  <section>
+    <div class="stitle"><div class="n">✓</div>2분기 핵심 요약</div>
+    <div class="card">
+      <table><thead><tr><th>항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><strong>채널</strong></td><td>네이버 블로그 (insight-wave) + 네이버 카페 · 주 3~4회 발행</td></tr>
+        <tr><td><strong>키워드 주력</strong></td><td>상세페이지제작(6,120) · 메타광고(5,960) · ROAS(3,040) + D 티어 롱테일</td></tr>
+        <tr><td><strong>4월 목표</strong></td><td>기반 구축 · D/C 티어 6편 + B 티어 시작 · baseline 측정</td></tr>
+        <tr><td><strong>5월 목표</strong></td><td>B 티어 시리즈 · A 티어 첫 발행 · 순위 개선 A/B 테스트</td></tr>
+        <tr><td><strong>6월 목표</strong></td><td>주 4회 스케일업 · 전 채널 자동화 · 월 3,000 방문자</td></tr>
+        <tr><td><strong>전환율 목표</strong></td><td>블로그 → bscamp 유입 5% (6월)</td></tr>
+        <tr><td><strong>자동화</strong></td><td>AI 초안 → 어드민 검수 → 자동 발행 완전 파이프라인 (6월 완성)</td></tr>
+        <tr><td><strong>성과 측정</strong></td><td>7일 주기: 순위 + 클릭 + 검색량 자동 갱신 → Supabase 저장</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+</div>
+<footer>bscamp 오가닉 마케팅 2분기 로드맵 · 2026.03.14 · 자사몰사관학교</footer>
+</body>
+</html>

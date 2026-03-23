@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="140" viewBox="0 0 700 140">
+  <rect width="700" height="140" rx="12" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="24" y="32" font-family="Pretendard,sans-serif" font-size="16" font-weight="700" fill="#111827">📊 내 광고 성과 (최근 7일)</text>
+  <text x="590" y="32" font-family="Pretendard,sans-serif" font-size="13" font-weight="500" fill="#F75D5D">상세보기 →</text>
+  <line x1="0" y1="48" x2="700" y2="48" stroke="#f3f4f6" stroke-width="1"/>
+  <!-- 광고매출 -->
+  <text x="95" y="85" font-family="Pretendard,sans-serif" font-size="22" font-weight="700" fill="#111827" text-anchor="middle">₩2.3억</text>
+  <text x="95" y="108" font-family="Pretendard,sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">광고매출</text>
+  <!-- 광고비 -->
+  <text x="270" y="85" font-family="Pretendard,sans-serif" font-size="22" font-weight="700" fill="#111827" text-anchor="middle">₩834만</text>
+  <text x="270" y="108" font-family="Pretendard,sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">광고비</text>
+  <!-- ROAS -->
+  <text x="445" y="85" font-family="Pretendard,sans-serif" font-size="22" font-weight="700" fill="#F75D5D" text-anchor="middle">285%</text>
+  <text x="445" y="108" font-family="Pretendard,sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">ROAS</text>
+  <!-- 구매전환 -->
+  <text x="620" y="85" font-family="Pretendard,sans-serif" font-size="22" font-weight="700" fill="#111827" text-anchor="middle">132</text>
+  <text x="620" y="108" font-family="Pretendard,sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">구매전환</text>
+</svg>

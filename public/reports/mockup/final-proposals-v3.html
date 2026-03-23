@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>최종 목업 v3 — 프로필 카드 + 메인페이지</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',sans-serif;background:#fff;color:#1a1a1a;line-height:1.7;padding:20px}
+.container{max-width:800px;margin:0 auto}
+h1{font-size:22px;margin:30px 0 6px}
+h2{font-size:18px;margin:40px 0 15px;padding-bottom:8px;border-bottom:2px solid #F75D5D}
+h3{font-size:15px;margin:20px 0 10px;color:#555}
+.note{background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:15px 0;border-radius:0 8px 8px 0;font-size:13px}
+.mockup-wrap{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);overflow:hidden;margin:20px 0}
+
+/* ===== 프로필 카드 (이메일/정보공유 하단) ===== */
+.profile-card{border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:24px 0;max-width:560px}
+.pc-top{display:flex;align-items:center;gap:16px}
+.pc-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.pc-name{font-weight:800;font-size:16px;color:#1a1a1a}
+.pc-role{font-weight:600;font-size:13px;color:#F75D5D}
+.pc-desc{margin:4px 0 0;font-size:13px;color:#64748b;line-height:160%}
+.pc-badge-row{margin-top:16px;padding-top:16px;border-top:1px solid #f1f5f9;display:flex;align-items:center;gap:12px}
+.pc-badge-row img.inline-logo{height:20px}
+.pc-badge-row .badge-text{font-size:12px;color:#64748b;line-height:1.4}
+
+/* ===== 메인페이지 ===== */
+.page-mock{background:#fff;border-radius:16px;overflow:hidden}
+.section-wrap{padding:24px 32px 32px}
+.section-title{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:12px;color:#111827}
+.ad-summary{background:#f8f9fa;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;color:#999;font-size:14px;border:1px dashed #ddd}
+.notice-box{background:#f8f9fa;border-radius:12px;padding:16px 20px;margin-bottom:12px;border:1px solid #eee}
+.notice-box .title{font-weight:600;font-size:14px;color:#333}
+.qa-box{background:#f8f9fa;border-radius:12px;padding:16px 20px;margin-bottom:12px;border:1px solid #eee}
+
+/* 신뢰 배너 */
+.trust-banner{background:#f8faff;border:1px solid #e8edf5;border-radius:12px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:20px}
+.trust-banner .badge-area{flex-shrink:0}
+.trust-banner .badge-area img{height:44px}
+.trust-banner .text-area{flex:1}
+.trust-banner .text-area .headline{font-weight:700;font-size:15px;color:#1a1a1a}
+.trust-banner .text-area .sub{font-size:13px;color:#64748b;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>최종 목업 v3</h1>
+<p style="color:#888;font-size:13px;margin-bottom:20px">2026-03-01 | Smith님 피드백 반영</p>
+
+<!-- ========== PART 1: 프로필 카드 ========== -->
+<h2>프로필 카드 (이메일 / 정보공유 하단)</h2>
+<p style="font-size:13px;color:#555;margin-bottom:16px">인라인(좌우로 긴) 로고 사용. 자격증 없이 배지만.</p>
+
+<h3>안 A — 인라인 로고만</h3>
+<div class="mockup-wrap" style="padding:24px 32px">
+  <div class="profile-card">
+    <div class="pc-top">
+      <img class="pc-photo" src="images/profile-smith.png" alt="스미스">
+      <div>
+        <div class="pc-name">스미스 <span class="pc-role">자사몰사관학교 코치</span></div>
+        <div class="pc-desc">스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+      </div>
+    </div>
+    <div class="pc-badge-row">
+      <img class="inline-logo" src="images/inline-positive.png" alt="Meta Business Partners">
+    </div>
+  </div>
+</div>
+
+<h3>안 B — 인라인 로고 + 한국어</h3>
+<div class="mockup-wrap" style="padding:24px 32px">
+  <div class="profile-card">
+    <div class="pc-top">
+      <img class="pc-photo" src="images/profile-smith.png" alt="스미스">
+      <div>
+        <div class="pc-name">스미스 <span class="pc-role">자사몰사관학교 코치</span></div>
+        <div class="pc-desc">스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+      </div>
+    </div>
+    <div class="pc-badge-row">
+      <img class="inline-logo" src="images/inline-positive.png" alt="Meta Business Partners">
+      <div class="badge-text">Meta가 인증한 공식 비즈니스 파트너</div>
+    </div>
+  </div>
+</div>
+
+<h3>안 C — 인라인 로고 + 영어</h3>
+<div class="mockup-wrap" style="padding:24px 32px">
+  <div class="profile-card">
+    <div class="pc-top">
+      <img class="pc-photo" src="images/profile-smith.png" alt="스미스">
+      <div>
+        <div class="pc-name">스미스 <span class="pc-role">자사몰사관학교 코치</span></div>
+        <div class="pc-desc">스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+      </div>
+    </div>
+    <div class="pc-badge-row">
+      <img class="inline-logo" src="images/inline-positive.png" alt="Meta Business Partners">
+      <div class="badge-text">We are a Meta Business Partner</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PART 2: 메인페이지 ========== -->
+<h2>메인페이지 — 공신력 강조</h2>
+<p style="font-size:13px;color:#555;margin-bottom:16px">위젯 디자인 통일. 광고성과 → 신뢰 배너 → 공지 → Q&A → 정보공유 순서.</p>
+
+<h3>안 1 — 신뢰 배너 (배지 + 설명)</h3>
+<div class="mockup-wrap">
+  <div class="page-mock">
+    <div class="section-wrap">
+      <div class="ad-summary">📊 내 광고 성과 요약 (현재 위치 유지)</div>
+
+      <div class="trust-banner">
+        <div class="badge-area">
+          <img src="images/badge-light.png" alt="Meta Business Partners badge">
+        </div>
+        <div class="text-area">
+          <div class="headline">Meta가 인증한 공식 비즈니스 파트너</div>
+          <div class="sub">자사몰사관학교는 Meta Business Partner로서 검증된 메타 광고 교육을 제공합니다.</div>
+        </div>
+      </div>
+
+      <div class="section-title">📢 공지사항</div>
+      <div class="notice-box"><span class="title">자사몰사관학교에 오신 것을 환영합니다!</span></div>
+      <div class="section-title" style="margin-top:20px">💬 최근 Q&A</div>
+      <div class="qa-box"><span class="title" style="font-weight:600;font-size:14px;color:#333">카탈로그 광고 세팅 질문</span></div>
+      <div class="section-title" style="margin-top:20px">📚 정보공유 최신글</div>
+      <div class="notice-box"><span class="title">2026년 메타 광고, 이렇게 바뀝니다</span></div>
+    </div>
+  </div>
+</div>
+
+<h3>안 2 — 광고성과 안에 배지 통합</h3>
+<div class="mockup-wrap">
+  <div class="page-mock">
+    <div class="section-wrap">
+      <div class="ad-summary" style="display:flex;flex-direction:column;gap:8px">
+        <span style="text-align:center;color:#999;font-size:14px">📊 내 광고 성과 요약</span>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;padding-top:12px;border-top:1px solid #eee">
+          <img src="images/inline-positive.png" style="height:16px" alt="Meta Business Partners">
+          <span style="font-size:11px;color:#94a3b8;font-weight:500">Powered by Meta Business Partner</span>
+        </div>
+      </div>
+
+      <div class="section-title">📢 공지사항</div>
+      <div class="notice-box"><span class="title">자사몰사관학교에 오신 것을 환영합니다!</span></div>
+      <div class="section-title" style="margin-top:20px">💬 최근 Q&A</div>
+      <div class="qa-box"><span class="title" style="font-weight:600;font-size:14px;color:#333">카탈로그 광고 세팅 질문</span></div>
+      <div class="section-title" style="margin-top:20px">📚 정보공유 최신글</div>
+      <div class="notice-box"><span class="title">2026년 메타 광고, 이렇게 바뀝니다</span></div>
+    </div>
+  </div>
+</div>
+
+
+<h3>안 3 — 코치 프로필 + 배지</h3>
+<div class="mockup-wrap">
+  <div class="page-mock">
+    <div class="section-wrap">
+      <div style="background:#f8faff;border:1px solid #e8edf5;border-radius:12px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px">
+        <img src="images/profile-smith.png" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0" alt="스미스">
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:14px;color:#1a1a1a">스미스 코치 · 수강생 자사몰매출 450억+</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px">Meta Business Partner</div>
+        </div>
+        <img src="images/badge-light.png" style="height:40px;flex-shrink:0" alt="Meta Business Partners badge">
+      </div>
+
+      <div class="section-title">📢 공지사항</div>
+      <div class="notice-box"><span class="title">자사몰사관학교에 오신 것을 환영합니다!</span></div>
+      <div class="section-title" style="margin-top:20px">💬 최근 Q&A</div>
+      <div class="qa-box"><span class="title" style="font-weight:600;font-size:14px;color:#333">카탈로그 광고 세팅 질문</span></div>
+      <div class="section-title" style="margin-top:20px">📚 정보공유 최신글</div>
+      <div class="notice-box"><span class="title">2026년 메타 광고, 이렇게 바뀝니다</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

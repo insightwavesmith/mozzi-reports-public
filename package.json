@@ -1,0 +1,25 @@
+{
+  "name": "mozzi-reports",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-index.js"
+  },
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insightwavesmith/mozzi-reports.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/insightwavesmith/mozzi-reports/issues"
+  },
+  "homepage": "https://github.com/insightwavesmith/mozzi-reports#readme",
+  "dependencies": {
+    "marked": "^17.0.3"
+  }
+}

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="category" content="plan">
+<meta name="issue" content="모찌 뉴런 아키텍처 v2 — 인간 뇌 기반 AI 계층구조">
+<title>모찌 뉴런 아키텍처 v2</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;background:#0c0a09;color:#e7e5e4;line-height:1.8;font-size:15px;-webkit-font-smoothing:antialiased}
+.c{max-width:640px;margin:0 auto;padding:40px 20px 100px}
+.hero{text-align:center;padding:48px 0 40px;border-bottom:1px solid #292524;margin-bottom:36px}
+.hero h1{font-size:26px;font-weight:800;background:linear-gradient(135deg,#F75D5D,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;line-height:1.4}
+.hero .sub{font-size:13px;color:#78716c;line-height:1.6}
+.hero .ver{display:inline-block;margin-top:10px;padding:3px 10px;background:#1c1917;border:1px solid #292524;border-radius:6px;font-size:11px;color:#F75D5D;font-weight:600}
+h2{font-size:20px;font-weight:700;color:#fafaf9;margin:44px 0 14px;display:flex;align-items:center;gap:10px}
+h3{font-size:16px;font-weight:600;color:#d6d3d1;margin:24px 0 10px}
+p{margin-bottom:16px;color:#a8a29e;font-size:14px}
+strong{color:#fafaf9;font-weight:600}
+.sn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:#F75D5D;color:#0c0a09;border-radius:50%;font-size:13px;font-weight:700;flex-shrink:0}
+.cd{background:#1c1917;border:1px solid #292524;border-radius:12px;padding:18px;margin:14px 0;font-size:14px}
+.ca{border-left:3px solid #F75D5D}
+.bc{background:#1c1917;border:1px solid #292524;border-radius:10px;padding:16px;margin:10px 0}
+.bc:hover{border-color:#F75D5D}
+.bc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bi{font-size:24px;flex-shrink:0}
+.bn{font-weight:700;font-size:14px;color:#fafaf9}
+.bm{font-size:11px;color:#F75D5D;font-weight:500}
+.bd{font-size:13px;color:#78716c;line-height:1.6}
+.fl{background:#1c1917;border:1px solid #292524;border-radius:12px;padding:18px;margin:16px 0;font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:#a8a29e;line-height:2;white-space:pre-wrap;overflow-x:auto;word-break:break-all}
+.h{color:#F75D5D;font-weight:600}.g{color:#4ade80}.b{color:#60a5fa}.y{color:#fbbf24}.d{color:#57534e}.p{color:#a78bfa}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+th{text-align:left;padding:8px 10px;color:#78716c;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #292524}
+td{padding:8px 10px;border-bottom:1px solid #1c1917;color:#a8a29e;vertical-align:top;font-size:13px}
+td:first-child{color:#fafaf9;font-weight:500;white-space:nowrap}
+.tg{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600}
+.tr{background:#451a03;color:#F75D5D}.tgn{background:#052e16;color:#4ade80}.tb{background:#172554;color:#60a5fa}.ty{background:#422006;color:#fbbf24}.tp{background:#1e1b4b;color:#a78bfa}
+.pq{margin:24px 0;padding:16px 18px;background:#1c1917;border-left:3px solid #F75D5D;border-radius:0 8px 8px 0;font-size:15px;color:#d6d3d1;font-weight:500;line-height:1.7}
+.ok{background:#0f1a0f;border:1px solid #166534;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#4ade80;line-height:1.7}
+.ok::before{content:'✅ ';font-weight:700}
+.pb{background:#1a0f0f;border:1px solid #7f1d1d;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#fca5a5;line-height:1.7}
+.pb::before{content:'⚠️ ';font-weight:700}
+.nw{background:#1a1a0f;border:1px solid #854d0e;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#fde68a;line-height:1.7}
+.nw::before{content:'🆕 ';font-weight:700}
+a{color:#F75D5D;text-decoration:none}a:hover{text-decoration:underline}
+.dv{height:1px;background:#292524;margin:40px 0}
+.ft{text-align:center;padding:24px;color:#44403c;font-size:11px}
+ol,ul{margin:6px 0 14px 18px;color:#a8a29e;font-size:13px}li{margin:3px 0}
+.layer{border:1px solid #292524;border-radius:12px;margin:10px 0;overflow:hidden}
+.layer-head{padding:12px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.layer-body{padding:14px 16px;font-size:13px;color:#a8a29e;line-height:1.8;border-top:1px solid #292524}
+.l1 .layer-head{background:#1e1b4b;color:#a78bfa}
+.l2 .layer-head{background:#172554;color:#60a5fa}
+.l3 .layer-head{background:#052e16;color:#4ade80}
+.l4 .layer-head{background:#422006;color:#fbbf24}
+.arrow{text-align:center;font-size:18px;color:#57534e;margin:4px 0}
+.todo{background:#1c1917;border:1px solid #292524;border-radius:8px;padding:12px 16px;margin:8px 0;font-size:13px;display:flex;gap:8px;align-items:flex-start}
+.todo-check{color:#F75D5D;flex-shrink:0;margin-top:2px}
+.todo-done .todo-check{color:#4ade80}
+.todo-text{color:#a8a29e;line-height:1.6}
+.todo-oc{display:inline-block;padding:1px 6px;background:#172554;color:#60a5fa;border-radius:3px;font-size:10px;font-weight:600;margin-left:4px}
+@media(max-width:480px){.c{padding:24px 16px 80px}.hero{padding:36px 0 32px}.hero h1{font-size:22px}.fl{font-size:11px;padding:14px}table{font-size:12px}td,th{padding:6px 8px}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="hero">
+  <h1>🧠 모찌 뉴런 아키텍처 v2</h1>
+  <div class="sub">인간의 뇌를 기반으로 만든 AI 계층구조<br>OpenClaw + Claude + 로컬 LLM 3박자 시너지</div>
+  <div class="ver">v2 · 2026.03.09 · 내부 비공개</div>
+</div>
+
+<!-- ===== 1. 철학 ===== -->
+<h2><span class="sn">1</span> 설계 철학</h2>
+
+<div class="pq">각 뇌가 자기 영역의 컨텍스트를 깊이 축적하는 것은 <strong>돈이 들어도 이득</strong>이다.<br>여러 번 반복해서 설명하는 게 진짜 손해다.</div>
+
+<p>하나의 컨텍스트 윈도우에 잡담/기획/개발/리서치를 다 섞으면, 기획 맥락이 잡담에 묻혀 사라진다. 그러면 매번 "아까 그거 뭐였지?" 반복. 이게 진짜 비용.</p>
+
+<p>해법: <strong>인지 모드별로 뇌를 분리</strong>. 전략 뇌는 기획만 30턴 축적. 분석 뇌는 리서치만 축적. 잡담이 끼어들 여지 없음. 뇌를 바꿔도 파일로 인수인계하니까 맥락은 살아있음.</p>
+
+<div class="ok">핵심: 하나의 인격(모찌), 여러 개의 뇌. Smith님 입장에서는 모찌 한 명과 대화. 뒤에서 뇌가 바뀌는 건 보이지 않음.</div>
+
+<!-- ===== 2. 인간 뇌 매핑 ===== -->
+<h2><span class="sn">2</span> 인간 뇌 → AI 매핑</h2>
+
+<p>MAP 논문(Nature 2025, Microsoft Research)이 전두엽 계획 과정을 6개 모듈로 분해한 것에 기반. 우리 구조는 이 중 핵심 4개를 구현하고, 나머지는 Phase 2에서 추가.</p>
+
+<div class="cd">
+<table>
+<tr><th>인간 뇌</th><th>역할</th><th>우리 구현</th></tr>
+<tr><td>시상</td><td>감각 입력 분류·전달</td><td>🔌 Hook (코드)</td></tr>
+<tr><td>전두극피질</td><td>조율·위임·판단</td><td>🧠 라우터 (Sonnet)</td></tr>
+<tr><td>변연계</td><td>감정·일상 반응</td><td>🗣️ casual 뇌 (Qwen)</td></tr>
+<tr><td>측두엽+두정엽</td><td>감각 통합·패턴</td><td>🔍 분석 뇌 (Sonnet)</td></tr>
+<tr><td>배외측 전전두엽</td><td>계획 분해</td><td>🎨 전략 뇌 (Opus)</td></tr>
+<tr><td>운동피질</td><td>행동 실행</td><td>⚡ 실행 뇌 (Opus)</td></tr>
+<tr><td>해마</td><td>기억 정리</td><td>📦 정리 뇌 (Cron)</td></tr>
+<tr><td>전측대상피질</td><td>갈등 감시</td><td>🛡️ Monitor <span class="tg ty">Phase 2</span></td></tr>
+<tr><td>신피질</td><td>장기 기억</td><td>📁 공유 메모리</td></tr>
+<tr><td>백질</td><td>뇌 영역 간 연결</td><td>📋 handoff.md</td></tr>
+</table>
+</div>
+
+<!-- ===== 3. 3층 구조 ===== -->
+<h2><span class="sn">3</span> 3층 아키텍처</h2>
+
+<div class="layer l1">
+  <div class="layer-head">Layer 1 — 시상 · OpenClaw Hook</div>
+  <div class="layer-body">
+    메시지가 들어오면 <strong>Sonnet이 분류</strong> (코드 레벨, 3초 timeout)<br>
+    → casual / analyst / strategist / executor / memory<br>
+    → <code>[ROUTE:X]</code> 태그를 메시지에 주입<br>
+    → Supabase 로깅 (fire-and-forget)<br><br>
+    <strong>왜 코드인가:</strong> LLM한테 맡기면 "내가 답할게" 하고 직접 처리함. 코드로 강제해야 100% 결정적.<br><br>
+    <span class="todo-oc">OpenClaw</span> <code>hooks.internal</code> — message:received 이벤트 인터셉트
+  </div>
+</div>
+
+<div class="arrow">↓ [ROUTE:X] 태그 주입됨</div>
+
+<div class="layer l2">
+  <div class="layer-head">Layer 2 — 전두극피질 · Orchestrator</div>
+  <div class="layer-body">
+    <strong>neuron-router</strong> (Sonnet 4.6) — 위임하고 판단. 직접 작업 안 함.<br><br>
+    ① 태그 확인 → 올바른 뇌에 spawn<br>
+    ② SESSION-STATE + handoff를 <strong>attachments로 직접 전달</strong><br>
+    ③ 결과 받으면 → <strong>다음 뇌 체인 판단</strong><br>
+    &nbsp;&nbsp;&nbsp;(예: analyst 결과 → executor에 넘기기)<br>
+    ④ 최종 결과를 Smith님에게 전달<br>
+    ⑤ casual/memory만 직접 처리<br><br>
+    <span class="todo-oc">OpenClaw</span> <code>sessions_spawn</code> — agentId + attachments + thinking<br>
+    <span class="todo-oc">OpenClaw</span> <code>subagents.allowAgents</code> — 허용된 뇌 목록<br>
+    <span class="todo-oc">OpenClaw</span> <code>subagents.thinking: "high"</code> — spawn 시 자동 적용<br>
+    <span class="todo-oc">OpenClaw</span> <code>subagents.runTimeoutSeconds: 300</code> — 5분 제한
+  </div>
+</div>
+
+<div class="arrow">↓ sessions_spawn(attachments=[SESSION-STATE, handoff])</div>
+
+<div class="layer l3">
+  <div class="layer-head">Layer 3 — 피질 · 전문 뇌들</div>
+  <div class="layer-body">
+    각 뇌는 <strong>자기 영역의 컨텍스트만 깊이 축적</strong>.<br>
+    결과는 <strong>3~5줄 자체 압축 후 반환</strong>. 상세는 handoff.md에 기록.<br><br>
+    <span class="todo-oc">OpenClaw</span> 에이전트별 <code>model</code> + <code>skills</code> + <code>AGENTS.md</code> 독립 설정<br>
+    <span class="todo-oc">OpenClaw</span> <code>model.fallbacks</code> — Opus 실패 시 Sonnet 자동 전환<br>
+    <span class="todo-oc">OpenClaw</span> <code>workspace 분리</code> — symlink로 메모리만 공유
+  </div>
+</div>
+
+<div class="arrow">↓ 결과 압축 반환 + handoff.md 기록</div>
+
+<div class="layer l4">
+  <div class="layer-head">Layer 4 — 신피질 · 공유 메모리</div>
+  <div class="layer-body">
+    모든 뇌가 symlink로 공유하는 장기 기억.<br><br>
+    <code>SESSION-STATE.md</code> — 작업 기억 (WAL)<br>
+    <code>MEMORY.md</code> — 장기 기억<br>
+    <code>memory/handoff.md</code> — 뇌 간 인수인계 (백질)<br>
+    <code>memory/YYYY-MM-DD.md</code> — 에피소드 기억<br><br>
+    <span class="todo-oc">OpenClaw</span> <code>memorySearch</code> — BGE-M3 로컬 임베딩<br>
+    <span class="todo-oc">OpenClaw</span> <code>compaction.memoryFlush</code> — 컴팩션 전 자동 저장<br>
+    <span class="todo-oc">OpenClaw</span> <code>session.maintenance: enforce</code> — 오래된 세션 자동 정리
+  </div>
+</div>
+
+<!-- ===== 4. 5개의 뇌 ===== -->
+<h2><span class="sn">4</span> 5개의 뇌</h2>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">🗣️</span>
+    <div><div class="bn">casual 뇌 <span class="tg tgn">변연계</span></div><div class="bm">Qwen 14B 로컬 · 무료 · Phase 2</div></div>
+  </div>
+  <div class="bd">잡담, 인사, 확인/동의. 전체 메시지의 60~70%.<br>이걸 무료로 빼면 Claude 비용 30~40% 절감.</div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">🔍</span>
+    <div><div class="bn">분석 뇌 <span class="tg tb">측두엽+두정엽</span></div><div class="bm">Sonnet 4.6</div></div>
+  </div>
+  <div class="bd">데이터 수집, 리서치, 비교 분석, 패턴 찾기.<br>자기 리서치 맥락을 깊이 축적. 같은 조사를 두 번 하지 않음.</div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">🎨</span>
+    <div><div class="bn">전략 뇌 <span class="tg tr">배외측 전전두엽</span></div><div class="bm">Opus 4.6 + thinking high</div></div>
+  </div>
+  <div class="bd">기획, PRD, 우선순위, 의사결정.<br>CPO 프레임워크 적용. 기획 논의 맥락을 온전히 보존 — 잡담에 묻히지 않음.</div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">⚡</span>
+    <div><div class="bn">실행 뇌 <span class="tg ty">운동피질</span></div><div class="bm">Opus 4.6 + thinking high</div></div>
+  </div>
+  <div class="bd">TASK 작성, SDK 실행, 코드리뷰, 배포.<br>코드베이스 맥락을 유지. "이 파일 뭐였지?" 반복 제거.</div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">📦</span>
+    <div><div class="bn">정리 뇌 <span class="tg tgn">해마</span></div><div class="bm">BGE-M3 + Sonnet · Cron 자동</div></div>
+  </div>
+  <div class="bd">기억 저장/검색/정리. daily → MEMORY.md 승격.<br>전략적 망각 (중복 버림). 매주 일 22:00.</div>
+</div>
+
+<!-- ===== 5. 왜 축적이 이득인가 ===== -->
+<h2><span class="sn">5</span> 왜 축적이 이득인가</h2>
+
+<div class="pq">"각 뇌는 본인의 컨텍스트가 축적되고, 많이 가지고 있어도 돈이 들어도 이득이다. 여러 번 반복하는 게 다 손해다."</div>
+
+<div class="cd ca">
+  <strong>반복의 비용 (지금):</strong><br>
+  • 기획 30턴 → 잡담 끼어듦 → 기획 맥락 증발<br>
+  • "아까 그거 뭐였지?" → 재설명 5분<br>
+  • 컴팩션 후 → "뭐 하고 있었죠?" → 파일 읽기 3~4회<br>
+  • 같은 코드 구조 매번 설명 → 매 세션 10분 낭비<br><br>
+  <strong>축적의 이득 (v2):</strong><br>
+  • 전략 뇌: 기획 논의 30턴이 온전히 축적. 5번째 질문에도 1번째 맥락 살아있음<br>
+  • 분석 뇌: 한번 조사한 건 세션에 남아있음. 재조사 불필요<br>
+  • 실행 뇌: 코드베이스 구조 한번 파악 → 다음 TASK에서 바로 시작<br>
+  • 토큰 비용 ↑ but 반복 비용 ↓↓↓ = 순이익
+</div>
+
+<p>one-shot(mode="run")이지만, <strong>handoff.md가 세션 간 기억을 연결</strong>한다. 뇌가 바뀌어도 파일에 핵심이 남아있으니 "처음부터 다시" 없음.</p>
+
+<!-- ===== 6. 3박자 시너지 ===== -->
+<h2><span class="sn">6</span> 3박자 시너지</h2>
+
+<p>각 기술의 강점만 쓴다. 약점은 다른 기술이 보완.</p>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">🔧</span>
+    <div><div class="bn">OpenClaw <span class="tg tp">신경계</span></div><div class="bm">파이프라인 + 강제력</div></div>
+  </div>
+  <div class="bd">
+    <strong>Hook</strong> — 코드 레벨 분류 (LLM이 판단 회피 불가)<br>
+    <strong>sessions_spawn</strong> — 뇌 세션 생성 + attachments 맥락 전달<br>
+    <strong>subagents config</strong> — thinking/timeout/model 자동 설정<br>
+    <strong>model.fallbacks</strong> — Opus 실패 시 Sonnet 자동 전환<br>
+    <strong>session.maintenance</strong> — one-shot 세션 자동 정리<br>
+    <strong>Cron</strong> — 정리 뇌 자동 실행<br>
+    <strong>memorySearch</strong> — BGE-M3 벡터 검색<br>
+    <strong>compaction.memoryFlush</strong> — 컴팩션 전 자동 저장
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">🏠</span>
+    <div><div class="bn">로컬 LLM <span class="tg tgn">무료</span></div><div class="bm">Ollama · Mac Studio</div></div>
+  </div>
+  <div class="bd">
+    <strong>Qwen 14B</strong> — casual 뇌 (잡담 60~70%), Monitor 게이팅 (Phase 2)<br>
+    <strong>BGE-M3</strong> — 임베딩, 메모리 시맨틱 검색
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">☁️</span>
+    <div><div class="bn">Claude API <span class="tg tr">판단 전용</span></div><div class="bm">Anthropic</div></div>
+  </div>
+  <div class="bd">
+    <strong>Sonnet 4.6</strong> — 훅 분류(정확도 95%+), 분석 뇌, 라우터<br>
+    <strong>Opus 4.6 + thinking</strong> — 전략 뇌, 실행 뇌 (깊은 판단 필수인 곳만)
+  </div>
+</div>
+
+<div class="ok">원칙: Claude는 판단이 필요한 곳만. 반복/규칙/잡담은 무료(로컬). OpenClaw가 파이프라인을 강제.</div>
+
+<!-- ===== 7. 데이터 흐름 ===== -->
+<h2><span class="sn">7</span> 데이터 흐름</h2>
+
+<h3>단순 요청</h3>
+
+<div class="fl"><span class="h">Smith:</span> "경쟁사 데이터 찾아봐"
+  <span class="d">│</span>
+<span class="p">Hook</span> Sonnet 분류 → analyst
+  [ROUTE:analyst] 태그 주입
+  <span class="d">│</span>
+<span class="b">라우터</span> 태그 확인
+  SESSION-STATE.md 읽기
+  → <span class="g">sessions_spawn</span>(
+      agentId: "neuron-analyst"
+      attachments: [SESSION-STATE 발췌]
+    )
+  <span class="d">│</span>
+<span class="g">분석 뇌</span> 리서치 수행
+  → handoff.md에 상세 기록
+  → 3~5줄 요약 반환
+  <span class="d">│</span>
+<span class="b">라우터</span> → Smith님에게 🔍 결과 전달</div>
+
+<h3>복합 요청 (체인)</h3>
+
+<div class="fl"><span class="h">Smith:</span> "경쟁사 분석하고 TASK 만들어줘"
+  <span class="d">│</span>
+<span class="p">Hook</span> → strategist (복합 판단)
+  <span class="d">│</span>
+<span class="b">라우터</span> "분석 먼저 필요"
+  → <span class="g">analyst spawn</span>
+  <span class="d">│</span>
+<span class="g">분석 뇌</span> 리서치 → 요약 반환 + handoff 기록
+  <span class="d">│</span>
+<span class="b">라우터</span> 결과 수신
+  <span class="y">"다음은 TASK → executor"</span> ← 체인 판단
+  → <span class="g">executor spawn</span>
+    (attachments: 분석 요약)
+  <span class="d">│</span>
+<span class="g">실행 뇌</span> handoff.md 참조 → TASK.md 작성
+  → 요약 반환
+  <span class="d">│</span>
+<span class="b">라우터</span> → Smith님에게 최종 전달</div>
+
+<div class="ok">체인 = v2 핵심. v1은 한 뇌만 spawn하고 끝. v2는 라우터가 결과를 보고 "다음 뇌 필요?" 판단.</div>
+
+<!-- ===== 8. 뇌별 스킬 무장 ===== -->
+<h2><span class="sn">8</span> 뇌별 스킬 무장</h2>
+
+<p>ClawHub에서 각 뇌에 맞는 최고급 스킬을 검색해서 등록. 뇌가 전문성을 가지려면 좋은 도구가 필수.</p>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">🔍</span>
+    <div><div class="bn">분석 뇌 — 8개 스킬</div><div class="bm">Sonnet 4.6</div></div>
+  </div>
+  <div class="bd">
+    <strong>academic-deep-research</strong> 🆕 — 2사이클 필수 조사 + APA 인용 + 증거 계층. sessions_spawn으로 병렬 리서치.<br>
+    <strong>deep-research-pro</strong> — 범용 딥 리서치<br>
+    <strong>market-research</strong> — 시장/경쟁사 분석<br>
+    <strong>seo-competitor-analysis</strong> 🆕 — SEO 경쟁 분석, 키워드 갭 분석<br>
+    <strong>reverse-prompting</strong> — 시스템 프롬프트 역추출<br>
+    <strong>mozzi-reports</strong> / <strong>bscamp-context</strong> / <strong>handoff</strong>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">🎨</span>
+    <div><div class="bn">전략 뇌 — 7개 스킬</div><div class="bm">Opus 4.6 + thinking</div></div>
+  </div>
+  <div class="bd">
+    <strong>cpo-advisor</strong> — 우리가 만든 CPO 프레임워크 (6-Pass PRD, 비가역성 테스트)<br>
+    <strong>cpo</strong> 🆕 — ClawHub 제품 전략 + 로드맵 + 팀 리더십 + 보드 커뮤니케이션 (5개 참조 파일)<br>
+    <strong>prd</strong> — PRD 문서 생성<br>
+    <strong>product-roadmap</strong> 🆕 — 분기 로드맵 + 우선순위 프레임워크 + "No" 하는 법<br>
+    <strong>mozzi-reports</strong> / <strong>bscamp-context</strong> / <strong>handoff</strong>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">⚡</span>
+    <div><div class="bn">실행 뇌 — 13개 스킬</div><div class="bm">Opus 4.6 + thinking</div></div>
+  </div>
+  <div class="bd">
+    <strong>ai-tech-lead</strong> 🆕 — Research→Design→Plan→Implement 4단계 강제. 서브에이전트 병렬 구현. Hard Stop 포함.<br>
+    <strong>software-engineer</strong> 🆕 — 클린 아키텍처 + 에러 핸들링 + 패턴 참조 (patterns.md, architecture.md, testing.md)<br>
+    <strong>critical-code-reviewer</strong> 🆕 — "Guilty until proven exceptional" 적대적 코드리뷰. Blocking/Required/Suggestion 분류.<br>
+    <strong>test-master</strong> 🆕 — 테스트 전략 + TDD + 자동화 프레임워크 (10개 참조 파일)<br>
+    <strong>dev-process</strong> — 개발 7단계 상태 머신<br>
+    <strong>task-writer</strong> / <strong>sdk-runner</strong> / <strong>code-review</strong> / <strong>qa-scenario</strong> / <strong>db-migration</strong><br>
+    <strong>mozzi-reports</strong> / <strong>bscamp-context</strong> / <strong>handoff</strong>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head">
+    <span class="bi">📦</span>
+    <div><div class="bn">정리 뇌 — Cron 자동</div><div class="bm">BGE-M3 + Sonnet</div></div>
+  </div>
+  <div class="bd">
+    매주 일 22:00 자동 실행. 7일+ 지난 daily → MEMORY.md 승격. SESSION-STATE 정리.
+  </div>
+</div>
+
+<div class="ok">총 20개 스킬 (기존 12 + 신규 8). 각 뇌가 자기 영역에 특화된 레퍼런스와 프로세스를 가짐.</div>
+
+<!-- ===== 9. OpenClaw 기능 매핑 ===== -->
+<h2><span class="sn">9</span> OpenClaw 기능 매핑</h2>
+
+<p>우리 아키텍처가 OpenClaw의 어떤 기능을 쓰는지, 그리고 아직 안 쓰고 있는 게 뭔지.</p>
+
+<div class="cd">
+<table>
+<tr><th>기능</th><th>역할</th><th>상태</th></tr>
+<tr><td>hooks.internal</td><td>메시지 분류 (시상)</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>sessions_spawn</td><td>뇌 세션 생성</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>subagents.allowAgents</td><td>spawn 허용 뇌 목록</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>에이전트별 model/skills</td><td>뇌별 모델·스킬 분리</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>workspace 분리 + symlink</td><td>뇌별 독립 + 메모리 공유</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>memorySearch (BGE-M3)</td><td>시맨틱 기억 검색</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>compaction.memoryFlush</td><td>컴팩션 전 자동 저장</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>Cron</td><td>정리 뇌 자동 실행</td><td><span class="tg tgn">사용 중</span></td></tr>
+<tr><td>subagents.thinking</td><td>spawn 시 thinking 자동 적용</td><td><span class="tg tgn">적용 완료</span></td></tr>
+<tr><td>subagents.runTimeoutSeconds</td><td>stuck 뇌 5분 자동 종료</td><td><span class="tg tgn">적용 완료</span></td></tr>
+<tr><td>model.fallbacks</td><td>Opus→Sonnet 자동 전환</td><td><span class="tg tgn">적용 완료</span></td></tr>
+<tr><td>spawn attachments</td><td>맥락 파일 직접 첨부</td><td><span class="tg ty">미적용</span></td></tr>
+<tr><td>session.maintenance</td><td>one-shot 세션 자동 정리</td><td><span class="tg ty">미적용</span></td></tr>
+<tr><td>sessions_history</td><td>이전 뇌 대화 조회 (보험)</td><td><span class="tg ty">미적용</span></td></tr>
+</table>
+</div>
+
+<!-- ===== 10. TODO ===== -->
+<h2><span class="sn">10</span> 할 일</h2>
+
+<h3>Phase 1 — 지금</h3>
+
+<div class="todo todo-done"><span class="todo-check">☑</span><div class="todo-text"><strong>subagents.thinking = "high"</strong> — spawn 시 thinking 자동 적용 <span class="todo-oc">config</span></div></div>
+<div class="todo todo-done"><span class="todo-check">☑</span><div class="todo-text"><strong>runTimeoutSeconds = 300</strong> — stuck 뇌 5분 자동 종료 <span class="todo-oc">config</span></div></div>
+<div class="todo todo-done"><span class="todo-check">☑</span><div class="todo-text"><strong>model.fallbacks = [sonnet]</strong> — Opus 실패 시 자동 전환 <span class="todo-oc">config</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>session.maintenance = enforce</strong> — 14일 지난 세션 자동 정리 <span class="todo-oc">config</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>라우터 AGENTS.md에 체인 로직 추가</strong> — 결과 받으면 다음 뇌 판단 <span class="todo-oc">파일</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>각 뇌 AGENTS.md에 "3~5줄 압축 반환" 규칙</strong> <span class="todo-oc">파일</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>라우터 spawn 시 attachments 사용</strong> — SESSION-STATE + handoff 직접 첨부 <span class="todo-oc">파일</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>qa-bot에서 전체 파이프라인 테스트</strong></div></div>
+
+<h3>Phase 2 — Qwen casual + Monitor</h3>
+
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>Qwen casual 뇌 에이전트 등록</strong> — 잡담 60~70% 무료화 <span class="todo-oc">config</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>훅에서 casual → Qwen 뇌로 직접 라우팅</strong> <span class="todo-oc">hook</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>Monitor 게이팅 구현</strong> (Qwen) — TASK 3요소 검증, handoff 형식 체크 <span class="todo-oc">파일</span></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>분류 정확도 50문장+ 벤치마크</strong></div></div>
+
+<h3>Phase 3 — 프로덕션 전환</h3>
+
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>기존 모찌/텐동 → 뉴런 에이전트로 교체</strong></div></div>
+<div class="todo"><span class="todo-check">☐</span><div class="todo-text"><strong>Predictor/Evaluator 추가</strong> (MAP 완전 구현)</div></div>
+
+<!-- ===== 10. 레퍼런스 ===== -->
+<h2><span class="sn">10</span> 레퍼런스</h2>
+
+<div class="cd" style="font-size:12px;">
+<table>
+<tr><th>개념</th><th>출처</th></tr>
+<tr><td>전두엽 6모듈 분해</td><td><a href="https://nature.com/articles/s41467-025-63804-5">MAP — Nature 2025, Microsoft</a></td></tr>
+<tr><td>뇌→에이전트 매핑</td><td><a href="https://arxiv.org/abs/2412.08875">Brain-Inspired AI Agent — Yu et al. 2024</a></td></tr>
+<tr><td>멀티에이전트 압축</td><td><a href="https://anthropic.com/engineering/multi-agent-research-system">Anthropic Multi-Agent Research 2025</a></td></tr>
+<tr><td>빠른/느린 뇌</td><td><a href="https://arxiv.org/abs/2410.08328">Talker-Reasoner — DeepMind 2024</a></td></tr>
+<tr><td>메모리 4계층</td><td><a href="https://arxiv.org/abs/2309.02427">CoALA — Princeton 2024</a></td></tr>
+<tr><td>자기관리 메모리</td><td><a href="https://arxiv.org/abs/2310.08560">MemGPT/Letta — UC Berkeley 2023</a></td></tr>
+<tr><td>서브에이전트 맥락 전달</td><td><a href="https://docs.openclaw.ai/tools/subagents">OpenClaw Subagents Docs</a></td></tr>
+<tr><td>컨텍스트 예산 분배</td><td><a href="https://clawhub.com">ClawHub — context-budgeting skill</a></td></tr>
+</table>
+</div>
+
+<div class="dv"></div>
+
+<div class="pq"><strong>핵심:</strong> 각 뇌가 자기 영역을 깊이 알수록 강해진다. 반복 설명이 사라지고, 한번 쌓은 맥락으로 바로 작업. OpenClaw가 파이프라인을 강제하고, 로컬 LLM이 비용을 잡고, Claude가 판단만 집중.</div>
+
+<div class="ft">🍤 텐동 · 모찌 뉴런 아키텍처 v2 · 비공개 내부 문서 · 2026.03.09</div>
+</div>
+</body>
+</html>

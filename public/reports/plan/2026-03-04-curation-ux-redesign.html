@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>큐레이션 UX 개선 기획서</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Pretendard', -apple-system, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .subtitle { color: #64748b; font-size: 14px; margin-bottom: 40px; }
+  h2 { font-size: 22px; font-weight: 700; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+  h3 { font-size: 17px; font-weight: 700; margin: 28px 0 12px; color: #334155; }
+  p { margin-bottom: 12px; font-size: 15px; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .badge-green { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+  .badge-blue { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+  .badge-gray { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+  /* 문제 카드 */
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .problem-card { background: #fff; border: 1px solid #fecaca; border-radius: 12px; padding: 20px; }
+  .problem-card .num { font-size: 32px; font-weight: 800; color: #ef4444; }
+  .problem-card .title { font-weight: 700; margin: 4px 0 8px; }
+  .problem-card .desc { font-size: 13px; color: #64748b; }
+
+  /* 아키텍처 다이어그램 */
+  .arch-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; margin: 20px 0; overflow-x: auto; }
+  .state-machine { display: flex; flex-direction: column; gap: 12px; }
+  .state-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .state { display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .state-new { background: #dbeafe; color: #1d4ed8; border: 2px solid #93c5fd; }
+  .state-reviewing { background: #fef3c7; color: #92400e; border: 2px solid #fcd34d; }
+  .state-generated { background: #d1fae5; color: #065f46; border: 2px solid #6ee7b7; }
+  .state-published { background: #e0e7ff; color: #3730a3; border: 2px solid #a5b4fc; }
+  .state-dismissed { background: #f1f5f9; color: #475569; border: 2px solid #cbd5e1; }
+  .state-archived { background: #fce7f3; color: #9d174d; border: 2px solid #f9a8d4; }
+  .arrow { font-size: 18px; color: #94a3b8; font-weight: 700; }
+  .arrow-back { color: #ef4444; }
+
+  /* 비교 테이블 */
+  .compare { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  .compare th { background: #f1f5f9; padding: 10px 14px; text-align: left; font-weight: 600; }
+  .compare td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; }
+  .compare .before { color: #dc2626; }
+  .compare .after { color: #16a34a; }
+
+  /* 목업 */
+  .mockup { background: #fff; border: 2px solid #e2e8f0; border-radius: 16px; overflow: hidden; margin: 24px 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,.06); }
+  .mockup-header { background: #f8fafc; padding: 12px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 8px; }
+  .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mockup-dot.red { background: #ef4444; }
+  .mockup-dot.yellow { background: #eab308; }
+  .mockup-dot.green { background: #22c55e; }
+  .mockup-url { font-size: 12px; color: #94a3b8; margin-left: 12px; }
+  .mockup-body { padding: 24px; }
+
+  /* 큐레이션 탭 목업 */
+  .curation-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
+  .curation-tab { padding: 10px 16px; font-size: 13px; font-weight: 600; color: #94a3b8; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+  .curation-tab.active { color: #2563eb; border-bottom-color: #2563eb; }
+  .curation-tab .count { background: #eff6ff; color: #2563eb; padding: 1px 8px; border-radius: 999px; font-size: 11px; margin-left: 4px; }
+  .curation-tab.active .count { background: #2563eb; color: #fff; }
+
+  .curation-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .curation-search { flex: 1; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #64748b; background: #f8fafc; }
+  .curation-sort { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; color: #64748b; background: #fff; }
+  .curation-bulk { display: flex; gap: 6px; }
+  .curation-bulk-btn { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; border: 1px solid #e2e8f0; background: #fff; color: #64748b; }
+
+  .curation-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .curation-card-header { display: flex; align-items: flex-start; gap: 10px; }
+  .curation-checkbox { width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 4px; margin-top: 2px; flex-shrink: 0; }
+  .curation-card-content { flex: 1; }
+  .curation-card-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .curation-card-meta { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .curation-card-link { font-size: 12px; color: #2563eb; background: #eff6ff; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 8px; }
+  .curation-card-actions { display: flex; gap: 6px; }
+  .curation-btn { padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; }
+  .curation-btn-primary { background: #2563eb; color: #fff; }
+  .curation-btn-secondary { background: #f1f5f9; color: #475569; }
+  .curation-btn-danger { background: #fef2f2; color: #ef4444; }
+
+  /* 생성물 상세 목업 */
+  .content-detail-source { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 12px 0; }
+  .content-detail-source-title { font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 8px; }
+  .content-detail-source-item { font-size: 13px; color: #64748b; padding: 4px 0; border-bottom: 1px solid #f1f5f9; }
+  .content-detail-source-item:last-child { border-bottom: none; }
+
+  /* 플로우 다이어그램 */
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
+  .flow-step { display: flex; align-items: flex-start; gap: 16px; }
+  .flow-line { display: flex; flex-direction: column; align-items: center; width: 32px; flex-shrink: 0; }
+  .flow-dot { width: 12px; height: 12px; border-radius: 50%; background: #2563eb; border: 3px solid #bfdbfe; flex-shrink: 0; }
+  .flow-connector { width: 2px; height: 40px; background: #cbd5e1; }
+  .flow-content { flex: 1; padding-bottom: 16px; }
+  .flow-title { font-weight: 700; font-size: 14px; }
+  .flow-desc { font-size: 13px; color: #64748b; margin-top: 2px; }
+  .flow-dot.red { background: #ef4444; border-color: #fecaca; }
+  .flow-dot.green { background: #22c55e; border-color: #bbf7d0; }
+  .flow-dot.yellow { background: #eab308; border-color: #fef3c7; }
+
+  /* 우선순위 */
+  .phase { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 12px 0; }
+  .phase-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .phase-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+  .phase-1 .phase-num { background: #ef4444; }
+  .phase-2 .phase-num { background: #eab308; }
+  .phase-3 .phase-num { background: #22c55e; }
+  .phase-title { font-weight: 700; font-size: 15px; }
+  .phase-items { list-style: none; padding: 0; }
+  .phase-items li { padding: 6px 0; font-size: 14px; color: #475569; border-bottom: 1px solid #f1f5f9; }
+  .phase-items li:last-child { border-bottom: none; }
+  .phase-items li::before { content: '•'; color: #94a3b8; margin-right: 8px; }
+
+  @media (max-width: 600px) {
+    .problem-grid { grid-template-columns: 1fr; }
+    .curation-toolbar { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>큐레이션 UX 개선 기획서</h1>
+<p class="subtitle">QA 헬프데스크 · 2026-03-04 · 모찌리포트 #87</p>
+
+<!-- ========== 1. 기획 의도 ========== -->
+<h2>1. 기획 의도</h2>
+<p>현재 큐레이션 파이프라인은 <strong>일방통행</strong>입니다. 소스가 수집되고, 콘텐츠로 변환되면, 되돌릴 수 없습니다. 삭제하면 소스도 사라지고, 과거 프롬프트로 만든 글을 다시 만들 수도 없습니다.</p>
+<p>콘텐츠가 계속 쌓이는데 관리 도구가 없어서, Smith님이 직접 하나하나 처리해야 합니다. 이 기획은 <strong>"소스는 절대 사라지지 않고, 어디서든 되돌릴 수 있는"</strong> 구조를 만드는 것이 목표입니다.</p>
+
+<div class="problem-grid">
+  <div class="problem-card">
+    <div class="num">01</div>
+    <div class="title">삭제 = 소스 소실</div>
+    <div class="desc">정보공유 글을 삭제하면 원본 큐레이션 아이템이 "published" 상태에 박혀서 영영 안 나타남. deleteContent()가 단순 DELETE만 수행.</div>
+  </div>
+  <div class="problem-card">
+    <div class="num">02</div>
+    <div class="title">재생성 불가</div>
+    <div class="desc">과거 프롬프트/설정으로 만든 글을 현재 프롬프트로 다시 만들 수 없음. AI 수정은 부분 수정만.</div>
+  </div>
+  <div class="problem-card">
+    <div class="num">03</div>
+    <div class="title">단방향 상태</div>
+    <div class="desc">new → published 한번 가면 끝. dismissed도 복원 불가. 모든 상태 전이가 되돌릴 수 없음.</div>
+  </div>
+  <div class="problem-card">
+    <div class="num">04</div>
+    <div class="title">관리 도구 부재</div>
+    <div class="desc">필터, 검색, 벌크 액션 없음. 소스가 쌓이면 스크롤해서 찾아야 함. 생성물 연결도 안 보임.</div>
+  </div>
+</div>
+
+<!-- ========== 2. 아키텍처 ========== -->
+<h2>2. 아키텍처</h2>
+
+<h3>2-1. 상태 머신 — 현재 vs 개선</h3>
+
+<table class="compare">
+  <tr>
+    <th width="50%">현재 <span class="badge badge-red">단방향</span></th>
+    <th width="50%">개선안 <span class="badge badge-green">순환 가능</span></th>
+  </tr>
+  <tr>
+    <td class="before">
+      new → selected → published (종착)<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+      &nbsp;&nbsp;dismissed (종착)<br><br>
+      ⚠️ 되돌리기 불가
+    </td>
+    <td class="after">
+      모든 상태에서 복원 가능<br>
+      삭제 시 소스 자동 복구<br>
+      재생성 = generated → reviewing<br><br>
+      ✅ 아래 다이어그램 참고
+    </td>
+  </tr>
+</table>
+
+<div class="arch-box">
+  <h3 style="margin-top:0;">상태 전이 다이어그램</h3>
+  <div class="state-machine">
+    <div class="state-row">
+      <div class="state state-new">🆕 new</div>
+      <div class="arrow">→</div>
+      <div class="state state-reviewing">🔍 reviewing</div>
+      <div class="arrow">→</div>
+      <div class="state state-generated">✨ generated</div>
+      <div class="arrow">→</div>
+      <div class="state state-published">📢 published</div>
+    </div>
+    <div class="state-row" style="margin-left:40px;">
+      <div class="arrow arrow-back">↑ 복원</div>
+      <span style="font-size:12px;color:#64748b;margin-left:8px;">dismissed/archived에서 new로 복원 가능</span>
+    </div>
+    <div class="state-row">
+      <div class="state state-dismissed">⏭️ dismissed</div>
+      <span style="font-size:13px;color:#64748b;margin:0 8px;">어디서든 스킵 가능, 복원도 가능</span>
+    </div>
+    <div class="state-row">
+      <div class="state state-archived">📦 archived</div>
+      <span style="font-size:13px;color:#64748b;margin:0 8px;">소프트 삭제 (hard delete 대체)</span>
+    </div>
+    <div class="state-row" style="margin-top:12px;padding:12px;background:#fef2f2;border-radius:8px;">
+      <span style="font-size:13px;">🔴 <strong>핵심 변경:</strong> 정보공유 글 삭제 시 → 소프트 삭제(archived) + 원본 소스 curation_status를 <strong>reviewing</strong>으로 자동 롤백</span>
+    </div>
+  </div>
+</div>
+
+<h3>2-2. 데이터 플로우</h3>
+<div class="arch-box">
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot"></div><div class="flow-connector"></div></div>
+      <div class="flow-content">
+        <div class="flow-title">소스 수집</div>
+        <div class="flow-desc">Notion sync (매일 04:00) / URL 크롤링 / 파일 업로드 / 웨비나 API → <code>curation_status: "new"</code></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot yellow"></div><div class="flow-connector"></div></div>
+      <div class="flow-content">
+        <div class="flow-title">관리자 검토</div>
+        <div class="flow-desc">큐레이션 탭에서 아이템 검토 → 최대 4개 선택 → <code>"reviewing"</code></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot green"></div><div class="flow-connector"></div></div>
+      <div class="flow-content">
+        <div class="flow-title">AI 생성</div>
+        <div class="flow-desc">Claude Opus + Extended Thinking + RAG → 미리보기 → 승인 → <code>contents INSERT</code>, 원본 → <code>"generated"</code></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot"></div><div class="flow-connector"></div></div>
+      <div class="flow-content">
+        <div class="flow-title">편집 & 발행</div>
+        <div class="flow-desc">MDX 에디터 / AI 수정요청으로 다듬기 → 발행 → 수강생 공개</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-line"><div class="flow-dot red"></div></div>
+      <div class="flow-content">
+        <div class="flow-title">삭제 시 자동 복구 <span class="badge badge-green">NEW</span></div>
+        <div class="flow-desc"><strong>소프트 삭제</strong> (status → "archived") + <strong>source_ref 파싱 → 원본 curation_status "reviewing"으로 롤백</strong> → 재생성 가능</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>2-3. DB 변경</h3>
+<table class="compare">
+  <tr><th>변경</th><th>내용</th></tr>
+  <tr>
+    <td><code>contents</code> 테이블</td>
+    <td>
+      <code>archived_at TIMESTAMPTZ DEFAULT NULL</code> 컬럼 추가<br>
+      <code>curation_status</code>에 <code>reviewing</code>, <code>generated</code>, <code>archived</code> 값 추가
+    </td>
+  </tr>
+  <tr>
+    <td><code>deleteContent()</code></td>
+    <td>
+      Hard DELETE → <code>status: "archived"</code> + <code>archived_at: now()</code><br>
+      <code>source_ref</code> 파싱 → 원본 아이템 <code>curation_status: "reviewing"</code>으로 복구
+    </td>
+  </tr>
+  <tr>
+    <td><code>source_ref</code></td>
+    <td>현행 유지 (쉼표 구분 문자열). Phase 3에서 <code>text[]</code> 배열 전환 고려.</td>
+  </tr>
+</table>
+
+<!-- ========== 3. UI 목업 ========== -->
+<h2>3. UI 목업</h2>
+
+<h3>3-1. 큐레이션 탭 개선안</h3>
+<div class="mockup">
+  <div class="mockup-header">
+    <div class="mockup-dot red"></div>
+    <div class="mockup-dot yellow"></div>
+    <div class="mockup-dot green"></div>
+    <span class="mockup-url">bscamp.vercel.app/admin/content?tab=curation</span>
+  </div>
+  <div class="mockup-body">
+    <!-- 필터 탭 -->
+    <div class="curation-tabs">
+      <div class="curation-tab active">신규 <span class="count">12</span></div>
+      <div class="curation-tab">검토중 <span class="count">3</span></div>
+      <div class="curation-tab">생성됨 <span class="count">8</span></div>
+      <div class="curation-tab">스킵 <span class="count">5</span></div>
+      <div class="curation-tab">보관 <span class="count">2</span></div>
+    </div>
+
+    <!-- 툴바 -->
+    <div class="curation-toolbar">
+      <input class="curation-search" placeholder="🔍 제목, 내용 검색..." />
+      <select class="curation-sort">
+        <option>최신순</option>
+        <option>오래된순</option>
+        <option>소스별</option>
+      </select>
+      <div class="curation-bulk">
+        <button class="curation-bulk-btn">☐ 전체선택</button>
+        <button class="curation-bulk-btn">스킵</button>
+        <button class="curation-bulk-btn">복원</button>
+      </div>
+    </div>
+
+    <!-- 카드 1: 생성물 연결 있음 -->
+    <div class="curation-card" style="border-left: 3px solid #2563eb;">
+      <div class="curation-card-header">
+        <div class="curation-checkbox"></div>
+        <div class="curation-card-content">
+          <div class="curation-card-title">Meta introduces click and engage-through attribution updates</div>
+          <div class="curation-card-meta">📎 Notion sync · 3/4 수집 · Search Engine Land</div>
+          <div class="curation-card-link">→ 생성물: "메타 클릭 기여 기준이 바뀌었다" (draft)</div>
+          <div class="curation-card-actions">
+            <button class="curation-btn curation-btn-primary">재생성</button>
+            <button class="curation-btn curation-btn-secondary">상세</button>
+            <button class="curation-btn curation-btn-secondary">스킵</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카드 2: 신규 -->
+    <div class="curation-card">
+      <div class="curation-card-header">
+        <div class="curation-checkbox"></div>
+        <div class="curation-card-content">
+          <div class="curation-card-title">Google Ads 2026 실적 보고서 자동화 업데이트</div>
+          <div class="curation-card-meta">🌐 URL 크롤링 · 3/3 수집 · Search Engine Journal</div>
+          <div class="curation-card-actions">
+            <button class="curation-btn curation-btn-primary">생성</button>
+            <button class="curation-btn curation-btn-secondary">상세</button>
+            <button class="curation-btn curation-btn-secondary">스킵</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카드 3: dismissed에서 복원된 -->
+    <div class="curation-card" style="border-left: 3px solid #22c55e;">
+      <div class="curation-card-header">
+        <div class="curation-checkbox"></div>
+        <div class="curation-card-content">
+          <div class="curation-card-title">카페24 신규 API 연동 가이드 (v3)</div>
+          <div class="curation-card-meta">📎 Notion sync · 2/28 수집 · <span class="badge badge-green">복원됨</span></div>
+          <div class="curation-card-actions">
+            <button class="curation-btn curation-btn-primary">생성</button>
+            <button class="curation-btn curation-btn-secondary">상세</button>
+            <button class="curation-btn curation-btn-secondary">스킵</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>3-2. 정보공유 글 상세 — 원본 소스 연결</h3>
+<div class="mockup">
+  <div class="mockup-header">
+    <div class="mockup-dot red"></div>
+    <div class="mockup-dot yellow"></div>
+    <div class="mockup-dot green"></div>
+    <span class="mockup-url">bscamp.vercel.app/admin/content/afa5e310-...</span>
+  </div>
+  <div class="mockup-body">
+    <h3 style="margin-top:0;font-size:18px;">메타 클릭 기여(Attribution) 기준이 바뀌었다</h3>
+    <div style="display:flex;gap:8px;margin:8px 0 16px;">
+      <span class="badge badge-blue">draft</span>
+      <span class="badge badge-gray">info_share</span>
+    </div>
+    
+    <div class="content-detail-source">
+      <div class="content-detail-source-title">📎 원본 소스 (3개)</div>
+      <div class="content-detail-source-item">1. Search Engine Land — "Meta introduces click and engage-through attribution updates"</div>
+      <div class="content-detail-source-item">2. Meta 공식 블로그 — "Simplifying Ad Measurement for a Social-First World"</div>
+      <div class="content-detail-source-item">3. Dataslayer — "Meta Ads Attribution Window Changes 2026"</div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="curation-btn curation-btn-primary">현재 설정으로 재생성</button>
+      <button class="curation-btn curation-btn-secondary">AI 수정</button>
+      <button class="curation-btn curation-btn-secondary">편집</button>
+      <button class="curation-btn curation-btn-secondary">발행</button>
+      <button class="curation-btn curation-btn-danger">삭제 (보관)</button>
+    </div>
+
+    <p style="font-size:12px;color:#94a3b8;margin-top:12px;">
+      ⓘ "삭제"는 소프트 삭제입니다. 원본 소스가 큐레이션 탭으로 복귀합니다.
+    </p>
+  </div>
+</div>
+
+<h3>3-3. 삭제 시 동작 비교</h3>
+<table class="compare">
+  <tr><th width="50%">현재 (Hard Delete)</th><th width="50%">개선 (Soft Delete + 복구)</th></tr>
+  <tr>
+    <td class="before">
+      1. 정보공유 글 삭제 클릭<br>
+      2. DB에서 완전 삭제<br>
+      3. 원본 소스 → "published" 유지<br>
+      4. 큐레이션 탭에 안 나타남<br>
+      5. <strong>소스 영영 소실 ❌</strong>
+    </td>
+    <td class="after">
+      1. 정보공유 글 "삭제(보관)" 클릭<br>
+      2. status → "archived", archived_at 기록<br>
+      3. source_ref 파싱 → 원본 복구<br>
+      4. 원본 → "reviewing" → 큐레이션 탭 복귀<br>
+      5. <strong>언제든 재생성 가능 ✅</strong>
+    </td>
+  </tr>
+</table>
+
+<!-- ========== 4. 구현 우선순위 ========== -->
+<h2>4. 구현 우선순위</h2>
+
+<div class="phase phase-1">
+  <div class="phase-header">
+    <div class="phase-num">1</div>
+    <div class="phase-title">안전망 — 즉시 구현</div>
+  </div>
+  <ul class="phase-items">
+    <li><strong>소프트 삭제</strong> — deleteContent()를 archived 상태 전환으로 변경</li>
+    <li><strong>삭제 시 소스 복구</strong> — source_ref 파싱 → curation_status 롤백</li>
+    <li><strong>dismissed 복원 버튼</strong> — 스킵한 아이템 되돌리기</li>
+  </ul>
+</div>
+
+<div class="phase phase-2">
+  <div class="phase-header">
+    <div class="phase-num">2</div>
+    <div class="phase-title">편의성 — 권장</div>
+  </div>
+  <ul class="phase-items">
+    <li><strong>상태별 필터 탭</strong> — 신규 / 검토중 / 생성됨 / 스킵 / 보관</li>
+    <li><strong>양방향 연결 표시</strong> — 큐레이션 카드에 생성물 링크, 생성물에 원본 소스</li>
+    <li><strong>재생성 버튼</strong> — 같은 소스로 현재 프롬프트 기반 재생성</li>
+  </ul>
+</div>
+
+<div class="phase phase-3">
+  <div class="phase-header">
+    <div class="phase-num">3</div>
+    <div class="phase-title">고도화 — 여유 시</div>
+  </div>
+  <ul class="phase-items">
+    <li><strong>벌크 액션</strong> — 다중 선택 → 일괄 스킵/복원/삭제</li>
+    <li><strong>검색 + 정렬</strong> — 제목/내용 검색, 날짜/소스 정렬</li>
+    <li><strong>source_ref 배열화</strong> — 쉼표 구분 → text[] 전환 (쿼리 성능)</li>
+  </ul>
+</div>
+
+<!-- ========== 5. 리스크 ========== -->
+<h2>5. 리스크 & 고려사항</h2>
+<table class="compare">
+  <tr><th>항목</th><th>대응</th></tr>
+  <tr>
+    <td>이미 "published"로 박힌 아이템</td>
+    <td>마이그레이션 스크립트로 <code>generated</code>로 변경 가능</td>
+  </tr>
+  <tr>
+    <td>이미 hard delete된 정보공유 글</td>
+    <td>복구 불가 (이미 DB에서 삭제됨). 향후 발생 방지만.</td>
+  </tr>
+  <tr>
+    <td>soft delete 시 UI 필터</td>
+    <td><code>status != "archived"</code> 기본 필터 추가. 관리자 전용 "보관함" 뷰.</td>
+  </tr>
+  <tr>
+    <td>성능</td>
+    <td>현재 규모에서 문제 없음. source_ref IN 쿼리로 충분.</td>
+  </tr>
+</table>
+
+</div>
+</body>
+</html>

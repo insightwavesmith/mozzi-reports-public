@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="date" content="2026-03-11">
+<meta name="project" content="BS CAMP">
+<meta name="status" content="pending">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자사몰 사관학교 — 오가닉 마케팅 실행 플랜 v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+  :root{--r:#F75D5D;--rl:#FEE8E8;--rd:#D94444;--dk:#1A1A2E;--dk2:#16213E;--g9:#212529;--g7:#495057;--g5:#868E96;--g3:#DEE2E6;--g1:#F8F9FA;--w:#FFF;--b:#3B82F6;--bl:#DBEAFE;--gn:#10B981;--gnl:#D1FAE5;--p:#8B5CF6;--pl:#EDE9FE;--o:#F59E0B;--ol:#FEF3C7}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans KR',-apple-system,sans-serif;color:var(--g9);background:var(--g1);line-height:1.75;font-size:9.5pt;-webkit-font-smoothing:antialiased}
+  .doc{max-width:210mm;margin:0 auto;background:var(--w);box-shadow:0 2px 24px rgba(0,0,0,.06)}
+  @media print{body{background:#fff;font-size:9pt}.doc{box-shadow:none;max-width:100%}.page{page-break-after:always;page-break-inside:avoid}.no-break{page-break-inside:avoid}}
+  .cover{min-height:290mm;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(155deg,#0F0F1A 0%,var(--dk) 40%,var(--dk2) 70%,#0F3460 100%);color:var(--w);text-align:center;padding:35mm 30mm;position:relative;overflow:hidden}
+  .cover::before{content:'';position:absolute;top:-30%;right:-20%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(247,93,93,.08) 0%,transparent 60%)}
+  .cover::after{content:'';position:absolute;bottom:-25%;left:-15%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.06) 0%,transparent 60%)}
+  .cover *{position:relative;z-index:1}
+  .c-badge{display:inline-block;border:1.5px solid rgba(247,93,93,.5);color:var(--r);padding:5px 20px;border-radius:24px;font-size:8pt;font-weight:600;letter-spacing:4px;text-transform:uppercase;margin-bottom:28px}
+  .cover h1{font-size:28pt;font-weight:900;line-height:1.25;margin-bottom:10px;letter-spacing:-0.5px}
+  .cover h1 em{font-style:normal;color:var(--r)}
+  .c-sub{font-size:13pt;font-weight:300;color:rgba(255,255,255,.55);margin-bottom:45px;line-height:1.6}
+  .c-stats{display:flex;gap:32px;margin-bottom:40px}
+  .c-stat{text-align:center}
+  .c-stat b{display:block;font-size:22pt;font-weight:900;color:var(--r)}
+  .c-stat span{font-size:7.5pt;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase}
+  .c-meta{display:flex;gap:36px;font-size:8pt;color:rgba(255,255,255,.35);border-top:1px solid rgba(255,255,255,.08);padding-top:28px}
+  .c-meta div span:first-child{display:block;font-size:7pt;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+  .c-meta div span:last-child{color:rgba(255,255,255,.7);font-weight:500}
+  .page{padding:18mm 24mm}
+  .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .sec-num{background:var(--r);color:#fff;min-width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:10pt}
+  .sec-label{font-size:7.5pt;color:var(--r);font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+  h2{font-size:15pt;font-weight:900;color:var(--dk);margin-bottom:16px;letter-spacing:-0.3px}
+  h3{font-size:11pt;font-weight:700;color:var(--dk);margin:18px 0 8px}
+  h4{font-size:9.5pt;font-weight:700;color:var(--g7);margin:12px 0 6px}
+  p{margin-bottom:8px;color:var(--g7)}
+  .line{width:40px;height:3px;background:var(--r);margin-bottom:20px}
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:8.5pt}
+  th{background:var(--dk);color:#fff;padding:7px 10px;text-align:left;font-weight:600;font-size:8pt}
+  td{padding:7px 10px;border-bottom:1px solid var(--g3);vertical-align:top}
+  tr:nth-child(even){background:var(--g1)}
+  .box{background:var(--g1);border:1px solid var(--g3);border-radius:10px;padding:14px 16px;margin:10px 0}
+  .hl{border-left:4px solid var(--r);padding:12px 16px;border-radius:0 8px 8px 0;margin:10px 0;background:var(--rl)}
+  .hl-b{border-left-color:var(--b);background:var(--bl)}
+  .hl-p{border-left-color:var(--p);background:var(--pl)}
+  .hl-g{border-left-color:var(--gn);background:var(--gnl)}
+  .dark{background:linear-gradient(135deg,var(--dk),var(--dk2));color:#fff;padding:18px;border-radius:10px;margin:12px 0}
+  .dark h4{color:var(--r);margin-top:0}
+  .dark p,.dark li{color:rgba(255,255,255,.75)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+  .card{border:1px solid var(--g3);border-radius:10px;padding:14px;background:var(--w)}
+  .card h4{margin-top:0}
+  .card ul{list-style:none;padding:0;font-size:8.5pt;color:var(--g7)}
+  .card ul li{padding:3px 0;padding-left:16px;position:relative}
+  .card ul li::before{content:'→';position:absolute;left:0;color:var(--g5);font-size:8pt}
+  .tag{display:inline-block;font-size:7pt;font-weight:700;padding:2px 8px;border-radius:10px}
+  .t-auto{background:var(--gnl);color:#065F46}
+  .t-semi{background:var(--ol);color:#92400E}
+  .t-setup{background:var(--bl);color:#1E40AF}
+  .t-social{background:var(--rl);color:var(--rd)}
+  .t-seo{background:var(--bl);color:var(--b)}
+  .t-geo{background:var(--pl);color:var(--p)}
+  .t-done{background:var(--gnl);color:#065F46}
+  .t-build{background:var(--ol);color:#92400E}
+  .sm{font-size:8pt;color:var(--g5)}
+  .num-big{font-size:20pt;font-weight:900;color:var(--r)}
+  .status-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+  .status-card{border-radius:10px;padding:12px 14px;text-align:center}
+  .status-card.done{background:var(--gnl);border:1px solid #A7F3D0}
+  .status-card.progress{background:var(--ol);border:1px solid #FDE68A}
+  .status-card.todo{background:var(--bl);border:1px solid #93C5FD}
+  .status-card b{display:block;font-size:14pt;font-weight:900;margin-bottom:2px}
+  .status-card span{font-size:7.5pt;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .status-card.done b{color:#065F46}.status-card.done span{color:#065F46}
+  .status-card.progress b{color:#92400E}.status-card.progress span{color:#92400E}
+  .status-card.todo b{color:#1E40AF}.status-card.todo span{color:#1E40AF}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="c-badge">Execution Plan v2</div>
+  <h1>오가닉 마케팅<br><em>실행 플랜</em> v2</h1>
+  <div class="c-sub">인프라 완성 → 배포 레이어 구축<br>콘텐츠 1개 → 4개 채널 → 검색 + AI 동시 장악</div>
+  <div class="c-stats">
+    <div class="c-stat"><b>441억</b><span>수강생 총매출</span></div>
+    <div class="c-stat"><b>255%</b><span>평균 ROAS</span></div>
+    <div class="c-stat"><b>80%</b><span>추천 유입</span></div>
+    <div class="c-stat"><b>D+2</b><span>서비스 오픈 후</span></div>
+  </div>
+  <div class="c-meta">
+    <div><span>서비스</span><span>bscamp.vercel.app (LIVE)</span></div>
+    <div><span>작성일</span><span>2026년 3월 11일</span></div>
+    <div><span>작성</span><span>마케팅팀 · 모찌</span></div>
+    <div><span>버전</span><span>Execution v2.0</span></div>
+  </div>
+</div>
+
+<!-- ===== 목차 ===== -->
+<div class="page">
+  <h2 style="margin-bottom:24px;">목차</h2>
+  <div class="line"></div>
+  <table style="font-size:9.5pt">
+    <tbody style="background:transparent">
+      <tr><td style="width:40px;font-weight:900;color:var(--r)">01</td><td><strong>왜 지금인가</strong> — v1 이후 22일, 무엇이 달라졌나</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">02</td><td><strong>전략 프레임워크</strong> — "4채널 집중" 퍼널 + 채널 역할 재정의</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">03</td><td><strong>배포 아키텍처</strong> — 어드민 → AI 변환 → 채널 배포 파이프라인</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">04</td><td><strong>[채널] 네이버 블로그 + 카페</strong> — 2026 신뢰도 랭킹 실전 대응</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">05</td><td><strong>[채널] 구글 SEO + GEO</strong> — 인사이트 페이지 + AI 검색 장악</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">06</td><td><strong>[채널] 뉴스레터 + 콘텐츠 허브</strong> — 기존 자산 극대화</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">07</td><td><strong>자동화 파이프라인</strong> — AI 변환 엔진 + DB + API 설계</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">08</td><td><strong>실행 로드맵 + 세팅 체크리스트</strong> — Phase 1~3</td></tr>
+      <tr><td style="font-weight:900;color:var(--r)">09</td><td><strong>KPI + 성과 목표</strong> — 1/3/6개월 타겟</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 01. 왜 지금인가 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">1</span><span class="sec-label">Why Now</span></div>
+  <h2>왜 지금인가</h2>
+  <div class="line"></div>
+
+  <h3>v1 마스터 플랜(2/17) 이후 22일 — 판이 바뀌었다</h3>
+  <p>2월 17일, "배포 레이어가 없는 것이 유일한 문제"라고 진단했다. 22일이 지난 지금, 그 배포 레이어의 <strong>기반 인프라가 전부 완성</strong>됐다. 계획 단계가 아니라 실행 단계다.</p>
+
+  <div class="status-grid">
+    <div class="status-card done"><b>7개</b><span>구축 완료 시스템</span></div>
+    <div class="status-card progress"><b>4채널</b><span>배포 대상 확정</span></div>
+    <div class="status-card todo"><b>~10일</b><span>파이프라인 완성</span></div>
+  </div>
+
+  <h3>이미 완성된 것 vs 남은 것</h3>
+  <table>
+    <thead><tr><th>영역</th><th>상태</th><th>상세</th></tr></thead>
+    <tbody>
+      <tr><td><strong>서비스 플랫폼</strong></td><td><span class="tag t-done">✅ LIVE</span></td><td>bscamp.vercel.app — 3/9 정식 오픈, 2기 운영 중</td></tr>
+      <tr><td><strong>콘텐츠 DB + 어드민</strong></td><td><span class="tag t-done">✅ 완료</span></td><td>contents 테이블 + 어드민 작성·편집 기능 구축</td></tr>
+      <tr><td><strong>지식 베이스</strong></td><td><span class="tag t-done">✅ 완료</span></td><td>sync-notion 크론 + 임베딩 파이프라인 가동 중 (664+ 청크)</td></tr>
+      <tr><td><strong>뉴스레터</strong></td><td><span class="tag t-done">✅ 완료</span></td><td>email_logs 기반 발송 파이프라인, 구독자 1,095명</td></tr>
+      <tr><td><strong>QA 헬프데스크</strong></td><td><span class="tag t-done">✅ 운영중</span></td><td>수강생 질문 → 슬랙 알림 봇 연동 완료</td></tr>
+      <tr><td><strong>벤치마크 엔진</strong></td><td><span class="tag t-done">✅ 운영중</span></td><td>대시보드 + 총가치각도기 + 경쟁사 분석기</td></tr>
+      <tr><td><strong>KnowledgeService</strong></td><td><span class="tag t-done">✅ 운영중</span></td><td>Opus 4.6 + RAG, 6개 Consumer 활용 중</td></tr>
+      <tr style="background:var(--ol)"><td><strong>채널 배포 파이프라인</strong></td><td><span class="tag t-build">🔧 구축</span></td><td>AI 포맷 변환 + 멀티채널 자동 배포</td></tr>
+      <tr style="background:var(--ol)"><td><strong>공개 인사이트 페이지</strong></td><td><span class="tag t-build">🔧 구축</span></td><td>/insight/[slug] — 구글 SEO + GEO 진입점</td></tr>
+      <tr style="background:var(--ol)"><td><strong>네이버 API 연동</strong></td><td><span class="tag t-build">🔧 구축</span></td><td>블로그 + 카페 자동 발행</td></tr>
+      <tr style="background:var(--ol)"><td><strong>성과 추적 시스템</strong></td><td><span class="tag t-build">🔧 구축</span></td><td>채널별 트래픽 · 순위 · 기여도 측정</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dark">
+    <h4>v1과 v2의 핵심 차이 — 계획에서 실행으로</h4>
+    <p>v1(2/17)은 "7채널 완전 자동화"라는 이상적 마스터 플랜이었다. 유튜브 쇼츠 자동 생성, 인스타 캐러셀 변환, 카카오 친구톡까지 — 범위가 넓었다.<br><br>
+    v2는 다르다. <strong>지금 가진 인프라로, 지금 효과가 나는 채널에 집중한다.</strong><br>
+    네이버 블로그/카페(검색 유입) + 구글 SEO(글로벌 권위) + GEO(AI 추천) + 뉴스레터(기존 리드 육성).<br>
+    이 4개 채널만 제대로 돌리면, 유튜브/인스타는 콘텐츠가 쌓인 뒤 자연스럽게 확장된다.</p>
+  </div>
+
+  <h3>왜 4채널 집중인가</h3>
+  <div class="hl">
+    <p><strong>핵심 논리:</strong> "메타 광고 교육"을 찾는 사람은 <strong>검색</strong>한다. 인스타 릴스를 보다가 "오 이거 배워야지"가 아니라, "메타 광고 ROAS 올리는 법"을 네이버에서, 구글에서, ChatGPT에서 검색한다. 검색 채널을 먼저 장악하는 것이 퍼널 TOFU의 본질이다.</p>
+    <p>소셜(유튜브 쇼츠/인스타 릴스)은 "발견"이지 "탐색"이 아니다. 발견형 채널은 콘텐츠 볼륨이 나와야 알고리즘을 탄다. 지금은 검색형 채널에서 "전문가"로 포지셔닝하는 게 먼저다.</p>
+  </div>
+</div>
+
+<!-- ===== 02. 전략 프레임워크 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">2</span><span class="sec-label">Strategy</span></div>
+  <h2>전략 프레임워크</h2>
+  <div class="line"></div>
+
+  <h3>v2 퍼널 — 검색 중심 리디자인</h3>
+  <div class="dark" style="text-align:center;">
+    <p style="font-size:9.5pt;line-height:2.4;color:rgba(255,255,255,.9)">
+      <strong style="color:var(--r);font-size:11pt">TOFU</strong> 검색 유입 — 네이버 블로그 · 구글 인사이트 · AI 검색 추천<br>
+      <span style="color:rgba(255,255,255,.3)">↓ "이 사람 진짜 전문가네" — 글 하나에서 권위 인식</span><br>
+      <strong style="color:var(--b);font-size:11pt">MOFU</strong> 신뢰 축적 — 네이버 카페 Q&amp;A · 뉴스레터 주간 인사이트 · 벤치마크 리포트<br>
+      <span style="color:rgba(255,255,255,.3)">↓ 구독 / 뉴스레터 가입 / 카페 가입</span><br>
+      <strong style="color:var(--gn);font-size:11pt">BOFU</strong> 전환 — 무료 웨비나 · 상담 신청 · 수강생 실적 데이터<br>
+      <span style="color:rgba(255,255,255,.3)">↓ 결제</span><br>
+      <strong style="color:var(--o);font-size:11pt">RETAIN</strong> 유지 — QA 헬프데스크 · 슬랙 알림 · 커뮤니티 — <span style="background:var(--gnl);color:#065F46;font-size:7pt;padding:2px 6px;border-radius:6px;font-weight:700">이미 구축됨</span>
+    </p>
+  </div>
+
+  <h3>4채널 × 역할 매트릭스</h3>
+  <table>
+    <thead><tr><th>채널</th><th>퍼널</th><th>전략적 역할</th><th>자동화</th><th>핵심 지표</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>네이버 블로그</strong></td>
+        <td><span class="tag t-seo">TOFU</span></td>
+        <td>"메타 광고 ROAS" 검색 시 전문가 블로그 상위 노출. 441억 실데이터가 무기</td>
+        <td><span class="tag t-auto">완전자동</span></td>
+        <td>검색 순위, 유입</td>
+      </tr>
+      <tr>
+        <td><strong>네이버 카페</strong></td>
+        <td><span class="tag t-seo">MOFU</span></td>
+        <td>커뮤니티 자체가 검색 노출 + 신뢰 축적. 수강생 Q&amp;A가 진짜 콘텐츠</td>
+        <td><span class="tag t-auto">완전자동</span></td>
+        <td>가입자, 댓글, 유입</td>
+      </tr>
+      <tr>
+        <td><strong>구글 SEO + GEO</strong></td>
+        <td><span class="tag t-seo">TOFU</span> <span class="tag t-geo">GEO</span></td>
+        <td>/insight 페이지로 구글 인덱싱 + Schema.org로 AI 검색 동시 장악</td>
+        <td><span class="tag t-auto">완전자동</span></td>
+        <td>인덱싱, AI추천</td>
+      </tr>
+      <tr>
+        <td><strong>뉴스레터</strong></td>
+        <td><span class="tag t-seo">MOFU→BOFU</span></td>
+        <td>1,095 리드에 주간 인사이트. 새 구독자는 블로그/카페에서 유입</td>
+        <td><span class="tag t-done">구축 완료</span></td>
+        <td>오픈율, 전환</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>콘텐츠 전략 — "1원본 → 4변환" 원칙</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>원본 콘텐츠 (어드민 작성)</h4>
+      <ul>
+        <li>bscamp 어드민에서 정보공유 글 작성</li>
+        <li>마크다운, 1,500~2,500자, 전문가 톤</li>
+        <li>강의 스크립트 · RAG · 벤치마크 DB 활용</li>
+        <li>주 2회 (화/금) 신규 발행 목표</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>AI 자동 변환 (4포맷)</h4>
+      <ul>
+        <li><strong>네이버 블로그</strong>: 2,000자+, SEO 키워드, 이모지 소제목</li>
+        <li><strong>네이버 카페</strong>: 800~1,200자, 구어체, 댓글 유도</li>
+        <li><strong>구글 인사이트</strong>: H1→H2→H3 계층, Schema.org, OG</li>
+        <li><strong>GEO 마크업</strong>: FAQ 3~5개 + HowTo schema</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="hl-b">
+    <p><strong>v1 대비 변경:</strong> 7채널(+유튜브/인스타/카카오) → 4채널 집중. 소셜 채널은 Phase 3 이후 검토.<br>
+    이유: ① 검색형 채널이 교육 사업에서 전환율 5~10배 높음 ② API 연동 복잡도 최소화 ③ 콘텐츠 볼륨 쌓인 뒤 소셜 확장이 효율적</p>
+  </div>
+</div>
+
+<!-- ===== 03. 배포 아키텍처 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">3</span><span class="sec-label">Architecture</span></div>
+  <h2>배포 아키텍처</h2>
+  <div class="line"></div>
+
+  <h3>전체 파이프라인 — 어드민부터 채널까지</h3>
+  <div class="dark" style="text-align:center;padding:24px;">
+    <p style="font-size:9.5pt;line-height:2.6;color:rgba(255,255,255,.85)">
+      <strong style="color:var(--gn);font-size:10pt">✅ Layer 0 — 이미 구축된 기반</strong><br>
+      <span style="font-size:8pt;color:rgba(255,255,255,.5)">contents 테이블 · KnowledgeService (Opus 4.6 + RAG 664청크) · 벤치마크 7,366rows · 어드민 에디터</span><br>
+      <span style="color:rgba(255,255,255,.25)">↓ 어드민에서 글 작성/편집 완료 → "배포" 트리거</span><br><br>
+      <strong style="color:var(--r);font-size:10pt">🔧 Layer 1 — AI 변환 엔진 (신규 구축)</strong><br>
+      <span style="font-size:8pt;color:rgba(255,255,255,.5)">원본 1개 → Anthropic API → 채널별 4개 변환 → 품질 검수 → channel_distributions 큐잉</span><br>
+      <span style="color:rgba(255,255,255,.25)">↓ 채널 선택 + 발행 트리거 (즉시 or 예약)</span><br><br>
+      <strong style="color:var(--b);font-size:10pt">🔧 Layer 2 — 채널 배포 (신규 구축)</strong><br>
+      <span style="font-size:8pt;">
+        <span style="color:var(--r)">네이버 블로그 API</span> ·
+        <span style="color:var(--r)">네이버 카페 API</span> ·
+        <span style="color:var(--b)">bscamp /insight (자체)</span> ·
+        <span style="color:var(--gn)">뉴스레터 (기존)</span>
+      </span><br>
+      <span style="color:rgba(255,255,255,.25)">↓ 발행 결과 + 외부 URL 저장</span><br><br>
+      <strong style="color:var(--p);font-size:10pt">🔧 Layer 3 — 성과 추적 (Phase 3)</strong><br>
+      <span style="font-size:8pt;color:rgba(255,255,255,.5)">채널별 트래픽 · UTM 파라미터 · 검색 순위 · AI 추천 모니터링 → 피드백 루프</span>
+    </p>
+  </div>
+
+  <h3>어드민 UX — "글 쓰고 → 배포" 원클릭 흐름</h3>
+  <div class="box">
+    <p>기존 어드민 글 편집 페이지(<code>/admin/contents/[id]</code>)에 "📤 오가닉 채널 배포" 섹션 추가.</p>
+    <table>
+      <thead><tr><th>요소</th><th>동작</th><th>상세</th></tr></thead>
+      <tbody>
+        <tr><td><strong>채널 체크박스</strong></td><td>배포 대상 선택</td><td>□ 네이버 블로그 □ 네이버 카페 ☑ 구글 SEO(항상 켜짐) ☑ GEO 마크업(자동)</td></tr>
+        <tr><td><strong>[AI 변환 미리보기]</strong></td><td>모달 오픈</td><td>탭 구조: [블로그] [카페] [SEO] [GEO] — 각 탭에서 변환 결과 확인 + 수정 가능</td></tr>
+        <tr><td><strong>발행 시점</strong></td><td>즉시 or 예약</td><td>● 즉시 ○ 예약 [날짜/시간 선택]</td></tr>
+        <tr><td><strong>[전체 발행]</strong></td><td>큐 등록 + 발행</td><td>channel_distributions에 INSERT → 병렬 발행 → 결과 알림</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>발행 순서 — 안전한 것부터</h3>
+  <div class="hl-g">
+    <p><strong>① 구글 SEO</strong> (bscamp 자체 서버 — 실패 없음, 즉시) → <strong>② GEO 마크업</strong> (같은 페이지에 schema 추가) → <strong>③ 네이버 블로그</strong> (OAuth 토큰, 안정적) → <strong>④ 네이버 카페</strong> (운영자 토큰 필요) → <strong>⑤ 뉴스레터</strong> (기존 흐름 연계)</p>
+    <p class="sm">구글과 네이버는 1~2일 시차를 두는 것이 권장 — 동일 콘텐츠 동시 게시 시 구글이 canonical 판단에 혼동할 수 있음</p>
+  </div>
+
+  <h3>DB 설계 — channel_distributions 테이블</h3>
+  <div class="box">
+    <table>
+      <thead><tr><th>컬럼</th><th>타입</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>uuid PK</td><td>배포 레코드 ID</td></tr>
+        <tr><td>content_id</td><td>uuid → contents</td><td>원본 콘텐츠 FK (ON DELETE CASCADE)</td></tr>
+        <tr><td><strong>channel_type</strong></td><td>text</td><td>'naver_blog' | 'naver_cafe' | 'google_seo' | 'geo' | 'newsletter'</td></tr>
+        <tr><td><strong>status</strong></td><td>text</td><td>'pending' → 'transforming' → 'ready' → 'published' → 'failed'</td></tr>
+        <tr><td><strong>transformed_content</strong></td><td>jsonb</td><td>채널별 변환된 콘텐츠 (제목, 본문, 메타데이터, 키워드 등)</td></tr>
+        <tr><td><strong>external_url</strong></td><td>text</td><td>발행된 외부 URL (추적용)</td></tr>
+        <tr><td>external_id</td><td>text</td><td>네이버 postId 등 외부 시스템 ID</td></tr>
+        <tr><td>error_message</td><td>text</td><td>실패 시 에러 메시지</td></tr>
+        <tr><td>scheduled_at</td><td>timestamptz</td><td>예약 발행 시각 (null이면 즉시)</td></tr>
+        <tr><td>published_at</td><td>timestamptz</td><td>실제 게시 시각</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>channel_credentials — 인증 관리</h3>
+  <div class="box">
+    <p>기존 <code>service_secrets</code> 테이블에 채널별 row 추가. 네이버 OAuth 토큰(access_token, refresh_token, expires_at)은 자동 갱신 로직 포함.</p>
+    <table>
+      <thead><tr><th>키</th><th>저장 내용</th><th>갱신</th></tr></thead>
+      <tbody>
+        <tr><td>naver_blog_credentials</td><td>{access_token, refresh_token, expires_at}</td><td>자동 (만료 전 갱신)</td></tr>
+        <tr><td>naver_cafe_credentials</td><td>{access_token, cafe_club_id, menu_ids}</td><td>자동</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 04. 네이버 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">4</span><span class="sec-label">Naver</span></div>
+  <h2>[채널] 네이버 블로그 + 카페</h2>
+  <div class="line"></div>
+
+  <h3>왜 네이버가 1순위인가</h3>
+  <div class="hl">
+    <p><strong>"메타 광고 ROAS"를 검색하는 사람은 네이버에서 검색한다.</strong> 한국 검색 시장 점유율 55%+. 교육 사업에서 네이버 검색 유입은 구글의 3~5배. 그런데 자사몰사관학교는 네이버에 아무것도 없다. 검색 자산 = 0. 이것만 해결해도 오가닉 리드가 생긴다.</p>
+  </div>
+
+  <h3>네이버 블로그 — 2026 신뢰도 랭킹 전략</h3>
+  <p>2025.11 네이버 공식 발표: AI 기반 '신뢰도 중심 통합 랭킹 모델' 도입. 키워드 뽀려서 올리는 시대 끝. 전문성·경험·출처 투명성이 핵심.</p>
+
+  <table>
+    <thead><tr><th>AI 신뢰도 요소</th><th>자사몰사관학교 대응</th><th>자동화</th></tr></thead>
+    <tbody>
+      <tr><td><strong>공신력</strong></td><td>수강생 총매출 441억 + ROAS 255% 데이터 전면 배치</td><td>벤치마크 DB 자동 업데이트</td></tr>
+      <tr><td><strong>전문성</strong></td><td>Smith 대표 프로필 (경희대 경영학원, 스킨스쿨 50억, 2기 운영)</td><td>고정 템플릿 자동 삽입</td></tr>
+      <tr><td><strong>경험 기반</strong></td><td>수강생 before/after 사례, 광고 관리자 실제 스크린샷</td><td>벤치마크 차트 자동 생성</td></tr>
+      <tr><td><strong>출처 투명성</strong></td><td>Meta 공식 문서, 광고 라이브러리, 통계청 링크</td><td>출처 DB에서 자동 삽입</td></tr>
+    </tbody>
+  </table>
+
+  <h3>블로그 AI 변환 규칙</h3>
+  <div class="box">
+    <p><strong>톤:</strong> 친근하지만 전문적 ("~입니다", "~해요" 혼용) · <strong>길이:</strong> 1,500~2,500자 · <strong>구조:</strong> 서론(문제제기) → 본론(소제목 3~5개) → 결론(핵심 요약)</p>
+    <p>✓ 소제목에 ✅ 이모지 + 굵게 처리 · 키워드: 제목 + 첫 문단 + 소제목에 3회+ · 태그 10개 · CTA: "자사몰사관학교 2기 →" 링크 · 공식 출처 2+ · FAQ 3~5개</p>
+    <p class="sm">⛔ 금지: 과도한 줄바꿈 남발, 광고성 표현, AI 패턴 감지될 수준의 정형화</p>
+  </div>
+
+  <h3>네이버 카페 — 커뮤니티 + 검색 노출 동시 확보</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>카페 전략</h4>
+      <ul>
+        <li>카페명: "자사몰 마케팅 연구소"</li>
+        <li>게시판: 자유게시판, 메타 광고 Q&amp;A, 성과 공유, 자료실</li>
+        <li>대표 카페 등급 목표 (네이버 신통검 대응)</li>
+        <li>수강생 초기 시딩 → 자연 성장 유도</li>
+        <li>주간 인사이트 + 벤치마크 리포트 배포</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>카페 AI 변환 규칙</h4>
+      <ul>
+        <li><strong>톤:</strong> 구어체 ("여러분", "공유드려요")</li>
+        <li><strong>길이:</strong> 800~1,200자 (핵심만)</li>
+        <li><strong>구조:</strong> 왜 공유? → 핵심 3가지 → 마무리 질문</li>
+        <li>마무리: "여러분은 어떻게 운영하세요?"</li>
+        <li>외부 링크 최소화 (카페 스팸 필터 대응)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>타겟 키워드 — P0 우선</h3>
+  <table>
+    <thead><tr><th>카테고리</th><th>키워드</th><th>의도</th><th>우선</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><strong>메타 광고</strong></td><td>메타 광고 ROAS 올리는 법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>메타 광고 세팅 방법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>페이스북 광고 시작하기</td><td>정보</td><td>P0</td></tr>
+      <tr><td rowspan="3"><strong>자사몰</strong></td><td>자사몰 매출 올리는 법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>자사몰 광고 대행사 vs 직접</td><td>비교</td><td>P0</td></tr>
+      <tr><td>자사몰 마케팅 교육</td><td>거래</td><td>P0</td></tr>
+      <tr><td rowspan="2"><strong>성과 분석</strong></td><td>광고 ROAS 계산법</td><td>정보</td><td>P0</td></tr>
+      <tr><td>메타 광고 성과 분석</td><td>정보</td><td>P1</td></tr>
+      <tr><td rowspan="2"><strong>브랜드</strong></td><td>자사몰 사관학교 후기</td><td>거래</td><td>P0</td></tr>
+      <tr><td>메타 광고 교육 추천</td><td>거래</td><td>P0</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dark">
+    <h4>바이럴 업체 vs 우리 — 판이 바뀌고 있다</h4>
+    <p>바이럴 업체: 블로그 팜 수십 개 + AI 글 복붙 + 체험단 가짜 후기.<br>
+    2026 네이버: AI 글 감지 시스템 + 신뢰도 통합 랭킹 + 트래픽 어뷰징 제재 강화.<br><br>
+    <strong>우리의 무기:</strong> 브랜드블로그 1개 집중(C-Rank) + 수강생 78명 리얼 성과(441억) + 벤치마크 DB 7,366rows 실측 데이터 + "총가치", "배수효과" 등 원본 용어(원본성 증명).<br>
+    가짜를 진짜처럼 보이게 하는 싸움이 아니라, <strong>진짜를 구조적으로 뿌리는 싸움.</strong> 판이 바뀌면 진짜가 이긴다.</p>
+  </div>
+</div>
+
+<!-- ===== 05. 구글 SEO + GEO ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">5</span><span class="sec-label">Google SEO + GEO</span></div>
+  <h2>[채널] 구글 SEO + GEO</h2>
+  <div class="line"></div>
+
+  <h3>구글 전략 — bscamp 안에 공개 인사이트 페이지</h3>
+  <div class="hl-b">
+    <p><strong>핵심 판단:</strong> 별도 블로그를 만들지 않는다. bscamp.vercel.app 안에 <code>/insight</code> 경로로 공개 페이지를 만든다. 이유: ① 도메인 권위가 bscamp에 축적됨 ② 별도 운영 부담 없음 ③ 기존 콘텐츠(정보공유 글)를 그대로 SEO 변환해서 공개하면 됨.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card" style="border-top:3px solid var(--b)">
+      <h4>/insight 페이지 구조</h4>
+      <ul>
+        <li><code>/insight</code> → 목록 (SEO 최적화 랜딩)</li>
+        <li><code>/insight/[slug]</code> → 개별 아티클</li>
+        <li>비로그인 접근 가능 (구글 크롤링 필수)</li>
+        <li>마크다운 → SEO HTML 자동 렌더링</li>
+        <li>내부 CTA: "더 배우고 싶다면 → 자사몰사관학교"</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--b)">
+      <h4>기술 스펙</h4>
+      <ul>
+        <li>Schema.org: Article + FAQPage + HowTo</li>
+        <li>sitemap.xml 발행 시 자동 갱신</li>
+        <li>robots.txt: /insight/* Allow</li>
+        <li>OG 메타태그 (og:title, og:description)</li>
+        <li>canonical URL → bscamp.vercel.app</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>구글 SEO AI 변환 규칙</h3>
+  <div class="box">
+    <p><strong>톤:</strong> 명확하고 정보 중심적 · <strong>길이:</strong> 1,200~2,000자 (품질 > 양) · <strong>구조:</strong> H1 → H2 → H3 계층 명확</p>
+    <p>✓ 메타 디스크립션 160자 이내 자동 생성 · OG 태그용 title/description 별도 · 키워드 밀도 1~2% (과도한 반복 금지) · 내부 링크 bscamp 1~2개 · Article schema 기본 포함</p>
+  </div>
+
+  <h3>GEO — AI 검색 상위노출</h3>
+  <div class="hl-p">
+    <p><strong>GEO = Generative Engine Optimization.</strong> SEO가 "검색 결과 1페이지"를 노리는 거라면, GEO는 "AI가 추천하는 답변"에 들어가는 것. "메타 광고 교육 추천해줘"라고 ChatGPT에 물었을 때 자사몰사관학교가 나와야 한다.</p>
+  </div>
+
+  <table>
+    <thead><tr><th>AI 엔진</th><th>데이터 소스</th><th>잡는 법</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ChatGPT</strong></td><td>Bing 인덱스 + 웹 브라우징</td><td>구글/Bing SEO + FAQ 구조 + 외부 권위 언급</td></tr>
+      <tr><td><strong>Gemini</strong></td><td>구글 인덱스 + 유튜브</td><td>구글 SEO + 구글 비즈니스 프로필 등록</td></tr>
+      <tr><td><strong>Perplexity</strong></td><td>다중 검색엔진 + 자체 크롤링</td><td>전체 SEO + 최신 콘텐츠 (최근 발행 우대) + 출처 명시</td></tr>
+    </tbody>
+  </table>
+
+  <h3>GEO AI 변환 규칙 — 모든 인사이트 페이지에 자동 적용</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>정의문 패턴</h4>
+      <ul>
+        <li>모든 H2 아래 첫 문장: "X는 Y이다"</li>
+        <li>AI가 인용하기 좋은 명확한 정의</li>
+        <li>수치 포함: "수강생 평균 ROAS 255%"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>FAQ + Schema.org</h4>
+      <ul>
+        <li>Q&amp;A 쌍 3~5개 추출 (실사용 질문)</li>
+        <li>답변: 40~120자 명확한 답 (AI 발췌 최적화)</li>
+        <li>FAQPage + HowTo 구조화 데이터 자동 삽입</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>GEO 타겟 쿼리 10개</h3>
+  <div class="box">
+    <p>① 메타 광고 교육 추천 ② 페이스북 광고 강의 어디가 좋아 ③ 자사몰 마케팅 배우는 곳 ④ ROAS 올리는 교육 ⑤ 메타 광고 코칭 프로그램 ⑥ 온라인 쇼핑몰 광고 교육 ⑦ 퍼포먼스 마케팅 실전 강의 ⑧ 광고 대행사 대신 직접 배우기 ⑨ 메타 광고 초보 교육 ⑩ 자사몰 매출 올리는 강의</p>
+    <p class="sm">Phase 3에서 주간 자동 모니터링 크론 추가 예정: ChatGPT/Gemini/Perplexity에 쿼리 → 추천 여부 체크 → 미추천 키워드 → 해당 콘텐츠 생성 우선순위 ↑</p>
+  </div>
+</div>
+
+<!-- ===== 06. 뉴스레터 + 콘텐츠 허브 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">6</span><span class="sec-label">Newsletter + Hub</span></div>
+  <h2>[채널] 뉴스레터 + 콘텐츠 허브</h2>
+  <div class="line"></div>
+
+  <h3>이미 가진 자산 — 활용만 하면 된다</h3>
+  <div class="hl-g">
+    <p><strong>뉴스레터 파이프라인은 이미 구축 완료.</strong> email_logs 기반 발송, 구독자 1,095명. 문제는 "보낼 콘텐츠"가 부족했던 것. 오가닉 채널 파이프라인이 돌면, 주 2회 생산되는 콘텐츠가 자동으로 뉴스레터 소재가 된다.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card" style="border-top:3px solid var(--gn)">
+      <h4>뉴스레터 전략</h4>
+      <ul>
+        <li>주 1회 발행 (금요일, 콘텐츠 2건 요약)</li>
+        <li>구조: 이번 주 인사이트 → 핵심 데이터 → CTA</li>
+        <li>기존 email_logs + 발송 파이프라인 활용</li>
+        <li>새 콘텐츠 발행 시 자동 연계 옵션</li>
+        <li>뉴스레터 → 블로그 링크 → 체류시간 향상</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gn)">
+      <h4>콘텐츠 허브 = bscamp 자체</h4>
+      <ul>
+        <li>bscamp.vercel.app이 콘텐츠 허브 역할</li>
+        <li>/insight: 공개 아티클 (구글 SEO)</li>
+        <li>/admin/contents: 내부 정보공유 (원본)</li>
+        <li>KnowledgeService: RAG 기반 답변 생성</li>
+        <li>벤치마크 대시보드: 데이터 시각화</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>콘텐츠 순환 구조 — 하나를 쓰면 다섯 곳에서 일한다</h3>
+  <div class="dark" style="text-align:center;padding:20px;">
+    <p style="font-size:9pt;line-height:2.4;color:rgba(255,255,255,.85)">
+      <strong style="color:var(--r)">어드민에서 원본 1개 작성</strong><br>
+      <span style="color:rgba(255,255,255,.3)">↓ AI 변환 엔진</span><br>
+      <span style="color:var(--b)">구글 /insight 페이지</span> → 검색 유입 → 신규 방문자<br>
+      <span style="color:var(--r)">네이버 블로그</span> → 검색 유입 → "전문가" 인식<br>
+      <span style="color:var(--r)">네이버 카페</span> → 커뮤니티 성장 → 검색 노출<br>
+      <span style="color:var(--gn)">뉴스레터</span> → 기존 리드 육성 → 웨비나 전환<br>
+      <span style="color:var(--p)">GEO 마크업</span> → AI가 추천 → 브랜드 권위<br>
+      <span style="color:rgba(255,255,255,.3)">↓ 모든 채널의 CTA</span><br>
+      <strong style="color:var(--gn)">bscamp.vercel.app → 웨비나 신청 → 수강 전환</strong>
+    </p>
+  </div>
+
+  <h3>리드 마그넷 — 벤치마크 리포트 자동 생성</h3>
+  <div class="box">
+    <p><strong>벤치마크 DB 7,366 rows를 리드 마그넷으로 전환.</strong> 매월 1일 자동 생성: "2026년 3월 메타 광고 업종별 벤치마크 리포트" — 업종별 평균 ROAS, CPA, CPM 요약 + 인사이트. 블로그/카페에 요약 게시 → 전문 리포트 다운로드 시 이메일 수집 → 뉴스레터 구독자 확대.</p>
+    <p class="sm">이것은 Phase 3 항목이지만, 전략적으로 가장 강력한 리드 마그넷. 아무도 이 수준의 데이터를 무료로 제공하지 않는다.</p>
+  </div>
+</div>
+
+<!-- ===== 07. 자동화 파이프라인 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">7</span><span class="sec-label">Automation</span></div>
+  <h2>자동화 파이프라인</h2>
+  <div class="line"></div>
+
+  <h3>API 라우트 설계 — 6개</h3>
+  <table>
+    <thead><tr><th>API</th><th>메서드</th><th>역할</th><th>Phase</th></tr></thead>
+    <tbody>
+      <tr><td><strong>/api/admin/distribute</strong></td><td>POST</td><td>콘텐츠 ID + 채널 배열 → AI 변환 + channel_distributions 큐 등록</td><td>P1</td></tr>
+      <tr><td><strong>/api/admin/distribute/preview</strong></td><td>POST</td><td>AI 변환 결과만 반환 (DB 저장 X) — 미리보기용</td><td>P1</td></tr>
+      <tr><td><strong>/api/admin/distribute/publish</strong></td><td>POST</td><td>distribution ID → 실제 채널 발행 실행</td><td>P1</td></tr>
+      <tr><td><strong>/api/admin/distributions</strong></td><td>GET</td><td>발행 현황 목록 (채널별 상태, 필터, 정렬)</td><td>P1</td></tr>
+      <tr><td><strong>/api/admin/naver/callback</strong></td><td>GET</td><td>네이버 OAuth 콜백 → 토큰 자동 저장</td><td>P2</td></tr>
+      <tr><td><strong>/api/admin/naver/refresh-token</strong></td><td>POST</td><td>네이버 OAuth 토큰 갱신 (만료 전 자동)</td><td>P2</td></tr>
+    </tbody>
+  </table>
+
+  <h3>크론 — 3개 (v1의 8개에서 집중)</h3>
+  <table>
+    <thead><tr><th>크론</th><th>주기</th><th>KST</th><th>내용</th><th>Phase</th></tr></thead>
+    <tbody>
+      <tr><td><strong>① 예약 발행</strong></td><td>매시간</td><td>:00</td><td>scheduled_at 도래한 distributions → 채널별 순차 발행</td><td>P1</td></tr>
+      <tr><td><strong>② 네이버 토큰 갱신</strong></td><td>매일</td><td>03:00</td><td>네이버 OAuth 토큰 만료 임박 시 자동 갱신</td><td>P2</td></tr>
+      <tr><td><strong>③ 성과 추적</strong></td><td>매주 월</td><td>09:00</td><td>채널별 트래픽 수집 + UTM 분석 + Slack 리포트</td><td>P3</td></tr>
+    </tbody>
+  </table>
+
+  <div class="hl">
+    <p><strong>v1과의 차이:</strong> v1은 크론 8개 + API 7개로 "무인 자동 생산"을 목표했다. v2는 <strong>"어드민에서 글 쓰면 자동 배포"</strong>에 집중한다. 콘텐츠 생성 자체를 AI에 맡기는 것이 아니라, 어드민에서 작성한 양질의 원본을 AI가 채널별로 변환+배포하는 구조. 품질 통제가 핵심.</p>
+  </div>
+
+  <h3>AI 변환 엔진 — Anthropic API 활용</h3>
+  <div class="dark">
+    <h4>1원본 → 4변환 처리 흐름</h4>
+    <p>① 어드민에서 "배포" 트리거 → ② 원본 콘텐츠(마크다운) + 태그/카테고리 추출 → ③ Anthropic API에 채널별 시스템 프롬프트 전달 → ④ 4개 포맷(블로그/카페/SEO/GEO) 동시 생성 → ⑤ channel_distributions에 'ready' 상태로 INSERT → ⑥ 미리보기에서 확인/수정 가능 → ⑦ "발행" 시 채널별 API 호출</p>
+  </div>
+
+  <h3>환경변수 — 추가 필요</h3>
+  <div class="box">
+    <table>
+      <thead><tr><th>변수</th><th>용도</th><th>Phase</th></tr></thead>
+      <tbody>
+        <tr><td><strong>NAVER_CLIENT_ID / SECRET</strong></td><td>네이버 OAuth (블로그+카페 API)</td><td>P2</td></tr>
+        <tr><td><strong>NAVER_CAFE_CLUB_ID</strong></td><td>운영 카페 ID</td><td>P2</td></tr>
+      </tbody>
+    </table>
+    <p class="sm">구글 SEO, GEO는 bscamp 자체 서버이므로 외부 인증 불필요. 뉴스레터는 기존 환경변수 활용.</p>
+  </div>
+
+  <h3>자동 생산량 (파이프라인 완성 시)</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>주간 생산량</h4>
+      <ul>
+        <li>원본 2건 × 4채널 변환 = <strong>8건/주</strong></li>
+        <li>+ 뉴스레터 1건 (금요일 요약)</li>
+        <li>= 주 <strong>9건</strong> 콘텐츠 자동 배포</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>월간 생산량</h4>
+      <ul>
+        <li><strong>~36건/월</strong> 멀티채널 배포</li>
+        <li>+ 월 1회 벤치마크 리포트 (Phase 3)</li>
+        <li>Smith님 추가 투입: <strong>0시간</strong> (글 작성 제외)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 08. 실행 로드맵 ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">8</span><span class="sec-label">Roadmap</span></div>
+  <h2>실행 로드맵 + 세팅 체크리스트</h2>
+  <div class="line"></div>
+
+  <div class="hl">
+    <p><strong>Phase 1 — MVP (1~2일)</strong><br>"구글 SEO + GEO 마크업" 최우선. 가장 안전하고 효과 장기적. 외부 API 없이 bscamp 자체 구현.</p>
+  </div>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>작업</th><th>누가</th><th>시간</th><th>상세</th></tr></thead>
+    <tbody>
+      <tr style="background:#d4edda">
+        <td colspan="5"><strong>▶ 에이전트팀 개발 — 외부 의존성 없음, 바로 시작 가능</strong></td>
+      </tr>
+      <tr>
+        <td>1-1</td>
+        <td><strong>DB: channel_distributions 테이블 생성</strong></td>
+        <td>에이전트팀</td>
+        <td>1시간</td>
+        <td>Supabase 마이그레이션. content_id FK, channel_type, status, transformed_content(jsonb), external_url, scheduled_at, published_at</td>
+      </tr>
+      <tr>
+        <td>1-2</td>
+        <td><strong>/insight + /insight/[slug] 공개 페이지</strong></td>
+        <td>에이전트팀</td>
+        <td>4시간</td>
+        <td>비로그인 접근 가능. 마크다운 → SEO HTML 렌더링. Schema.org Article + FAQPage. OG 메타태그. 내부 CTA 삽입</td>
+      </tr>
+      <tr>
+        <td>1-3</td>
+        <td><strong>sitemap.xml + robots.txt</strong></td>
+        <td>에이전트팀</td>
+        <td>1시간</td>
+        <td>/api/sitemap — published 상태 글만 동적 생성. robots.txt: /insight/* Allow</td>
+      </tr>
+      <tr>
+        <td>1-4</td>
+        <td><strong>GEO 마크업 자동 생성</strong></td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>Anthropic API → FAQ schema.org 추출. /insight/[slug]에 JSON-LD 자동 삽입. HowTo schema (단계별 내용 시)</td>
+      </tr>
+      <tr>
+        <td>1-5</td>
+        <td><strong>어드민 배포 UI 기초</strong></td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>글 편집 페이지에 "오가닉 배포" 섹션 추가. 채널 체크박스 + "구글 SEO에 발행" 버튼. channel_distributions INSERT</td>
+      </tr>
+      <tr>
+        <td>1-6</td>
+        <td><strong>AI 변환 API (구글 SEO + GEO)</strong></td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>/api/admin/distribute + /api/admin/distribute/preview. 구글 SEO용 + GEO용 변환 프롬프트. 미리보기 모달</td>
+      </tr>
+      <tr style="background:#e8f4fd">
+        <td colspan="5">✅ <strong>P1 완료 시</strong>: 어드민에서 글 작성 → "발행" 클릭 → 구글 인사이트 페이지 자동 생성 + GEO 마크업 자동 적용. Smith님 추가 작업 0.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hl" style="margin-top:24px">
+    <p><strong>Phase 2 — 네이버 연동 (2~3일)</strong><br>OAuth 인증 필요. Smith님 세팅 약 20분.</p>
+  </div>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>작업</th><th>누가</th><th>시간</th><th>상세</th></tr></thead>
+    <tbody>
+      <tr style="background:#fff3cd">
+        <td colspan="5"><strong>▶ Smith님 세팅 (20분) — 에이전트팀 개발과 병렬</strong></td>
+      </tr>
+      <tr>
+        <td>2-1</td>
+        <td><strong>네이버 개발자센터 앱 등록</strong></td>
+        <td>Smith님</td>
+        <td>10분</td>
+        <td>developers.naver.com → 앱 등록 → API 권한: 블로그+카페 체크 → 콜백 URL: <code>https://bscamp.vercel.app/api/admin/naver/callback</code></td>
+      </tr>
+      <tr>
+        <td>2-2</td>
+        <td><strong>네이버 브랜드블로그 개설</strong></td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td>블로그명: "자사몰사관학교 공식". 카테고리 4개: 메타 광고 세팅 / 성과 분석 / 자사몰 전략 / 수강생 사례</td>
+      </tr>
+      <tr>
+        <td>2-3</td>
+        <td><strong>네이버 카페 개설</strong></td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td>카페명: "자사몰 마케팅 연구소". 게시판 4개: 자유게시판, 메타 광고 Q&amp;A, 성과 공유, 자료실</td>
+      </tr>
+      <tr style="background:#d4edda">
+        <td colspan="5"><strong>▶ 에이전트팀 개발 — Smith님 세팅 완료 후</strong></td>
+      </tr>
+      <tr>
+        <td>2-4</td>
+        <td><strong>네이버 OAuth 콜백 구현</strong></td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>/api/admin/naver/callback — OAuth 2.0 → access_token, refresh_token → service_secrets 저장. 자동 갱신 로직 포함</td>
+      </tr>
+      <tr>
+        <td>2-5</td>
+        <td><strong>네이버 블로그 자동 발행 API</strong></td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>Anthropic → 블로그 포맷 변환 + POST openapi.naver.com/blog/writePost.json → external_url 저장</td>
+      </tr>
+      <tr>
+        <td>2-6</td>
+        <td><strong>네이버 카페 자동 발행 API</strong></td>
+        <td>에이전트팀</td>
+        <td>3시간</td>
+        <td>카페 카테고리 ID 조회 + AI 포맷 변환(카페용) + POST /v1/cafe/{clubid}/articles. 스팸 필터 대응 에러 핸들링</td>
+      </tr>
+      <tr>
+        <td>2-7</td>
+        <td><strong>네이버 OAuth 로그인</strong></td>
+        <td>Smith님</td>
+        <td>1분</td>
+        <td>모찌가 생성한 URL 클릭 → 로그인 → 토큰 자동 저장 (2-4 완료 후)</td>
+      </tr>
+      <tr>
+        <td>2-8</td>
+        <td><strong>어드민 배포 UI 확장</strong></td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>네이버 블로그/카페 체크박스 활성화. 미리보기에 [블로그] [카페] 탭 추가. 발행 현황에 네이버 상태 표시</td>
+      </tr>
+      <tr>
+        <td>2-9</td>
+        <td><strong>예약 발행 크론</strong></td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>vercel.json 크론: /api/cron/distribute-publish (매시간). scheduled_at 도래한 distributions 자동 발행</td>
+      </tr>
+      <tr style="background:#e8f4fd">
+        <td colspan="5">✅ <strong>P2 완료 시</strong>: 어드민에서 글 작성 → 4채널(구글+GEO+네이버 블로그+카페) 자동 배포. 주 8건 멀티채널 배포 가능.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hl" style="margin-top:24px">
+    <p><strong>Phase 3 — 고도화 (1~2주 후)</strong><br>데이터 쌓인 후 효과 측정 + 개선. 소셜 채널 확장 검토.</p>
+  </div>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>작업</th><th>누가</th><th>시간</th><th>상세</th></tr></thead>
+    <tbody>
+      <tr style="background:#fff3cd">
+        <td colspan="5"><strong>▶ Smith님 세팅 (5분)</strong></td>
+      </tr>
+      <tr>
+        <td>3-1</td>
+        <td><strong>구글 비즈니스 프로필 등록</strong></td>
+        <td>Smith님</td>
+        <td>5분</td>
+        <td>"자사몰사관학교" 등록 — Gemini GEO 가중치. 카테고리: 교육 서비스. 웹사이트: bscamp.vercel.app</td>
+      </tr>
+      <tr style="background:#d4edda">
+        <td colspan="5"><strong>▶ 에이전트팀 개발</strong></td>
+      </tr>
+      <tr>
+        <td>3-2</td>
+        <td><strong>발행 현황 대시보드</strong></td>
+        <td>에이전트팀</td>
+        <td>4시간</td>
+        <td>/admin/distributions — 채널별 상태(pending/ready/published/failed), 외부 URL 링크, 실패 재발행, 에러 로그</td>
+      </tr>
+      <tr>
+        <td>3-3</td>
+        <td><strong>성과 추적 시스템</strong></td>
+        <td>에이전트팀</td>
+        <td>4시간</td>
+        <td>UTM 파라미터 자동 삽입 (모든 외부 링크에 ?utm_source=naver_blog 등). Mixpanel 이벤트 연동. 채널 기여도 통계</td>
+      </tr>
+      <tr>
+        <td>3-4</td>
+        <td><strong>벤치마크 리포트 자동 발행</strong></td>
+        <td>에이전트팀</td>
+        <td>4시간</td>
+        <td>매월 1일 크론: 벤치마크 DB → 업종별 요약 리포트 → 인사이트 페이지 자동 게시 + 네이버 배포. 리드 마그넷</td>
+      </tr>
+      <tr>
+        <td>3-5</td>
+        <td><strong>GEO 모니터링 크론</strong></td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>주 1회 수요일: 10개 타겟 쿼리 → ChatGPT/Gemini/Perplexity 추천 체크 → 미추천 키워드 → 콘텐츠 우선순위 ↑ → Slack 리포트</td>
+      </tr>
+      <tr>
+        <td>3-6</td>
+        <td><strong>뉴스레터 자동 연계</strong></td>
+        <td>에이전트팀</td>
+        <td>2시간</td>
+        <td>오가닉 채널 발행 시 → 뉴스레터 소재로 자동 큐잉. 금요일 발행 시 해당 주 콘텐츠 요약 자동 포함</td>
+      </tr>
+      <tr>
+        <td>3-7</td>
+        <td><strong>소셜 채널 확장 검토</strong></td>
+        <td>모찌</td>
+        <td>리포트</td>
+        <td>3개월 데이터 기반: 채널별 유입/전환 분석 → 유튜브/인스타/카카오 추가 여부 Smith님에게 보고</td>
+      </tr>
+      <tr style="background:#e8f4fd">
+        <td colspan="5">✅ <strong>P3 완료 시</strong>: 성과 측정 + 리드 마그넷 + AI 검색 모니터링 + 뉴스레터 자동 연계. 전체 파이프라인 완성.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="dark" style="margin-top:20px">
+    <h4>Smith님 총 투입 요약</h4>
+    <table>
+      <thead><tr><th>Phase</th><th>작업</th><th>시간</th></tr></thead>
+      <tbody>
+        <tr><td>P1</td><td>없음 (에이전트팀만으로 진행)</td><td><strong>0분</strong></td></tr>
+        <tr><td>P2</td><td>네이버 앱 등록 + 블로그 개설 + 카페 개설 + OAuth 로그인</td><td><strong>21분</strong></td></tr>
+        <tr><td>P3</td><td>구글 비즈니스 프로필 등록</td><td><strong>5분</strong></td></tr>
+        <tr><td colspan="2"><strong>합계</strong></td><td><strong>26분 (1회)</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:8px;font-size:9pt;">v1의 49분 → v2의 26분. 채널을 4개로 집중하면서 세팅도 절반으로 줄었다.</p>
+  </div>
+</div>
+
+<!-- ===== 09. KPI ===== -->
+<div class="page">
+  <div class="sec-head"><span class="sec-num">9</span><span class="sec-label">KPI</span></div>
+  <h2>성과 목표</h2>
+  <div class="line"></div>
+
+  <table>
+    <thead><tr><th>지표</th><th>현재</th><th>1개월</th><th>3개월</th><th>6개월</th></tr></thead>
+    <tbody>
+      <tr><td><strong>콘텐츠 배포량 (월)</strong></td><td>수동 2~3건</td><td>36건 (자동)</td><td>36건</td><td>36건+</td></tr>
+      <tr><td><strong>네이버 블로그 글 수</strong></td><td>0</td><td>8+</td><td>24+</td><td>48+</td></tr>
+      <tr><td><strong>구글 인덱싱 페이지</strong></td><td>1 (랜딩)</td><td>10+</td><td>30+</td><td>60+</td></tr>
+      <tr><td><strong>네이버 P0 키워드 순위</strong></td><td>미노출</td><td>상위 30</td><td>상위 10</td><td>상위 5</td></tr>
+      <tr><td><strong>AI 검색 추천 키워드</strong></td><td>0</td><td>2+</td><td>5+</td><td>8+</td></tr>
+      <tr><td><strong>네이버 카페 가입자</strong></td><td>0</td><td>50+</td><td>200+</td><td>500+</td></tr>
+      <tr><td><strong>뉴스레터 구독자</strong></td><td>~1,095</td><td>1,200+</td><td>1,500+</td><td>2,500+</td></tr>
+      <tr><td><strong>월 오가닉 리드</strong></td><td>거의 0</td><td>10+</td><td>30+</td><td>80+</td></tr>
+      <tr><td><strong>채널별 bscamp 유입</strong></td><td>직접/추천만</td><td>검색 10%+</td><td>검색 25%+</td><td>검색 40%+</td></tr>
+      <tr><td><strong>Smith님 배포 투입</strong></td><td>-</td><td>0시간</td><td>0시간</td><td>0시간</td></tr>
+    </tbody>
+  </table>
+
+  <h3>마일스톤</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>1개월 — "존재감 확보"</h4>
+      <ul>
+        <li>네이버에 "자사몰사관학교" 검색 시 노출</li>
+        <li>구글에 /insight 페이지 인덱싱 확인</li>
+        <li>AI 검색 2개+ 쿼리에서 추천 시작</li>
+        <li>카페 가입자 50명, 첫 Q&amp;A 발생</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>3개월 — "전문가 포지셔닝"</h4>
+      <ul>
+        <li>"메타 광고 ROAS" 네이버 상위 10 진입</li>
+        <li>구글 30+ 페이지, 롱테일 키워드 유입 시작</li>
+        <li>뉴스레터 → 웨비나 전환율 측정 시작</li>
+        <li>월 30건 오가닉 리드 → 웨비나 참석 유도</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>6개월 — "채널 자생"</h4>
+      <ul>
+        <li>네이버 P0 키워드 상위 5, 브랜드 키워드 1위</li>
+        <li>카페 커뮤니티 자생 (수강생 주도 Q&amp;A)</li>
+        <li>월 80+ 오가닉 리드, 광고 의존도 감소</li>
+        <li>소셜 채널(유튜브/인스타) 확장 판단 리포트</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>장기 비전 — "오가닉 50%"</h4>
+      <ul>
+        <li>신규 수강생의 50%가 오가닉 유입</li>
+        <li>광고비 절감 → ROAS 추가 개선</li>
+        <li>"자사몰 교육 = 자사몰사관학교" 인식</li>
+        <li>콘텐츠 자산이 복리로 축적</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dark" style="margin-top:20px;text-align:center;">
+    <h4 style="font-size:13pt;margin-bottom:12px;">핵심 메시지</h4>
+    <p style="font-size:10.5pt;line-height:1.9;">
+      v1은 "무엇을 할 것인가"였다. v2는 "지금 무엇을 하는가"다.<br><br>
+      인프라는 완성됐다. 콘텐츠 DB, 지식 베이스, 뉴스레터, 벤치마크 — 전부 가동 중.<br>
+      남은 건 <strong>배포 파이프라인 하나</strong>. 그것만 연결하면 끝이다.<br><br>
+      Phase 1(구글 SEO + GEO): <strong>에이전트팀만으로 바로 시작.</strong><br>
+      Phase 2(네이버): Smith님 20분 세팅 후 자동화.<br>
+      Phase 3(성과 측정 + 리드 마그넷): 데이터 쌓인 후 고도화.<br><br>
+      <strong style="color:var(--r);font-size:12pt">다음 단계: Phase 1 구현 시작 → 이번 주 내 구글 인사이트 라이브</strong>
+    </p>
+  </div>
+
+  <div style="margin-top:30px;text-align:center;color:var(--g5);font-size:8.5pt;">
+    <p>자사몰 사관학교 마케팅팀 · 2026년 3월 11일</p>
+    <p style="margin-top:3px;">Execution Plan v2.0 · Prepared by 모찌</p>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

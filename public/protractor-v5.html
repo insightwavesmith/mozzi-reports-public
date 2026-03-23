@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>총가치각도기 v5 목업</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 24px; }
+
+/* 헤더 */
+.header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.header-icon { width: 40px; height: 40px; background: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.header h1 { font-size: 22px; font-weight: 700; }
+.header .sub { font-size: 13px; color: #94a3b8; margin-top: 2px; }
+
+/* 기간 버튼 */
+.period-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+.period-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; font-size: 13px; cursor: pointer; }
+.period-btn.active { background: #ef4444; color: white; border-color: #ef4444; }
+
+/* 탭 */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px; }
+.tab { padding: 10px 24px; font-size: 14px; font-weight: 600; color: #94a3b8; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.tab.active { color: #1e293b; border-bottom-color: #1e293b; }
+
+/* === 성과요약 탭 === */
+
+/* 게이지 + 등급 카드 */
+.gauge-section { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 24px; }
+
+.gauge-wrap { flex: 0 0 220px; text-align: center; background: white; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; }
+.gauge-svg { width: 180px; height: 110px; }
+.gauge-score { font-size: 48px; font-weight: 800; margin-top: -10px; }
+.gauge-grade { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-top: 4px; }
+.grade-a { background: #dcfce7; color: #16a34a; }
+.grade-b { background: #fef9c3; color: #ca8a04; }
+.grade-c { background: #fee2e2; color: #dc2626; }
+.gauge-label { font-size: 12px; color: #94a3b8; margin-top: 8px; }
+
+.grade-cards { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.grade-card { background: white; border-radius: 12px; padding: 16px 20px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+.grade-card-left { display: flex; align-items: center; gap: 12px; }
+.grade-dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-green { background: #22c55e; }
+.dot-yellow { background: #eab308; }
+.dot-red { background: #ef4444; }
+.grade-card-title { font-size: 14px; font-weight: 600; }
+.grade-card-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+.grade-card-right { text-align: right; }
+.grade-card-score { font-size: 20px; font-weight: 800; }
+.grade-card-grade { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+
+/* 6개 핵심 지표 카드 */
+.metrics-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+.metric-card { background: white; border-radius: 12px; padding: 16px; border: 1px solid #e2e8f0; }
+.metric-label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+.metric-value { font-size: 22px; font-weight: 800; }
+.metric-bench { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+.metric-bench .good { color: #16a34a; }
+.metric-bench .bad { color: #dc2626; }
+
+/* 타겟중복 */
+.overlap-section { background: white; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 32px; }
+.overlap-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.overlap-bar { height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 8px; position: relative; }
+.overlap-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #f97316); border-radius: 4px; width: 42%; }
+.overlap-value { font-size: 28px; font-weight: 800; color: #ef4444; }
+.overlap-desc { font-size: 13px; color: #64748b; margin-top: 4px; }
+
+/* === 콘텐츠 탭 (숨김) === */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* 콘텐츠 카드 */
+.content-card { background: white; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+.content-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.content-rank { font-size: 14px; font-weight: 700; color: #ef4444; }
+.content-name { font-size: 14px; font-weight: 600; }
+.content-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.content-metric { padding: 8px; background: #f8fafc; border-radius: 8px; }
+.content-metric-label { font-size: 11px; color: #64748b; }
+.content-metric-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 2px; }
+.content-metric-val { font-size: 15px; font-weight: 700; }
+.content-metric-bench { font-size: 11px; color: #94a3b8; }
+.verdict-good { color: #16a34a; }
+.verdict-warn { color: #ca8a04; }
+.verdict-bad { color: #dc2626; }
+.verdict-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+/* 그룹 헤더 */
+.group-header { font-size: 13px; font-weight: 700; color: #64748b; margin: 12px 0 8px; padding: 4px 0; border-bottom: 1px solid #f1f5f9; }
+
+.note { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #92400e; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 헤더 -->
+  <div class="header">
+    <div class="header-icon">📊</div>
+    <div>
+      <h1>총가치각도기</h1>
+      <div class="sub">Meta 광고 성과 진단</div>
+    </div>
+  </div>
+
+  <!-- 기간 -->
+  <div class="period-bar">
+    <div class="period-btn">어제</div>
+    <div class="period-btn active">7일</div>
+    <div class="period-btn">14일</div>
+    <div class="period-btn">30일</div>
+    <div class="period-btn">직접선택</div>
+  </div>
+
+  <!-- 탭 -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('summary')">성과 요약</div>
+    <div class="tab" onclick="switchTab('content')">콘텐츠</div>
+  </div>
+
+  <!-- ========== 성과요약 탭 ========== -->
+  <div id="tab-summary" class="tab-content active">
+
+    <!-- 게이지 + 등급 -->
+    <div class="gauge-section">
+      <div class="gauge-wrap">
+        <svg class="gauge-svg" viewBox="0 0 200 120">
+          <!-- 배경 호 -->
+          <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="16" stroke-linecap="round"/>
+          <!-- 빨강 -->
+          <path d="M 20 100 A 80 80 0 0 1 60 35" fill="none" stroke="#ef4444" stroke-width="16" stroke-linecap="round"/>
+          <!-- 노랑 -->
+          <path d="M 60 35 A 80 80 0 0 1 140 35" fill="none" stroke="#eab308" stroke-width="16" stroke-linecap="round"/>
+          <!-- 초록 -->
+          <path d="M 140 35 A 80 80 0 0 1 180 100" fill="none" stroke="#22c55e" stroke-width="16" stroke-linecap="round"/>
+          <!-- 바늘 위치 (59점 → 약 60% 위치) -->
+          <circle cx="128" cy="38" r="6" fill="#1e293b"/>
+        </svg>
+        <div class="gauge-score">59</div>
+        <div class="gauge-grade grade-b">B등급</div>
+        <div class="gauge-label">7일 기준 · 전체 광고 합산</div>
+      </div>
+
+      <div class="grade-cards">
+        <div class="grade-card">
+          <div class="grade-card-left">
+            <div class="grade-dot dot-green"></div>
+            <div>
+              <div class="grade-card-title">기반점수</div>
+              <div class="grade-card-sub">노출·도달·빈도 기반</div>
+            </div>
+          </div>
+          <div class="grade-card-right">
+            <div class="grade-card-score">72</div>
+            <span class="grade-card-grade grade-a">A</span>
+          </div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-card-left">
+            <div class="grade-dot dot-yellow"></div>
+            <div>
+              <div class="grade-card-title">참여율</div>
+              <div class="grade-card-sub">3초시청·좋아요·공유 등</div>
+            </div>
+          </div>
+          <div class="grade-card-right">
+            <div class="grade-card-score">55</div>
+            <span class="grade-card-grade grade-b">B</span>
+          </div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-card-left">
+            <div class="grade-dot dot-red"></div>
+            <div>
+              <div class="grade-card-title">전환율</div>
+              <div class="grade-card-sub">CTR·구매·ROAS</div>
+            </div>
+          </div>
+          <div class="grade-card-right">
+            <div class="grade-card-score">48</div>
+            <span class="grade-card-grade grade-c">C</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6개 핵심 지표 -->
+    <div class="metrics-title">핵심 성과 지표</div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">CTR (클릭률)</div>
+        <div class="metric-value">2.10%</div>
+        <div class="metric-bench"><span class="good">▲ 기준 1.8%</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">CPC (클릭당비용)</div>
+        <div class="metric-value">₩850</div>
+        <div class="metric-bench"><span class="good">▼ 기준 ₩1,020</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">구매전환율</div>
+        <div class="metric-value">0.80%</div>
+        <div class="metric-bench"><span class="bad">▼ 기준 1.2%</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">ROAS</div>
+        <div class="metric-value">350%</div>
+        <div class="metric-bench"><span class="good">▲ 기준 280%</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">3초 시청률</div>
+        <div class="metric-value">42.5%</div>
+        <div class="metric-bench"><span class="good">▲ 기준 35%</span></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">노출당구매확률</div>
+        <div class="metric-value">0.027%</div>
+        <div class="metric-bench"><span class="bad">▼ 기준 0.04%</span></div>
+      </div>
+    </div>
+
+    <!-- 타겟중복 -->
+    <div class="overlap-section">
+      <div class="overlap-title">타겟 중복 분석</div>
+      <div class="overlap-bar"><div class="overlap-fill"></div></div>
+      <div class="overlap-value">42.2%</div>
+      <div class="overlap-desc">광고세트 간 오디언스 중복률 · 30% 이하 권장</div>
+    </div>
+
+  </div>
+
+  <!-- ========== 콘텐츠 탭 ========== -->
+  <div id="tab-content" class="tab-content">
+
+    <div class="note">광고별 성과를 벤치마크와 비교합니다. 0.0인 항목도 기준값을 함께 표시합니다.</div>
+
+    <!-- 광고 1 -->
+    <div class="content-card">
+      <div class="content-card-header">
+        <span class="content-rank">#1</span>
+        <span class="content-name">브랜드_리타겟팅_30대여성</span>
+      </div>
+      <div class="group-header">기반</div>
+      <div class="content-metrics">
+        <div class="content-metric">
+          <div class="content-metric-label">3초 시청률</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>48.2%</span>
+            <span class="content-metric-bench">기준 35%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">ThruPlay율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>12.3%</span>
+            <span class="content-metric-bench">기준 8%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">지속비율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-warn"><span class="verdict-dot" style="background:#eab308"></span>29.0%</span>
+            <span class="content-metric-bench">기준 32%</span>
+          </div>
+        </div>
+      </div>
+      <div class="group-header">참여</div>
+      <div class="content-metrics">
+        <div class="content-metric">
+          <div class="content-metric-label">참여합계/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>15.3</span>
+            <span class="content-metric-bench">기준 12.0</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">좋아요/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>8.4</span>
+            <span class="content-metric-bench">기준 5.0</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">댓글/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-bad"><span class="verdict-dot" style="background:#ef4444"></span>0.0</span>
+            <span class="content-metric-bench">기준 0.8</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">공유/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-bad"><span class="verdict-dot" style="background:#ef4444"></span>0.0</span>
+            <span class="content-metric-bench">기준 1.2</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">저장/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-warn"><span class="verdict-dot" style="background:#eab308"></span>5.4</span>
+            <span class="content-metric-bench">기준 6.0</span>
+          </div>
+        </div>
+      </div>
+      <div class="group-header">전환</div>
+      <div class="content-metrics">
+        <div class="content-metric">
+          <div class="content-metric-label">CTR</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>2.14%</span>
+            <span class="content-metric-bench">기준 1.8%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">결제시작율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>3.34%</span>
+            <span class="content-metric-bench">기준 2.5%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">구매전환율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-warn"><span class="verdict-dot" style="background:#eab308"></span>1.26%</span>
+            <span class="content-metric-bench">기준 1.2%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">결제→구매율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>37.7%</span>
+            <span class="content-metric-bench">기준 30%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">노출당구매확률</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-bad"><span class="verdict-dot" style="background:#ef4444"></span>0.0%</span>
+            <span class="content-metric-bench">기준 0.04%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">ROAS</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-good"><span class="verdict-dot" style="background:#22c55e"></span>3.50</span>
+            <span class="content-metric-bench">기준 2.80</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 광고 2 (0이 많은 예시) -->
+    <div class="content-card">
+      <div class="content-card-header">
+        <span class="content-rank">#2</span>
+        <span class="content-name">신규_프로스펙팅_이미지</span>
+      </div>
+      <div class="group-header">기반</div>
+      <div class="content-metrics">
+        <div class="content-metric">
+          <div class="content-metric-label">3초 시청률</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val" style="color:#94a3b8"><span class="verdict-dot" style="background:#94a3b8"></span>0.0%</span>
+            <span class="content-metric-bench">기준 35%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">ThruPlay율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val" style="color:#94a3b8"><span class="verdict-dot" style="background:#94a3b8"></span>0.0%</span>
+            <span class="content-metric-bench">기준 8%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">지속비율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val" style="color:#94a3b8"><span class="verdict-dot" style="background:#94a3b8"></span>0.0%</span>
+            <span class="content-metric-bench">기준 32%</span>
+          </div>
+        </div>
+      </div>
+      <div class="group-header">참여</div>
+      <div class="content-metrics">
+        <div class="content-metric">
+          <div class="content-metric-label">참여합계/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-bad"><span class="verdict-dot" style="background:#ef4444"></span>2.1</span>
+            <span class="content-metric-bench">기준 12.0</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">좋아요/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-bad"><span class="verdict-dot" style="background:#ef4444"></span>1.2</span>
+            <span class="content-metric-bench">기준 5.0</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">댓글/만노출</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val" style="color:#94a3b8"><span class="verdict-dot" style="background:#94a3b8"></span>0.0</span>
+            <span class="content-metric-bench">기준 0.8</span>
+          </div>
+        </div>
+      </div>
+      <div class="group-header">전환</div>
+      <div class="content-metrics">
+        <div class="content-metric">
+          <div class="content-metric-label">CTR</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-bad"><span class="verdict-dot" style="background:#ef4444"></span>0.8%</span>
+            <span class="content-metric-bench">기준 1.8%</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">ROAS</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val verdict-bad"><span class="verdict-dot" style="background:#ef4444"></span>1.20</span>
+            <span class="content-metric-bench">기준 2.80</span>
+          </div>
+        </div>
+        <div class="content-metric">
+          <div class="content-metric-label">구매전환율</div>
+          <div class="content-metric-row">
+            <span class="content-metric-val" style="color:#94a3b8"><span class="verdict-dot" style="background:#94a3b8"></span>0.0%</span>
+            <span class="content-metric-bench">기준 1.2%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  if (tab === 'summary') {
+    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.getElementById('tab-summary').classList.add('active');
+  } else {
+    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.getElementById('tab-content').classList.add('active');
+  }
+}
+</script>
+</body>
+</html>

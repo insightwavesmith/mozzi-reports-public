@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="date" content="2026-03-20">
+<meta name="project" content="Naver Cafe SEO">
+<title>네이버 카페 검색 노출 로직 분석 — 메인 노출 vs 하단 배치 게시물의 차이</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fc;color:#1a1a1a;line-height:1.8}
+.container{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.back{display:inline-block;margin-bottom:24px;color:#64748b;text-decoration:none;font-size:14px}
+.back:hover{color:#1a1a1a}
+h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.3}
+.subtitle{font-size:16px;color:#64748b;margin-bottom:12px}
+.date{font-size:13px;color:#94a3b8;margin-bottom:32px}
+h2{font-size:22px;font-weight:700;margin:48px 0 16px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+h3{font-size:18px;font-weight:600;margin:28px 0 12px;color:#334155}
+p{margin-bottom:16px;font-size:15px;color:#374151}
+ul,ol{margin:8px 0 16px 20px;font-size:15px}
+li{margin-bottom:8px;line-height:1.7;color:#374151}
+strong{font-weight:700;color:#1a1a1a}
+
+/* Cards */
+.box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:20px 0}
+.box.key{border-left:4px solid #F75D5D}
+.box.insight{border-left:4px solid #3b82f6}
+.box.action{border-left:4px solid #10b981}
+.box.warn{border-left:4px solid #f59e0b}
+.box h4{font-size:15px;font-weight:700;margin-bottom:10px;color:#1a1a1a}
+.box p{margin-bottom:8px;font-size:14px}
+.box ul{margin:6px 0 0 18px;font-size:14px}
+.box li{margin-bottom:6px}
+
+/* Highlight summary */
+.highlight{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:20px 24px;margin:24px 0;font-size:15px;font-weight:600;color:#92400e}
+
+/* Stage grid */
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}
+.stage{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;text-align:center}
+.stage .num{font-size:28px;font-weight:900;margin-bottom:4px}
+.stage .label{font-size:13px;font-weight:700;margin-bottom:12px}
+.stage ul{text-align:left;font-size:13px;margin:0 0 0 16px}
+.stage li{margin-bottom:4px;color:#475569}
+.stage.s1 .num{color:#22c55e}
+.stage.s1{border-top:3px solid #22c55e}
+.stage.s2 .num{color:#f59e0b}
+.stage.s2{border-top:3px solid #f59e0b}
+.stage.s3 .num{color:#94a3b8}
+.stage.s3{border-top:3px solid #94a3b8}
+
+/* Diff list */
+.diff-list{list-style:none;margin:16px 0;padding:0}
+.diff-list li{display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:flex-start;padding:14px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:10px;font-size:14px}
+.diff-list li:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.diff-num{font-size:18px;font-weight:900;color:#F75D5D;line-height:1.4}
+.diff-body .diff-title{font-weight:700;font-size:14px;margin-bottom:4px;color:#1a1a1a}
+.diff-body .diff-desc{color:#475569;font-size:13px;line-height:1.6}
+.vs{display:inline-flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag-main{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px}
+.tag-sub{background:#fee2e2;color:#991b1b;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px}
+
+/* Logic grid */
+.logic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.logic-item{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px}
+.logic-item .lg-num{font-size:22px;font-weight:900;color:#3b82f6;margin-bottom:6px}
+.logic-item .lg-title{font-size:15px;font-weight:700;margin-bottom:6px;color:#1a1a1a}
+.logic-item .lg-desc{font-size:13px;color:#475569;line-height:1.6}
+
+/* Action checklist */
+.checklist{list-style:none;margin:16px 0;padding:0}
+.checklist li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#374151}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:"✅";font-size:16px;flex-shrink:0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0}
+thead{background:#f1f5f9}
+th{padding:12px 16px;text-align:left;font-weight:700;font-size:13px;color:#475569;border-bottom:2px solid #e2e8f0}
+td{padding:12px 16px;border-bottom:1px solid #f1f5f9;color:#374151;vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+td:first-child{font-weight:700;color:#1a1a1a}
+
+/* TOC */
+.toc{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:24px 0}
+.toc h3{margin:0 0 12px;font-size:16px;font-weight:700}
+.toc ol{margin:0 0 0 20px}
+.toc li{margin-bottom:6px}
+.toc a{color:#3b82f6;text-decoration:none;font-size:14px}
+.toc a:hover{text-decoration:underline}
+
+@media(max-width:640px){
+  .stages{grid-template-columns:1fr}
+  .logic-grid{grid-template-columns:1fr}
+  h1{font-size:22px}
+  h2{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a href="/reports" class="back">← 리포트 목록</a>
+
+  <h1>네이버 카페 검색 노출 로직 분석</h1>
+  <p class="subtitle">메인 노출 vs 하단 배치 게시물의 차이</p>
+  <p class="date">2026-03-20 &nbsp;·&nbsp; Research</p>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>📋 목차</h3>
+    <ol>
+      <li><a href="#background">조사 배경</a></li>
+      <li><a href="#structure">카페 검색 노출 3단계 구조</a></li>
+      <li><a href="#diff">메인 노출 vs 하단 배치 핵심 차이 5가지</a></li>
+      <li><a href="#logic">네이버 로직 추정</a></li>
+      <li><a href="#action">실전 활용법 — 카페 SEO 최적화</a></li>
+      <li><a href="#table">검색 키워드별 비교 테이블</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. 조사 배경 -->
+  <h2 id="background">조사 배경</h2>
+  <p>
+    "두피건선", "두피", "두피케어", "두피가려움" 등 키워드를 네이버에서 검색했을 때,
+    카페 게시물이 <strong>메인에 크게 노출되는 것</strong>과 <strong>아래에 작게 깔리는 것</strong>의
+    차이를 분석.
+  </p>
+  <p>
+    동일 주제의 글인데도 어떤 게시물은 검색 결과 상단을 큰 카드로 차지하고,
+    어떤 게시물은 하단 2열에 작게 배치된다. 이 차이의 구조적 원인을 파악해
+    카페 콘텐츠 SEO 전략에 활용하기 위해 조사를 진행했다.
+  </p>
+
+  <!-- 2. 3단계 구조 -->
+  <h2 id="structure">네이버 카페 검색 노출 3단계 구조</h2>
+
+  <div class="stages">
+    <div class="stage s1">
+      <div class="num">1</div>
+      <div class="label">메인 노출<br><span style="font-size:11px;font-weight:400;color:#64748b">넓은 카드</span></div>
+      <ul>
+        <li>전체 너비 사용</li>
+        <li>본문 3~5줄 미리보기</li>
+        <li>썸네일 이미지 포함</li>
+        <li>댓글(RE) 미리보기 2~3개</li>
+        <li>연관 링크 표시</li>
+      </ul>
+    </div>
+    <div class="stage s2">
+      <div class="num">2</div>
+      <div class="label">하단 배치<br><span style="font-size:11px;font-weight:400;color:#64748b">좁은 카드, 2열</span></div>
+      <ul>
+        <li>2열 배치, 면적 절반</li>
+        <li>본문 1~2줄만</li>
+        <li>이미지 없음</li>
+        <li>RE(댓글) 형태로 노출</li>
+      </ul>
+    </div>
+    <div class="stage s3">
+      <div class="num">3</div>
+      <div class="label">더보기 영역<br><span style="font-size:11px;font-weight:400;color:#64748b">하단 확장</span></div>
+      <ul>
+        <li>스크롤 후 진입</li>
+        <li>추가 게시물 모음</li>
+        <li>탭/필터 포함</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. 핵심 차이 5가지 -->
+  <h2 id="diff">메인 노출 vs 하단 배치 핵심 차이 5가지</h2>
+
+  <ul class="diff-list">
+    <li>
+      <div class="diff-num">1</div>
+      <div class="diff-body">
+        <div class="diff-title">원본 글 vs 댓글</div>
+        <div class="diff-desc">
+          가장 큰 구조적 차이. 메인은 원본 게시물(원글)이, 하단은 대부분 댓글(RE)이 노출된다.<br>
+          <div class="vs">
+            <span class="tag-main">메인: 원글</span>
+            <span class="tag-sub">하단: RE 댓글</span>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="diff-num">2</div>
+      <div class="diff-body">
+        <div class="diff-title">카페 규모 / 신뢰도</div>
+        <div class="diff-desc">
+          메인에는 메인 배지를 받은 대형 카페(해돌, 부산맘)가 우선 배치되고,
+          하단은 소규모 카페 or 댓글이 채운다.<br>
+          <div class="vs">
+            <span class="tag-main">메인: 대형 카페 (C-Rank 高)</span>
+            <span class="tag-sub">하단: 소규모 카페</span>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="diff-num">3</div>
+      <div class="diff-body">
+        <div class="diff-title">본문 길이 / 품질</div>
+        <div class="diff-desc">
+          메인 노출 글은 300자 이상의 구체적 경험담. 하단은 1~2줄 짧은 공감 댓글 수준.<br>
+          <div class="vs">
+            <span class="tag-main">메인: 300자+ 경험담</span>
+            <span class="tag-sub">하단: 1~2줄 단문</span>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="diff-num">4</div>
+      <div class="diff-body">
+        <div class="diff-title">인게이지먼트</div>
+        <div class="diff-desc">
+          메인 노출 원글에는 댓글이 다수 달려 있고, 그 댓글들도 같이 노출된다.
+          하단의 개별 댓글은 자체 인게이지먼트가 없다.<br>
+          <div class="vs">
+            <span class="tag-main">메인: 댓글 다수 + 함께 노출</span>
+            <span class="tag-sub">하단: 인게이지먼트 無</span>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="diff-num">5</div>
+      <div class="diff-body">
+        <div class="diff-title">키워드 자연스러움</div>
+        <div class="diff-desc">
+          메인 글은 키워드가 자연스러운 맥락 안에 녹아 있고,
+          하단 글은 단순 언급 수준이다.<br>
+          <div class="vs">
+            <span class="tag-main">메인: "두피건선 진단을 받았는데…"</span>
+            <span class="tag-sub">하단: "두피건선 때문에"</span>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <!-- 4. 로직 추정 -->
+  <h2 id="logic">네이버 로직 추정</h2>
+
+  <div class="logic-grid">
+    <div class="logic-item">
+      <div class="lg-num">①</div>
+      <div class="lg-title">원본 글 우선</div>
+      <div class="lg-desc">원글이 먼저 상단 배치. 댓글은 구조적으로 하단 배치. 타입(원글/댓글)이 노출 위치를 1차 결정.</div>
+    </div>
+    <div class="logic-item">
+      <div class="lg-num">②</div>
+      <div class="lg-title">C-Rank 반영</div>
+      <div class="lg-desc">카페 자체의 신뢰도 점수. 활동량·회원수·콘텐츠 품질 기반. 대형 카페가 구조적으로 유리.</div>
+    </div>
+    <div class="logic-item">
+      <div class="lg-num">③</div>
+      <div class="lg-title">DIA 로직</div>
+      <div class="lg-desc">개별 문서의 품질 점수. 본문 길이·이미지 유무·인게이지먼트 수치가 반영됨.</div>
+    </div>
+    <div class="logic-item">
+      <div class="lg-num">④</div>
+      <div class="lg-title">댓글 클러스터링</div>
+      <div class="lg-desc">같은 원글의 댓글들을 묶어 하단 2열로 배치. 원글 1개 → 댓글 다수 그룹핑 구조.</div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    💡 핵심 인사이트: "하단 배치"는 품질 문제가 아니다.<br>
+    구조적으로 "댓글(RE)"이기 때문에 하단에 배치되는 것.
+  </div>
+
+  <!-- 5. 실전 활용법 -->
+  <h2 id="action">실전 활용법 — 카페 SEO 최적화</h2>
+
+  <div class="box action">
+    <h4>✅ 즉시 적용 가능한 액션</h4>
+    <ul class="checklist">
+      <li>수강생들이 카페에 <strong>원본 글(원글)</strong>로 올리도록 가이드 — 댓글 형식 X</li>
+      <li>본문 <strong>300자 이상</strong> / 키워드 자연 포함 / 이미지 첨부 템플릿 제공</li>
+      <li><strong>대형 카페 타겟팅</strong> — C-Rank 높은 카페 리스트업 후 집중 공략</li>
+      <li>댓글보다 원글이 SEO 효과 훨씬 큼 — 팀 내 공유 및 교육 필요</li>
+    </ul>
+  </div>
+
+  <div class="box insight">
+    <h4>📌 원글 작성 가이드라인 (템플릿 기준)</h4>
+    <ul>
+      <li><strong>분량</strong>: 최소 300자 이상. 500자+ 권장</li>
+      <li><strong>키워드</strong>: 제목 + 본문 초반 자연스럽게 1~2회 포함</li>
+      <li><strong>이미지</strong>: 썸네일 포함 시 메인 카드 노출에 유리</li>
+      <li><strong>경험담 형식</strong>: "진단받았는데…", "써봤더니…" 등 1인칭 서술 권장</li>
+      <li><strong>카페 선택</strong>: 해돌, 부산맘처럼 메인 배지 보유 대형 카페 우선</li>
+    </ul>
+  </div>
+
+  <!-- 6. 키워드별 비교 테이블 -->
+  <h2 id="table">검색 키워드별 비교 테이블</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>키워드</th>
+        <th>메인 노출 카페</th>
+        <th>하단 배치 유형</th>
+        <th>특이사항</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>두피건선</td>
+        <td>해돌, 부산맘 (대형)</td>
+        <td>RE 댓글 2~3개</td>
+        <td>의료 키워드 → 닥터스픽 콘텐츠 우선</td>
+      </tr>
+      <tr>
+        <td>두피</td>
+        <td>뷰티/생활 카페</td>
+        <td>제품 후기 댓글</td>
+        <td>상업 키워드 → 쇼핑 탭 우선</td>
+      </tr>
+      <tr>
+        <td>두피케어</td>
+        <td>뷰티 전문 카페</td>
+        <td>짧은 추천 댓글</td>
+        <td>브랜드 키워드 포함</td>
+      </tr>
+      <tr>
+        <td>두피가려움</td>
+        <td>건강/맘 카페</td>
+        <td>공감 댓글</td>
+        <td>증상 키워드 → 지식인 우선</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box warn">
+    <h4>⚠️ 키워드 유형별 주의</h4>
+    <p>의료 키워드(두피건선)는 닥터스픽 등 전문 콘텐츠가 카페보다 우선. 증상 키워드(두피가려움)는 지식인이 최상단 차지. 카페 SEO는 <strong>생활/경험 키워드</strong>에서 효과가 가장 큼.</p>
+  </div>
+
+  <p style="margin-top:40px;font-size:13px;color:#94a3b8;text-align:center">
+    리서치 완료: 2026-03-20 &nbsp;·&nbsp; 모찌리포트
+  </p>
+
+</div>
+</body>
+</html>

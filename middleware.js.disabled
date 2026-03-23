@@ -1,0 +1,24 @@
+export const config = { matcher: ['/((?!api).*)'] };
+
+export default function middleware(req) {
+  const auth = req.headers.get('authorization');
+  
+  if (auth) {
+    const [scheme, encoded] = auth.split(' ');
+    if (scheme === 'Basic') {
+      const decoded = atob(encoded);
+      const [user, pass] = decoded.split(':');
+      if (user === 'bscamp' && pass === 'bscamp2026!') {
+        return;
+      }
+    }
+  }
+
+  return new Response('인증이 필요합니다', {
+    status: 401,
+    headers: {
+      'WWW-Authenticate': 'Basic realm="mozzi-reports"',
+      'Content-Type': 'text/plain; charset=utf-8',
+    },
+  });
+}

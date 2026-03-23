@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메인페이지 최종</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',sans-serif;background:#f8f9fa;color:#1a1a1a;line-height:1.7;padding:20px}
+.container{max-width:800px;margin:0 auto}
+h1{font-size:20px;margin-bottom:4px}
+.mockup-wrap{background:#f8f9fa;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);overflow:hidden;margin:20px 0}
+.section-wrap{padding:24px 24px 32px}
+.trust-banner{background:#f8faff;border:1px solid #e8edf5;border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:20px}
+.trust-banner .badge-area{flex-shrink:0}
+.trust-banner .badge-area img{height:44px}
+.trust-banner .text-area{flex:1}
+.trust-banner .text-area .headline{font-weight:700;font-size:15px;color:#1a1a1a}
+.trust-banner .text-area .sub{font-size:13px;color:#64748b;margin-top:2px}
+.ad-widget{width:100%;margin-bottom:20px;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb}
+.ad-widget img{width:100%;display:block}
+.section-title{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;margin:20px 0 12px;color:#111827}
+.card-item{background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:16px 20px;margin-bottom:10px;transition:box-shadow 0.2s}
+.card-item:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.card-item .title{font-weight:600;font-size:14px;color:#333}
+.card-item .meta{font-size:12px;color:#9ca3af;margin-top:4px}
+@media(max-width:640px){.trust-banner{flex-direction:column;text-align:center;gap:12px}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>메인페이지 최종</h1>
+<p style="color:#888;font-size:13px;margin-bottom:20px">신뢰배너 → 광고성과 → 공지 → Q&A → 정보공유</p>
+
+<div class="mockup-wrap">
+  <div class="section-wrap">
+
+    <!-- 1. 신뢰 배너 -->
+    <div class="trust-banner">
+      <div class="badge-area">
+        <img src="images/badge-light.png" alt="Meta Business Partners badge">
+      </div>
+      <div class="text-area">
+        <div class="headline">Meta가 인증한 비즈니스 파트너</div>
+        <div class="sub">자사몰사관학교는 Meta Business Partner로서 검증된 메타 광고 교육을 제공합니다.</div>
+      </div>
+    </div>
+
+    <!-- 2. 광고성과 (이미지) -->
+    <div class="ad-widget">
+      <img src="images/ad-widget.svg" alt="내 광고 성과 (최근 7일)">
+    </div>
+
+    <!-- 3. 공지사항 -->
+    <div class="section-title">📢 공지사항</div>
+    <div class="card-item">
+      <div class="title">자사몰사관학교에 오신 것을 환영합니다!</div>
+      <div class="meta">2026.02.28 · 관리자</div>
+    </div>
+    <div class="card-item">
+      <div class="title">3기 수강생 OT 안내</div>
+      <div class="meta">2026.02.25 · 관리자</div>
+    </div>
+
+    <!-- 4. Q&A -->
+    <div class="section-title">💬 최근 Q&A</div>
+    <div class="card-item">
+      <div class="title">카탈로그 광고 세팅 질문</div>
+      <div class="meta">2026.03.01 · 김OO</div>
+    </div>
+
+    <!-- 5. 정보공유 -->
+    <div class="section-title">📚 정보공유 최신글</div>
+    <div class="card-item">
+      <div class="title">2026년 메타 광고, 이렇게 바뀝니다 — 자사몰 대표가 꼭 알아야 할 3가지 트렌드</div>
+      <div class="meta">2026.02.28 · 스미스</div>
+    </div>
+
+  </div>
+</div>
+</div>
+</body>
+</html>

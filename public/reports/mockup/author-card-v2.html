@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>작성자 소개 카드 — 개선안</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',sans-serif;background:#fff;color:#1a1a1a;line-height:1.7;padding:40px 20px}
+.container{max-width:600px;margin:0 auto}
+
+/* 작성자 소개 카드 */
+.author-card{border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:24px 0;margin:0}
+.author-top{display:flex;align-items:center;gap:16px}
+.author-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.author-name{font-weight:800;font-size:16px;color:#1a1a1a}
+.author-role{font-weight:600;font-size:13px;color:#F75D5D}
+.author-desc{margin:4px 0 0;font-size:13px;color:#64748b;line-height:160%}
+.author-badges{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid #f1f5f9;flex-wrap:wrap}
+.partner-logo{height:28px}
+.certs{display:flex;gap:6px}
+.cert-img{width:36px;height:36px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="author-card">
+  <div class="author-top">
+    <img class="author-photo" src="images/profile-smith.png" alt="스미스">
+    <div>
+      <div class="author-name">스미스 <span class="author-role">자사몰사관학교 코치</span></div>
+      <div class="author-desc">메타파트너 / 메타공식 프로페셔널<br>스킨스쿨 / 재미어트 Co-founder<br>수강생 자사몰매출 450억+</div>
+    </div>
+  </div>
+  <div class="author-badges">
+    <img class="partner-logo" src="images/inline-positive.png" alt="Meta Business Partners">
+    <div class="certs">
+      <img class="cert-img" src="images/cert-ai-performance.png" alt="AI & Performance Marketing" title="AI and Performance Marketing">
+      <img class="cert-img" src="images/cert-media-measurement.png" alt="Media Measurement" title="Media Measurement">
+      <img class="cert-img" src="images/cert-technical-implementation.png" alt="Technical Implementation" title="Technical Implementation">
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

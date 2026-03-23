@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="category" content="plan">
+<meta name="issue" content="SIGNAL Framework v1 — Unified Marketing Operating System">
+<title>SIGNAL Framework v1 — Unified Marketing OS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0c0a09;--bg2:#111110;--bg3:#1c1917;--bg4:#292524;--text:#e7e5e4;--muted:#a8a29e;--faint:#78716c;--border:#292524;--acc:#F75D5D;--r:#f97316;--c:#60a5fa;--p:#c084fc;--a:#4ade80;--y:#fbbf24;--rb:#451a03;--cb:#172554;--pb:#2e1065;--ab:#052e16;--yb:#422006}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Pretendard Variable',Pretendard,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:15px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);padding:22px 0 40px;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent;z-index:100}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+.sb-brand{padding:0 16px 18px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.sb-logo{font-size:22px;font-weight:900;color:var(--acc);font-family:'JetBrains Mono',monospace;letter-spacing:-1px}
+.sb-sub{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+.toc-lbl{padding:10px 16px 4px;font-size:9px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:1.2px}
+.ti{display:flex;align-items:center;gap:8px;padding:5px 16px;font-size:12px;color:var(--muted);text-decoration:none;transition:all .15s;border-left:2px solid transparent;line-height:1.4}
+.ti:hover{color:var(--text);background:var(--bg3)}
+.ti.active{color:var(--text);border-left-color:var(--acc);background:rgba(247,93,93,.07);font-weight:600}
+.tn{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:var(--bg4);border-radius:4px;font-size:9px;font-weight:700;color:var(--faint);flex-shrink:0}
+.ti.active .tn{background:var(--acc);color:#0c0a09}
+.tn-r{background:var(--rb)!important;color:var(--r)!important}
+.tn-c{background:var(--cb)!important;color:var(--c)!important}
+.tn-p{background:var(--pb)!important;color:var(--p)!important}
+.tn-a{background:var(--ab)!important;color:var(--a)!important}
+.main{padding:52px 54px 120px;min-width:0}
+/* Hero */
+.hero{padding:0 0 50px;border-bottom:1px solid var(--border);margin-bottom:54px}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(247,93,93,.1);border:1px solid rgba(247,93,93,.25);border-radius:20px;font-size:10px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:1px;margin-bottom:22px}
+.hero h1{font-size:42px;font-weight:900;line-height:1.08;letter-spacing:-2px;margin-bottom:14px}
+.h1s{background:linear-gradient(135deg,var(--acc) 0%,#fb923c 55%,var(--y) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.h1r{background:linear-gradient(135deg,#fafaf9 0%,#78716c 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.75;max-width:640px;margin-bottom:22px}
+.thesis{padding:16px 20px;background:linear-gradient(135deg,rgba(247,93,93,.08),rgba(249,115,22,.04));border:1px solid rgba(247,93,93,.22);border-radius:10px;font-size:16px;font-style:italic;color:#e7e5e4;margin-bottom:22px;line-height:1.65}
+.hero-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:0}
+.pill{display:inline-flex;align-items:center;padding:3px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;font-size:11px;color:var(--muted);font-weight:500}
+.sig-row{display:flex;gap:8px;margin-top:34px;flex-wrap:wrap}
+.sl{display:flex;flex-direction:column;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 8px;flex:1;min-width:72px;transition:transform .2s,border-color .2s;cursor:default}
+.sl:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.15)}
+.sl-l{font-size:28px;font-weight:900;font-family:'JetBrains Mono',monospace;line-height:1}
+.sl-w{font-size:10px;color:var(--faint);margin-top:5px;text-align:center;line-height:1.3}
+.sl:nth-child(1) .sl-l{color:var(--acc)}
+.sl:nth-child(2) .sl-l{color:var(--r)}
+.sl:nth-child(3) .sl-l{color:var(--y)}
+.sl:nth-child(4) .sl-l{color:var(--c)}
+.sl:nth-child(5) .sl-l{color:var(--p)}
+.sl:nth-child(6) .sl-l{color:var(--a)}
+/* Sections */
+.sa{display:block;height:80px;margin-top:-80px;visibility:hidden;pointer-events:none}
+h2{font-size:23px;font-weight:800;color:#fafaf9;margin:0 0 18px;display:flex;align-items:center;gap:12px;letter-spacing:-.3px}
+h3{font-size:16px;font-weight:700;color:#e7e5e4;margin:30px 0 10px;letter-spacing:-.1px}
+h4{font-size:11px;font-weight:700;color:var(--faint);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.8px}
+p{margin-bottom:14px;color:var(--muted);font-size:14px;line-height:1.8}
+strong{color:#fafaf9;font-weight:600}
+a{color:var(--acc);text-decoration:none}
+a:hover{text-decoration:underline}
+ul,ol{margin:6px 0 14px 18px;color:var(--muted);font-size:13px}
+li{margin:4px 0;line-height:1.7}
+.sn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;background:var(--acc);color:#0c0a09;border-radius:8px;font-size:13px;font-weight:800;flex-shrink:0}
+.dv{height:1px;background:var(--border);margin:48px 0}
+.pq{margin:18px 0 22px;padding:17px 22px;background:linear-gradient(135deg,rgba(247,93,93,.07),rgba(249,115,22,.04));border-left:3px solid var(--acc);border-radius:0 10px 10px 0;font-size:15px;color:#d6d3d1;font-weight:500;line-height:1.7}
+/* Cards */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin:9px 0;transition:border-color .15s}
+.card:hover{border-color:rgba(255,255,255,.1)}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ci{font-size:21px;flex-shrink:0}.cn{font-weight:700;font-size:14px;color:#fafaf9}.cm{font-size:11px;color:var(--acc);font-weight:600}
+.cb{font-size:13px;color:var(--faint);line-height:1.75}
+.ok{background:#081a08;border:1px solid #15532f;border-radius:8px;padding:11px 16px;margin:10px 0;font-size:13px;color:#86efac;line-height:1.75}
+.ok::before{content:'✅  '}
+.warn{background:#1a1200;border:1px solid #713f12;border-radius:8px;padding:11px 16px;margin:10px 0;font-size:13px;color:#fde68a;line-height:1.75}
+.warn::before{content:'⚡  '}
+.info{background:#07111a;border:1px solid #1e3a5f;border-radius:8px;padding:11px 16px;margin:10px 0;font-size:13px;color:#93c5fd;line-height:1.75}
+.info::before{content:'💡  '}
+.key{background:#0f0a1a;border:1px solid #4c1d95;border-radius:8px;padding:11px 16px;margin:10px 0;font-size:13px;color:#c4b5fd;line-height:1.75}
+.key::before{content:'🔑  '}
+/* Mono */
+.mono{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:12px 0;font-family:'JetBrains Mono','SF Mono','Fira Code',monospace;font-size:12px;color:var(--muted);line-height:2;white-space:pre-wrap;overflow-x:auto}
+.mh{color:var(--acc);font-weight:600}.mr{color:var(--r)}.mc{color:var(--c)}.mp{color:var(--p)}.ma{color:var(--a)}.my{color:var(--y)}.md{color:var(--bg4)}
+/* Tables */
+.tw{overflow-x:auto;margin:12px 0;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#161412}
+th{text-align:left;padding:9px 12px;color:var(--faint);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--border)}
+td{padding:9px 12px;border-bottom:1px solid #1a1815;color:var(--muted);vertical-align:top;line-height:1.6}
+td:first-child{color:#fafaf9;font-weight:500}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.018)}
+.tg{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;vertical-align:middle}
+.tgr{background:var(--rb);color:var(--r)}.tgc{background:var(--cb);color:var(--c)}.tgp{background:var(--pb);color:var(--p)}.tga{background:var(--ab);color:var(--a)}.tgy{background:var(--yb);color:var(--y)}.tgx{background:#1c1917;color:var(--acc)}
+/* Formula */
+.formula{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:22px;margin:14px 0;text-align:center}
+.feq{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--acc);font-weight:700;margin-bottom:6px;line-height:1.6}
+.fnote{font-size:12px;color:var(--faint);line-height:1.6}
+/* Grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+/* Axis cards */
+.axc{border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:22px 0}
+.axh{padding:18px 22px;display:flex;align-items:center;gap:16px}
+.axl{font-size:52px;font-weight:900;line-height:1;font-family:'JetBrains Mono',monospace}
+.axm .axn{font-size:19px;font-weight:800;color:#fafaf9;letter-spacing:-.2px}
+.axm .axe{font-size:12px;font-weight:600;margin-top:4px}
+.axm .axq{font-size:13px;color:var(--muted);font-style:italic;margin-top:4px}
+.axb{padding:20px 22px;border-top:1px solid var(--border)}
+.ax-r{border-color:rgba(249,115,22,.35)}.ax-r .axh{background:linear-gradient(135deg,rgba(249,115,22,.13),rgba(249,115,22,.03))}.ax-r .axl{color:var(--r)}.ax-r .axe{color:var(--r)}
+.ax-c{border-color:rgba(96,165,250,.35)}.ax-c .axh{background:linear-gradient(135deg,rgba(96,165,250,.13),rgba(96,165,250,.03))}.ax-c .axl{color:var(--c)}.ax-c .axe{color:var(--c)}
+.ax-p{border-color:rgba(192,132,252,.35)}.ax-p .axh{background:linear-gradient(135deg,rgba(192,132,252,.13),rgba(192,132,252,.03))}.ax-p .axl{color:var(--p)}.ax-p .axe{color:var(--p)}
+.ax-a{border-color:rgba(74,222,128,.35)}.ax-a .axh{background:linear-gradient(135deg,rgba(74,222,128,.13),rgba(74,222,128,.03))}.ax-a .axl{color:var(--a)}.ax-a .axe{color:var(--a)}
+.tr2{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #1e1b18}
+.tr2:last-child{border-bottom:none}
+.tn2{font-size:13px;font-weight:700;color:#fafaf9;min-width:118px;flex-shrink:0;padding-top:1px}
+.td2{flex:1}
+.tdef{font-size:13px;color:var(--muted);line-height:1.65}
+.trepl{font-size:11px;color:var(--faint);margin-top:3px}
+.tmaps{font-size:11px;color:var(--c);margin-top:2px}
+/* Spine */
+.spine{position:relative;margin:22px 0;padding-left:66px}
+.spine::before{content:'';position:absolute;left:21px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,#44403c,var(--a))}
+.ss{position:relative;margin-bottom:16px}
+.sd{position:absolute;left:-66px;top:0;width:44px;height:44px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);border:2px solid;z-index:1}
+.sd .ss1{font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.sd .ss2{font-size:13px;font-weight:900}
+.si{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.stit{font-size:15px;font-weight:700;color:#fafaf9;margin-bottom:4px}
+.stag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-bottom:8px}
+.sdesc{font-size:13px;color:var(--muted);line-height:1.65}
+.stl{margin:8px 0 0;display:flex;gap:5px;flex-wrap:wrap}
+.stl span{padding:2px 8px;border-radius:4px;font-size:11px;background:var(--bg4);color:var(--muted)}
+.s-dk .sd{border-color:#44403c;color:#78716c}.s-dk .stag{background:#1a1816;color:#78716c}
+.s-vi .sd{border-color:var(--c);color:var(--c)}.s-vi .stag{background:var(--cb);color:var(--c)}
+.s-cr .sd{border-color:var(--p);color:var(--p)}.s-cr .stag{background:var(--pb);color:var(--p)}
+.s-sc .sd{border-color:var(--a);color:var(--a)}.s-sc .stag{background:var(--ab);color:var(--a)}
+/* Flywheel */
+.fw{display:flex;align-items:center;gap:0;margin:18px 0;flex-wrap:wrap}
+.fwn{display:flex;flex-direction:column;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 8px;flex:1;min-width:76px;text-align:center;transition:border-color .15s}
+.fwn:hover{border-color:var(--acc)}
+.fwi{font-size:20px;margin-bottom:4px}.fwl{font-size:11px;font-weight:700;color:#fafaf9}.fws{font-size:10px;color:var(--faint);margin-top:2px;line-height:1.3}
+.fwa{color:var(--faint);font-size:14px;padding:0 1px;flex-shrink:0}
+/* Map rows */
+.mrow{display:flex;align-items:stretch;margin:5px 0;font-size:12px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.ml{flex:1;background:#1a1226;padding:9px 11px;color:var(--p);font-weight:600;line-height:1.5}
+.msep{background:var(--bg3);padding:9px 7px;color:var(--faint);display:flex;align-items:center}
+.mm{flex:1;background:#0f1a10;padding:9px 11px;color:var(--a);line-height:1.5}
+.mrr{flex:1;background:#0c1528;padding:9px 11px;color:var(--c);line-height:1.5}
+/* Weeks */
+.week{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:12px 0}
+.wh{padding:11px 17px;display:flex;align-items:center;gap:11px;background:#141210}
+.wn{font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;font-family:'JetBrains Mono',monospace}
+.wt{font-size:13px;font-weight:700;color:#fafaf9;flex:1}
+.wb{padding:15px 17px;border-top:1px solid var(--border)}
+.wg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.wgb{background:var(--bg4);border-radius:8px;padding:10px}
+.wgbt{font-size:10px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.wgbc{font-size:12px;color:var(--muted);line-height:1.65}
+.ph{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700}
+.ph1{background:#1e1b4b;color:#a5b4fc}.ph2{background:var(--cb);color:var(--c)}.ph3{background:var(--pb);color:var(--p)}.ph4{background:var(--ab);color:var(--a)}
+/* Cohort */
+.crow{display:flex;gap:8px;margin:14px 0;align-items:stretch}
+.cc{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.ccn{font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.cct{font-size:15px;font-weight:800;color:#fafaf9;margin-bottom:7px}
+.ccd{font-size:12px;color:var(--muted);line-height:1.6}
+.carr{display:flex;align-items:center;font-size:20px;color:var(--faint);flex-shrink:0}
+/* Refs */
+.ri{display:flex;gap:13px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+.ri:last-child{border-bottom:none}
+.rico{font-size:21px;flex-shrink:0;margin-top:2px}.rit{font-size:14px;font-weight:700;color:#fafaf9}.rim{font-size:12px;color:var(--faint);margin-top:2px}.rid{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.6}
+.ft{text-align:center;padding:30px 0 0;color:var(--faint);font-size:11px;border-top:1px solid var(--border)}
+/* Responsive */
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:10px 0}.sb-brand{display:none}.main{padding:28px 20px 72px}.hero h1{font-size:26px;letter-spacing:-1px}.g2,.g3{grid-template-columns:1fr}.wg{grid-template-columns:1fr}.sig-row{flex-wrap:wrap}.axl{font-size:36px}.crow{flex-direction:column}.carr{justify-content:center;transform:rotate(90deg)}.mrow{flex-direction:column}.spine{padding-left:54px}.sd{left:-54px;width:40px;height:40px}}
+@media(max-width:480px){.main{padding:18px 14px 56px}.hero h1{font-size:22px}h2{font-size:19px}table{font-size:11px}th,td{padding:7px 8px}.fw{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<div class="sb-brand"><div class="sb-logo">SIGNAL</div><div class="sb-sub">Marketing Framework v1</div></div>
+<div class="toc-lbl">Sections</div>
+<a class="ti active" href="#exec"><span class="tn">1</span>Executive Summary</a>
+<a class="ti" href="#problem"><span class="tn">2</span>Core Design Problem</a>
+<a class="ti" href="#rcpa"><span class="tn">3</span>The Four Axes — RCPA</a>
+<a class="ti" href="#axis-r"><span class="tn tn-r">R</span>Resource</a>
+<a class="ti" href="#axis-c"><span class="tn tn-c">C</span>Channel</a>
+<a class="ti" href="#axis-p"><span class="tn tn-p">P</span>Persuasion</a>
+<a class="ti" href="#axis-a"><span class="tn tn-a">A</span>AI Co-pilot</a>
+<a class="ti" href="#dna"><span class="tn">4</span>Signal DNA</a>
+<a class="ti" href="#spine"><span class="tn">5</span>Escalation Spine</a>
+<a class="ti" href="#mapping"><span class="tn">6</span>Global Mapping</a>
+<a class="ti" href="#glossary"><span class="tn">7</span>Terminology Glossary</a>
+<a class="ti" href="#course"><span class="tn">8</span>15-Week Course</a>
+<a class="ti" href="#moat"><span class="tn">9</span>Cross-Cohort Moat</a>
+<a class="ti" href="#refs"><span class="tn">10</span>References</a>
+</nav>
+<main class="main">
+
+<div class="hero">
+<div class="eyebrow">📡 Framework v1.0 — March 2026</div>
+<h1><span class="h1s">THE SIGNAL</span> <span class="h1r">FRAMEWORK</span></h1>
+<p class="hero-sub">A Unified Marketing Operating System that merges Korean ecommerce mastery, global marketing science, and AI co-piloting into one coherent language. Built for practitioners who sell real products.</p>
+<div class="thesis">"You are noise. Marketing is the act of becoming a signal."</div>
+<div class="hero-meta">
+<span class="pill">🇰🇷 엠타트업 × 자사몰사관학교</span>
+<span class="pill">🌍 Schwartz · Hormozi · Brunson · Deiss · Godin · Suby</span>
+<span class="pill">🤖 AI Co-pilot Native</span>
+<span class="pill">📊 Signal DNA Flywheel</span>
+</div>
+<div class="sig-row">
+<div class="sl"><div class="sl-l">S</div><div class="sl-w">Source</div></div>
+<div class="sl"><div class="sl-l">I</div><div class="sl-w">Impact</div></div>
+<div class="sl"><div class="sl-l">G</div><div class="sl-w">Gravity</div></div>
+<div class="sl"><div class="sl-l">N</div><div class="sl-w">Network</div></div>
+<div class="sl"><div class="sl-l">A</div><div class="sl-w">Amplify</div></div>
+<div class="sl"><div class="sl-l">L</div><div class="sl-w">Leverage</div></div>
+</div>
+</div>
+<span class="sa" id="exec"></span>
+<h2><span class="sn">1</span> Executive Summary</h2>
+<p>The SIGNAL Framework is a unified marketing operating system that absorbs the essence of three knowledge streams into one coherent language:</p>
+<div class="g3">
+<div class="card"><div class="ch"><span class="ci">🇰🇷</span><span class="cn">엠타트업 (M-Startup)</span></div><div class="cb">15 cohorts of Korean ecommerce marketing wisdom. Core insight: <strong>Marketing = Gather + Persuade = RCS</strong>. Concepts: Core Value, Purchase Benefits, Marketing Axis, Equivalent Exchange, O-M-C, Traffic Waterway, Choice Control, Keyword Levels, Multiplier Effect.</div></div>
+<div class="card"><div class="ch"><span class="ci">📊</span><span class="cn">자사몰사관학교 (DTC Academy)</span></div><div class="cb">5 cohorts of Meta ads execution mastery. Core formula: <strong>Total Value = Ad Spend × Est. Action Rate + Ad Quality</strong>. Concepts: 3-Scene Structure, Multiplication Law, Meta Auction 4 Stages, Multiplier Diagnosis.</div></div>
+<div class="card"><div class="ch"><span class="ci">🌍</span><span class="cn">Global Marketing Science</span></div><div class="cb">Schwartz (5 Awareness Stages), Hormozi (Value Equation), Brunson (Value Ladder), Deiss (Customer Value Journey), Godin (Purple Cow), Suby (8-Phase Selling), AARRR (Pirate Metrics).</div></div>
+</div>
+<p><strong>What makes SIGNAL different:</strong> It doesn't just combine these — it creates a <strong>new language</strong> with one root metaphor ("Signal and Amplification"), adds <strong>AI as a fundamental 4th axis</strong> (not a tool), and introduces <strong>Signal DNA</strong> — a compounding data flywheel that makes each practitioner's marketing uncopyable over time.</p>
+<div class="pq">SIGNAL operates on four axes: <strong>Resource</strong> (what you have) × <strong>Channel</strong> (where you go) × <strong>Persuasion</strong> (what you say) × <strong>AI Co-pilot</strong> (who assists). Above all four sits <strong>Signal DNA</strong> — the meta-layer that turns generic AI outputs into your unique competitive advantage.</div>
+<div class="dv"></div>
+<span class="sa" id="problem"></span>
+<h2><span class="sn">2</span> The Core Design Problem</h2>
+<h3>Three Frameworks, Three Languages</h3>
+<p>Before SIGNAL, practitioners had to mentally juggle three different metaphor families:</p>
+<div class="tw"><table>
+<thead><tr><th>Source</th><th>Metaphor Family</th><th>Example Terms</th><th>Problem</th></tr></thead>
+<tbody>
+<tr><td>엠타트업</td><td>Infrastructure</td><td>RCS, 물길 (Waterway), 시스템 7대영역</td><td>Engineering language — powerful but cold</td></tr>
+<tr><td>자사몰사관학교</td><td>Formula/Math</td><td>총가치 공식, 곱셈의 법칙, 배수효과</td><td>Precise but intimidating for beginners</td></tr>
+<tr><td>Global (Schwartz, etc.)</td><td>Funnel/Ladder</td><td>Awareness Stages, Value Ladder, CVJ</td><td>Western-centric, overlapping terminology</td></tr>
+</tbody></table></div>
+<div class="warn">Students and practitioners feel the seams. They learn 등가교환 on Monday, Value Equation on Tuesday, and don't realize they're the same concept in different clothes.</div>
+
+<h3>The Solution: One Root Metaphor</h3>
+<p>The best frameworks feel like they're describing one coherent reality from different angles. SIGNAL chose <strong>"Signal and Amplification"</strong> from physics/engineering as its root metaphor:</p>
+<div class="mono"><span class="mh">The Signal Journey:</span>
+<span class="mr">Create</span> a signal (value)     → <span class="mc">Broadcast</span> through channels
+→ <span class="mp">Amplify</span> with persuasion  → <span class="ma">Automate</span> with AI
+→ <span class="my">Compound</span> with data (Signal DNA)</div>
+<p>Every concept in the framework lives naturally within this metaphor. No "metaphor buffet" — just one world.</p>
+
+<h3>Design Rules</h3>
+<ul>
+<li><strong>Two syllables max</strong> for core nouns — must flow in team meetings</li>
+<li><strong>Action verb pairing</strong> — every term maps to "what do I do Monday morning?"</li>
+<li><strong>Enemy per axis</strong> — each axis fights a specific enemy (Invisibility → Obscurity → Skepticism → Friction)</li>
+<li><strong>Narrative spine</strong> — the framework is a plot, not a checklist</li>
+</ul>
+<div class="dv"></div>
+<span class="sa" id="rcpa"></span>
+<h2><span class="sn">3</span> The Four Axes — RCPA</h2>
+<p>SIGNAL operates on four axes. Each axis has an <strong>enemy to defeat</strong>, a <strong>core question</strong>, and <strong>3-4 key terms</strong>. Together they cover the entire marketing operation.</p>
+
+<span class="sa" id="axis-r"></span>
+<div class="axc ax-r">
+<div class="axh"><div class="axl">R</div><div class="axm"><div class="axn">Resource</div><div class="axe">Enemy: Invisibility — "We have something, but nobody can see it"</div><div class="axq">"What do we actually have?"</div></div></div>
+<div class="axb">
+<div class="tr2"><div class="tn2">Signal Stack</div><div class="td2"><div class="tdef">Everything your team owns — product, story, people, time, money, content. Your total inventory of assets before any marketing begins.</div><div class="trepl">Replaces: RCS Resource layer</div><div class="tmaps">→ Hormozi's "Dream Outcome ingredients", Brunson's offer stack</div></div></div>
+<div class="tr2"><div class="tn2">Signal Mass</div><div class="td2"><div class="tdef">The <strong>one thing</strong> about your product that competitors cannot easily copy. The core of your competitive advantage. If you can't name it in one sentence, you don't have it yet.</div><div class="trepl">Replaces: 핵심가치 (Core Value), 핵심가치 이동</div><div class="tmaps">→ Godin's Purple Cow (remarkability), Hormozi's Dream Outcome</div></div></div>
+<div class="tr2"><div class="tn2">Proof Assets</div><div class="td2"><div class="tdef">Tangible evidence that your Signal Mass is real — reviews, demos, before/after photos, user testimonials, certifications. Not claims. <em>Evidence.</em></div><div class="trepl">Replaces: 구매편익 4분류 (Purchase Benefit Types)</div><div class="tmaps">→ Suby's "Godfather Offer" proof elements, Schwartz's "Most Aware" stage content</div></div></div>
+</div></div>
+
+<span class="sa" id="axis-c"></span>
+<div class="axc ax-c">
+<div class="axh"><div class="axl">C</div><div class="axm"><div class="axn">Channel</div><div class="axe">Enemy: Obscurity — "We exist, but nobody encounters us"</div><div class="axq">"Where do our customers already look?"</div></div></div>
+<div class="axb">
+<div class="tr2"><div class="tn2">Flow Map</div><div class="td2"><div class="tdef">The exact path from a customer's first encounter with you to purchase. Not theoretical — draw it. Every step, every click, every decision point.</div><div class="trepl">Replaces: 물길 (Traffic Waterway), 물길 마인드맵</div><div class="tmaps">→ Brunson's funnel stages, AARRR Acquisition→Activation, Deiss CVJ steps 1-4</div></div></div>
+<div class="tr2"><div class="tn2">Flow Source</div><div class="td2"><div class="tdef">Where attention originates. Two types: <strong>Organic</strong> (earned — content, SEO, community) and <strong>Paid</strong> (bought — Meta ads, Google ads). Your Flow Map starts here.</div><div class="trepl">Replaces: 제로마케팅 (Zero Marketing) vs 페이드마케팅</div><div class="tmaps">→ Suby's 3%/17%/20%/60% market split, 채널(C) 전략</div></div></div>
+<div class="tr2"><div class="tn2">Flow Gate</div><div class="td2"><div class="tdef">The moment in your Flow Map where you narrow options and force a decision — "click here", "add to cart", "choose A or B". Strategic friction that converts browsers to buyers.</div><div class="trepl">Replaces: 선택제어 3종 (Choice Control: Easy Choice / Double Bind / Elimination)</div><div class="tmaps">→ Behavioral economics "choice architecture", 클로징 4요소</div></div></div>
+</div></div>
+
+<span class="sa" id="axis-p"></span>
+<div class="axc ax-p">
+<div class="axh"><div class="axl">P</div><div class="axm"><div class="axn">Persuasion</div><div class="axe">Enemy: Skepticism — "They see us, but don't believe us"</div><div class="axq">"Why should they believe us?"</div></div></div>
+<div class="axb">
+<div class="tr2"><div class="tn2">Signal Arc</div><div class="td2"><div class="tdef">The 3-beat persuasion structure: <strong>Hook</strong> (stop scrolling) → <strong>Proof</strong> (show evidence) → <strong>Claim</strong> (make the ask). This single concept absorbs O-M-C, 3-Scene Structure, AND Schwartz's awareness progression.</div><div class="trepl">Replaces: O-M-C (Opening/Merit/Closing), 3장면 구조 (3-Scene Structure)</div><div class="tmaps">→ Schwartz's awareness-to-action arc, Suby's 8-Phase selling sequence</div></div></div>
+<div class="tr2"><div class="tn2">Gravity Score</div><div class="td2"><div class="tdef">The perceived fairness of the exchange. Does what the customer gets <em>feel</em> worth more than what they pay? High gravity = irresistible pull. Not about being cheap — about <strong>designing the exchange</strong> so value obviously exceeds cost.</div><div class="trepl">Replaces: 등가교환 (Equivalent Exchange), 매몰비용</div><div class="tmaps">→ Hormozi's Value Equation: (Dream Outcome × Likelihood) / (Time × Effort)</div></div></div>
+<div class="tr2"><div class="tn2">Desire Axis</div><div class="td2"><div class="tdef">The spectrum of customer intent: <strong>Latent</strong> (don't know they want it) → <strong>Active</strong> (searching for solutions) → <strong>Ready</strong> (credit card in hand). Your Signal Arc must match where they are on this axis.</div><div class="trepl">Replaces: 마케팅축 (Marketing Axis: Desire/Alternative/Access), 관여도</div><div class="tmaps">→ Schwartz 5 Awareness Stages, 엠타트업 키워드 5단계</div></div></div>
+<div class="tr2"><div class="tn2">Scene Stack</div><div class="td2"><div class="tdef">The three visual/narrative moments that make up a single piece of content or ad: <strong>Problem</strong> (pain) → <strong>Transformation</strong> (aha!) → <strong>Aspiration</strong> (desire). The visual layer of your Signal Arc.</div><div class="trepl">Replaces: 3장면 구조 (Problem Scene → Transition Scene → Ideal Scene)</div><div class="tmaps">→ 싱귤래리티 효과 (focus on one person's story)</div></div></div>
+</div></div>
+
+<span class="sa" id="axis-a"></span>
+<div class="axc ax-a">
+<div class="axh"><div class="axl">A</div><div class="axm"><div class="axn">AI Co-pilot</div><div class="axe">Enemy: Friction & Scale — "It works, but we can't do it fast enough"</div><div class="axq">"What can we automate right now?"</div></div></div>
+<div class="axb">
+<div class="tr2"><div class="tn2">Pilot Brief</div><div class="td2"><div class="tdef">The structured prompt you give AI before any task. Not a vague ask — a brief that includes context, constraints, examples, and success criteria. <strong>This is a NEW concept</strong> — no source equivalent.</div><div class="trepl">NEW — no direct predecessor</div><div class="tmaps">→ Prompt engineering meets project management. The quality of your Pilot Brief determines the quality of every AI output.</div></div></div>
+<div class="tr2"><div class="tn2">Amplify Loop</div><div class="td2"><div class="tdef">The process of turning one proven asset into many variants using AI. One good ad → 10 headline tests. One customer review → 5 content angles. Amplification, not creation from scratch.</div><div class="trepl">Replaces: 배수효과 (Multiplier Effect)</div><div class="tmaps">→ 곱셈의 법칙 (Multiplication Law): CTR × Retention × Checkout × Purchase. Each 10% improvement = 46% total growth.</div></div></div>
+<div class="tr2"><div class="tn2">Signal Score</div><div class="td2"><div class="tdef">An AI-readable composite metric that combines spend efficiency + creative quality + conversion performance. Your north-star number. When Signal Score goes up, your marketing is working.</div><div class="trepl">Replaces: 총가치 공식 (Total Value = Ad Spend × Est. Action Rate + Ad Quality)</div><div class="tmaps">→ Meta Auction mechanics, 배수효과 진단 (Multiplier Diagnosis: benchmark / current = priority)</div></div></div>
+<div class="tr2"><div class="tn2">Keyword Ladder</div><div class="td2"><div class="tdef">The five stages of search intent, from pure information to ready-to-buy. Each rung requires different content: Level 5 (browse) → Level 4 (problem) → Level 3 (compare) → Level 2 (evaluate) → Level 1 (purchase).</div><div class="trepl">Replaces: 키워드 5단계, 접촉지점</div><div class="tmaps">→ Schwartz 5 Awareness Stages (nearly 1:1 mapping), Suby's 3%/17%/20%/60% market split</div></div></div>
+</div></div>
+<div class="dv"></div>
+<span class="sa" id="dna"></span>
+<h2><span class="sn">4</span> Signal DNA — The Meta-Layer</h2>
+<div class="pq">"AI marketing without your data is the internet's average. Your Signal DNA makes your marketing uncopyable."</div>
+
+<h3>The Problem with Generic AI</h3>
+<p>Ask any AI to "write a cleansing foam ad" and you get the average of every cleansing foam ad on the internet. It's <em>fine</em>. It's also what everyone else gets. <strong>Zero competitive advantage.</strong></p>
+
+<h3>The Signal DNA Formula</h3>
+<div class="formula">
+<div class="feq">AI Base Output + Your Accumulated Data = Your Signal DNA</div>
+<div class="fnote">(reference aggregate, same for everyone) + (unique, non-replicable) = (output competitors cannot reproduce)</div>
+</div>
+
+<p>Signal DNA sits <strong>above</strong> the four RCPA axes — not as a 5th axis, but as an operating layer. Think of it this way:</p>
+<div class="info">RCPA axes = your muscles (what you do). Signal DNA = the neural pathways that make those muscles stronger over time (what you learn).</div>
+
+<h3>The Signal Flywheel</h3>
+<div class="fw">
+<div class="fwn"><div class="fwi">⚡</div><div class="fwl">Action</div><div class="fws">Run campaigns, post content, test hooks</div></div>
+<div class="fwa">→</div>
+<div class="fwn"><div class="fwi">📊</div><div class="fwl">Data</div><div class="fws">CTR, conversion, engagement, what worked/failed</div></div>
+<div class="fwa">→</div>
+<div class="fwn"><div class="fwi">🧠</div><div class="fwl">AI Learning</div><div class="fws">Feed data into Pilot Briefs, refine prompts</div></div>
+<div class="fwa">→</div>
+<div class="fwn"><div class="fwi">🚀</div><div class="fwl">Better Output</div><div class="fws">AI produces team-specific, data-informed results</div></div>
+<div class="fwa">→</div>
+<div class="fwn"><div class="fwi">🔄</div><div class="fwl">Repeat</div><div class="fws">Each cycle makes the next one faster and smarter</div></div>
+</div>
+
+<h3>Signal DNA File — Structure</h3>
+<p>A living document (Google Doc or Notion) that every team maintains. Four sections mirror the four axes:</p>
+<div class="g2">
+<div class="card"><div class="ch"><span class="ci" style="color:var(--r)">R</span><span class="cn">Resource Log</span></div><div class="cb">Assets created, product insights discovered, Signal Mass refinements. "What do we know about our product that we didn't know last week?"</div></div>
+<div class="card"><div class="ch"><span class="ci" style="color:var(--c)">C</span><span class="cn">Channel Log</span></div><div class="cb">Reach, CTR, traffic by source. Which Flow Sources work? Which Flow Gates convert? "Where are our customers actually coming from?"</div></div>
+<div class="card"><div class="ch"><span class="ci" style="color:var(--p)">P</span><span class="cn">Persuasion Log</span></div><div class="cb">Winning hooks, effective Signal Arcs, Gravity Score experiments. "Which words and images make people stop and buy?"</div></div>
+<div class="card"><div class="ch"><span class="ci" style="color:var(--a)">A</span><span class="cn">AI Prompt Library</span></div><div class="cb">Best Pilot Briefs, successful prompt templates, AI tool workflows. "Which prompts produce the best outputs for our specific product?"</div></div>
+</div>
+
+<h3>Signal Debrief — The Weekly Ritual</h3>
+<p>Every Friday, 15 minutes. Not a grand event — a small, repeating ritual that compounds.</p>
+<div class="mono"><span class="mh">Signal Debrief Template (15 min):</span>
+<span class="mr">1. What did we run this week?</span>    (actions taken)
+<span class="mc">2. What did the data say?</span>       (numbers, not feelings)
+<span class="mp">3. What surprised us?</span>           (unexpected wins or losses)
+<span class="ma">4. What's our next move?</span>        (specific, testable)
+<span class="my">5. Update the DNA File</span>          (log it or lose it)</div>
+<div class="key">Rituals beat events. A weekly 15-minute debrief compounds more learning than a monthly 2-hour review. The Signal DNA File is where institutional memory lives — when a team member leaves, the knowledge stays.</div>
+<div class="dv"></div>
+<span class="sa" id="spine"></span>
+<h2><span class="sn">5</span> The Escalation Spine</h2>
+<p>The SIGNAL Framework is not a checklist — it's a <strong>story</strong>. The Escalation Spine is the narrative engine that turns the framework into a plot. Teams progress through four stages, each with its own enemy to defeat.</p>
+
+<div class="spine">
+<div class="ss s-dk"><div class="sd"><div class="ss1">Stage</div><div class="ss2">1</div></div><div class="si"><div class="stit">DARK</div><div class="stag">Enemy: Invisibility</div><div class="sdesc">Nobody knows you exist. Your Signal Mass is undefined. You have a product but no story, no audience, no data. This is where every team starts — and it's uncomfortable by design.</div><div class="stl"><span>Signal Stack audit</span><span>Signal Mass definition</span><span>Team formation</span><span>First Pilot Brief</span></div></div></div>
+<div class="ss s-vi"><div class="sd"><div class="ss1">Stage</div><div class="ss2">2</div></div><div class="si"><div class="stit">VISIBLE</div><div class="stag">Enemy: Obscurity</div><div class="sdesc">Your Flow Map is built. Organic content is running. AI is generating your first assets. People are starting to see you — but they don't yet trust you. The transition from Dark to Visible is the hardest. Most give up here.</div><div class="stl"><span>Flow Map design</span><span>Organic Flow Source</span><span>AI asset generation</span><span>First content live</span></div></div></div>
+<div class="ss s-cr"><div class="sd"><div class="ss1">Stage</div><div class="ss2">3</div></div><div class="si"><div class="stit">CREDIBLE</div><div class="stag">Enemy: Skepticism</div><div class="sdesc">Your Signal Arc is working. Proof Assets are accumulating — real reviews, real results, real transformations. Gravity Score is positive. People don't just see you — they start to believe you.</div><div class="stl"><span>Signal Arc construction</span><span>Proof Asset sprints</span><span>Gravity Score optimization</span><span>Desire Axis mapping</span></div></div></div>
+<div class="ss s-sc"><div class="sd"><div class="ss1">Stage</div><div class="ss2">4</div></div><div class="si"><div class="stit">SCALABLE</div><div class="stag">Enemy: Friction & Scale</div><div class="sdesc">Paid channels are live. Amplify Loop is running. Signal Score is being optimized weekly. The flywheel spins: more data → better AI → better results → more data. You're no longer doing marketing manually — the system is doing it.</div><div class="stl"><span>Paid Flow Source</span><span>Meta ad campaigns</span><span>Amplify Loop activation</span><span>Signal Score optimization</span></div></div></div>
+</div>
+<div class="dv"></div>
+<span class="sa" id="mapping"></span>
+<h2><span class="sn">6</span> Global Framework Mapping</h2>
+<div class="pq">"엠타트업 was already world-class. Schwartz's 5 Awareness Stages maps nearly 1:1 to 엠타트업's Keyword 5 Levels. Hormozi's Value Equation is 등가교환 in different clothes. The marketing essence is universal — SIGNAL just names it once."</div>
+
+<div class="tw"><table>
+<thead><tr><th>SIGNAL Term</th><th>Axis</th><th>엠타트업</th><th>자사몰사관학교</th><th>Global Framework</th></tr></thead>
+<tbody>
+<tr><td>Signal Stack</td><td><span class="tg tgr">R</span></td><td>RCS (Resource)</td><td>—</td><td>Hormozi: Offer Stack</td></tr>
+<tr><td>Signal Mass</td><td><span class="tg tgr">R</span></td><td>핵심가치 (Core Value)</td><td>—</td><td>Godin: Purple Cow</td></tr>
+<tr><td>Proof Assets</td><td><span class="tg tgr">R</span></td><td>구매편익 4분류</td><td>—</td><td>Hormozi: Dream Outcome proof</td></tr>
+<tr><td>Flow Map</td><td><span class="tg tgc">C</span></td><td>물길 (Traffic Waterway)</td><td>—</td><td>Brunson: Funnel, AARRR</td></tr>
+<tr><td>Flow Source</td><td><span class="tg tgc">C</span></td><td>제로마케팅/채널전략</td><td>—</td><td>Suby: Market split</td></tr>
+<tr><td>Flow Gate</td><td><span class="tg tgc">C</span></td><td>선택제어 3종</td><td>—</td><td>Choice Architecture</td></tr>
+<tr><td>Signal Arc</td><td><span class="tg tgp">P</span></td><td>O-M-C</td><td>3장면 구조</td><td>Schwartz: Awareness arc</td></tr>
+<tr><td>Gravity Score</td><td><span class="tg tgp">P</span></td><td>등가교환</td><td>—</td><td>Hormozi: Value Equation</td></tr>
+<tr><td>Desire Axis</td><td><span class="tg tgp">P</span></td><td>마케팅축, 관여도</td><td>—</td><td>Schwartz: 5 Awareness</td></tr>
+<tr><td>Scene Stack</td><td><span class="tg tgp">P</span></td><td>—</td><td>3장면 구조</td><td>Suby: HVCO</td></tr>
+<tr><td>Pilot Brief</td><td><span class="tg tga">A</span></td><td>—</td><td>—</td><td>NEW (AI-native)</td></tr>
+
+<tr><td>Amplify Loop</td><td><span class="tg tga">A</span></td><td>배수효과</td><td>배수효과 진단</td><td>AARRR: each stage optimization</td></tr>
+<tr><td>Signal Score</td><td><span class="tg tga">A</span></td><td>—</td><td>총가치 공식</td><td>Meta: Auction total value</td></tr>
+<tr><td>Keyword Ladder</td><td><span class="tg tga">A</span></td><td>키워드 5단계</td><td>—</td><td>Schwartz: 5 Awareness Stages</td></tr>
+<tr><td>Signal DNA</td><td><span class="tg tgx">META</span></td><td>—</td><td>스노우볼 효과</td><td>Deiss: CVJ compounding</td></tr>
+</tbody></table></div>
+
+<h3>Key Insight: The 1:1 Mapping</h3>
+<div class="ok">Schwartz's 5 Awareness Stages (1966) maps almost perfectly to 엠타트업's Keyword 5 Levels:<br><br>
+<strong>Unaware</strong> = Level 5 (Pure Information) · <strong>Problem Aware</strong> = Level 4 (Problem Recognition) · <strong>Solution Aware</strong> = Level 3 (Alternative Search) · <strong>Product Aware</strong> = Level 2 (Comparison) · <strong>Most Aware</strong> = Level 1 (Ready to Buy)<br><br>
+Two frameworks, developed independently on opposite sides of the world, 60 years apart — arriving at the same insight. Marketing's essence is universal. SIGNAL just names it once.</div>
+<div class="dv"></div>
+<span class="sa" id="glossary"></span>
+<h2><span class="sn">7</span> Full Terminology Glossary</h2>
+<p>All SIGNAL terms in one reference. Design rule: <em>"Two syllables max for the core noun, one clear action verb."</em></p>
+<div class="tw"><table>
+<thead><tr><th>Term</th><th>Axis</th><th>Replaces</th><th>One-line Definition</th><th>Action Verb</th></tr></thead>
+<tbody>
+<tr><td>Signal Stack</td><td><span class="tg tgr">R</span></td><td>RCS Resource</td><td>Everything your team owns</td><td>Audit</td></tr>
+<tr><td>Signal Mass</td><td><span class="tg tgr">R</span></td><td>핵심가치</td><td>Your uncopyable advantage</td><td>Define</td></tr>
+<tr><td>Proof Assets</td><td><span class="tg tgr">R</span></td><td>구매편익</td><td>Evidence it's real</td><td>Collect</td></tr>
+<tr><td>Flow Map</td><td><span class="tg tgc">C</span></td><td>물길</td><td>Customer's path to purchase</td><td>Draw</td></tr>
+<tr><td>Flow Source</td><td><span class="tg tgc">C</span></td><td>채널전략</td><td>Where attention comes from</td><td>Choose</td></tr>
+<tr><td>Flow Gate</td><td><span class="tg tgc">C</span></td><td>선택제어</td><td>Force a decision point</td><td>Place</td></tr>
+<tr><td>Signal Arc</td><td><span class="tg tgp">P</span></td><td>O-M-C + 3장면</td><td>Hook → Proof → Claim</td><td>Construct</td></tr>
+<tr><td>Gravity Score</td><td><span class="tg tgp">P</span></td><td>등가교환</td><td>Perceived exchange fairness</td><td>Design</td></tr>
+<tr><td>Desire Axis</td><td><span class="tg tgp">P</span></td><td>마케팅축</td><td>Latent → Active → Ready</td><td>Map</td></tr>
+<tr><td>Scene Stack</td><td><span class="tg tgp">P</span></td><td>3장면 구조</td><td>Problem → Transform → Aspire</td><td>Storyboard</td></tr>
+<tr><td>Pilot Brief</td><td><span class="tg tga">A</span></td><td>NEW</td><td>Structured AI instruction</td><td>Write</td></tr>
+<tr><td>Amplify Loop</td><td><span class="tg tga">A</span></td><td>배수효과</td><td>1 asset → 10 variants via AI</td><td>Amplify</td></tr>
+<tr><td>Signal Score</td><td><span class="tg tga">A</span></td><td>총가치 공식</td><td>Composite efficiency metric</td><td>Track</td></tr>
+<tr><td>Keyword Ladder</td><td><span class="tg tga">A</span></td><td>키워드 5단계</td><td>5 stages of search intent</td><td>Climb</td></tr>
+<tr><td>Signal DNA</td><td><span class="tg tgx">META</span></td><td>NEW</td><td>Your unique data + AI = uncopyable output</td><td>Cultivate</td></tr>
+<tr><td>Signal DNA File</td><td><span class="tg tgx">META</span></td><td>NEW</td><td>Living document logging all learnings</td><td>Update</td></tr>
+<tr><td>Signal Debrief</td><td><span class="tg tgx">META</span></td><td>NEW</td><td>Friday 15-min review ritual</td><td>Conduct</td></tr>
+</tbody></table></div>
+<div class="dv"></div>
+<span class="sa" id="course"></span>
+<h2><span class="sn">8</span> Application: 15-Week University Course</h2>
+<div class="info">This is <strong>one application</strong> of the SIGNAL Framework. The framework itself is universal — applicable to startups, agencies, corporate teams, or solo practitioners. This section shows how to deploy it as a hands-on university course.</div>
+
+<h3>Course Overview</h3>
+<p><strong>Cosmetics Customer-Based Marketing Practice</strong> · 15 weeks · 4 hours/week · Teams of 4-5 · Real cosmetic products</p>
+
+<h3>Weekly Cadence</h3>
+<div class="mono"><span class="mh">Every Week:</span>
+<span class="mr">Monday</span>   → Draft <span class="ma">Pilot Brief</span> (plan + AI objectives)
+<span class="mc">Wednesday</span> → Execute (create + deploy content/ads)
+<span class="mp">Friday</span>    → <span class="my">Signal Debrief</span> (15 min → update DNA File)</div>
+
+<h3>15-Week Structure</h3>
+<div class="week"><div class="wh"><span class="wn">W01</span><span class="ph ph1">DARK</span><span class="wt">Intro to SIGNAL & Cosmetics Market</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">SIGNAL framework, RCPA axes, team assignment, product briefing</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Form teams, receive products, initialize Signal DNA File</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W02</span><span class="ph ph1">DARK</span><span class="wt">Signal Mass & Competitor Research</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Signal Mass definition, competitive analysis, Proof Asset types</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Define Signal Mass in one sentence, Claude competitor teardown</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W03</span><span class="ph ph1">DARK</span><span class="wt">Signal Stack Audit & Story Discovery</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Complete resource inventory, storytelling for credibility, Proof Assets</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Full Signal Stack audit, collect/create first Proof Assets</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W04</span><span class="ph ph1">DARK</span><span class="wt">Positioning & Stack Presentation</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Positioning strategy, Gravity Score introduction, Desire Axis basics</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Present Signal Stack + positioning to class, peer feedback</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W05</span><span class="ph ph2">VISIBLE</span><span class="wt">⚡ Signal DNA Ignition</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Signal DNA concept, Flywheel mechanics, "generic AI is your competitor"</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Initialize DNA File, first Signal Debrief, review weeks 1-4 data</div></div></div><div class="key">The "aha" moment: "Generic AI is your competitor. Your team's Signal DNA — the data you generate and the prompts you write — makes your marketing uncopyable. This is your competitive edge."</div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W06</span><span class="ph ph2">VISIBLE</span><span class="wt">Flow Map & Channel Strategy</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Flow Map construction, Flow Source selection (organic first), channel metrics</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Draw Flow Map, identify top 2 organic channels, channel case studies</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W07</span><span class="ph ph2">VISIBLE</span><span class="wt">Organic Content & First AI Sprint</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Content creation with AI, Claude/Midjourney/Canva workflows, Pilot Brief writing</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Create and post 3+ organic content pieces using AI tools</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W08</span><span class="ph ph2">VISIBLE</span><span class="wt">Flow Gate Optimization & Mid-Review</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Flow Gate placement, conversion optimization, engagement analytics</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Mid-semester presentation: Signal Stack + Flow Map + early results</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W09</span><span class="ph ph3">CREDIBLE</span><span class="wt">Signal Arc Deep Dive I — Hook Mastery</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">3-beat structure (Hook→Proof→Claim), 3-second stopping power, hook patterns</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Write 20 hooks → team votes top 5 → test on social → measure CTR</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W10</span><span class="ph ph3">CREDIBLE</span><span class="wt">Signal Arc Deep Dive II — Scene Stack & Copy</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Scene Stack visual storytelling, ad copywriting, Midjourney/Canva for ads</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Create hero ad with full Signal Arc, A/B test visuals</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W11</span><span class="ph ph3">CREDIBLE</span><span class="wt">Gravity Score & Exchange Design</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Exchange design (not discounting), Gravity Score calibration, offer structure</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Design 3 offer variants, test with real audience, measure Gravity Score</div></div></div><div class="warn">Students often confuse "cheap" with "high gravity." Emphasize offer STRENGTH — not price cuts.</div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W12</span><span class="ph ph3">CREDIBLE</span><span class="wt">Proof Asset Sprint</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Proof Asset acquisition strategies, UGC, testimonials, before/after methodology</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Rapid collection: 5+ new Proof Assets this week. Final hero ad test.</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W13</span><span class="ph ph4">SCALABLE</span><span class="wt">Paid Channels Activation</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Meta Ads Manager, campaign structure, Signal Score basics, budget allocation</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Set up and launch first paid Meta ad campaign</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W14</span><span class="ph ph4">SCALABLE</span><span class="wt">Amplify Loop & Optimization</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Amplify Loop mechanics, creative variant testing, real-time optimization</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">1 winning ad → 5 AI variants → test → optimize Signal Score</div></div></div></div></div>
+
+<div class="week"><div class="wh"><span class="wn">W15</span><span class="ph ph4">SCALABLE</span><span class="wt">Final Signal DNA & Presentations</span></div><div class="wb"><div class="wg"><div class="wgb"><div class="wgbt">Learn</div><div class="wgbc">Signal DNA File review, cross-team insights, framework reflection</div></div><div class="wgb"><div class="wgbt">Do</div><div class="wgbc">Submit final DNA File (50+ experiments), team presentations, cohort debrief</div></div></div></div></div>
+
+<h3>Grading Philosophy</h3>
+<div class="ok"><strong>Execution and learning &gt; theoretical perfection.</strong> Failed experiments with documented learnings earn higher marks than safe, limited plans. The goal is 50+ experiments in the DNA File — volume of learning, not just success.</div>
+<div class="dv"></div>
+<span class="sa" id="moat"></span>
+<h2><span class="sn">9</span> The Cross-Cohort Moat</h2>
+<p>The SIGNAL Framework's most powerful feature isn't visible in any single cohort — it's what happens <strong>across</strong> cohorts.</p>
+
+<div class="crow">
+<div class="cc"><div class="ccn">Cohort 1</div><div class="cct">🌱 Raw Data</div><div class="ccd">Teams generate original campaign data, unique prompt libraries, winning hooks and angles. First Signal DNA Files are created from scratch.</div></div>
+<div class="carr">→</div>
+<div class="cc"><div class="ccn">Cohort 2</div><div class="cct">🌿 Baseline Brief</div><div class="ccd">Inherits anonymized best practices: proven hooks, channel benchmarks, validated Pilot Brief templates. Starts higher, goes further.</div></div>
+<div class="carr">→</div>
+<div class="cc"><div class="ccn">Cohort 3+</div><div class="cct">🌳 Compounding IP</div><div class="ccd">Industry-specific cosmetics data + curated prompt libraries = unreplicable advantage. The framework itself gets smarter every semester.</div></div>
+</div>
+
+<div class="pq">"You can copy the curriculum. You cannot copy three cohorts of validated data, refined prompts, and battle-tested Signal DNA."</div>
+
+<div class="formula">
+<div class="feq">Framework Intelligence = Σ (Cohort Data × Time)</div>
+<div class="fnote">Each cycle of the flywheel makes the next one more powerful. This is the instructor's IP moat.</div>
+</div>
+<div class="dv"></div>
+<span class="sa" id="refs"></span>
+<h2><span class="sn">10</span> References</h2>
+<div class="ri"><span class="rico">📕</span><div><div class="rit">Breakthrough Advertising</div><div class="rim">Eugene Schwartz, 1966</div><div class="rid">The 5 Stages of Customer Awareness — foundational framework that maps 1:1 to both 엠타트업's Keyword Levels and SIGNAL's Desire Axis + Keyword Ladder.</div></div></div>
+<div class="ri"><span class="rico">💰</span><div><div class="rit">$100M Offers</div><div class="rim">Alex Hormozi, 2021</div><div class="rid">The Value Equation: (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort). Directly absorbed into SIGNAL's Gravity Score.</div></div></div>
+<div class="ri"><span class="rico">🔵</span><div><div class="rit">DotCom Secrets</div><div class="rim">Russell Brunson, 2015</div><div class="rid">Value Ladder: Bait → Frontend → Middle → Backend → Continuity. Influenced SIGNAL's Flow Map and progressive commitment architecture.</div></div></div>
+<div class="ri"><span class="rico">🔥</span><div><div class="rit">Sell Like Crazy</div><div class="rim">Sabri Suby, 2019</div><div class="rid">8-Phase Selling System and Godfather Offer. SIGNAL's Signal Arc (Hook→Proof→Claim) absorbs Suby's phase structure.</div></div></div>
+<div class="ri"><span class="rico">🟣</span><div><div class="rit">Purple Cow + Permission Marketing</div><div class="rim">Seth Godin, 2003 / 1999</div><div class="rid">Remarkability principle and earned attention. Core influence on Signal Mass (be uncopyable) and Flow Source (organic-first).</div></div></div>
+<div class="ri"><span class="rico">📈</span><div><div class="rit">Customer Value Optimization</div><div class="rim">Ryan Deiss, DigitalMarketer</div><div class="rid">8-stage Customer Value Journey. Influenced SIGNAL's post-purchase thinking and the compounding nature of Signal DNA across cohorts.</div></div></div>
+<div class="ri"><span class="rico">🇰🇷</span><div><div class="rit">엠타트업 (M-Startup) — 15 Cohorts</div><div class="rim">M군 / 맹지호</div><div class="rid">Korean ecommerce marketing framework. RCS, Core Value, Purchase Benefits, Marketing Axis, Equivalent Exchange, O-M-C, Traffic Waterway, Choice Control, Keyword Levels, Multiplier Effect. The deepest single influence on SIGNAL.</div></div></div>
+<div class="ri"><span class="rico">📊</span><div><div class="rit">자사몰사관학교 (DTC Academy) — 5 Cohorts</div><div class="rim">BS Camp Curriculum</div><div class="rid">Meta advertising execution system. Total Value Formula, 3-Scene Structure, Multiplication Law, Meta Auction 4 Stages, Multiplier Diagnosis. The execution backbone of SIGNAL's AI Co-pilot axis.</div></div></div>
+<div class="ri"><span class="rico">🤖</span><div><div class="rit">ChatPRD</div><div class="rim">Claire Vo (3x CPO)</div><div class="rid">AI product management platform. The SIGNAL terminology system was designed using ChatPRD's framework design methodology — root metaphor selection, cognitive operating system architecture, and narrative spine construction.</div></div></div>
+
+<div class="ft">SIGNAL Framework v1.0 · March 2026 · Built with 🍡 by Mozzi<br>Designed using ChatPRD methodology · Powered by RCPA + Signal DNA</div>
+</main>
+</div>
+
+<script>
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if(e.isIntersecting) {
+      document.querySelectorAll('.ti').forEach(t => t.classList.remove('active'));
+      const id = e.target.id;
+      const link = document.querySelector('.ti[href="#'+id+'"]');
+      if(link) link.classList.add('active');
+    }
+  });
+}, {rootMargin: '-20% 0px -60% 0px'});
+document.querySelectorAll('.sa').forEach(s => {
+  // observe the next sibling (the actual section content)
+  obs.observe(s);
+});
+</script>
+
+</body>
+</html>

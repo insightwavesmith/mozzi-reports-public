@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>총가치각도기 — 엔젤앤비</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 14px; }
+
+  /* ── Header ── */
+  .header { background: #fff; border-bottom: 1px solid #e8e9f0; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
+  .header-logo { display: flex; align-items: center; gap: 10px; }
+  .header-logo .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #6c63ff, #3f3d8f); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 13px; }
+  .header-logo .brand { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .header-logo .account-badge { background: #f0eefc; color: #6c63ff; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600; margin-left: 8px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-right .avatar { width: 32px; height: 32px; background: linear-gradient(135deg, #ff6b6b, #feca57); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 12px; }
+
+  /* ── Tab Bar ── */
+  .tab-bar { background: #fff; border-bottom: 1px solid #e8e9f0; padding: 0 24px; display: flex; gap: 0; }
+  .tab-btn { padding: 14px 20px; font-size: 14px; font-weight: 500; color: #888; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+  .tab-btn:hover { color: #6c63ff; }
+  .tab-btn.active { color: #6c63ff; border-bottom-color: #6c63ff; font-weight: 600; }
+
+  /* ── Content ── */
+  .tab-content { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  /* ── Controls Bar ── */
+  .controls-bar { background: #fff; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .controls-bar select, .controls-bar input { border: 1px solid #e0e1ea; border-radius: 8px; padding: 7px 12px; font-size: 13px; color: #1a1a2e; background: #fafbff; outline: none; cursor: pointer; }
+  .controls-bar select:focus, .controls-bar input:focus { border-color: #6c63ff; }
+  .controls-bar label { font-size: 12px; font-weight: 600; color: #888; }
+  .btn-primary { background: #6c63ff; color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-primary:hover { background: #5a52d5; }
+  .btn-outline { background: #fff; color: #6c63ff; border: 1.5px solid #6c63ff; border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+  /* ── Section Header ── */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .section-title { font-size: 15px; font-weight: 700; color: #1a1a2e; display: flex; align-items: center; gap: 8px; }
+  .section-title .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  /* ── Cards ── */
+  .card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; }
+  .card-title { font-size: 13px; font-weight: 700; color: #888; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── Rank Table ── */
+  .rank-table { width: 100%; border-collapse: collapse; }
+  .rank-table th { font-size: 11px; font-weight: 700; color: #aaa; text-align: left; padding: 8px 10px; border-bottom: 1px solid #f0f1f7; text-transform: uppercase; letter-spacing: 0.5px; }
+  .rank-table td { padding: 11px 10px; border-bottom: 1px solid #f8f9fd; font-size: 13px; color: #333; vertical-align: middle; }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-table tr:hover td { background: #fafbff; }
+  .rank-num { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+  .rank-1 { background: #fff8e1; color: #f59e0b; }
+  .rank-2 { background: #f0f1f7; color: #666; }
+  .rank-3 { background: #fef3ee; color: #e07a3f; }
+  .rank-4, .rank-5 { background: #f5f6fa; color: #999; }
+  .creative-name { font-weight: 600; color: #1a1a2e; }
+  .creative-type { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+  /* ── Metric Pill ── */
+  .metric { text-align: right; }
+  .metric-val { font-weight: 600; font-size: 13px; }
+  .metric-bench { font-size: 10px; color: #aaa; margin-top: 1px; }
+  .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 20px; }
+  .badge-green { background: #e8f8f0; color: #22a55b; }
+  .badge-yellow { background: #fef9e7; color: #d4a017; }
+  .badge-red { background: #fef0ef; color: #e0463a; }
+
+  /* ── Score Section ── */
+  .score-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .score-card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .score-card-title { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .score-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f6fa; }
+  .score-row:last-child { border-bottom: none; }
+  .score-label { font-size: 13px; color: #555; }
+  .score-values { display: flex; align-items: center; gap: 8px; }
+  .score-mine { font-weight: 600; font-size: 13px; color: #1a1a2e; }
+  .score-bench-val { font-size: 12px; color: #aaa; }
+
+  /* ── Progress Bar ── */
+  .progress-wrap { background: #f0f1f7; border-radius: 20px; height: 6px; width: 80px; overflow: hidden; display: inline-block; vertical-align: middle; margin: 0 4px; }
+  .progress-fill { height: 100%; border-radius: 20px; }
+  .fill-green { background: #22a55b; }
+  .fill-yellow { background: #f59e0b; }
+  .fill-red { background: #e0463a; }
+
+  /* ── Tab2: 소재 분석 ── */
+  .analysis-grid { display: grid; grid-template-columns: 38% 60%; gap: 20px; margin-bottom: 20px; }
+  .creative-card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .creative-thumb { width: 100%; aspect-ratio: 9/16; background: linear-gradient(160deg, #2d2d5e 0%, #4a3f8a 50%, #6c63ff 100%); border-radius: 10px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .creative-thumb-label { color: rgba(255,255,255,0.5); font-size: 12px; text-align: center; }
+  .creative-thumb .thumb-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 16px 12px 12px; }
+  .creative-thumb .thumb-overlay .t-name { color: #fff; font-weight: 700; font-size: 14px; }
+  .creative-thumb .thumb-overlay .t-type { color: rgba(255,255,255,0.7); font-size: 11px; }
+  .tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .tag { background: #f0eefc; color: #6c63ff; border-radius: 6px; padding: 4px 9px; font-size: 11px; font-weight: 600; }
+  .mini-score-row { display: flex; gap: 10px; }
+  .mini-score { flex: 1; background: #f5f6fa; border-radius: 10px; padding: 10px; text-align: center; }
+  .mini-score .ms-label { font-size: 10px; color: #aaa; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+  .mini-score .ms-val { font-size: 18px; font-weight: 700; }
+  .ms-val.red { color: #e0463a; }
+  .ms-val.yellow { color: #f59e0b; }
+  .ms-val.green { color: #22a55b; }
+
+  /* ── AI Analysis ── */
+  .ai-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .score-display { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid #f0f1f7; }
+  .big-score { width: 72px; height: 72px; border-radius: 50%; border: 4px solid #f59e0b; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .big-score .bs-num { font-size: 22px; font-weight: 800; color: #1a1a2e; line-height: 1; }
+  .big-score .bs-total { font-size: 11px; color: #aaa; }
+  .score-label-area .score-main-label { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .score-label-area .score-sub { font-size: 13px; color: #f59e0b; font-weight: 600; margin-top: 2px; }
+  .score-label-area .score-desc { font-size: 12px; color: #999; margin-top: 4px; }
+
+  /* ── Compare Table ── */
+  .compare-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  .compare-table th { font-size: 11px; font-weight: 700; color: #aaa; text-align: left; padding: 8px 10px; border-bottom: 2px solid #f0f1f7; text-transform: uppercase; letter-spacing: 0.5px; }
+  .compare-table td { padding: 10px 10px; border-bottom: 1px solid #f8f9fd; font-size: 13px; color: #333; vertical-align: middle; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: #fafbff; }
+  .element-name { font-weight: 600; color: #555; font-size: 12px; }
+
+  /* ── AI Suggestions ── */
+  .ai-suggest-title { font-size: 13px; font-weight: 700; color: #6c63ff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .ai-suggest-list { list-style: none; }
+  .ai-suggest-list li { display: flex; gap: 10px; padding: 10px 12px; background: #fafbff; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #444; border-left: 3px solid #6c63ff; line-height: 1.5; }
+  .ai-suggest-list li .suggest-num { background: #6c63ff; color: #fff; border-radius: 50%; width: 20px; height: 20px; min-width: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-top: 1px; }
+
+  /* ── Heatmap Section ── */
+  .heatmap-section { margin-top: 4px; }
+  .heatmap-grid { display: grid; grid-template-columns: 32% 68%; gap: 20px; margin-bottom: 20px; }
+  .heatmap-visual-card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .heatmap-thumb-wrap { position: relative; width: 100%; aspect-ratio: 9/16; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+  .heatmap-base { width: 100%; height: 100%; background: linear-gradient(160deg, #2d2d5e 0%, #4a3f8a 50%, #6c63ff 100%); }
+  /* Heatmap blob overlays */
+  .hm-blob { position: absolute; border-radius: 50%; filter: blur(18px); opacity: 0.72; }
+  .hm-red-1 { background: radial-gradient(circle, #ff2d00 0%, rgba(255,45,0,0) 70%); width: 60%; height: 22%; top: 20%; left: 20%; }
+  .hm-red-2 { background: radial-gradient(circle, #ff6600 0%, rgba(255,102,0,0) 70%); width: 55%; height: 18%; top: 52%; left: 22%; }
+  .hm-yellow-1 { background: radial-gradient(circle, #ffe000 0%, rgba(255,224,0,0) 70%); width: 45%; height: 16%; top: 35%; left: 28%; }
+  .hm-blue-1 { background: radial-gradient(circle, #1e6fff 0%, rgba(30,111,255,0) 70%); width: 80%; height: 30%; top: 70%; left: 10%; opacity: 0.5; }
+  .hm-blue-2 { background: radial-gradient(circle, #00b4d8 0%, rgba(0,180,216,0) 70%); width: 50%; height: 20%; top: 5%; left: 5%; opacity: 0.4; }
+  /* Heatmap legend */
+  .hm-legend { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hm-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #666; }
+  .hm-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .hm-dot-red { background: #ff2d00; }
+  .hm-dot-yellow { background: #ffe000; border: 1px solid #ccc; }
+  .hm-dot-blue { background: #1e6fff; }
+  .hm-caption { font-size: 11px; color: #999; margin-bottom: 10px; line-height: 1.5; background: #fef0ef; border-radius: 6px; padding: 8px 10px; }
+
+  .heatmap-analysis-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+  /* ── Gaze Flow ── */
+  .gaze-flow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .gaze-flow-card { background: #f8f9fd; border-radius: 10px; padding: 14px; }
+  .gaze-flow-card .gf-title { font-size: 12px; font-weight: 700; color: #888; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .gaze-flow-card .gf-title .gf-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .gf-steps { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .gf-step { text-align: center; }
+  .gf-step-box { border-radius: 8px; padding: 7px 10px; font-size: 12px; font-weight: 600; }
+  .gf-step-pct { font-size: 11px; color: #aaa; margin-top: 3px; }
+  .gf-arrow { color: #ccc; font-size: 16px; padding-top: 4px; }
+  .gf-bench .gf-step-box { background: #e8f8f0; color: #22a55b; }
+  .gf-mine .gf-step-box { background: #fef0ef; color: #e0463a; }
+  .gf-mine .gf-step-box.ok { background: #fef9e7; color: #d4a017; }
+
+  /* ── LP Analysis ── */
+  .lp-grid { display: grid; grid-template-columns: 38% 60%; gap: 20px; margin-bottom: 20px; }
+  .lp-screen { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .lp-thumb { width: 100%; aspect-ratio: 9/16; background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%); border: 1px solid #e8e9f0; border-radius: 10px; margin-bottom: 14px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+  .lp-hero { background: linear-gradient(135deg, #1a1a2e 0%, #3f3d8f 100%); flex: 0 0 35%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 700; text-align: center; padding: 10px; }
+  .lp-section { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 11px; color: #555; }
+  .lp-section .ls-label { font-weight: 600; color: #333; font-size: 12px; margin-bottom: 4px; }
+  .lp-cta-btn { background: #6c63ff; color: #fff; border-radius: 6px; padding: 10px; text-align: center; font-weight: 700; font-size: 13px; margin: 10px 12px; }
+  .lp-url-bar { background: #f5f6fa; border-radius: 6px; padding: 8px 10px; font-size: 11px; color: #888; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .lp-url-icon { color: #22a55b; font-size: 12px; }
+  .structure-check { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .check-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; background: #f8f9fd; border-radius: 8px; padding: 7px 10px; }
+  .check-ok { color: #22a55b; font-size: 14px; }
+  .check-no { color: #e0463a; font-size: 14px; }
+  .consistency-score { background: #fef9e7; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+  .cs-num { font-size: 26px; font-weight: 800; color: #f59e0b; }
+  .cs-label { font-size: 13px; color: #888; }
+  .cs-sublabel { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+  /* ── Competitor Analysis ── */
+  .search-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+  .search-bar input { flex: 1; border: 1.5px solid #e0e1ea; border-radius: 10px; padding: 10px 14px; font-size: 14px; outline: none; }
+  .search-bar input:focus { border-color: #6c63ff; }
+  .comp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .comp-card { background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); cursor: pointer; transition: box-shadow 0.2s; }
+  .comp-card:hover { box-shadow: 0 4px 12px rgba(108,99,255,0.12); }
+  .comp-card.selected { border: 2px solid #6c63ff; }
+  .comp-thumb { width: 100%; aspect-ratio: 4/5; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 600; }
+  .comp-brand { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; }
+  .comp-meta { font-size: 11px; color: #aaa; margin-bottom: 6px; }
+  .comp-platform { display: flex; gap: 4px; flex-wrap: wrap; }
+  .platform-tag { background: #f0f1f7; color: #666; border-radius: 4px; padding: 2px 7px; font-size: 10px; font-weight: 600; }
+  .compare-btn { width: 100%; margin-top: 8px; background: #f0eefc; color: #6c63ff; border: none; border-radius: 7px; padding: 7px; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .compare-btn:hover { background: #6c63ff; color: #fff; }
+
+  /* ── Comparison view ── */
+  .comp-compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .comp-compare-col { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .comp-compare-header { font-size: 13px; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #f0f1f7; display: flex; align-items: center; gap: 8px; }
+  .my-tag { background: #f0eefc; color: #6c63ff; padding: 3px 8px; border-radius: 6px; font-size: 11px; }
+  .comp-tag { background: #fef0ef; color: #e0463a; padding: 3px 8px; border-radius: 6px; font-size: 11px; }
+  .comp-compare-thumb { width: 100%; aspect-ratio: 9/16; border-radius: 10px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+  .comp-diff-row { display: flex; align-items: flex-start; gap: 8px; padding: 9px 0; border-bottom: 1px solid #f5f6fa; font-size: 13px; }
+  .comp-diff-row:last-child { border-bottom: none; }
+  .diff-label { color: #888; min-width: 60px; font-weight: 600; font-size: 12px; }
+  .diff-val { color: #1a1a2e; }
+
+  /* ── Stat Badge Strip ── */
+  .stat-strip { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stat-box { background: #fff; border-radius: 10px; padding: 12px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); flex: 1; min-width: 120px; }
+  .stat-box .sb-label { font-size: 11px; color: #aaa; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+  .stat-box .sb-val { font-size: 18px; font-weight: 800; color: #1a1a2e; }
+  .stat-box .sb-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+  /* ── Divider ── */
+  .divider { border: none; border-top: 1px solid #f0f1f7; margin: 20px 0; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+<div class="header">
+  <div class="header-logo">
+    <div class="logo-icon">각</div>
+    <span class="brand">총가치각도기</span>
+    <span class="account-badge">엔젤앤비</span>
+  </div>
+  <div class="header-right">
+    <span style="font-size:12px; color:#aaa;">마지막 업데이트: 2026-03-19 20:00</span>
+    <div class="avatar">엔</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TAB BAR ═══════════════════════════════ -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('dashboard')">📊 대시보드</button>
+  <button class="tab-btn" onclick="switchTab('creative')">🎨 소재 분석</button>
+  <button class="tab-btn" onclick="switchTab('landing')">📄 랜딩페이지</button>
+  <button class="tab-btn" onclick="switchTab('competitor')">🔍 경쟁사 분석</button>
+</div>
+
+
+<!-- ═══════════════════════════════ TAB 1: DASHBOARD ═══════════════════════════════ -->
+<div id="tab-dashboard" class="tab-content active">
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <label>광고계정</label>
+    <select>
+      <option>엔젤앤비 — Act_2948472</option>
+    </select>
+    <label>기간</label>
+    <select>
+      <option>최근 7일</option>
+      <option>최근 14일</option>
+      <option>최근 30일</option>
+    </select>
+    <button class="btn-primary">적용</button>
+    <div style="margin-left:auto; font-size:12px; color:#aaa;">2026-03-12 ~ 2026-03-18</div>
+  </div>
+
+  <!-- Stat Strip -->
+  <div class="stat-strip">
+    <div class="stat-box">
+      <div class="sb-label">총 지출</div>
+      <div class="sb-val">₩108,294</div>
+      <div class="sb-sub">7일 누계</div>
+    </div>
+    <div class="stat-box">
+      <div class="sb-label">총 노출</div>
+      <div class="sb-val">1,284,720</div>
+    </div>
+    <div class="stat-box">
+      <div class="sb-label">평균 CTR</div>
+      <div class="sb-val">3.42%</div>
+      <div class="sb-sub">벤치마크 2.08%</div>
+    </div>
+    <div class="stat-box">
+      <div class="sb-label">평균 ROAS</div>
+      <div class="sb-val">1.8x</div>
+      <div class="sb-sub">벤치마크 3.2x</div>
+    </div>
+    <div class="stat-box">
+      <div class="sb-label">활성 소재</div>
+      <div class="sb-val">5개</div>
+    </div>
+  </div>
+
+  <!-- Ranking -->
+  <div class="card">
+    <div class="card-title">소재 랭킹 (지출 기준)</div>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th style="width:40px;">#</th>
+          <th>소재</th>
+          <th class="metric">지출</th>
+          <th class="metric">노출</th>
+          <th class="metric">CTR</th>
+          <th class="metric">3초시청률</th>
+          <th class="metric">구매전환율</th>
+          <th class="metric">ROAS</th>
+          <th class="metric">종합</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="rank-num rank-1">1</div></td>
+          <td>
+            <div class="creative-name">비포 애프터 25s</div>
+            <div class="creative-type">동영상 · 25초</div>
+          </td>
+          <td class="metric"><div class="metric-val">₩35,474</div></td>
+          <td class="metric"><div class="metric-val">487,210</div></td>
+          <td class="metric">
+            <div class="metric-val">3.66%</div>
+            <div class="metric-bench">벤치 2.08%</div>
+            <span class="badge badge-green">🟢 상위</span>
+          </td>
+          <td class="metric">
+            <div class="metric-val">22.82%</div>
+            <div class="metric-bench">벤치 26.84%</div>
+            <span class="badge badge-red">🔴 미달</span>
+          </td>
+          <td class="metric">
+            <div class="metric-val">0.00%</div>
+            <div class="metric-bench">벤치 10.72%</div>
+            <span class="badge badge-red">🔴 미달</span>
+          </td>
+          <td class="metric"><div class="metric-val">1.4x</div></td>
+          <td class="metric"><span class="badge badge-yellow">🟡 72점</span></td>
+        </tr>
+        <tr>
+          <td><div class="rank-num rank-2">2</div></td>
+          <td>
+            <div class="creative-name">깔끔한 실사 이미지</div>
+            <div class="creative-type">이미지 · 정적</div>
+          </td>
+          <td class="metric"><div class="metric-val">₩28,320</div></td>
+          <td class="metric"><div class="metric-val">312,840</div></td>
+          <td class="metric">
+            <div class="metric-val">2.52%</div>
+            <div class="metric-bench">벤치 2.08%</div>
+            <span class="badge badge-green">🟢 상위</span>
+          </td>
+          <td class="metric"><div class="metric-val">—</div></td>
+          <td class="metric">
+            <div class="metric-val">5.34%</div>
+            <div class="metric-bench">벤치 10.72%</div>
+            <span class="badge badge-yellow">🟡 미달</span>
+          </td>
+          <td class="metric"><div class="metric-val">2.1x</div></td>
+          <td class="metric"><span class="badge badge-yellow">🟡 68점</span></td>
+        </tr>
+        <tr>
+          <td><div class="rank-num rank-3">3</div></td>
+          <td>
+            <div class="creative-name">모델 팝업 30s</div>
+            <div class="creative-type">동영상 · 30초</div>
+          </td>
+          <td class="metric"><div class="metric-val">₩22,150</div></td>
+          <td class="metric"><div class="metric-val">218,490</div></td>
+          <td class="metric">
+            <div class="metric-val">5.19%</div>
+            <div class="metric-bench">벤치 2.08%</div>
+            <span class="badge badge-green">🟢 우수</span>
+          </td>
+          <td class="metric">
+            <div class="metric-val">31.4%</div>
+            <div class="metric-bench">벤치 26.84%</div>
+            <span class="badge badge-green">🟢 상위</span>
+          </td>
+          <td class="metric">
+            <div class="metric-val">8.22%</div>
+            <div class="metric-bench">벤치 10.72%</div>
+            <span class="badge badge-yellow">🟡 근접</span>
+          </td>
+          <td class="metric"><div class="metric-val">3.0x</div></td>
+          <td class="metric"><span class="badge badge-green">🟢 84점</span></td>
+        </tr>
+        <tr>
+          <td><div class="rank-num rank-4">4</div></td>
+          <td>
+            <div class="creative-name">제품 클로즈업 15s</div>
+            <div class="creative-type">동영상 · 15초</div>
+          </td>
+          <td class="metric"><div class="metric-val">₩13,820</div></td>
+          <td class="metric"><div class="metric-val">142,310</div></td>
+          <td class="metric">
+            <div class="metric-val">1.88%</div>
+            <div class="metric-bench">벤치 2.08%</div>
+            <span class="badge badge-red">🔴 미달</span>
+          </td>
+          <td class="metric">
+            <div class="metric-val">19.6%</div>
+            <div class="metric-bench">벤치 26.84%</div>
+            <span class="badge badge-red">🔴 미달</span>
+          </td>
+          <td class="metric">
+            <div class="metric-val">3.1%</div>
+            <div class="metric-bench">벤치 10.72%</div>
+            <span class="badge badge-red">🔴 미달</span>
+          </td>
+          <td class="metric"><div class="metric-val">0.9x</div></td>
+          <td class="metric"><span class="badge badge-red">🔴 52점</span></td>
+        </tr>
+        <tr>
+          <td><div class="rank-num rank-5">5</div></td>
+          <td>
+            <div class="creative-name">텍스트 강조 후기</div>
+            <div class="creative-type">이미지 · 카드</div>
+          </td>
+          <td class="metric"><div class="metric-val">₩8,530</div></td>
+          <td class="metric"><div class="metric-val">123,870</div></td>
+          <td class="metric">
+            <div class="metric-val">2.14%</div>
+            <div class="metric-bench">벤치 2.08%</div>
+            <span class="badge badge-green">🟢 상위</span>
+          </td>
+          <td class="metric"><div class="metric-val">—</div></td>
+          <td class="metric">
+            <div class="metric-val">7.8%</div>
+            <div class="metric-bench">벤치 10.72%</div>
+            <span class="badge badge-yellow">🟡 미달</span>
+          </td>
+          <td class="metric"><div class="metric-val">2.3x</div></td>
+          <td class="metric"><span class="badge badge-yellow">🟡 66점</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Score Sections -->
+  <div class="score-sections">
+    <!-- 기반점수 -->
+    <div class="score-card">
+      <div class="score-card-title">
+        <div class="dot" style="background:#6c63ff;"></div>기반 점수
+        <span style="margin-left:auto; font-size:12px; color:#e0463a; font-weight:700;">미달</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">3초시청률</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-red" style="width:53%;"></div></div>
+          <span class="score-mine">22.82%</span>
+          <span class="score-bench-val">/ 26.84% 🔴</span>
+        </div>
+      </div>
+      <div class="score-row">
+        <span class="score-label">ThruPlay율</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-red" style="width:45%;"></div></div>
+          <span class="score-mine">2.62%</span>
+          <span class="score-bench-val">/ 2.88% 🔴</span>
+        </div>
+      </div>
+      <div class="score-row">
+        <span class="score-label">평균 시청 시간</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-yellow" style="width:62%;"></div></div>
+          <span class="score-mine">6.4초</span>
+          <span class="score-bench-val">/ 8.1초 🟡</span>
+        </div>
+      </div>
+    </div>
+    <!-- 참여율 -->
+    <div class="score-card">
+      <div class="score-card-title">
+        <div class="dot" style="background:#22a55b;"></div>참여율
+        <span style="margin-left:auto; font-size:12px; color:#22a55b; font-weight:700;">혼재</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">좋아요/만노출</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-yellow" style="width:38%;"></div></div>
+          <span class="score-mine">0.6</span>
+          <span class="score-bench-val">/ 4.7 🟡</span>
+        </div>
+      </div>
+      <div class="score-row">
+        <span class="score-label">저장/만노출</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-green" style="width:78%;"></div></div>
+          <span class="score-mine">28.2</span>
+          <span class="score-bench-val">/ 19.8 🟢</span>
+        </div>
+      </div>
+      <div class="score-row">
+        <span class="score-label">공유/만노출</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-yellow" style="width:55%;"></div></div>
+          <span class="score-mine">3.1</span>
+          <span class="score-bench-val">/ 3.5 🟡</span>
+        </div>
+      </div>
+    </div>
+    <!-- 전환율 -->
+    <div class="score-card">
+      <div class="score-card-title">
+        <div class="dot" style="background:#e0463a;"></div>전환율
+        <span style="margin-left:auto; font-size:12px; color:#e0463a; font-weight:700;">미달</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">CTR</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-green" style="width:80%;"></div></div>
+          <span class="score-mine">3.66%</span>
+          <span class="score-bench-val">/ 2.08% 🟢</span>
+        </div>
+      </div>
+      <div class="score-row">
+        <span class="score-label">구매전환율</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-red" style="width:0%;"></div></div>
+          <span class="score-mine">0.00%</span>
+          <span class="score-bench-val">/ 10.72% 🔴</span>
+        </div>
+      </div>
+      <div class="score-row">
+        <span class="score-label">ROAS</span>
+        <div class="score-values">
+          <div class="progress-wrap"><div class="progress-fill fill-red" style="width:35%;"></div></div>
+          <span class="score-mine">1.4x</span>
+          <span class="score-bench-val">/ 3.2x 🔴</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ TAB 2: 소재 분석 ═══════════════════════════════ -->
+<div id="tab-creative" class="tab-content">
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <label>소재 선택</label>
+    <select>
+      <option>1등 — 비포 애프터 25s (₩35,474)</option>
+      <option>2등 — 깔끔한 실사 이미지 (₩28,320)</option>
+      <option>3등 — 모델 팝업 30s (₩22,150)</option>
+      <option>4등 — 제품 클로즈업 15s (₩13,820)</option>
+      <option>5등 — 텍스트 강조 후기 (₩8,530)</option>
+    </select>
+    <span style="font-size:12px; color:#aaa; margin-left:auto;">벤치마크 기준: 헬스/뷰티 카테고리 상위 20%</span>
+  </div>
+
+  <!-- Main Analysis Grid -->
+  <div class="analysis-grid">
+    <!-- 왼쪽: 내 소재 카드 -->
+    <div class="creative-card">
+      <div class="card-title">📌 내 광고 소재</div>
+      <div class="creative-thumb">
+        <span class="creative-thumb-label">썸네일</span>
+        <div class="thumb-overlay">
+          <div class="t-name">비포 애프터 25s</div>
+          <div class="t-type">동영상 · 25초 · Meta Feed</div>
+        </div>
+      </div>
+      <div class="tag-wrap">
+        <div style="font-size:11px; color:#888; width:100%; margin-bottom:4px; font-weight:600;">L1 태그</div>
+        <span class="tag">hook: 문제제기</span>
+        <span class="tag">style: 비포애프터</span>
+        <span class="tag">CTA: 더알아보기</span>
+        <span class="tag">자막: 하단고정</span>
+        <span class="tag">모델: 있음</span>
+      </div>
+      <hr class="divider">
+      <div class="mini-score-row">
+        <div class="mini-score">
+          <div class="ms-label">기반</div>
+          <div class="ms-val red">58</div>
+        </div>
+        <div class="mini-score">
+          <div class="ms-label">참여</div>
+          <div class="ms-val yellow">74</div>
+        </div>
+        <div class="mini-score">
+          <div class="ms-label">전환</div>
+          <div class="ms-val red">42</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: AI 분석 -->
+    <div class="ai-card">
+      <div class="score-display">
+        <div class="big-score">
+          <div class="bs-num">72</div>
+          <div class="bs-total">/100</div>
+        </div>
+        <div class="score-label-area">
+          <div class="score-main-label">종합 점수</div>
+          <div class="score-sub">⚠️ 개선 필요</div>
+          <div class="score-desc">CTR은 우수하나 전환율 개선 시급<br>벤치마크 상위 20%와 비교 분석</div>
+        </div>
+      </div>
+
+      <div class="card-title" style="margin-bottom:10px;">요소별 벤치마크 비교</div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>요소</th>
+            <th>내 소재</th>
+            <th>벤치마크 상위</th>
+            <th>판정</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="element-name">Hook 유형</span></td>
+            <td>문제제기</td>
+            <td><span style="color:#888;">70%가 문제제기 사용</span></td>
+            <td><span class="badge badge-green">🟢 일치</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">CTA 문구</span></td>
+            <td>더알아보기</td>
+            <td><span style="color:#888;">55%가 '지금구매'</span></td>
+            <td><span class="badge badge-yellow">🟡 개선 가능</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">자막 위치</span></td>
+            <td>하단 고정</td>
+            <td><span style="color:#888;">45%가 중앙 임팩트</span></td>
+            <td><span class="badge badge-yellow">🟡 테스트 권장</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">첫 3초 시작</span></td>
+            <td>제품 노출</td>
+            <td><span style="color:#888;">60%가 문제 상황</span></td>
+            <td><span class="badge badge-red">🔴 개선 필요</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">영상 길이</span></td>
+            <td>25초</td>
+            <td><span style="color:#888;">최빈값 30~45초</span></td>
+            <td><span class="badge badge-yellow">🟡 약간 짧음</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">모델 등장</span></td>
+            <td>있음</td>
+            <td><span style="color:#888;">80%가 모델 포함</span></td>
+            <td><span class="badge badge-green">🟢 일치</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ai-suggest-title">✨ AI 개선 제안</div>
+      <ul class="ai-suggest-list">
+        <li><div class="suggest-num">1</div> CTA를 <strong>'지금 구매하기'</strong>로 변경 — 벤치마크 상위 55%가 직접적 CTA 사용, 구매전환율 +12% 예상</li>
+        <li><div class="suggest-num">2</div> <strong>첫 3초에 '탈모 고민' 문제 상황</strong>으로 시작 — 제품보다 문제 공감이 3초시청률 +30% 효과</li>
+        <li><div class="suggest-num">3</div> <strong>자막을 중앙 팝업형</strong>으로 변경 — 시선 집중도 향상, 특히 무음 시청 환경에서 유리</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── 히트맵 섹션 ─── -->
+  <hr class="divider">
+  <div class="heatmap-section">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="dot" style="background:#ff6b6b; width:10px; height:10px;"></div>
+        👁️ 시선 히트맵 분석 (L2 Eye-Tracking 예측)
+      </div>
+      <span style="font-size:12px; color:#aaa;">AI 기반 추정치 · 실제 eye-tracking 아님</span>
+    </div>
+
+    <div class="heatmap-grid">
+      <!-- 왼쪽: 히트맵 시각화 -->
+      <div class="heatmap-visual-card">
+        <div class="card-title">시선 집중도 시뮬레이션</div>
+        <div class="heatmap-thumb-wrap">
+          <div class="heatmap-base"></div>
+          <!-- Heat blobs -->
+          <div class="hm-blob hm-blue-2"></div>
+          <div class="hm-blob hm-red-1"></div>
+          <div class="hm-blob hm-yellow-1"></div>
+          <div class="hm-blob hm-red-2"></div>
+          <div class="hm-blob hm-blue-1"></div>
+          <!-- Area Labels -->
+          <div style="position:absolute; top:18%; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.55); color:#fff; font-size:10px; padding:3px 8px; border-radius:20px; font-weight:600; white-space:nowrap;">Hook 텍스트 영역</div>
+          <div style="position:absolute; top:46%; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.55); color:#fff; font-size:10px; padding:3px 8px; border-radius:20px; font-weight:600; white-space:nowrap;">제품 노출 영역</div>
+          <div style="position:absolute; top:72%; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.55); color:#fff; font-size:10px; padding:3px 8px; border-radius:20px; font-weight:600; white-space:nowrap;">CTA 버튼 영역</div>
+          <div style="position:absolute; top:88%; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.55); color:#fff; font-size:10px; padding:3px 8px; border-radius:20px; font-weight:600; white-space:nowrap;">배경 영역</div>
+        </div>
+        <div class="hm-caption">
+          ⚠️ <strong>배경에 시선 분산 (40%)</strong> — CTA 및 Hook 텍스트 시선 부족
+        </div>
+        <div class="hm-legend">
+          <div class="hm-legend-item"><div class="hm-dot hm-dot-red"></div> 집중 (핫스팟)</div>
+          <div class="hm-legend-item"><div class="hm-dot" style="background:#ff9500;"></div> 보통</div>
+          <div class="hm-legend-item"><div class="hm-dot hm-dot-yellow"></div> 약한 시선</div>
+          <div class="hm-legend-item"><div class="hm-dot hm-dot-blue"></div> 무시 (콜드)</div>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 분석 카드 -->
+      <div class="heatmap-analysis-card">
+        <div class="card-title" style="margin-bottom:12px;">영역별 시선 집중도 비교</div>
+        <table class="compare-table" style="margin-bottom:20px;">
+          <thead>
+            <tr>
+              <th>영역</th>
+              <th>내 소재</th>
+              <th>벤치마크 상위</th>
+              <th>판정</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="element-name">Hook 텍스트</span></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-red" style="width:43%;"></div></div>
+                  <span style="font-weight:600; color:#e0463a;">15%</span>
+                </div>
+              </td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-green" style="width:100%;"></div></div>
+                  <span style="font-weight:600; color:#22a55b;">35%</span>
+                </div>
+              </td>
+              <td><span class="badge badge-red">🔴 시선 부족</span></td>
+            </tr>
+            <tr>
+              <td><span class="element-name">제품 영역</span></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-yellow" style="width:71%;"></div></div>
+                  <span style="font-weight:600; color:#f59e0b;">25%</span>
+                </div>
+              </td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-green" style="width:86%;"></div></div>
+                  <span style="font-weight:600; color:#22a55b;">30%</span>
+                </div>
+              </td>
+              <td><span class="badge badge-yellow">🟡 비슷</span></td>
+            </tr>
+            <tr>
+              <td><span class="element-name">CTA 버튼</span></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-red" style="width:34%;"></div></div>
+                  <span style="font-weight:600; color:#e0463a;">12%</span>
+                </div>
+              </td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-green" style="width:63%;"></div></div>
+                  <span style="font-weight:600; color:#22a55b;">22%</span>
+                </div>
+              </td>
+              <td><span class="badge badge-red">🔴 시선 부족</span></td>
+            </tr>
+            <tr>
+              <td><span class="element-name">배경</span></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-red" style="width:100%;"></div></div>
+                  <span style="font-weight:600; color:#e0463a;">40%</span>
+                </div>
+              </td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <div class="progress-wrap" style="width:60px;"><div class="progress-fill fill-green" style="width:23%;"></div></div>
+                  <span style="font-weight:600; color:#22a55b;">8%</span>
+                </div>
+              </td>
+              <td><span class="badge badge-red">🔴 시선 분산</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 시선 동선 비교 -->
+        <div class="card-title" style="margin-bottom:12px;">시선 동선 비교</div>
+        <div class="gaze-flow">
+          <div class="gaze-flow-card gf-bench">
+            <div class="gf-title">
+              <div class="gf-dot" style="background:#22a55b;"></div> 벤치마크 상위 소재 동선
+            </div>
+            <div class="gf-steps">
+              <div class="gf-step">
+                <div class="gf-step-box">Hook</div>
+                <div class="gf-step-pct">35%</div>
+              </div>
+              <div class="gf-arrow">→</div>
+              <div class="gf-step">
+                <div class="gf-step-box">제품</div>
+                <div class="gf-step-pct">30%</div>
+              </div>
+              <div class="gf-arrow">→</div>
+              <div class="gf-step">
+                <div class="gf-step-box">CTA</div>
+                <div class="gf-step-pct">22%</div>
+              </div>
+              <div class="gf-arrow">→</div>
+              <div class="gf-step">
+                <div class="gf-step-box">배경</div>
+                <div class="gf-step-pct">8%</div>
+              </div>
+            </div>
+          </div>
+          <div class="gaze-flow-card gf-mine">
+            <div class="gf-title">
+              <div class="gf-dot" style="background:#e0463a;"></div> 내 소재 시선 동선
+            </div>
+            <div class="gf-steps">
+              <div class="gf-step">
+                <div class="gf-step-box">배경</div>
+                <div class="gf-step-pct">40%</div>
+              </div>
+              <div class="gf-arrow">→</div>
+              <div class="gf-step">
+                <div class="gf-step-box ok">제품</div>
+                <div class="gf-step-pct">25%</div>
+              </div>
+              <div class="gf-arrow">→</div>
+              <div class="gf-step">
+                <div class="gf-step-box">Hook</div>
+                <div class="gf-step-pct">15%</div>
+              </div>
+              <div class="gf-arrow">→</div>
+              <div class="gf-step">
+                <div class="gf-step-box">CTA</div>
+                <div class="gf-step-pct">12%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI 개선 제안 (히트맵) -->
+        <div class="ai-suggest-title">✨ AI 시선 개선 제안</div>
+        <ul class="ai-suggest-list">
+          <li><div class="suggest-num">1</div> <strong>CTA 버튼 크기 키우고 상단 이동</strong> — 현재 12% 시선을 22%↑로 끌어올릴 수 있음. 버튼 색상 대비 강화 병행 권장</li>
+          <li><div class="suggest-num">2</div> <strong>배경 단순화</strong> (단색 또는 블러 처리) — 배경 시선 분산 40% → 10% 이하로 감소, Hook/CTA 집중도 대폭 향상 예상</li>
+          <li><div class="suggest-num">3</div> <strong>Hook 텍스트 폰트 2배 확대</strong> + 강조 색상 — 15% 시선을 30%↑ 목표. 첫 1초 내 텍스트 시선 고정 필수</li>
+        </ul>
+      </div>
+    </div><!-- /.heatmap-grid -->
+  </div><!-- /.heatmap-section -->
+</div><!-- /#tab-creative -->
+
+
+<!-- ═══════════════════════════════ TAB 3: 랜딩페이지 ═══════════════════════════════ -->
+<div id="tab-landing" class="tab-content">
+
+  <div class="controls-bar">
+    <label>LP URL</label>
+    <input type="text" value="https://angelanbi.kr/product/hair-tonic-01" style="width:340px;">
+    <span style="font-size:12px; color:#aaa;">크롤링: 2026-03-18 14:22</span>
+    <button class="btn-outline" style="margin-left:auto;">재크롤링</button>
+  </div>
+
+  <div class="lp-grid">
+    <!-- 왼쪽: LP 스크린샷 + 구조 분석 -->
+    <div class="lp-screen">
+      <div class="card-title">📱 LP 구조 분석</div>
+      <div class="lp-url-bar">
+        <span class="lp-url-icon">🔒</span>
+        angelanbi.kr/product/hair-tonic-01
+      </div>
+      <div class="lp-thumb">
+        <div class="lp-hero">🛒 Hero 섹션<br><span style="font-size:11px; opacity:0.7;">메인 제품 이미지 + 제목</span></div>
+        <div class="lp-cta-btn">지금 구매하기</div>
+        <div class="lp-section">
+          <div class="ls-label">제품 상세 설명</div>
+          성분 설명, 사용법, 효과 안내
+        </div>
+        <div class="lp-section">
+          <div class="ls-label">가격 정보</div>
+          ₩48,000 (정가 ₩65,000)
+        </div>
+        <div class="lp-section" style="color:#ccc; font-style:italic;">
+          리뷰 섹션 없음
+        </div>
+        <div class="lp-section" style="color:#ccc; font-style:italic;">
+          FAQ 없음
+        </div>
+      </div>
+
+      <div class="card-title" style="margin-bottom:10px;">구조 체크리스트</div>
+      <div class="structure-check">
+        <div class="check-item"><span class="check-ok">✅</span> Hero 섹션</div>
+        <div class="check-item"><span class="check-no">❌</span> 리뷰 섹션</div>
+        <div class="check-item"><span class="check-ok">✅</span> 가격 노출</div>
+        <div class="check-item"><span class="check-no">❌</span> FAQ</div>
+        <div class="check-item"><span class="check-no">⚠️</span> CTA 1개만</div>
+        <div class="check-item"><span class="check-no">❌</span> GIF/동영상</div>
+        <div class="check-item"><span class="check-ok">✅</span> 성분 설명</div>
+        <div class="check-item"><span class="check-no">❌</span> 배송 안내</div>
+      </div>
+
+      <div class="consistency-score">
+        <div class="cs-num">65</div>
+        <div>
+          <div class="cs-label">소재↔LP 일관성 점수</div>
+          <div class="cs-sublabel">광고 메시지와 LP 내용 간 불일치 존재</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 벤치마크 비교 + AI 제안 -->
+    <div class="ai-card">
+      <div class="score-display">
+        <div class="big-score" style="border-color:#e0463a;">
+          <div class="bs-num" style="color:#e0463a;">42</div>
+          <div class="bs-total">/100</div>
+        </div>
+        <div class="score-label-area">
+          <div class="score-main-label">LP 종합 점수</div>
+          <div class="score-sub" style="color:#e0463a;">🔴 즉시 개선 필요</div>
+          <div class="score-desc">전환율 저하 주요 원인<br>리뷰·FAQ·CTA 부재가 구매 장벽</div>
+        </div>
+      </div>
+
+      <div class="card-title" style="margin-bottom:10px;">벤치마크 LP 패턴 비교</div>
+      <table class="compare-table" style="margin-bottom:18px;">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>내 LP</th>
+            <th>벤치마크 상위 LP</th>
+            <th>판정</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="element-name">CTA 개수</span></td>
+            <td>1개</td>
+            <td><span style="color:#888;">평균 3.2개</span></td>
+            <td><span class="badge badge-red">🔴 부족</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">리뷰 섹션</span></td>
+            <td>없음</td>
+            <td><span style="color:#888;">80%가 3단계 구조</span></td>
+            <td><span class="badge badge-red">🔴 필수 추가</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">가격 위치</span></td>
+            <td>하단</td>
+            <td><span style="color:#888;">65%가 Hero 아래</span></td>
+            <td><span class="badge badge-yellow">🟡 상단 이동</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">GIF/동영상</span></td>
+            <td>없음</td>
+            <td><span style="color:#888;">45%가 사용</span></td>
+            <td><span class="badge badge-yellow">🟡 권장</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">FAQ 섹션</span></td>
+            <td>없음</td>
+            <td><span style="color:#888;">70%가 포함</span></td>
+            <td><span class="badge badge-red">🔴 추가 필요</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">사회적 증거</span></td>
+            <td>없음</td>
+            <td><span style="color:#888;">구매자 수/별점 노출 90%</span></td>
+            <td><span class="badge badge-red">🔴 즉시 추가</span></td>
+          </tr>
+          <tr>
+            <td><span class="element-name">소재↔LP 일관성</span></td>
+            <td>65점</td>
+            <td><span style="color:#888;">상위권 평균 88점</span></td>
+            <td><span class="badge badge-red">🔴 개선 필요</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ai-suggest-title">✨ AI 개선 제안</div>
+      <ul class="ai-suggest-list">
+        <li><div class="suggest-num">1</div> <strong>리뷰 섹션 추가</strong> — 벤치마크 80%가 '사진후기 → 텍스트후기 → 별점' 3단계 구조. 전환율 +20~35% 기대</li>
+        <li><div class="suggest-num">2</div> <strong>CTA 버튼 3개 이상</strong> 배치 — Hero 바로 아래, 스크롤 중간, 페이지 하단. 현재 1개 → 이탈률 높음</li>
+        <li><div class="suggest-num">3</div> <strong>FAQ 섹션</strong> 추가 — 배송/교환/환불 정보 포함. 구매 불안 해소 → 전환율 +15% 예상</li>
+        <li><div class="suggest-num">4</div> <strong>가격을 Hero 섹션 바로 아래로</strong> 이동 — 스크롤 없이 가격 확인 가능해야 이탈 방지</li>
+      </ul>
+    </div>
+  </div>
+</div><!-- /#tab-landing -->
+
+
+<!-- ═══════════════════════════════ TAB 4: 경쟁사 분석 ═══════════════════════════════ -->
+<div id="tab-competitor" class="tab-content">
+
+  <div class="search-bar">
+    <input type="text" value="탈모 샴푸" placeholder="브랜드명 또는 키워드 검색...">
+    <button class="btn-primary">🔍 검색</button>
+    <span style="font-size:12px; color:#aaa; align-self:center;">Meta Ad Library 기반 · 2026-03-18 기준</span>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title">검색 결과 — "탈모 샴푸" 카테고리 광고 (12건)</div>
+    <span style="font-size:12px; color:#6c63ff; cursor:pointer;">+ 전체 보기</span>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card selected" onclick="showCompare()">
+      <div class="comp-thumb" style="background: linear-gradient(135deg, #1a1a2e, #6c63ff);">내 소재</div>
+      <div class="comp-brand">엔젤앤비</div>
+      <div class="comp-meta">내 광고 · 비포애프터 25s</div>
+      <div class="comp-platform">
+        <span class="platform-tag">Facebook</span>
+        <span class="platform-tag">Instagram</span>
+      </div>
+    </div>
+    <div class="comp-card" onclick="showCompare()">
+      <div class="comp-thumb" style="background: linear-gradient(135deg, #ff6b35, #f7931e);">경쟁사 A</div>
+      <div class="comp-brand">닥터포헤어</div>
+      <div class="comp-meta">게재 62일 · 장기 집행</div>
+      <div class="comp-platform">
+        <span class="platform-tag">Facebook</span>
+        <span class="platform-tag">Instagram</span>
+        <span class="platform-tag">Audience</span>
+      </div>
+      <button class="compare-btn">내 소재와 비교</button>
+    </div>
+    <div class="comp-card" onclick="showCompare()">
+      <div class="comp-thumb" style="background: linear-gradient(135deg, #11998e, #38ef7d);">경쟁사 B</div>
+      <div class="comp-brand">TS샴푸</div>
+      <div class="comp-meta">게재 38일 · 진행중</div>
+      <div class="comp-platform">
+        <span class="platform-tag">Instagram</span>
+        <span class="platform-tag">Reels</span>
+      </div>
+      <button class="compare-btn">내 소재와 비교</button>
+    </div>
+    <div class="comp-card" onclick="showCompare()">
+      <div class="comp-thumb" style="background: linear-gradient(135deg, #e96c5a, #f9ca24);">경쟁사 C</div>
+      <div class="comp-brand">케어존</div>
+      <div class="comp-meta">게재 14일 · 신규</div>
+      <div class="comp-platform">
+        <span class="platform-tag">Facebook</span>
+      </div>
+      <button class="compare-btn">내 소재와 비교</button>
+    </div>
+  </div>
+
+  <!-- Comparison View -->
+  <div id="comp-compare" style="display:none;">
+    <hr class="divider">
+    <div class="section-header">
+      <div class="section-title">📊 소재 비교 분석 — 엔젤앤비 vs 닥터포헤어</div>
+      <button class="btn-outline" onclick="document.getElementById('comp-compare').style.display='none'">닫기 ✕</button>
+    </div>
+    <div class="comp-compare-grid">
+      <div class="comp-compare-col">
+        <div class="comp-compare-header">
+          <span>내 소재</span>
+          <span class="my-tag">엔젤앤비</span>
+        </div>
+        <div class="comp-compare-thumb" style="background: linear-gradient(160deg, #2d2d5e 0%, #4a3f8a 50%, #6c63ff 100%); color: rgba(255,255,255,0.6);">비포 애프터 25s</div>
+        <div class="comp-diff-row"><span class="diff-label">길이</span><span class="diff-val">25초</span></div>
+        <div class="comp-diff-row"><span class="diff-label">Hook</span><span class="diff-val">문제제기 — 텍스트 오버레이</span></div>
+        <div class="comp-diff-row"><span class="diff-label">CTA</span><span class="diff-val">더알아보기 (소극적)</span></div>
+        <div class="comp-diff-row"><span class="diff-label">리뷰</span><span class="diff-val" style="color:#e0463a;">없음</span></div>
+        <div class="comp-diff-row"><span class="diff-label">CTR</span><span class="diff-val" style="color:#22a55b;">3.66% 🟢</span></div>
+        <div class="comp-diff-row"><span class="diff-label">전환율</span><span class="diff-val" style="color:#e0463a;">0.00% 🔴</span></div>
+        <div class="comp-diff-row"><span class="diff-label">게재기간</span><span class="diff-val">7일</span></div>
+      </div>
+      <div class="comp-compare-col">
+        <div class="comp-compare-header">
+          <span>경쟁사 소재</span>
+          <span class="comp-tag">닥터포헤어</span>
+        </div>
+        <div class="comp-compare-thumb" style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: rgba(255,255,255,0.6);">닥터포헤어 비포애프터</div>
+        <div class="comp-diff-row"><span class="diff-label">길이</span><span class="diff-val">40초</span></div>
+        <div class="comp-diff-row"><span class="diff-label">Hook</span><span class="diff-val">문제제기 — 실제 탈모 영상</span></div>
+        <div class="comp-diff-row"><span class="diff-label">CTA</span><span class="diff-val" style="color:#22a55b;">지금 구매하기 (직접)</span></div>
+        <div class="comp-diff-row"><span class="diff-label">리뷰</span><span class="diff-val" style="color:#22a55b;">영상 내 후기 3건 포함</span></div>
+        <div class="comp-diff-row"><span class="diff-label">CTR</span><span class="diff-val">4.2% (추정)</span></div>
+        <div class="comp-diff-row"><span class="diff-label">전환율</span><span class="diff-val">12.3% (추정)</span></div>
+        <div class="comp-diff-row"><span class="diff-label">게재기간</span><span class="diff-val" style="color:#22a55b;font-weight:700;">62일 (장기=성과 좋음)</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="ai-suggest-title">✨ 경쟁사 분석 인사이트</div>
+      <ul class="ai-suggest-list">
+        <li><div class="suggest-num">1</div> 닥터포헤어 소재가 <strong>62일 장기 집행</strong> 중 — 성과가 좋다는 신호. Hook 방식(문제제기)은 동일하나 CTA와 리뷰 포함이 핵심 차이점</li>
+        <li><div class="suggest-num">2</div> <strong>소재 내 리뷰 삽입</strong> 전략 — 경쟁사 상위 3개 모두 영상 내 고객 후기 포함. 별도 LP 이동 없이 영상 내에서 설득</li>
+        <li><div class="suggest-num">3</div> CTA 문구 A/B 테스트 즉시 시작 — '더알아보기' vs '지금 구매하기' 2주 비교 후 성과 좋은 것으로 통일</li>
+      </ul>
+    </div>
+  </div>
+</div><!-- /#tab-competitor -->
+
+
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  function showCompare() {
+    const el = document.getElementById('comp-compare');
+    el.style.display = 'block';
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+</script>
+
+</body>
+</html>

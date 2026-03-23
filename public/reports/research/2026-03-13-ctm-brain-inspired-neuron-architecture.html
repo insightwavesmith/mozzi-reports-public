@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="date" content="2026-03-13">
+<meta name="project" content="Neuron Architecture">
+<title>뇌 영감 AI 아키텍처 리서치 — CTM 논문과 뉴런 시스템 적용 방안</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fc;color:#1a1a1a;line-height:1.8}
+.container{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.back{display:inline-block;margin-bottom:24px;color:#64748b;text-decoration:none;font-size:14px}
+.back:hover{color:#1a1a1a}
+h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.3}
+.subtitle{font-size:16px;color:#64748b;margin-bottom:32px}
+.date{font-size:13px;color:#94a3b8;margin-bottom:24px}
+h2{font-size:22px;font-weight:700;margin:40px 0 16px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+h3{font-size:18px;font-weight:600;margin:28px 0 12px;color:#334155}
+p{margin-bottom:16px;font-size:15px;color:#374151}
+.box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:20px 0}
+.box.key{border-left:4px solid #F75D5D}
+.box.insight{border-left:4px solid #3b82f6}
+.box.action{border-left:4px solid #10b981}
+.box h4{font-size:15px;font-weight:700;margin-bottom:8px}
+.box p{margin-bottom:8px}
+.pc{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin:12px 0;transition:box-shadow .2s}
+.pc:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.pc .tt{font-weight:700;font-size:15px;margin-bottom:4px}
+.pc .au{font-size:13px;color:#64748b;margin-bottom:6px}
+.pc .ve{font-size:12px;color:#94a3b8;background:#f1f5f9;display:inline-block;padding:2px 8px;border-radius:4px;margin-bottom:8px}
+.pc .ds{font-size:14px;color:#475569;line-height:1.6}
+.pc a{color:#3b82f6;text-decoration:none;font-size:13px}
+.pc a:hover{text-decoration:underline}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th{background:#f1f5f9;padding:10px 12px;text-align:left;font-weight:600;border-bottom:2px solid #e2e8f0}
+td{padding:10px 12px;border-bottom:1px solid #e2e8f0}
+tr:hover td{background:#f8fafc}
+.emoji{font-size:20px;margin-right:6px}
+ul,ol{margin:8px 0 16px 20px;font-size:14px}
+li{margin-bottom:6px;line-height:1.6}
+.toc{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:24px 0}
+.toc h3{margin:0 0 12px;font-size:16px}
+.toc ol{margin:0 0 0 20px}
+.toc a{color:#3b82f6;text-decoration:none;font-size:14px}
+.toc a:hover{text-decoration:underline}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-right:4px;font-weight:600}
+.tag-now{background:#dcfce7;color:#166534}
+.tag-next{background:#dbeafe;color:#1e40af}
+.tag-future{background:#f3e8ff;color:#6b21a8}
+.phase{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;margin:16px 0}
+.phase .ph{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.phase .pn{background:#F75D5D;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.phase .pt{font-weight:700;font-size:16px}
+.phase .pm{font-size:12px;color:#94a3b8;background:#f1f5f9;padding:2px 8px;border-radius:4px;margin-left:8px}
+.phase ul{margin:0 0 0 16px}
+.footer{margin-top:48px;padding-top:24px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;text-align:center}
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back" href="/">← 목록으로</a>
+
+<p class="date">2026년 3월 13일 · Neuron Architecture Research</p>
+<h1>🧠 뇌 영감 AI 아키텍처 리서치</h1>
+<p class="subtitle">CTM 논문 + 10개 핵심 레퍼런스 분석, 뉴런 멀티에이전트 시스템 적용 방안</p>
+
+<div class="toc">
+<h3>📑 목차</h3>
+<ol>
+<li><a href="#tldr">한 줄 요약</a></li>
+<li><a href="#ctm">CTM이 뭔데?</a></li>
+<li><a href="#papers">핵심 논문 10개 요약</a></li>
+<li><a href="#mapping">우리 뉴런 시스템과의 대응</a></li>
+<li><a href="#gaps">우리에게 없는 것</a></li>
+<li><a href="#roadmap">도입 로드맵</a></li>
+<li><a href="#priority">우선순위 근거 — 왜 이 순서인가</a></li>
+<li><a href="#impl">파일별 구현 명세 — 구체적으로 무엇을 고치나</a></li>
+<li><a href="#roi">ROI 분석 — 어떤 개선이 가장 효과적인가</a></li>
+<li><a href="#risks">리스크 분석 — 단계별 주의 사항</a></li>
+</ol>
+</div>
+
+<h2 id="tldr"><span class="emoji">💡</span>한 줄 요약</h2>
+<div class="box key">
+<h4>핵심 메시지</h4>
+<p>최신 연구들의 공통 결론: <strong>"AI도 뇌처럼 모듈을 나누고, 시간 축을 가지고, 서로 동기화하면 훨씬 잘한다."</strong></p>
+<p>우리 뉴런 아키텍처는 이미 이 방향의 70%를 구현하고 있고, 나머지 30%를 논문에서 배울 수 있다.</p>
+</div>
+
+<h2 id="ctm"><span class="emoji">🔬</span>CTM이 뭔데?</h2>
+<p><strong>Continuous Thought Machine</strong>은 Sakana AI(도쿄)가 만든 새로운 신경망 아키텍처로, NeurIPS 2025 Spotlight 논문이다.</p>
+<p>기존 AI는 뉴런을 단순한 숫자 상자로 취급한다. 입력 → 가중치 곱하기 → 출력. 끝. 근데 실제 뇌의 뉴런은 <strong>시간에 따라 리듬을 가지고, 다른 뉴런과 박자를 맞추면서</strong> 정보를 처리한다.</p>
+
+<div class="box insight">
+<h4>CTM의 핵심 혁신 2가지</h4>
+<p><strong>1. 뉴런별 고유 모델 (NLM)</strong> — 각 뉴런이 자기만의 가중치를 갖고, 과거 M개의 신호 히스토리를 보고 반응. 같은 입력이라도 뉴런마다 다르게 해석.</p>
+<p><strong>2. 동기화 = 표현</strong> — 뉴런들의 활동 패턴이 시간에 따라 얼마나 일치하는지(상관관계)를 계산해서, 이것 자체를 "생각"으로 사용. 순간 스냅샷이 아닌 시간적 흐름이 핵심.</p>
+</div>
+
+<p>비유: 오케스트라에서 각 악기(뉴런)가 자기 파트를 연주하고, 지휘자 없이도 서로 박자를 맞추면서 하모니(동기화)를 만드는 것. 그 하모니 자체가 "음악(인식/판단)"이 된다.</p>
+
+<h3>실제 성능</h3>
+<ul>
+<li><strong>2D 미로</strong>: 39×39 미로에서 100스텝 경로를 찾고, 학습 안 한 99×99 미로까지 일반화</li>
+<li><strong>ImageNet</strong>: 이미지를 "둘러보면서" 분류 — 사람처럼 이리저리 살펴보는 행동이 자연 발생</li>
+<li><strong>적응적 계산</strong>: 쉬운 문제는 5틱만에, 어려운 문제는 50틱까지 — 자동으로 계산량 조절</li>
+</ul>
+
+<h2 id="papers"><span class="emoji">📚</span>핵심 논문 10개 요약</h2>
+
+<div class="pc">
+<div class="tt">1. Continuous Thought Machines (CTM)</div>
+<div class="au">Darlow, Regan, Risi, Seely, Jones — Sakana AI</div>
+<div class="ve">NeurIPS 2025 Spotlight</div>
+<div class="ds">
+<strong>한 줄:</strong> 뉴런에게 "시간"과 "고유한 성격"을 주면 놀라운 능력이 창발한다.<br>
+<strong>우리에게:</strong> 우리 기능들이 각각 다른 모델(Opus/Sonnet/Qwen)을 쓰는 것 = NLM. handoff.md로 히스토리를 공유 = 동기화의 원시적 형태.
+</div>
+<a href="https://arxiv.org/abs/2505.05522" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">2. 🔥 MAP: Modular Agentic Planner — 가장 관련도 높음</div>
+<div class="au">Webb et al. — Columbia / NYU</div>
+<div class="ve">Nature Communications, 2025</div>
+<div class="ds">
+<strong>한 줄:</strong> 뇌의 전두엽 기능을 6개 LLM 모듈로 분해하면 계획 능력이 극적으로 향상된다.<br>
+<strong>6개 모듈:</strong> TaskDecomposer(작업 분해), Actor(실행), Monitor(오류 감시), Predictor(상태 예측), Evaluator(가치 평가), Orchestrator(조율)<br>
+<strong>우리에게:</strong> 우리 아키텍처와 <strong>거의 동일한 구조</strong>. 다만 MAP은 Monitor→Actor 피드백 루프와 Tree Search가 추가.
+</div>
+<a href="https://www.nature.com/articles/s41467-025-63804-5" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">3. 🔥 BMAS: Brain-inspired Multi-Agent System</div>
+<div class="au">Anonymous — OpenReview submission</div>
+<div class="ve">2025</div>
+<div class="ds">
+<strong>한 줄:</strong> PFC(전두엽) + 해마-신피질 이중 메모리로 멀티에이전트를 설계하면 장기 추론이 안정적이다.<br>
+<strong>우리에게:</strong> handoff.md(해마=단기) + memory/(신피질=장기) + 컴팩션 flush(수면 통합)가 바로 이 구조.
+</div>
+<a href="https://openreview.net/forum?id=YqFLsI44vN" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">4. Adaptive Computation Time (ACT)</div>
+<div class="au">Graves — DeepMind</div>
+<div class="ve">ICLR 2017</div>
+<div class="ds">
+<strong>한 줄:</strong> RNN이 "충분히 생각했다"고 판단하면 스스로 멈추는 메커니즘.<br>
+<strong>우리에게:</strong> 시상이 "이건 직접 답변" vs "이건 체인 필요"를 판단하는 것의 이론적 토대.
+</div>
+<a href="https://arxiv.org/abs/1603.08983" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">5. PonderNet: Learning to Ponder</div>
+<div class="au">Banino et al. — DeepMind</div>
+<div class="ve">ICML Workshop 2021</div>
+<div class="ds">
+<strong>한 줄:</strong> "언제 멈출지"를 확률적으로 학습. 쉬운 건 빨리, 어려운 건 천천히.<br>
+<strong>우리에게:</strong> 라우팅 로그를 분석해서 최적 체인 길이를 학습하면 동일 메커니즘.
+</div>
+<a href="https://arxiv.org/abs/2107.05407" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">6. RIM: Recurrent Independent Mechanisms</div>
+<div class="au">Goyal et al. — Mila, University of Montreal</div>
+<div class="ve">ICLR 2021</div>
+<div class="ds">
+<strong>한 줄:</strong> 여러 순환 셀 그룹이 독립적으로 돌아가고, 어텐션 병목으로만 소통.<br>
+<strong>우리에게:</strong> <strong>우리 뉴런과 가장 유사한 구조!</strong> 각 기능이 독립 동작, handoff.md라는 병목으로만 소통.
+</div>
+<a href="https://arxiv.org/abs/1909.10893" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">7. Liquid Time-Constant Networks (LTC)</div>
+<div class="au">Hasani et al. — MIT</div>
+<div class="ve">AAAI 2021</div>
+<div class="ds">
+<strong>한 줄:</strong> 뉴런의 시간 상수가 입력에 따라 적응적으로 변한다. 19개 뉴런으로 자율주행 가능.<br>
+<strong>우리에게:</strong> 태스크 복잡도에 따라 모델을 동적 전환(Qwen→Sonnet→Opus)하는 것과 유사.
+</div>
+<a href="https://arxiv.org/abs/2006.04439" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">8. Quiet-STaR: Think Before Speaking</div>
+<div class="au">Zelikman et al. — Stanford</div>
+<div class="ve">ICML 2024</div>
+<div class="ds">
+<strong>한 줄:</strong> LLM이 매 토큰마다 "숨겨진 생각"을 하면 예측이 좋아진다.<br>
+<strong>우리에게:</strong> 분석→전략 체인이 "숨겨진 생각" 단계, 실행→응답이 "말하기" 단계.
+</div>
+<a href="https://arxiv.org/abs/2403.09629" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">9. HoloBrain/HoloGraph</div>
+<div class="au">Wu et al. — UNC Chapel Hill</div>
+<div class="ve">Nature Communications, 2025</div>
+<div class="ds">
+<strong>한 줄:</strong> 뇌의 진동 동기화를 그래프 신경망에 적용. 반딧불이처럼 리듬을 맞추며 정보 압축.<br>
+<strong>우리에게:</strong> CHAIN 태그로 기능들이 "리듬을 맞추는" 것의 이론적 근거.
+</div>
+<a href="https://www.nature.com/articles/s41467-025-64471-2" target="_blank">논문 →</a>
+</div>
+
+<div class="pc">
+<div class="tt">10. Neurons as Autonomous Agents</div>
+<div class="au">Luczak — University of Lethbridge</div>
+<div class="ve">Cognitive Systems Research, 2025</div>
+<div class="ds">
+<strong>한 줄:</strong> 개별 뉴런도 자율 에이전트다 — 환경 감지, 판단, 적응을 한다.<br>
+<strong>우리에게:</strong> 각 기능이 독립적 판단력을 갖되 집단으로 더 나은 결과를 내는 것의 생물학적 근거.
+</div>
+<a href="https://www.sciencedirect.com/science/article/pii/S138904172500018X" target="_blank">논문 →</a>
+</div>
+
+<h2 id="mapping"><span class="emoji">🔗</span>우리 뉴런 시스템과의 대응</h2>
+
+<h3>MAP 모듈 ↔ 뉴런 기능</h3>
+<table>
+<tr><th>MAP 모듈</th><th>뇌 영역</th><th>역할</th><th>뉴런 시스템</th><th>상태</th></tr>
+<tr><td><strong>Orchestrator</strong></td><td>aPFC</td><td>전체 조율</td><td>Router (시상)</td><td><span class="tag tag-now">있음</span></td></tr>
+<tr><td><strong>TaskDecomposer</strong></td><td>aPFC</td><td>작업 분해</td><td>분석 기능</td><td><span class="tag tag-now">있음</span></td></tr>
+<tr><td><strong>Actor</strong></td><td>dlPFC</td><td>행동 실행</td><td>실행 기능</td><td><span class="tag tag-now">있음</span></td></tr>
+<tr><td><strong>Predictor</strong></td><td>OFC</td><td>결과 예측</td><td>전략 (부분적)</td><td><span class="tag tag-next">보강</span></td></tr>
+<tr><td><strong>Evaluator</strong></td><td>OFC</td><td>가치 평가</td><td>없음</td><td><span class="tag tag-next">신규</span></td></tr>
+<tr><td><strong>Monitor</strong></td><td>ACC</td><td>오류 감시</td><td>Guardian Plugin</td><td><span class="tag tag-now">있음</span></td></tr>
+</table>
+
+<h3>BMAS 메모리 ↔ 뉴런 메모리</h3>
+<table>
+<tr><th>BMAS</th><th>뇌 영역</th><th>기능</th><th>뉴런 시스템</th></tr>
+<tr><td><strong>Working Memory</strong></td><td>PFC</td><td>현재 작업 상태</td><td>SESSION-STATE.md</td></tr>
+<tr><td><strong>Hippocampus</strong></td><td>해마</td><td>단기 에피소드</td><td>handoff.md</td></tr>
+<tr><td><strong>Neocortex</strong></td><td>신피질</td><td>장기 통합</td><td>memory/*.md</td></tr>
+<tr><td><strong>Consolidation</strong></td><td>수면 통합</td><td>단기→장기 이전</td><td>컴팩션 flush</td></tr>
+</table>
+
+<div class="box insight">
+<h4>💡 발견: 우리가 이미 BMAS와 같은 구조를 가지고 있었다</h4>
+<p>BMAS가 제안하는 해마-신피질 이중 메모리를 우리는 handoff.md + memory/ + 컴팩션 flush로 이미 구현하고 있었다. <strong>명시적으로 의식하고 최적화하지 않았을 뿐.</strong></p>
+</div>
+
+<h3>CTM 메커니즘 ↔ 뉴런 메커니즘</h3>
+<table>
+<tr><th>CTM</th><th>설명</th><th>뉴런 시스템</th><th>성숙도</th></tr>
+<tr><td><strong>Internal Ticks</strong></td><td>내부 시간축</td><td>체인 실행</td><td>⬛⬛⬛⬜⬜</td></tr>
+<tr><td><strong>NLM</strong></td><td>뉴런별 고유 모델</td><td>Opus/Sonnet/Qwen</td><td>⬛⬛⬛⬛⬜</td></tr>
+<tr><td><strong>히스토리 윈도우</strong></td><td>최근 M개 기록 참조</td><td>handoff.md (1개만)</td><td>⬛⬛⬜⬜⬜</td></tr>
+<tr><td><strong>동기화 행렬</strong></td><td>뉴런 간 상관관계</td><td>CHAIN 태그 (이산적)</td><td>⬛⬛⬜⬜⬜</td></tr>
+<tr><td><strong>Adaptive Compute</strong></td><td>난이도별 계산량</td><td>직접 답변 vs 체인</td><td>⬛⬛⬛⬜⬜</td></tr>
+<tr><td><strong>Temporal Decay</strong></td><td>최근 정보 가중</td><td>없음</td><td>⬛⬜⬜⬜⬜</td></tr>
+</table>
+
+<h2 id="gaps"><span class="emoji">🔍</span>우리에게 없는 것 — 논문에서 배울 점</h2>
+
+<div class="box key">
+<h4>Gap 1: 피드백 루프 (MAP의 Monitor→Actor)</h4>
+<p>MAP에서는 Monitor가 Actor의 행동을 검증하고, 잘못되면 피드백을 보내서 재시도한다. 우리는 Guardian Plugin이 메시지만 필터링하지, <strong>실행 결과를 검증하고 재시도하는 루프가 없다.</strong></p>
+<p>→ 실행 기능이 TASK를 작성하면, 전략 기능이 검증하고 피드백하는 루프 추가.</p>
+</div>
+
+<div class="box key">
+<h4>Gap 2: 히스토리 윈도우 (CTM의 M개 기록)</h4>
+<p>CTM은 최근 10~100개의 활성화를 참조한다. 우리 handoff.md는 <strong>마지막 1개만 보는 경우가 많다.</strong> 과거 맥락이 유실된다.</p>
+<p>→ 최근 N개 handoff를 항상 컨텍스트에 포함. CTM처럼 히스토리 윈도우를 유지.</p>
+</div>
+
+<div class="box key">
+<h4>Gap 3: Early Exit (CTM/ACT의 적응적 계산)</h4>
+<p>CTM은 certainty가 높으면 10틱 중 3틱만에 멈춘다. 우리는 체인이 시작되면 무조건 끝까지 간다. <strong>분석 결과만으로 충분하면 전략을 건너뛸 수 있어야 한다.</strong></p>
+<p>→ CHAIN 태그에 confidence 점수 추가. 점수가 높으면 다음 단계 스킵.</p>
+</div>
+
+<div class="box key">
+<h4>Gap 4: Evaluator (MAP의 상태 가치 평가)</h4>
+<p>MAP에서는 Evaluator가 "이 상태가 목표에 얼마나 가까운지" 평가한다. 우리에게는 <strong>실행 결과의 품질을 평가하는 전용 메커니즘이 없다.</strong></p>
+<p>→ 체인 완료 후 결과를 평가하는 단계 추가 (전략 기능 확장 또는 새 역할).</p>
+</div>
+
+<div class="box key">
+<h4>Gap 5: Temporal Decay (CTM의 시간 가중치)</h4>
+<p>CTM은 최근 정보에 더 높은 가중치를 준다 (지수 감쇠). 우리 메모리는 <strong>모든 기록이 동등한 가중치</strong>를 가진다.</p>
+<p>→ handoff 기록에 타임스탬프 기반 가중치 적용. 오래된 기록은 요약, 최근 기록은 원문 유지.</p>
+</div>
+
+<h2 id="roadmap"><span class="emoji">🗺️</span>도입 로드맵</h2>
+
+<div class="phase">
+<div class="ph">
+<div class="pn">1</div>
+<div class="pt">히스토리 윈도우 + Early Exit</div>
+<div class="pm">1~2일</div>
+</div>
+<ul>
+<li><strong>히스토리 윈도우</strong>: handoff.md에서 최근 3개 기록을 항상 attachments로 포함. 라우터 AGENTS.md에 규칙 추가.</li>
+<li><strong>Early Exit</strong>: CHAIN 태그에 <code>[CHAIN:strategist|confidence:0.9]</code> 형식 추가. confidence ≥ 0.85면 다음 단계 스킵 가능.</li>
+<li><strong>효과</strong>: 컨텍스트 풍부화 + 불필요한 체인 단축 → 속도 & 품질 동시 개선</li>
+</ul>
+</div>
+
+<div class="phase">
+<div class="ph">
+<div class="pn">2</div>
+<div class="pt">Monitor 피드백 루프</div>
+<div class="pm">2~3일</div>
+</div>
+<ul>
+<li>실행 기능의 TASK 결과를 전략 기능이 검증하는 루프 추가</li>
+<li>Guardian Plugin에 <code>subagent_ended</code> hook 확장 — 결과 품질 체크</li>
+<li>검증 실패 시 피드백과 함께 재실행 (최대 2회)</li>
+<li><strong>효과</strong>: 실행 품질 보장, 단발성 실패 자동 복구</li>
+</ul>
+</div>
+
+<div class="phase">
+<div class="ph">
+<div class="pn">3</div>
+<div class="pt">Evaluator + Temporal Decay</div>
+<div class="pm">3~5일</div>
+</div>
+<ul>
+<li><strong>Evaluator</strong>: 체인 완료 후 결과 품질 평가 — "목표에 얼마나 가까운지" 점수화</li>
+<li><strong>Temporal Decay</strong>: handoff.md 기록에 타임스탬프 기반 가중치. 24시간 이내 = 원문, 7일 이상 = 한 줄 요약</li>
+<li>Supabase 라우팅 로그에 평가 점수 누적 → 체인 최적화 데이터 수집</li>
+<li><strong>효과</strong>: PonderNet처럼 체인 길이를 데이터 기반으로 최적화하는 토대</li>
+</ul>
+</div>
+
+<div class="phase">
+<div class="ph">
+<div class="pn">4</div>
+<div class="pt">동기화 정식화 + Tree Search (장기)</div>
+<div class="pm">1~2주</div>
+</div>
+<ul>
+<li>CHAIN 태그를 구조화된 동기화 프로토콜로 발전</li>
+<li>전략 기능에 Tree Search 추가 — 여러 전략을 병렬 평가 후 최적 선택</li>
+<li>메모리 구조를 BMAS 스타일로 정식화 (워킹/에피소드/시맨틱 분리)</li>
+<li><strong>효과</strong>: MAP 논문 수준의 멀티스텝 플래닝 능력 확보</li>
+</ul>
+</div>
+
+<div class="box action">
+<h4>✅ 결론: 우리는 이미 70% 와 있다</h4>
+<p>Nature Communications(MAP)과 NeurIPS(CTM)에 실린 뇌 영감 AI 아키텍처의 핵심 원리들을 우리 뉴런 시스템은 이미 상당 부분 구현하고 있다.</p>
+<p>남은 30%는:</p>
+<ul>
+<li>히스토리 윈도우 (1개 → N개)</li>
+<li>Early Exit (체인 조기 종료)</li>
+<li>피드백 루프 (실행→검증→재시도)</li>
+<li>Evaluator (결과 품질 평가)</li>
+<li>Temporal Decay (시간 가중치)</li>
+</ul>
+<p>Phase 1~2만 적용해도 체감 성능이 크게 올라갈 것으로 예상.</p>
+</div>
+
+
+<!-- ===== 전략 보강 섹션 (2026-03-13 추가) ===== -->
+
+<h2 id="priority"><span class="emoji">🎯</span>우선순위 근거 — 왜 이 순서인가</h2>
+
+<p>Phase 순서는 세 가지 기준으로 결정했다: <strong>①의존성</strong>(나중 단계가 이전 단계 결과를 전제로 하는지), <strong>②ROI</strong>(투입 대비 실질적 체감 효과), <strong>③리스크</strong>(도입 실패 시 기존 시스템에 미치는 영향).</p>
+
+<div class="box insight">
+<h4>Phase 1이 먼저인 근거 (히스토리 윈도우 + Early Exit)</h4>
+<p><strong>의존성 없음</strong> — 기존 AGENTS.md 규칙에 텍스트 추가만으로 완성. 코드 변경 불필요.<br>
+<strong>ROI 최고</strong> — 히스토리 윈도우는 30분 작업으로 컨텍스트 연속성을 1개 → N개로 확장. 단발성 체인에서 "지난번에 뭐 했더라?" 맥락 손실을 즉시 해결.<br>
+<strong>리스크 최저</strong> — AGENTS.md 텍스트 변경은 원상복구가 git revert 한 줄. 시스템 다운 없음.<br>
+<strong>Phase 2~4의 전제</strong> — 피드백 루프(Phase 2)는 과거 실행 기록을 참조해야 의미가 있다. 히스토리 윈도우가 없으면 피드백 루프도 "이번 실패"만 보고 패턴을 못 잡는다.</p>
+</div>
+
+<div class="box insight">
+<h4>Phase 2가 두 번째인 근거 (Monitor 피드백 루프)</h4>
+<p><strong>Phase 1 데이터 활용</strong> — 히스토리 윈도우가 있으면 "이 패턴의 실패가 3번째"를 감지할 수 있다.<br>
+<strong>실질 고통 해결</strong> — 현재 실행 뇌 실패 시 Smith님이 직접 재요청해야 함. 자동 재시도는 체감 품질을 가장 크게 올리는 변화.<br>
+<strong>neuron-guardian 확장</strong> — Phase 1이 완료된 상태에서 기존 `subagent_ended` hook을 확장하는 구조라 코드 접점이 명확함.</p>
+</div>
+
+<div class="box insight">
+<h4>Phase 3이 세 번째인 근거 (Evaluator + Temporal Decay)</h4>
+<p><strong>평가는 히스토리가 있어야 의미 있음</strong> — "결과 품질 5점"이라는 스코어는 시계열이 쌓여야 트렌드가 보인다. Phase 1~2 없이 단독 도입하면 숫자만 기록되고 활용 불가.<br>
+<strong>Temporal Decay는 데이터 인프라 선행 필요</strong> — 오래된 기록을 가중치 낮춰 읽으려면 타임스탬프 기반 파싱 로직이 필요. Supabase 로그가 쌓인 뒤 설계하는 게 더 정확함.</p>
+</div>
+
+<div class="box insight">
+<h4>Phase 4가 마지막인 근거 (동기화 정식화 + Tree Search)</h4>
+<p><strong>진짜 R&amp;D 단계</strong> — CTM의 동기화 행렬, MAP의 Tree Search는 "아이디어를 더 잘 실행"이 아니라 "아이디어 탐색 공간 자체를 확장"하는 개념. 실용적 인프라(Phase 1~3) 없이 도입하면 복잡도만 오르고 관리 불가.<br>
+<strong>비용 리스크</strong> — 병렬 전략 평가는 API 비용을 N배 증가시킴. Phase 1~3으로 효율화가 선행돼야 비용 중립적으로 도입 가능.</p>
+</div>
+
+<h3>의존성 다이어그램</h3>
+<table>
+<tr><th>Phase</th><th>선행 조건</th><th>가능 최소 상태</th><th>이상적 상태</th></tr>
+<tr><td><strong>Phase 1</strong></td><td>없음</td><td>AGENTS.md 5개 파일 수정</td><td>AGENTS.md + router 규칙 + 테스트 2회</td></tr>
+<tr><td><strong>Phase 2</strong></td><td>Phase 1 완료</td><td>guardian plugin 1개 hook 수정</td><td>+ Supabase 실패 로그 + 재시도 횟수 캡</td></tr>
+<tr><td><strong>Phase 3</strong></td><td>Phase 1~2 완료 + 1주 운영 데이터</td><td>strategist AGENTS.md 평가 단계 추가</td><td>+ Supabase quality_score 컬럼 + 대시보드</td></tr>
+<tr><td><strong>Phase 4</strong></td><td>Phase 1~3 완료 + 설계 리뷰</td><td>실험 브랜치에서 Tree Search 프로토타입</td><td>+ 비용 모니터링 + A/B 테스트</td></tr>
+</table>
+
+<h2 id="impl"><span class="emoji">⚙️</span>파일별 구현 명세 — 구체적으로 무엇을 고치나</h2>
+
+<p>각 Gap별로 <strong>어떤 파일의 어떤 섹션을</strong> 어떻게 수정하는지 명세한다. 모두 AGENTS.md 텍스트 수정 + 가끔 plugin TS 파일 수정이다.</p>
+
+<div class="box key">
+<h4>Gap 2 구현: 히스토리 윈도우</h4>
+<p><strong>파일 1:</strong> <code>~/.openclaw/agents/neuron/router/agent/AGENTS.md</code></p>
+<p><strong>섹션:</strong> <code>## spawn 방법</code> 내 attachments 규칙</p>
+<p><strong>변경 내용:</strong> 현재 "handoff.md 최근 내용 읽어서 첨부"를 아래로 교체:</p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">handoff.md 읽을 때 규칙:
+- 전체를 읽지 말고 최근 3개 "## [" 섹션만 추출
+- 3개 섹션 합산 토큰이 2000 초과 시 각 섹션을 핵심 결과 3줄로 요약
+- attachments에 "handoff-recent.md" 이름으로 포함</pre>
+<p><strong>파일 2:</strong> <code>~/.openclaw/workspace-neuron/memory/handoff.md</code></p>
+<p><strong>운영 규칙 추가:</strong> 항목이 10개 초과 시 가장 오래된 항목부터 <code>memory/handoff-archive.md</code>로 이동 (7개 유지). 라우터가 아닌 뇌들이 작업 완료 후 직접 정리.</p>
+</div>
+
+<div class="box key">
+<h4>Gap 3 구현: Early Exit (Confidence 태그)</h4>
+<p><strong>파일 1:</strong> <code>~/.openclaw/agents/neuron/analyst/agent/AGENTS.md</code></p>
+<p><strong>섹션:</strong> <code>## CHAIN 태그</code> (또는 결과 반환 규칙 섹션)</p>
+<p><strong>추가 규칙:</strong></p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">CHAIN 태그에 confidence 추가:
+[CHAIN:strategist|confidence:0.85]
+
+confidence 기준:
+- 0.95+: 기술 문서/코드/수치 — 사실 확인 완료
+- 0.80-0.94: 분석적 판단 — 근거 있는 추론
+- 0.60-0.79: 주관/의견 필요 영역 — 전략 검토 권장
+- 0.60 미만: [CHAIN:strategist] (confidence 생략 = 전략 필수)</pre>
+<p><strong>파일 2:</strong> <code>~/.openclaw/agents/neuron/router/agent/AGENTS.md</code></p>
+<p><strong>섹션:</strong> <code>## CHAIN 태그 감지</code></p>
+<p><strong>추가 규칙:</strong></p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">confidence 파싱:
+[CHAIN:strategist|confidence:0.92] → confidence 0.92 추출
+
+Early Exit 조건 (모두 충족 시 strategist 스킵):
+1. confidence >= 0.90
+2. 다음 단계가 strategist (executor는 스킵 금지)
+3. 태스크가 "단순 조회/사실 확인" 유형
+
+스킵 시: Smith님에게 analyst 결과 직접 전달 또는 executor 직행</pre>
+</div>
+
+<div class="box key">
+<h4>Gap 1 구현: 피드백 루프 (Monitor→Actor)</h4>
+<p><strong>파일 1 (단순 접근법):</strong> <code>~/.openclaw/agents/neuron/executor/agent/AGENTS.md</code></p>
+<p><strong>섹션:</strong> <code>## 작업 완료 규칙</code> 또는 handoff 섹션</p>
+<p><strong>추가 규칙:</strong></p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">자체 검증 단계 (작업 완료 직후):
+1. 파일 작성 → read로 확인 (내용 정상 여부)
+2. git push → git log --oneline -1로 커밋 확인
+3. 배포 → HTTP 요청으로 응답 확인
+
+검증 실패 시:
+- 즉시 1회 재시도 (동일 접근법)
+- 재시도도 실패 → handoff에 [FAILED] 마크 + 구체적 오류 내용 기록
+- CHAIN 태그: [CHAIN:none|status:failed]</pre>
+<p><strong>파일 2 (plugin 접근법, Phase 2):</strong> <code>~/.openclaw/extensions/neuron-guardian/index.ts</code></p>
+<p><strong>섹션:</strong> <code>subagent_ended</code> hook 확장</p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">api.on('subagent_ended', async (event, ctx) => {
+  // 기존 BUSY 해제 로직 유지
+
+  // 추가: executor 실패 감지
+  if (event.agentId === 'neuron-executor'
+      && event.outcome !== 'ok') {
+    // 라우터에 재시도 신호 주입
+    // 재시도 카운터는 SESSION-STATE.md에 기록
+    // 최대 2회 초과 시 신호 차단
+  }
+});</pre>
+<p>⚠️ plugin 접근법은 <code>enqueueSystemEvent</code> API 안정성 확인 후 도입 권장.</p>
+</div>
+
+<div class="box key">
+<h4>Gap 4 구현: Evaluator</h4>
+<p><strong>파일 1:</strong> <code>~/.openclaw/agents/neuron/strategist/agent/AGENTS.md</code></p>
+<p><strong>섹션:</strong> <code>## 역할</code> 또는 체인 수신 규칙 섹션</p>
+<p><strong>추가 규칙:</strong></p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">executor 결과 수신 시 평가 단계 추가:
+1. 완성도 (1-5): 요청한 모든 항목이 완료됐는가?
+2. 정확성 (1-5): 오류/예외 없이 실행됐는가?
+3. 효율성 (1-5): 불필요한 단계 없이 최단 경로로 완료됐는가?
+
+평가 결과를 handoff.md에 기록:
+### 평가
+- 완성도: 4/5 (파일 생성 완료, push 실패)
+- 정확성: 5/5
+- 효율성: 3/5 (불필요한 read 3회)
+- 종합: 4.0/5</pre>
+<p><strong>파일 2 (중기):</strong> Supabase <code>neuron_routing_log</code> 테이블</p>
+<p><strong>스키마 변경:</strong></p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">ALTER TABLE neuron_routing_log
+  ADD COLUMN quality_score FLOAT,
+  ADD COLUMN quality_notes TEXT;
+
+-- 전략 뇌가 평가 후 업데이트
+UPDATE neuron_routing_log
+SET quality_score = 4.0,
+    quality_notes = '완성도↑ 효율성↓'
+WHERE id = {chain_id};</pre>
+</div>
+
+<div class="box key">
+<h4>Gap 5 구현: Temporal Decay</h4>
+<p><strong>파일:</strong> 분석/전략/실행/casual 뇌 AGENTS.md 4개 모두 (동일한 규칙 추가)</p>
+<p><strong>섹션:</strong> <code>## handoff.md 읽기 규칙</code> (새 섹션 추가)</p>
+<pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:13px;overflow-x:auto">## handoff 메모리 읽기 규칙 (Temporal Decay)
+handoff.md 읽을 때 타임스탬프 기반 가중치 적용:
+
+- 오늘 ~ 3일: 원문 전체 읽기 (최고 가중치)
+- 4일 ~ 7일:  핵심 결과 섹션만 읽기 (중간 가중치)
+- 8일 이상:   제목 + 다음 단계만 읽기 (낮은 가중치)
+- 30일 이상:  handoff-archive.md로 이동됨, 읽지 않음
+
+현재 날짜와 각 항목의 날짜를 비교해서
+오래된 항목은 "오래된 기록: {제목}" 한 줄로만 인식.</pre>
+</div>
+
+<h2 id="roi"><span class="emoji">📊</span>ROI 분석 — 어떤 개선이 가장 효과적인가</h2>
+
+<p>각 Gap의 <strong>구현 공수(시간)</strong>와 <strong>실질 효과</strong>를 정량화해서 우선순위를 검증한다.</p>
+
+<h3>Impact/Effort 매트릭스</h3>
+<table>
+<tr>
+<th>Gap</th>
+<th>구현 공수</th>
+<th>체감 효과</th>
+<th>ROI</th>
+<th>우선 순위</th>
+</tr>
+<tr>
+<td><strong>Gap 2: 히스토리 윈도우</strong></td>
+<td>⏱ 30분<br><small>router AGENTS.md 1개 파일 규칙 추가</small></td>
+<td>⬛⬛⬛⬛⬜<br><small>체인 간 맥락 연속성 극적 개선<br>반복 질문 감소, 오류율 감소</small></td>
+<td style="color:#166534;font-weight:700">🏆 최고</td>
+<td><span class="tag tag-now">Phase 1</span></td>
+</tr>
+<tr>
+<td><strong>Gap 3: Early Exit</strong></td>
+<td>⏱ 1시간<br><small>5개 AGENTS.md + confidence 기준 정의</small></td>
+<td>⬛⬛⬛⬜⬜<br><small>단순 질문에서 체인 1~2단계 단축<br>추정 20~30% 응답 속도 향상</small></td>
+<td style="color:#166534;font-weight:700">높음</td>
+<td><span class="tag tag-now">Phase 1</span></td>
+</tr>
+<tr>
+<td><strong>Gap 1: 피드백 루프</strong></td>
+<td>⏱ 2~4시간<br><small>executor AGENTS.md + guardian plugin 수정</small></td>
+<td>⬛⬛⬛⬛⬛<br><small>실행 실패 자동 복구<br>현재 수동 재요청 제거</small></td>
+<td style="color:#1e40af;font-weight:700">높음</td>
+<td><span class="tag tag-next">Phase 2</span></td>
+</tr>
+<tr>
+<td><strong>Gap 4: Evaluator</strong></td>
+<td>⏱ 3~5시간<br><small>strategist AGENTS.md + Supabase 스키마</small></td>
+<td>⬛⬛⬛⬜⬜<br><small>품질 측정 기반 마련<br>직접 체감보다 데이터 수집이 목적</small></td>
+<td style="color:#1e40af;font-weight:700">중간 (장기)</td>
+<td><span class="tag tag-next">Phase 3</span></td>
+</tr>
+<tr>
+<td><strong>Gap 5: Temporal Decay</strong></td>
+<td>⏱ 1~2시간<br><small>4개 AGENTS.md 동일 규칙 추가</small></td>
+<td>⬛⬛⬜⬜⬜<br><small>메모리 효율화<br>오래된 기록 노이즈 감소</small></td>
+<td style="color:#6b21a8;font-weight:700">낮음</td>
+<td><span class="tag tag-next">Phase 3</span></td>
+</tr>
+</table>
+
+<div class="box action">
+<h4>📌 ROI 결론: Phase 1 두 항목이 압도적</h4>
+<p>히스토리 윈도우(30분, 효과 80%)와 Early Exit(1시간, 효과 60%)는 <strong>총 1.5시간으로 전체 Gap의 절반 이상을 해결</strong>한다.</p>
+<p>피드백 루프는 효과는 가장 크지만 공수도 3~4배 높다. Phase 1 완료 후 도입해야 맥락 데이터도 확보되고 재시도 로직도 더 정교해진다.</p>
+<p>Evaluator와 Temporal Decay는 <strong>직접 체감보다는 장기 최적화 기반</strong>이다. 서두르지 말고 Phase 1~2 운영 데이터가 쌓인 후 도입이 정석.</p>
+</div>
+
+<h3>누적 효과 시뮬레이션</h3>
+<table>
+<tr><th>단계</th><th>누적 투입</th><th>예상 개선</th><th>주요 변화</th></tr>
+<tr><td>현재 (0%)</td><td>—</td><td>기준선</td><td>handoff 1개, 체인 무조건 전체 실행, 실패 시 수동 재요청</td></tr>
+<tr><td>Phase 1 완료</td><td>1.5시간</td><td>+40% 체감 품질</td><td>맥락 연속성 확보, 단순 질문 응답 속도 30% 향상</td></tr>
+<tr><td>Phase 2 완료</td><td>+4시간</td><td>+25% 추가 (누적 +65%)</td><td>실행 실패 자동 복구, Smith님 재요청 80% 감소</td></tr>
+<tr><td>Phase 3 완료</td><td>+5시간</td><td>+15% 추가 (누적 +80%)</td><td>품질 측정 가능, 시간 가중 메모리 적용</td></tr>
+<tr><td>Phase 4 완료</td><td>+2주</td><td>+20% 추가 (누적 +100%)</td><td>MAP 논문 수준 플래닝, 병렬 전략 평가</td></tr>
+</table>
+
+<h2 id="risks"><span class="emoji">⚠️</span>리스크 분석 — 단계별 주의 사항</h2>
+
+<h3>Phase 1 리스크</h3>
+<div class="box">
+<h4>🔴 리스크 1-A: 히스토리 윈도우 → 컨텍스트 토큰 초과</h4>
+<p><strong>시나리오:</strong> handoff 항목이 길어지면 "최근 3개"도 8K+ 토큰. spawn task에 포함 시 모델 컨텍스트 초과.</p>
+<p><strong>완화:</strong> 항목당 500토큰 캡 설정 규칙을 AGENTS.md에 명시. 초과 시 요약 버전으로 자동 대체. handoff.md 정기 아카이브 규칙 동시 적용 필수.</p>
+</div>
+<div class="box">
+<h4>🟡 리스크 1-B: Early Exit → Confidence 점수 환각</h4>
+<p><strong>시나리오:</strong> LLM이 confidence를 항상 0.95로 리포트. 실제로 전략 검토가 필요한 요청도 스킵됨.</p>
+<p><strong>완화:</strong> 초기 임계값을 <strong>0.95 이상으로 매우 보수적으로</strong> 설정. 실제 스킵 빈도를 Supabase 로그로 모니터링. 2주 후 데이터 보고 임계값 조정. 스킵 대상은 "단순 사실 확인"으로 유형 명시해서 LLM 판단 범위 좁히기.</p>
+</div>
+<div class="box">
+<h4>🟢 리스크 1-C: 롤백 방법</h4>
+<p>Phase 1은 모두 AGENTS.md 텍스트 수정. 문제 발생 시: <code>git -C ~/.openclaw revert HEAD</code> 또는 수동으로 해당 섹션 삭제. 시스템 다운 없이 즉시 롤백 가능.</p>
+</div>
+
+<h3>Phase 2 리스크</h3>
+<div class="box">
+<h4>🔴 리스크 2-A: 피드백 루프 → 무한 재시도</h4>
+<p><strong>시나리오:</strong> 실패가 일시적이 아닌 구조적 문제일 때(권한 오류, 파일 미존재 등) 재시도를 반복하다 API 비용 폭발.</p>
+<p><strong>완화:</strong> 재시도 최대 <strong>2회</strong>로 하드코딩. SESSION-STATE.md에 <code>retry_count</code> 필드 추가. 2회 초과 시 즉시 중단 + Smith님에게 알림. guardian plugin에서 BUSY 타임아웃 15분도 안전망 역할.</p>
+</div>
+<div class="box">
+<h4>🟡 리스크 2-B: guardian plugin 수정 → 기존 BUSY 로직 깨짐</h4>
+<p><strong>시나리오:</strong> subagent_ended hook 확장 시 기존 .neuron-busy 파일 삭제 로직 실수로 누락. BUSY 플래그가 해제 안 돼서 이후 모든 spawn이 차단됨.</p>
+<p><strong>완화:</strong> plugin 수정 후 <strong>반드시 gateway restart + 간단한 테스트 요청</strong>으로 BUSY 해제 흐름 확인. 테스트 절차를 AGENTS.md에 명시.</p>
+</div>
+<div class="box">
+<h4>🟡 리스크 2-C: 재시도 시 BUSY 상태 관리</h4>
+<p><strong>시나리오:</strong> 재시도 spawn 시 이전 BUSY 플래그가 아직 해제 안 된 상태. 재시도가 BUSY 차단됨.</p>
+<p><strong>완화:</strong> guardian plugin에서 "재시도 spawn은 BUSY 체크 우회" 플래그 추가. <code>event.metadata.is_retry = true</code> 체크로 구분.</p>
+</div>
+
+<h3>Phase 3 리스크</h3>
+<div class="box">
+<h4>🟡 리스크 3-A: Evaluator → 전략 뇌의 평가 편향</h4>
+<p><strong>시나리오:</strong> 전략 뇌가 자신이 설계한 전략의 실행 결과를 평가함 → 자기 자신을 높게 평가하는 편향.</p>
+<p><strong>완화:</strong> 평가 기준을 <strong>객관적 체크리스트</strong>로 명시 (모호한 "품질"이 아닌 "파일 X가 생성됐는가", "git push가 성공했는가" 등). 주관적 평가보다 이진 체크리스트가 훨씬 신뢰성 높음.</p>
+</div>
+<div class="box">
+<h4>🟢 리스크 3-B: Temporal Decay → 중요한 오래된 기록 무시</h4>
+<p><strong>시나리오:</strong> 3주 전에 결정한 중요한 아키텍처 원칙이 오래됐다는 이유로 읽히지 않음.</p>
+<p><strong>완화:</strong> handoff.md에 <code>[PERMANENT]</code> 마크 규칙 추가. PERMANENT 항목은 날짜와 무관하게 항상 원문 읽기. MEMORY.md에 핵심 원칙을 별도 유지하는 현재 구조도 안전망.</p>
+</div>
+
+<h3>Phase 4 리스크</h3>
+<div class="box">
+<h4>🔴 리스크 4-A: Tree Search → API 비용 급증</h4>
+<p><strong>시나리오:</strong> 전략 3개를 병렬 평가하면 API 호출이 3배. 복잡한 요청에서 비용 폭발.</p>
+<p><strong>완화:</strong> Tree Search를 <strong>명시적으로 요청한 태스크에만</strong> 적용 (기본값 아님). 최대 병렬 전략 수를 3개로 제한. Phase 1~3 도입 후 효율화된 상태에서 비용 중립적으로 도입.</p>
+</div>
+<div class="box">
+<h4>🟡 리스크 4-B: 동기화 프로토콜 → 과도한 구조화</h4>
+<p><strong>시나리오:</strong> CHAIN 태그를 복잡한 동기화 프로토콜로 발전시키면서 단순한 요청도 복잡한 오케스트레이션을 거쳐야 하는 구조가 됨.</p>
+<p><strong>완화:</strong> 기존 CHAIN 태그의 단순함은 유지. 동기화 프로토콜은 "복잡한 멀티스텝 기획"에만 적용하는 옵트인(opt-in) 방식으로 설계.</p>
+</div>
+
+<div class="box action">
+<h4>🛡️ 전체 안전 원칙</h4>
+<ul>
+<li><strong>점진적 도입:</strong> 한 Phase가 2주 이상 안정적으로 운영된 후 다음 Phase 시작</li>
+<li><strong>모니터링 선행:</strong> Supabase 로그에서 각 지표를 확인할 수 있는 상태에서만 다음 단계 진행</li>
+<li><strong>롤백 계획:</strong> 각 Phase 적용 전 git commit으로 스냅샷. 문제 시 즉시 revert</li>
+<li><strong>파일럿 테스트:</strong> Phase 2~4는 실제 적용 전 단일 태스크로 동작 확인 필수</li>
+</ul>
+</div>
+
+<div class="footer">
+모찌 🍡 · Neuron Architecture Research · 2026-03-13 · 전략 보강 2026-03-13
+</div>
+</div>
+</body>
+</html>

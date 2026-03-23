@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="category" content="plan">
+<meta name="issue" content="통합 마케팅 프레임워크 v1 — 엠타트업×자사몰사관학교×글로벌 대가×AI 15주 커리큘럼">
+<title>통합 마케팅 프레임워크 v1</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;background:#0c0a09;color:#e7e5e4;line-height:1.8;font-size:15px;-webkit-font-smoothing:antialiased}
+.c{max-width:680px;margin:0 auto;padding:40px 20px 100px}
+.hero{text-align:center;padding:48px 0 40px;border-bottom:1px solid #292524;margin-bottom:36px}
+.hero h1{font-size:26px;font-weight:800;background:linear-gradient(135deg,#F75D5D,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;line-height:1.4}
+.hero .sub{font-size:13px;color:#78716c;line-height:1.6}
+.hero .ver{display:inline-block;margin-top:10px;padding:3px 10px;background:#1c1917;border:1px solid #292524;border-radius:6px;font-size:11px;color:#F75D5D;font-weight:600}
+.toc{background:#1c1917;border:1px solid #292524;border-radius:12px;padding:20px 24px;margin:0 0 36px}
+.toc-title{font-size:11px;font-weight:700;color:#78716c;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.toc ol{margin:0 0 0 16px;padding:0}.toc li{font-size:13px;color:#a8a29e;margin:4px 0}.toc a{color:#a8a29e;text-decoration:none}.toc a:hover{color:#F75D5D}
+h2{font-size:20px;font-weight:700;color:#fafaf9;margin:48px 0 14px;display:flex;align-items:center;gap:10px}
+h3{font-size:16px;font-weight:600;color:#d6d3d1;margin:28px 0 10px}
+h4{font-size:14px;font-weight:600;color:#a8a29e;margin:14px 0 6px}
+p{margin-bottom:14px;color:#a8a29e;font-size:14px}
+strong{color:#fafaf9;font-weight:600}
+.sn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:#F75D5D;color:#0c0a09;border-radius:50%;font-size:13px;font-weight:700;flex-shrink:0}
+.cd{background:#1c1917;border:1px solid #292524;border-radius:12px;padding:18px;margin:14px 0;font-size:14px}
+.ca{border-left:3px solid #F75D5D}
+.fl{background:#1c1917;border:1px solid #292524;border-radius:12px;padding:18px;margin:16px 0;font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:#a8a29e;line-height:2;white-space:pre-wrap;overflow-x:auto;word-break:break-all}
+.h{color:#F75D5D;font-weight:600}.g{color:#4ade80}.b{color:#60a5fa}.y{color:#fbbf24}.d{color:#57534e}.p{color:#a78bfa}.o{color:#fb923c}
+.bc{background:#1c1917;border:1px solid #292524;border-radius:10px;padding:16px;margin:10px 0}
+.bc:hover{border-color:#F75D5D}
+.bc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bi{font-size:24px;flex-shrink:0}
+.bn{font-weight:700;font-size:14px;color:#fafaf9}
+.bm{font-size:11px;color:#F75D5D;font-weight:500}
+.bd{font-size:13px;color:#78716c;line-height:1.7}
+.pq{margin:24px 0;padding:16px 18px;background:#1c1917;border-left:3px solid #F75D5D;border-radius:0 8px 8px 0;font-size:15px;color:#d6d3d1;font-weight:500;line-height:1.7}
+.ok{background:#0f1a0f;border:1px solid #166534;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#4ade80;line-height:1.7}
+.ok::before{content:'✅ ';font-weight:700}
+.pb{background:#1a0f0f;border:1px solid #7f1d1d;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#fca5a5;line-height:1.7}
+.pb::before{content:'⚠️ ';font-weight:700}
+.nw{background:#1a1a0f;border:1px solid #854d0e;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;color:#fde68a;line-height:1.7}
+.nw::before{content:'💡 ';font-weight:700}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+th{text-align:left;padding:8px 10px;color:#78716c;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #292524}
+td{padding:8px 10px;border-bottom:1px solid #1c1917;color:#a8a29e;vertical-align:top;font-size:13px}
+td:first-child{color:#fafaf9;font-weight:500}
+.tg{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600}
+.tr{background:#451a03;color:#F75D5D}.tgn{background:#052e16;color:#4ade80}.tb{background:#172554;color:#60a5fa}.ty{background:#422006;color:#fbbf24}.tp{background:#1e1b4b;color:#a78bfa}.to{background:#1c1004;color:#fb923c}
+a{color:#F75D5D;text-decoration:none}a:hover{text-decoration:underline}
+.dv{height:1px;background:#292524;margin:40px 0}
+.ft{text-align:center;padding:24px;color:#44403c;font-size:11px}
+ol,ul{margin:6px 0 14px 18px;color:#a8a29e;font-size:13px}li{margin:3px 0}
+.formula{background:#1a0a0a;border:1px solid #7f1d1d;border-radius:8px;padding:14px 18px;margin:14px 0;text-align:center;line-height:2}
+.formula .eq{font-family:'SF Mono','Fira Code',monospace;font-size:15px;color:#F75D5D;font-weight:700}
+.formula .sub{font-size:11px;color:#78716c;margin-top:4px}
+.week{border:1px solid #292524;border-radius:10px;margin:14px 0;overflow:hidden}
+.week-head{padding:10px 16px;display:flex;align-items:center;gap:10px;background:#161412}
+.week-num{font-size:11px;font-weight:700;color:#F75D5D;white-space:nowrap}
+.week-title{font-size:14px;font-weight:600;color:#fafaf9;flex:1}
+.week-body{padding:16px;border-top:1px solid #1c1917;font-size:13px;color:#a8a29e;line-height:1.8}
+.week-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.wg-box{background:#1c1917;border-radius:8px;padding:12px}
+.wg-title{font-size:10px;font-weight:700;color:#78716c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.wg-content{font-size:12px;color:#a8a29e;line-height:1.7}
+.phase-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-bottom:8px}
+.ph1{background:#1e1b4b;color:#a78bfa}
+.ph2{background:#172554;color:#60a5fa}
+.ph3{background:#052e16;color:#4ade80}
+.ph4{background:#422006;color:#fbbf24}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.map-row{display:flex;gap:0;align-items:stretch;margin:6px 0;font-size:12px;border-radius:6px;overflow:hidden;border:1px solid #292524}
+.map-l{flex:1;background:#1e1b4b;padding:8px 10px;color:#a78bfa;font-weight:600}
+.map-c{background:#1c1917;padding:8px 6px;color:#57534e;display:flex;align-items:center}
+.map-r{flex:1;background:#0f1a0f;padding:8px 10px;color:#4ade80}
+.map-r2{flex:1;background:#172554;padding:8px 10px;color:#60a5fa}
+@media(max-width:480px){.grid2{grid-template-columns:1fr}.week-grid{grid-template-columns:1fr}.map-row{flex-direction:column}.c{padding:24px 16px 80px}.hero h1{font-size:22px}.fl{font-size:11px}table{font-size:12px}td,th{padding:6px 8px}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>📚 통합 마케팅 프레임워크 v1</h1>
+  <div class="sub">세계 최고 수준의 커머스 마케팅 프레임워크 + 실전 실행 + AI<br>엠타트업 × 자사몰사관학교 × 글로벌 대가 × AI 15주 커리큘럼</div>
+  <div class="ver">v1 · 2026.03.11 · 내부 기획서</div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">목차</div>
+  <ol>
+    <li><a href="#s0">설계 철학</a></li>
+    <li><a href="#s1">글로벌 대가들의 핵심 프레임워크 (7개)</a></li>
+    <li><a href="#s2">엠타트업 핵심 프레임워크 (20개 개념)</a></li>
+    <li><a href="#s3">자사몰사관학교 핵심 프레임워크</a></li>
+    <li><a href="#s4">글로벌 × 엠타트업 × 자사몰 연결 맵</a></li>
+    <li><a href="#s5">15주 통합 커리큘럼 (Phase별 상세)</a></li>
+    <li><a href="#s6">AI 활용 가이드 (매주)</a></li>
+    <li><a href="#s7">평가 체계</a></li>
+    <li><a href="#s8">핵심 공식 종합</a></li>
+    <li><a href="#s9">참고 문헌 / 레퍼런스</a></li>
+  </ol>
+</div>
+
+<!-- ===== 0. 설계 철학 ===== -->
+<h2 id="s0"><span class="sn">0</span> 설계 철학</h2>
+
+<div class="pq">세계 정상급 이론 × 한국 이커머스 실전 × Meta 광고 기술 × AI 가속기 — 이 네 기둥이 교차하는 지점이 <strong>세계에서 가장 강한 커머스 마케팅 시스템</strong>이다.</div>
+
+<div class="grid2">
+  <div class="bc"><div class="bc-head"><span class="bi">🧠</span><div><div class="bn">엠타트업 (M군/맹지호)</div><div class="bm">본질적 사고방식</div></div></div><div class="bd">한국 이커머스 마케팅의 핵심 원리. RCS, 욕구축, 등가교환, O-M-C 등 현장에서 검증된 프레임워크 체계.</div></div>
+  <div class="bc"><div class="bc-head"><span class="bi">🎯</span><div><div class="bn">자사몰사관학교</div><div class="bm">Meta 광고 실전 실행</div></div></div><div class="bd">Meta(Facebook/Instagram) 광고 실전 체계. 곱셈의 법칙, 총가치 공식, 3장면 구조 등 실행 중심 시스템.</div></div>
+  <div class="bc"><div class="bc-head"><span class="bi">🌍</span><div><div class="bn">글로벌 대가 프레임워크</div><div class="bm">세계 정상급 이론</div></div></div><div class="bd">Hormozi, Schwartz, Brunson, Deiss, Godin, Suby, McClure — 수십 년간 검증된 글로벌 마케팅 이론.</div></div>
+  <div class="bc"><div class="bc-head"><span class="bi">🤖</span><div><div class="bn">AI 가속기</div><div class="bm">모든 단계를 10× 빠르게</div></div></div><div class="bd">Claude(리서치/분석/카피), Midjourney(이미지 생성), Canva(디자인). 소재 생산 속도 10×, 분석 속도 5×.</div></div>
+</div>
+
+<div class="ok">핵심 발견: 엠타트업의 키워드 5단계 = Schwartz의 5 Stages of Awareness. 한국과 미국의 마케팅 본질은 같다. 이 통찰이 이 커리큘럼 전체를 관통한다.</div>
+
+<!-- ===== 1. 글로벌 대가들 ===== -->
+<h2 id="s1"><span class="sn">1</span> 글로벌 대가들의 핵심 프레임워크</h2>
+
+<h3>① Alex Hormozi — Value Equation <span class="tg tr">$100M Offers, 2021</span></h3>
+
+<div class="formula">
+  <div class="eq">Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort)</div>
+  <div class="sub">가치 = (꿈의 결과 × 실현 가능성) / (시간 지연 × 투입 노력)</div>
+</div>
+
+<p>Hormozi의 핵심: <strong>가격이 아니라 가치로 승부</strong>. 경쟁사가 가격을 낮출 때, 우리는 가치 방정식의 분자를 올리고 분모를 낮춘다. "거부할 수 없는 오퍼"란 가치가 가격을 압도하는 상태다.</p>
+
+<div class="cd">
+<table>
+<tr><th>변수</th><th>의미</th><th>화장품 적용 예시</th><th>방향</th></tr>
+<tr><td>Dream Outcome</td><td>고객이 원하는 최종 결과</td><td>"3일 만에 톤업" / "촉촉한 아기피부"</td><td><span class="tg tgn">↑ 극대화</span></td></tr>
+<tr><td>Perceived Likelihood</td><td>실현될 것 같은 확신</td><td>"500만명이 검증" / "피부과 의사 추천"</td><td><span class="tg tgn">↑ 극대화</span></td></tr>
+<tr><td>Time Delay</td><td>결과까지 걸리는 시간</td><td>"세안 후 즉시 흡수" / "첫날부터 차이"</td><td><span class="tg tr">↓ 최소화</span></td></tr>
+<tr><td>Effort</td><td>고객의 투입 노력</td><td>"세안 후 1단계로 끝" / "30초 루틴"</td><td><span class="tg tr">↓ 최소화</span></td></tr>
+</table>
+</div>
+
+<div class="nw">엠타트업 연결: Hormozi Value Equation = 엠타트업 등가교환 + 구매편익 4분류. "어떤 가치를" 제공할지는 구매편익 4분류로, "가치가 가격을 압도하는지"는 등가교환으로 점검한다.</div>
+
+<h3>② Eugene Schwartz — 5 Stages of Awareness <span class="tg ty">Breakthrough Advertising, 1966</span></h3>
+
+<p>1966년에 쓰였지만 지금도 광고 카피라이팅의 성경. 핵심: <strong>같은 제품도 고객이 어느 인지 단계에 있느냐에 따라 카피 전략이 완전히 달라야 한다.</strong></p>
+
+<div class="fl"><span class="h">레벨5 · Unaware      </span> 문제 자체를 모름
+  카피: 공감할 수 있는 이야기로 문제를 처음 제시
+  예: "요즘 거울 볼 때마다 피부가 칙칙해 보이지 않나요?"
+<span class="d">─────────────────────────────────────────────────────</span>
+<span class="y">레벨4 · Problem Aware </span> 문제는 알지만 해결책 모름
+  카피: 문제를 명확히 정의, 공감 + 긴박감
+  예: "피부 톤이 고르지 않은 건 색소침착+산화 때문입니다"
+<span class="d">─────────────────────────────────────────────────────</span>
+<span class="b">레벨3 · Solution Aware</span> 해결책 카테고리는 알지만 제품 모름
+  카피: 우리 카테고리가 최선임을 증명
+  예: "비타민C 세럼이 톤업에 가장 빠른 이유 5가지"
+<span class="d">─────────────────────────────────────────────────────</span>
+<span class="p">레벨2 · Product Aware </span> 제품 알지만 아직 구매 결정 안 함
+  카피: 경쟁 제품 대비 명확한 차별화
+  예: "왜 OOO 세럼이 다른 비타C보다 3배 빠를까"
+<span class="d">─────────────────────────────────────────────────────</span>
+<span class="g">레벨1 · Most Aware    </span> 살 준비 됨, 트리거만 필요
+  카피: 오퍼 + 긴박감 + CTA
+  예: "오늘만 30% 할인 + 무료배송 + 사은품. 마감 3시간"</div>
+
+<div class="cd ca">
+<strong>🔑 핵심 발견 — 엠타트업 키워드 5단계와 1:1 매핑</strong>
+<table>
+<tr><th>Schwartz 단계</th><th>엠타트업 키워드 레벨</th><th>검색 키워드 예시 (화장품)</th></tr>
+<tr><td>Unaware (5)</td><td>레벨5 · 순수정보</td><td>"피부 관리 방법", "피부 좋아지는 법"</td></tr>
+<tr><td>Problem Aware (4)</td><td>레벨4 · 문제인식</td><td>"피부 칙칙한 이유", "잡티 생기는 원인"</td></tr>
+<tr><td>Solution Aware (3)</td><td>레벨3 · 대안탐색</td><td>"미백 세럼 효과", "톤업 방법 추천"</td></tr>
+<tr><td>Product Aware (2)</td><td>레벨2 · 비교검토</td><td>"OOO 세럼 후기", "비타C 세럼 비교"</td></tr>
+<tr><td>Most Aware (1)</td><td>레벨1 · 구매직전</td><td>"OOO 세럼 구매", "OOO 세럼 최저가"</td></tr>
+</table>
+</div>
+
+<h3>③ Russell Brunson — Value Ladder + Sales Funnel <span class="tg tb">DotCom Secrets, 2015</span></h3>
+
+<div class="fl"><span class="h">Continuity</span>  $$$$  정기구독 (월정액/자동결제)   ← LTV 극대화
+   <span class="d">▲</span>
+<span class="p"> Backend</span>    $$$   프리미엄 세트 / 상위 서비스
+   <span class="d">▲</span>
+<span class="b">  Middle</span>     $$    번들 세트 / 패키지
+   <span class="d">▲</span>
+<span class="y"> Frontend</span>   $     단품 첫 구매 (저위험 진입)
+   <span class="d">▲</span>
+<span class="g">    Bait</span>     FREE  샘플 / 무료 체험 / 콘텐츠  ← 첫 접촉</div>
+
+<p><strong>고객을 한 번에 고가로 끌어올리려 하지 마라.</strong> 작은 신뢰를 쌓고 단계적으로 올린다. 첫 거래에서 등가교환(가치&gt;가격)을 체감시키면 다음 단계 설득이 쉬워진다.</p>
+
+<div class="cd">
+<table>
+<tr><th>단계</th><th>화장품 적용</th><th>목적</th><th>예상 전환율</th></tr>
+<tr><td>Bait</td><td>샘플 키트 (배송비만 부담)</td><td>첫 접촉, DB 확보</td><td>15~30%</td></tr>
+<tr><td>Frontend</td><td>단품 30ml (첫 구매 할인)</td><td>첫 구매 경험</td><td>5~15%</td></tr>
+<tr><td>Middle</td><td>2종 세트 / 루틴 패키지</td><td>객단가 2× 상승</td><td>20~35%</td></tr>
+<tr><td>Backend</td><td>프리미엄 라인 / VIP 세트</td><td>고가치 고객 전환</td><td>5~10%</td></tr>
+<tr><td>Continuity</td><td>정기구독 (월 1회 자동 배송)</td><td>LTV 극대화</td><td>10~20%</td></tr>
+</table>
+</div>
+
+<h3>④ Ryan Deiss — Customer Value Journey <span class="tg tgn">DigitalMarketer</span></h3>
+
+<div class="fl"><span class="h">1. Aware   </span> 브랜드/제품 존재 인식 (광고/SNS/추천)
+<span class="y">2. Engage  </span> 콘텐츠/광고와 상호작용 (좋아요, 댓글, 공유)
+<span class="b">3. Subscribe</span>허락 마케팅 채널 가입 (이메일, 카카오, 문자)
+<span class="p">4. Convert </span> 첫 구매 — Tripwire (저가, 저위험, 와우 경험 설계)
+<span class="g">5. Excite  </span> "이 브랜드 진짜다!" 와우 경험 → 신뢰 폭발
+<span class="g">6. Ascend  </span> 업셀/크로스셀 → 객단가 + LTV 상승
+<span class="o">7. Advocate</span> 만족 → 자발적 후기/리뷰/추천
+<span class="h">8. Promote </span> 적극적 홍보 → 인플루언서/앰배서더화</div>
+
+<p><strong>구매 이후가 더 중요하다.</strong> 5번 Excite(와우 경험)가 실패하면 7, 8번은 없다. 자사몰사관학교의 "첫구매+재구매 순환루프"가 CVJ 4→8단계 구현이다. LTV = 객단가 × 구매빈도 × 고객수명.</p>
+
+<h3>⑤ Seth Godin — Purple Cow + Permission Marketing <span class="tg tp">Purple Cow, 2003</span></h3>
+
+<div class="cd ca">
+<strong>Purple Cow (보랏빛 소):</strong><br>
+평범한 소 수천 마리 사이에서 보랏빛 소 한 마리가 지나가면 모두가 멈춰서 본다.<br>
+리마커블(Remarkable)하지 않으면 아무도 주목하지 않는다. 평범한 제품은 광고해봤자 무의미.<br><br>
+<strong>Permission Marketing (허락 마케팅):</strong><br>
+고객의 허락(Permission)을 얻은 다음 소통한다. 이메일 구독, 카카오 채널 팔로워, 앱 푸시 수신 동의 = Permission.<br>
+반대: Interruption Marketing (강제로 끼어드는 광고) — 효율이 계속 하락 중.
+</div>
+
+<p>AI 시대에 Purple Cow는 더 중요해진다. 매일 수백만 개의 콘텐츠가 쏟아지는 환경에서 평범한 제품/콘텐츠는 알고리즘에 묻힌다. <strong>엠타트업의 "가치더하기"가 바로 Purple Cow 만들기</strong>다.</p>
+<h3>⑥ Sabri Suby — 8 Phase Selling System <span class="tg ty">Sell Like Crazy, 2019</span></h3>
+
+<div class="cd ca">
+<strong>시장 분류 (Suby의 핵심 인사이트):</strong>
+<table>
+<tr><th>비율</th><th>단계</th><th>특징</th><th>접근 전략</th></tr>
+<tr><td><span class="tg tgn">3%</span></td><td>구매 준비</td><td>지금 당장 살 준비 됨</td><td>직접 오퍼 → 즉시 전환</td></tr>
+<tr><td><span class="tg tb">17%</span></td><td>정보 수집</td><td>구매 고려, 비교 중</td><td>교육 + 차별화 + 신뢰</td></tr>
+<tr><td><span class="tg ty">20%</span></td><td>문제 인식</td><td>문제는 알지만 해결책 탐색 전</td><td>문제 정의 + HVCO</td></tr>
+<tr><td><span class="tg tr">60%</span></td><td>무인식</td><td>문제 자체를 모름</td><td>어웨어니스 콘텐츠</td></tr>
+</table>
+</div>
+
+<p><strong>Godfather Offer:</strong> 거부할 수 없는 제안 설계 — Hormozi의 Value Equation과 동일한 철학. HVCO(High Value Content Offer): 무료 가치 제공 → 리드 확보 → 너처링 → 전환. 엠타트업의 O-M-C(오프닝-메리트-클로징)와 구조적으로 동일하다.</p>
+
+<div class="fl"><span class="h">Phase 1</span>  HVCO 설계 (무료 가치 제공)
+<span class="y">Phase 2</span>  리드 페이지 (랜딩페이지)
+<span class="b">Phase 3</span>  트래픽 → 리드 전환
+<span class="p">Phase 4</span>  이메일/SMS 너처링 시퀀스
+<span class="g">Phase 5</span>  판매 페이지 + Godfather Offer
+<span class="o">Phase 6</span>  전화/채팅 클로징 (고관여)
+<span class="h">Phase 7</span>  재구매 + 업셀 이메일
+<span class="g">Phase 8</span>  리퍼럴 + 리뷰 수집</div>
+
+<h3>⑦ AARRR — Pirate Metrics <span class="tg tb">Dave McClure, 500 Startups</span></h3>
+
+<div class="formula">
+  <div class="eq">A → A → R → R → R</div>
+  <div class="sub">Acquisition(획득) → Activation(활성화) → Retention(유지) → Revenue(매출) → Referral(추천)</div>
+</div>
+
+<div class="cd">
+<table>
+<tr><th>단계</th><th>의미</th><th>이커머스 지표</th><th>자사몰 연결</th></tr>
+<tr><td>Acquisition</td><td>어떻게 사람들이 오는가</td><td>신규 방문자, CPC, CTR</td><td>트래픽 + 광고 CTR</td></tr>
+<tr><td>Activation</td><td>첫 좋은 경험을 하는가</td><td>첫 방문 체류시간, 장바구니 담기</td><td>체류 × 결제시작</td></tr>
+<tr><td>Retention</td><td>다시 돌아오는가</td><td>재방문율, 재구매율</td><td>재구매 순환루프</td></tr>
+<tr><td>Revenue</td><td>돈을 버는가</td><td>구매전환율, ROAS, LTV</td><td>곱셈의 법칙 최종값</td></tr>
+<tr><td>Referral</td><td>추천하는가</td><td>추천인 수, 바이럴 계수</td><td>Advocate → Promote</td></tr>
+</table>
+</div>
+
+<div class="nw">자사몰사관학교 "곱셈의 법칙"과 연결: 각 단계를 10%씩 개선하면 전체 성과는 46% 상승. AARRR 각 단계 = 곱셈의 법칙 각 단계와 1:1 대응.</div>
+
+<!-- ===== 2. 엠타트업 핵심 프레임워크 ===== -->
+<h2 id="s2"><span class="sn">2</span> 엠타트업 핵심 프레임워크</h2>
+
+<div class="pq">마케팅 = <strong>모으고(Resource/Channel) + 설득하기(System)</strong>. 이 두 단어 안에 마케팅의 모든 것이 들어있다.</div>
+
+<h3>대전제: RCS 프레임워크</h3>
+
+<div class="cd ca">
+<table>
+<tr><th>구성</th><th>의미</th><th>핵심 질문</th></tr>
+<tr><td><strong>R</strong> — Resource</td><td>우리가 가진 것</td><td>"우리 제품/브랜드의 핵심가치는 무엇인가?"</td></tr>
+<tr><td><strong>C</strong> — Channel</td><td>고객을 모으는 채널</td><td>"어디서, 어떻게 고객을 만나는가?"</td></tr>
+<tr><td><strong>S</strong> — System</td><td>설득 → 구매 → 재구매 시스템</td><td>"첫 구매 후 어떻게 관계를 유지하는가?"</td></tr>
+</table>
+</div>
+
+<h3>R: 리소스 평가 5기준 (VRIN+M)</h3>
+
+<div class="cd">
+<table>
+<tr><th>기준</th><th>질문</th><th>평가 방법</th></tr>
+<tr><td>시장성 (Value)</td><td>시장이 원하는 리소스인가?</td><td>검색량, 시장 규모, 트렌드</td></tr>
+<tr><td>희귀성 (Rarity)</td><td>경쟁사가 없거나 적은가?</td><td>경쟁사 수, 차별화 가능성</td></tr>
+<tr><td>모방성 (Imitability)</td><td>따라 하기 어려운가?</td><td>특허, 노하우, 원료, 공정</td></tr>
+<tr><td>접근성 (Non-substitutability)</td><td>대체재가 없는가?</td><td>유사 제품 비교</td></tr>
+<tr><td>가치성 (Margin)</td><td>수익이 나는가?</td><td>원가율, 예상 마진</td></tr>
+</table>
+</div>
+
+<h3>핵심가치(CV) 3종류 + 핵심가치 이동</h3>
+
+<div class="fl"><span class="h">CV1: 기능가치</span>  제품 자체의 기능적 성능
+              예: "SPF50+ 자외선 차단", "24시간 보습 지속"
+<span class="y">CV2: 경험가치</span>  사용하는 과정의 감각적 경험
+              예: "발림감이 가볍다", "향이 기분 좋다"
+<span class="b">CV3: 상징가치</span>  제품이 상징하는 이미지/신분
+              예: "프리미엄 스킨케어 유저", "환경 의식있는 소비"
+
+<span class="d">핵심가치 이동: 시장이 성숙할수록 CV1 → CV2 → CV3으로 경쟁 축이 이동</span>
+<span class="d">스마트폰: 초기(기능) → 카메라(경험) → 브랜드(상징)</span>
+<span class="d">화장품: 성분(기능) → 발림감(경험) → 라이프스타일(상징)</span></div>
+
+<h3>구매편익 4분류 + 승패 관계</h3>
+
+<div class="cd">
+<table>
+<tr><th>편익</th><th>의미</th><th>예시</th><th>경쟁 관계</th></tr>
+<tr><td>기능편익</td><td>실용적 효과/성능</td><td>"미백, 수분, 자외선 차단"</td><td rowspan="2">기능↔경험 대체</td></tr>
+<tr><td>경험편익</td><td>사용 과정의 즐거움/감각</td><td>"발림감, 향, 패키지 개봉 경험"</td></tr>
+<tr><td>상징편익</td><td>사회적 이미지/소속</td><td>"OOO 쓰는 사람 = 세련된 사람"</td><td rowspan="2">상징↔경제 대체</td></tr>
+<tr><td>경제편익</td><td>가격/가성비/절약</td><td>"1+1, 대용량 리필, 구독 할인"</td></tr>
+</table>
+</div>
+
+<div class="nw">승패 관계: 같은 편익 카테고리 내에서 경쟁해야 이긴다. 기능이 약한 제품이 기능으로 싸우면 진다. 차별화 불가 시 상징편익이나 경험편익으로 경쟁 축을 바꿔라.</div>
+
+<h3>마케팅축 — 욕구 / 대안 / 접근</h3>
+
+<div class="fl"><span class="h">욕구축</span>: 고객이 원하는 것 (3대 욕구)
+  → 생리적 욕구 (건강, 생존, 안전)
+  → 사회적 욕구 (소속, 인정, 관계)
+  → 자아실현 욕구 (성장, 성취, 표현)
+
+<span class="y">대안축</span>: 고객의 선택지 (우리 vs 경쟁사 vs 대체재)
+  → 직접 경쟁자: 동일 카테고리
+  → 간접 경쟁자: 다른 방식으로 같은 욕구 해결
+  → 대체재: 아예 다른 방법
+
+<span class="b">접근축</span>: 고객에게 닿는 방법
+  → 어디서? (채널)
+  → 언제? (타이밍)
+  → 어떻게? (메시지/형식)</div>
+
+<div class="cd ca"><strong>욕구깡패:</strong> 3대 욕구 중 가장 강한 것이 구매를 지배한다. 화장품은 표면적으로는 기능(생리) 욕구지만, 실제 구매는 사회적 욕구(타인에게 예뻐 보이고 싶다)가 지배하는 경우가 많다. 마케팅 메시지는 진짜 욕구를 건드려야 한다.</div>
+
+<h3>관여도 스펙트럼 + 관여도 이동</h3>
+
+<div class="fl"><span class="h">고관여</span>  ←────────────────────→  <span class="g">저관여</span>
+집/차/보험/B2B 솔루션     일상 소모품/간식/소액 앱
+(깊이 생각하고 구매)      (거의 생각 없이 구매)
+
+<span class="d">관여도가 높을수록: 정보 제공 → 비교 → 신뢰 구축이 중요</span>
+<span class="d">관여도가 낮을수록: 노출 빈도 → 감정 → 즉각 구매가 중요</span>
+
+<span class="y">관여도 이동 전략:</span>
+→ 저관여를 고관여처럼: 이야기/철학으로 관여도 높이기
+→ 고관여를 저관여처럼: 구매 장벽 낮추기 (분할결제, 체험)</div>
+
+<h3>포지셔닝 + 프레임 분리</h3>
+
+<div class="cd ca">
+<strong>포지셔닝:</strong> 고객의 마음속 특정 위치를 선점하는 것.<br>
+"OOO하면 OOO" — 1등이 되는 영역을 스스로 정의한다.<br>
+예: "데일리 톤업 전문" / "민감성 피부 첫 번째 선택" / "성분 투명 브랜드"<br><br>
+<strong>프레임 분리:</strong> 기존 카테고리에서 새 프레임을 만들어 혼자 1등이 되는 전략.<br>
+예: "일반 세럼" 프레임 → "아침 전용 세럼" 프레임 분리 → 새 카테고리 1등
+</div>
+
+<h3>가치더하기 (Value Addition)</h3>
+
+<p>제품에 직접적 가치 외에 <strong>부가 가치를 더해 경쟁에서 이탈</strong>하는 전략. Purple Cow 만들기의 실전 도구.</p>
+
+<div class="cd">
+<table>
+<tr><th>가치더하기 유형</th><th>예시</th></tr>
+<tr><td>정보/교육 더하기</td><td>성분 설명 카드, 사용법 영상, 피부 타입별 가이드</td></tr>
+<tr><td>경험 더하기</td><td>언박싱 경험 설계, 향기, 패키지 디자인</td></tr>
+<tr><td>관계 더하기</td><td>개인화 메시지, 구독자 커뮤니티, 브랜드 스토리</td></tr>
+<tr><td>보증 더하기</td><td>30일 환불 보장, 평생 교환 보장</td></tr>
+<tr><td>편의 더하기</td><td>정기구독, 자동 리필, 새벽배송</td></tr>
+</table>
+</div>
+
+<h3>접촉지점 + 키워드 5단계</h3>
+
+<div class="fl"><span class="d">고객이 제품을 알게 되는 모든 접촉지점 (Touchpoint) 매핑:</span>
+
+<span class="h">인지 전</span>  SNS 피드, 유튜브 광고, 추천 알고리즘
+<span class="y">인지 후</span>  검색 (네이버/구글), 리뷰 플랫폼
+<span class="b">비교 중</span>  상세페이지, 경쟁사 비교 블로그
+<span class="p">구매 직전</span> 장바구니, 결제 페이지, 쿠폰
+<span class="g">구매 후</span>  배송 알림, 패키지, 고객센터, 재구매 CRM
+
+<span class="d">키워드 5단계 = Schwartz 매핑 (섹션1 참조)</span></div>
+
+<h3>선택제어 3종</h3>
+
+<div class="cd">
+<table>
+<tr><th>기법</th><th>원리</th><th>예시</th></tr>
+<tr><td>이지선다</td><td>2가지 선택지만 제시 → 둘 다 우리한테 유리</td><td>"지금 구매하시겠어요, 아니면 샘플 받아보시겠어요?"</td></tr>
+<tr><td>더블바인드</td><td>어떤 선택을 해도 긍정적 결과 → 저항 해제</td><td>"오늘 주문하면 내일 도착, 내일 주문해도 빠른배송"</td></tr>
+<tr><td>소거법</td><td>대안을 하나씩 제거 → 우리만 남음</td><td>"타 브랜드는 이 성분이 없고... 결국 OOO만이"</td></tr>
+</table>
+</div>
+
+<h3>O-M-C 설득 구조 + 클로징 4요소</h3>
+
+<div class="fl"><span class="h">O — Opening  </span> 관심 끌기 + 문제 제시
+              3초 Hook → 공감 → 긴박감 형성
+
+<span class="y">M — Merit    </span> 가치 증명
+              혜택 설명 → 증거 제시 → 반론 해소
+
+<span class="g">C — Closing  </span> 행동 유도
+              4요소: ① 명확한 CTA ② 긴박감(마감/수량)
+                     ③ 리스크 제거(환불 보장) ④ 보너스(사은품)</div>
+
+<h3>등가교환 + 매몰비용</h3>
+
+<div class="cd ca">
+<strong>등가교환:</strong> 고객이 지불하는 가격과 받는 가치가 같거나 가치가 더 크다고 느낄 때 구매한다.<br>
+가치 > 가격 체감 = 구매 발생. 가치 &lt; 가격 체감 = 이탈.<br>
+마케팅의 역할은 가치를 제대로 보이게 만드는 것.<br><br>
+<strong>매몰비용:</strong> 이미 투자한 것이 있으면 더 투자하는 경향.<br>
+샘플 → 단품 → 세트 → 구독: 각 단계에서 이전 경험이 매몰비용으로 작용 → 다음 단계 전환율 상승.
+</div>
+
+<h3>물길(트래픽) 프레임워크</h3>
+
+<div class="fl"><span class="h">상류 (Source)</span>: 트래픽이 발생하는 곳
+  - 유료: Meta 광고, 구글 광고, 네이버 광고
+  - 자연: SEO, SNS, 유튜브, 카페
+  - 소개: 리퍼럴, 인플루언서
+
+<span class="y">중류 (Flow)</span>: 트래픽이 흐르는 경로
+  - 랜딩페이지 → 상세페이지 → 장바구니 → 결제
+
+<span class="b">하류 (Pool)</span>: 트래픽이 모이는 곳
+  - 자사몰, 스마트스토어, 쿠팡
+  - CRM DB (이메일, 카카오, 문자)
+
+<span class="d">물길 전략: 상류를 다양화, 중류 누수(이탈) 최소화, 하류에 자산 축적</span></div>
+
+<h3>배제와 양보의 설득법</h3>
+
+<div class="cd ca">
+<strong>배제 설득:</strong> "이 제품은 아무에게나 권하지 않습니다. OOO한 분들만." → 희소성 + 자격 부여.<br><br>
+<strong>양보 설득:</strong> "가격이 비싼 건 맞아요. 그런데..." → 단점을 먼저 인정하면 신뢰가 올라가고 그 다음 메시지의 설득력이 강해진다.
+</div>
+
+<h3>제로 마케팅</h3>
+
+<p>광고비 없이(또는 최소한으로) 마케팅하는 전략. SNS 자연 유입, 블로그 SEO, 커뮤니티 마케팅, 바이럴. 자원이 적은 초기 브랜드에 필수. 나중에 유료 광고를 쓸 때도 제로 마케팅 채널이 신뢰도를 높인다.</p>
+
+<h3>브랜드 4유형 + 네이밍</h3>
+
+<div class="cd">
+<table>
+<tr><th>유형</th><th>특징</th><th>예시</th><th>전략</th></tr>
+<tr><td>제품 브랜드</td><td>제품 자체가 브랜드</td><td>불닭볶음면, 초코파이</td><td>제품력 극대화</td></tr>
+<tr><td>회사 브랜드</td><td>회사 이름이 브랜드</td><td>삼성, LG, 애플</td><td>신뢰 + 라인업 확장</td></tr>
+<tr><td>카테고리 브랜드</td><td>카테고리 자체를 소유</td><td>락앤락(밀폐용기), 스카치테이프</td><td>1등 포지셔닝</td></tr>
+<tr><td>퍼스널 브랜드</td><td>사람이 브랜드</td><td>망고보드, 클레어스(유튜버)</td><td>신뢰 이전 + 팬덤</td></tr>
+</table>
+</div>
+
+<p><strong>네이밍 원칙:</strong> ① 기억하기 쉬울 것 ② 발음 쉬울 것 ③ 의미 있을 것 ④ 검색 가능할 것 ⑤ 상표 등록 가능할 것. AI(Claude)로 수백 개 후보 생성 후 5원칙으로 필터링.</p>
+
+<h3>시스템 7대 영역</h3>
+
+<div class="fl"><span class="h">1. 유입 시스템  </span> 새 고객이 계속 들어오는 구조 (광고/SEO/바이럴)
+<span class="y">2. 전환 시스템  </span> 방문자 → 구매자 전환 (상세페이지/UX/오퍼)
+<span class="b">3. 재구매 시스템</span> 한 번 산 사람이 다시 사는 구조 (CRM/구독)
+<span class="p">4. 객단가 시스템</span> 한 번 살 때 더 많이 사는 구조 (업셀/번들)
+<span class="g">5. 추천 시스템  </span> 고객이 고객을 데려오는 구조 (리퍼럴/리뷰)
+<span class="o">6. 운영 시스템  </span> CS, 물류, 재고, 품질 관리
+<span class="h">7. 데이터 시스템</span> 위 6개를 측정하고 개선하는 구조</div>
+
+<h3>통찰력 = 5분 안에 마케팅 그림 그리기</h3>
+
+<p>어떤 브랜드/제품을 봐도 5분 안에 RCS 그림을 그릴 수 있는 능력. Resource 평가 → 핵심가치 정의 → 경쟁 포지셔닝 → 채널 전략 → 시스템 구조. 이 능력이 커리큘럼 최종 목표.</p>
+
+<!-- ===== 3. 자사몰사관학교 ===== -->
+<h2 id="s3"><span class="sn">3</span> 자사몰사관학교 핵심 프레임워크</h2>
+
+<div class="pq">Meta 광고는 기계다. 기계가 잘 작동하려면 <strong>올바른 데이터(소재+타겟+구조)</strong>를 제대로 넣어야 한다. 자사몰사관학교는 그 방법을 가르친다.</div>
+
+<h3>총가치 공식</h3>
+
+<div class="formula">
+  <div class="eq">총가치 = 광고비 × 추산행동률 + 광고품질</div>
+  <div class="sub">Meta가 광고주에게 노출 기회를 배분하는 경매 공식</div>
+</div>
+
+<div class="cd ca">
+광고비가 많아도 추산행동률(예상 CTR × CVR)이 낮으면 경매에서 진다.<br>
+광고품질(소재의 관련성 + 참여도)이 높으면 적은 광고비로 많은 노출을 얻는다.<br>
+<strong>결론: 좋은 소재 = 광고비 절약 + 더 많은 노출 = 선순환</strong>
+</div>
+
+<h3>주인공 정의: 작가시점 ∩ 고객시점</h3>
+
+<div class="fl"><span class="h">작가시점 (브랜드가 생각하는 주인공)</span>
+  → 우리 제품의 이상적 고객은 누구인가?
+  → 어떤 삶을 살고, 어떤 고민이 있는가?
+
+<span class="y">고객시점 (실제 고객이 생각하는 자기 자신)</span>
+  → 고객은 스스로를 어떻게 정의하는가?
+  → 어떤 욕구가 있고 어떤 언어를 쓰는가?
+
+<span class="b">주인공 = 작가시점 ∩ 고객시점 (교집합)</span>
+  → 두 시점이 겹치는 지점 = 진짜 주인공
+  → 이 지점에서 만들어진 소재가 공명한다</div>
+
+<h3>3장면 구조</h3>
+
+<div class="cd">
+<table>
+<tr><th>장면</th><th>역할</th><th>목적</th><th>예시</th></tr>
+<tr><td><span class="tg tr">문제장면</span> (Hook)</td><td>주인공의 현재 고통</td><td>공감 → 멈춤</td><td>"요즘 거울 보기 싫지 않으세요?"</td></tr>
+<tr><td><span class="tg ty">전환장면</span> (아하!)</td><td>전환점 — 제품 등장</td><td>아하! 순간</td><td>"이 성분 하나가 달랐어요"</td></tr>
+<tr><td><span class="tg tgn">이상장면</span> (기대감)</td><td>제품 사용 후 이상적 미래</td><td>구매 욕구 자극</td><td>"3일 후 거울 보는 나의 표정"</td></tr>
+</table>
+</div>
+
+<h3>싱귤래리티 효과 + 스노우볼 효과</h3>
+
+<div class="cd ca">
+<strong>싱귤래리티 효과 (Singularity Effect):</strong><br>
+소재 하나가 완벽하게 타겟에 공명할 때 발생하는 폭발적 성과. 같은 예산으로 100배 차이가 난다.<br>
+→ 좋은 소재 1개 > 평범한 소재 100개<br><br>
+<strong>스노우볼 효과:</strong><br>
+좋은 소재 → Meta 머신러닝이 더 많이 노출 → 더 많은 데이터 수집 → 더 정확한 타겟팅 → 더 좋은 성과.<br>
+선순환이 시작되면 가속도가 붙는다.
+</div>
+
+<h3>Meta 경매 4단계</h3>
+
+<div class="fl"><span class="h">1. 필터링    </span> 광고 정책 위반 여부 검사 (자동화)
+<span class="y">2. 리트리벌  </span> 광고주 DB에서 후보 광고 수천 개 추출
+<span class="b">3. 시퀀스러닝</span> 후보 광고별 예상 성과(CTR×CVR) 랭킹
+<span class="p">4. 라티스     </span> 최종 경매 — 총가치 공식으로 노출 배분
+
+<span class="d">→ 시퀀스러닝이 핵심: ML이 "이 소재가 이 사람에게 효과있을까?" 예측</span>
+<span class="d">→ 데이터(행동지문)가 많을수록 예측 정확도↑</span></div>
+
+<h3>행동지문 = 성향 + 취향 + 행동 = 광고 임베딩</h3>
+
+<p>Meta는 모든 사용자의 행동 패턴을 벡터로 임베딩한다. 좋아요, 댓글, 구매, 검색, 체류시간 — 모든 행동이 지문이 된다. 광고 소재도 마찬가지로 임베딩된다. <strong>소재와 사용자의 임베딩 유사도가 높을수록 노출 확률이 올라간다.</strong></p>
+
+<h3>곱셈의 법칙</h3>
+
+<div class="formula">
+  <div class="eq">ROAS = CTR × 체류율 × 결제시작률 × 구매전환율</div>
+  <div class="sub">각 단계가 독립 변수 — 하나가 0이면 전체가 0</div>
+</div>
+
+<div class="cd">
+<table>
+<tr><th>단계</th><th>지표</th><th>낮으면 문제</th><th>벤치마크</th></tr>
+<tr><td>CTR</td><td>광고 클릭률</td><td>소재/Hook이 약함</td><td>1% 이상</td></tr>
+<tr><td>체류율</td><td>랜딩 후 3초 이상 머묾</td><td>상세페이지 도입이 약함</td><td>60% 이상</td></tr>
+<tr><td>결제시작률</td><td>장바구니 → 결제 시작</td><td>가격/신뢰 장벽</td><td>30% 이상</td></tr>
+<tr><td>구매전환율</td><td>결제 완료</td><td>복잡한 결제 UX, 불안감</td><td>70% 이상</td></tr>
+</table>
+</div>
+
+<h3>배수효과 진단: 벤치마크 vs 현재값</h3>
+
+<div class="nw">각 단계 현재값을 벤치마크와 비교 → 가장 낮은 단계가 병목 → 거기에 자원 집중. CTR이 0.3%면 소재가 문제. 결제시작률이 낮으면 가격/신뢰 문제. 진단 없이 광고비만 늘리면 낭비.</div>
+
+<h3>캠페인 구조 4원칙 + ASC+</h3>
+
+<div class="fl"><span class="h">원칙1</span>: 캠페인 = 목적. 하나의 캠페인은 하나의 목적만.
+<span class="y">원칙2</span>: 광고세트 = 예산 + 타겟. A/B 테스트 단위.
+<span class="b">원칙3</span>: 광고 = 소재. 소재 다양성 확보 (3~5개+).
+<span class="p">원칙4</span>: 데이터 축적 우선. 섣부른 수정 금지 (최소 3~7일).
+
+<span class="h">ASC+ (Advantage+ Shopping Campaign):</span>
+→ Meta ML에 최대한 자율성 부여
+→ 타겟 설정 최소화 → ML이 최적 타겟 탐색
+→ 소재 다양성이 핵심 — 최소 10개 이상 권장</div>
+
+<h3>카탈로그 / Shops / 일치율</h3>
+
+<div class="cd">
+<table>
+<tr><th>도구</th><th>역할</th><th>핵심 지표</th></tr>
+<tr><td>카탈로그</td><td>제품 데이터 Meta에 연동</td><td>일치율 (픽셀 ↔ 카탈로그)</td></tr>
+<tr><td>Meta Shops</td><td>Meta 내 쇼핑 경험</td><td>Shops 전환율</td></tr>
+<tr><td>일치율</td><td>광고 클릭 → 실제 구매 추적 정확도</td><td>80% 이상 목표</td></tr>
+</table>
+</div>
+
+<!-- ===== 4. 연결 맵 ===== -->
+<h2 id="s4"><span class="sn">4</span> 글로벌 × 엠타트업 × 자사몰 연결 맵</h2>
+
+<div class="pq">글로벌 대가들의 프레임워크와 엠타트업/자사몰의 개념은 <strong>표현만 다르고 본질은 같다</strong>. 이 매핑을 이해하면 하나를 배우면서 셋을 동시에 체득한다.</div>
+
+<div class="map-row"><div class="map-l">Schwartz<br>5 Stages of Awareness</div><div class="map-c">↔</div><div class="map-r">엠타트업<br>키워드 5단계 (레벨1~5)</div><div class="map-c">↔</div><div class="map-r2">자사몰<br>타겟 세분화 + 소재 전략</div></div>
+
+<div class="map-row"><div class="map-l">Hormozi<br>Value Equation</div><div class="map-c">↔</div><div class="map-r">엠타트업<br>등가교환 + 구매편익 4분류</div><div class="map-c">↔</div><div class="map-r2">자사몰<br>소재 가치 전달 + 오퍼 설계</div></div>
+
+<div class="map-row"><div class="map-l">Brunson<br>Value Ladder</div><div class="map-c">↔</div><div class="map-r">엠타트업<br>등가교환 + 시스템 7대 영역</div><div class="map-c">↔</div><div class="map-r2">자사몰<br>첫구매 → 재구매 순환루프</div></div>
+
+<div class="map-row"><div class="map-l">Deiss<br>Customer Value Journey</div><div class="map-c">↔</div><div class="map-r">엠타트업<br>시스템 7대 영역</div><div class="map-c">↔</div><div class="map-r2">자사몰<br>LTV 최대화 + CRM</div></div>
+
+<div class="map-row"><div class="map-l">Godin<br>Purple Cow</div><div class="map-c">↔</div><div class="map-r">엠타트업<br>가치더하기 + 포지셔닝</div><div class="map-c">↔</div><div class="map-r2">자사몰<br>싱귤래리티 소재 + 브랜딩</div></div>
+
+<div class="map-row"><div class="map-l">Suby<br>8 Phase Selling System</div><div class="map-c">↔</div><div class="map-r">엠타트업<br>O-M-C + 물길 프레임워크</div><div class="map-c">↔</div><div class="map-r2">자사몰<br>3장면 구조 + 캠페인 구조</div></div>
+
+<div class="map-row"><div class="map-l">AARRR<br>Pirate Metrics</div><div class="map-c">↔</div><div class="map-r">엠타트업<br>RCS + 시스템 7대 영역</div><div class="map-c">↔</div><div class="map-r2">자사몰<br>곱셈의 법칙 + 배수효과</div></div>
+
+<div class="cd ca" style="margin-top:20px">
+<strong>통합 공식 (세 체계를 하나로):</strong><br>
+<code>좋은 리소스(R) × 올바른 채널(C) × 강한 설득 시스템(S) × AI 가속 = 지속 성장</code><br><br>
+각 항목 중 하나라도 0이면 전체가 0. AARRR과 곱셈의 법칙과 같은 원리.
+</div>
+
+<!-- ===== 5. 15주 커리큘럼 ===== -->
+<h2 id="s5"><span class="sn">5</span> 15주 통합 커리큘럼</h2>
+
+<div class="pq">4 Phase × 15주 × 60분×4 블록 = 총 240시간의 실전 마케팅 교육. 매주 엠타트업 + 자사몰 + 글로벌 + AI를 함께 엮는다.</div>
+
+<!-- Phase 1 -->
+<div style="margin:20px 0 8px"><span class="phase-badge ph1">Phase 1 (1~4주) · 마인드셋 &amp; 고객 이해</span></div>
+
+<div class="week">
+  <div class="week-head">
+    <span class="week-num">1주차</span>
+    <span class="week-title">오리엔테이션 + RCS 전체 그림 + AI 입문</span>
+    <span class="tg tp">Phase 1</span>
+  </div>
+  <div class="week-body">
+    <div class="week-grid">
+      <div class="wg-box">
+        <div class="wg-title">🟣 블록 1 (60분)</div>
+        <div class="wg-content"><strong>오리엔테이션</strong><br>왜 마케팅인가? 마케팅 = 모으고 설득하기. RCS 전체 구조 소개. 15주 로드맵 공유.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🔵 블록 2 (60분)</div>
+        <div class="wg-content"><strong>R(리소스) 개요</strong><br>내 제품/브랜드의 리소스 평가 5기준 소개. 핵심가치(CV) 3종류. 시장에서 내 위치 파악.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟡 블록 3 (60분)</div>
+        <div class="wg-content"><strong>AI 입문 — Claude 기초</strong><br>Claude 프롬프팅 기초. 시장 리서치 실습. "내 제품의 경쟁사 분석" 실전 프롬프트.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟢 블록 4 (60분)</div>
+        <div class="wg-content"><strong>실습 + Q&amp;A</strong><br>내 제품 RCS 초안 작성. Claude로 시장 규모 조사. 그룹 공유 + 피드백.</div>
+      </div>
+    </div>
+    <h4>📌 핵심 질문</h4>
+    <ul>
+      <li>"내 제품의 가장 강한 리소스는 무엇인가?"</li>
+      <li>"나는 어떤 마케팅 채널에 접근 가능한가?"</li>
+    </ul>
+    <h4>📝 과제 (AI 포함)</h4>
+    <ul>
+      <li>Claude로 경쟁사 5개 조사 + RCS 비교표 작성</li>
+      <li>내 제품의 핵심가치 3가지 정의 (CV1/2/3)</li>
+    </ul>
+    <h4>📦 산출물</h4>
+    <ul><li>내 브랜드 RCS 초안 1페이지</li></ul>
+  </div>
+</div>
+
+<div class="week">
+  <div class="week-head">
+    <span class="week-num">2주차</span>
+    <span class="week-title">R 심화: 리소스 평가 + CV + Schwartz 인지단계 + 작가시점</span>
+    <span class="tg tp">Phase 1</span>
+  </div>
+  <div class="week-body">
+    <div class="week-grid">
+      <div class="wg-box">
+        <div class="wg-title">🟣 블록 1 (60분)</div>
+        <div class="wg-content"><strong>리소스 평가 5기준 심화</strong><br>시장성/희귀성/모방성/접근성/가치성 각각 실전 평가법. 점수 매기기. 내 제품 리소스 강약점 분석.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🔵 블록 2 (60분)</div>
+        <div class="wg-content"><strong>Schwartz 5 Stages + 키워드 5단계</strong><br>1:1 매핑 심화. 각 단계별 카피 전략. 내 제품의 키워드 레벨별 검색어 리스트 작성.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟡 블록 3 (60분)</div>
+        <div class="wg-content"><strong>작가시점 — 이상적 고객 프로파일링</strong><br>자사몰사관학교 "작가시점" 개념. 페르소나 1~3개 작성. 나이/직업/고민/미디어 소비 패턴.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟢 블록 4 (60분)</div>
+        <div class="wg-content"><strong>AI 실습 — 고객 분석</strong><br>Claude로 페르소나 상세화. "이 고객의 하루 루틴은?" "어떤 키워드로 검색할까?" 프롬프팅.</div>
+      </div>
+    </div>
+    <h4>📌 핵심 질문</h4>
+    <ul>
+      <li>"내 고객은 지금 어느 인지 단계(레벨 1~5)에 있는가?"</li>
+      <li>"각 레벨의 고객에게 어떤 메시지를 써야 하는가?"</li>
+    </ul>
+    <h4>📝 과제 (AI 포함)</h4>
+    <ul>
+      <li>Claude로 키워드 5단계 리스트 각 10개씩 (총 50개) 생성</li>
+      <li>작가시점 페르소나 3개 작성 (Claude 보조)</li>
+    </ul>
+    <h4>📦 산출물</h4>
+    <ul><li>키워드 매핑 테이블 + 페르소나 프로파일 3개</li></ul>
+  </div>
+</div>
+
+<div class="week">
+  <div class="week-head">
+    <span class="week-num">3주차</span>
+    <span class="week-title">마케팅축 + Hormozi Value Equation + 고객시점 + 주인공 정의</span>
+    <span class="tg tp">Phase 1</span>
+  </div>
+  <div class="week-body">
+    <div class="week-grid">
+      <div class="wg-box">
+        <div class="wg-title">🟣 블록 1 (60분)</div>
+        <div class="wg-content"><strong>마케팅축 — 욕구/대안/접근</strong><br>3대 욕구와 내 제품의 연결. 욕구깡패 찾기. 직접/간접 경쟁사 + 대체재 매핑.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🔵 블록 2 (60분)</div>
+        <div class="wg-content"><strong>Hormozi Value Equation 적용</strong><br>내 제품의 Dream Outcome 정의. Perceived Likelihood 증거 목록. Time Delay/Effort 최소화 방법 찾기.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟡 블록 3 (60분)</div>
+        <div class="wg-content"><strong>고객시점 + 주인공 정의</strong><br>자사몰사관학교 작가시점 ∩ 고객시점. 진짜 주인공의 언어 찾기. 고객 리뷰 분석 실습.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟢 블록 4 (60분)</div>
+        <div class="wg-content"><strong>AI 실습</strong><br>Claude로 경쟁사 리뷰 300개 분석 → 욕구/불만 키워드 추출. Value Equation 점수 매기기.</div>
+      </div>
+    </div>
+    <h4>📌 핵심 질문</h4>
+    <ul>
+      <li>"우리 고객의 진짜 욕구는 기능인가, 사회적 인정인가?"</li>
+      <li>"우리 제품의 Value Equation 점수는 경쟁사 대비 어떤가?"</li>
+    </ul>
+    <h4>📝 과제 (AI 포함)</h4>
+    <ul>
+      <li>Claude로 고객 리뷰 50개 분석 → 욕구 분류표</li>
+      <li>내 제품 Value Equation vs 경쟁사 비교 표</li>
+    </ul>
+    <h4>📦 산출물</h4>
+    <ul><li>주인공 정의서 (작가시점 ∩ 고객시점) + Value Equation 비교표</li></ul>
+  </div>
+</div>
+
+<div class="week">
+  <div class="week-head">
+    <span class="week-num">4주차</span>
+    <span class="week-title">포지셔닝 + Purple Cow + 가치더하기 + 프레임 분리</span>
+    <span class="tg tp">Phase 1</span>
+  </div>
+  <div class="week-body">
+    <div class="week-grid">
+      <div class="wg-box">
+        <div class="wg-title">🟣 블록 1 (60분)</div>
+        <div class="wg-content"><strong>포지셔닝 전략</strong><br>시장 내 빈 공간 찾기. 포지셔닝 맵 작성. "OOO하면 OOO" 문장 만들기. 상표 등록 가능성 검토.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🔵 블록 2 (60분)</div>
+        <div class="wg-content"><strong>Purple Cow + 프레임 분리</strong><br>내 제품의 리마커블 요소 찾기. 새 카테고리 프레임 만들기. AI 시대 차별화 전략.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟡 블록 3 (60분)</div>
+        <div class="wg-content"><strong>가치더하기 실전</strong><br>5가지 유형별 아이디어 브레인스토밍. 비용 대비 효과 계산. 경쟁사가 못하는 가치더하기.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟢 블록 4 (60분)</div>
+        <div class="wg-content"><strong>Phase 1 종합 + AI 포지셔닝 리포트</strong><br>Claude로 포지셔닝 문장 10개 생성 → 최적 선택. 4주 산출물 통합 발표 준비.</div>
+      </div>
+    </div>
+    <h4>📌 핵심 질문</h4>
+    <ul>
+      <li>"경쟁사가 없는 나만의 포지셔닝은 무엇인가?"</li>
+      <li>"우리 제품을 리마커블하게 만드는 단 하나의 요소는?"</li>
+    </ul>
+    <h4>📝 과제 (AI 포함)</h4>
+    <ul>
+      <li>Claude로 포지셔닝 문장 20개 생성 → 투표 후 최종 3개 선정</li>
+      <li>가치더하기 아이디어 5개 + 실행 계획</li>
+    </ul>
+    <h4>📦 산출물</h4>
+    <ul><li>포지셔닝 선언문 + 가치더하기 계획서 + Phase 1 종합 1페이지</li></ul>
+  </div>
+</div>
+
+<!-- Phase 2 -->
+<div style="margin:28px 0 8px"><span class="phase-badge ph2">Phase 2 (5~8주) · 설득 설계</span></div>
+
+<div class="week">
+  <div class="week-head">
+    <span class="week-num">5주차</span>
+    <span class="week-title">구매편익 4분류 + 등가교환 + 3장면 구조 + Value Ladder</span>
+    <span class="tg tb">Phase 2</span>
+  </div>
+  <div class="week-body">
+    <div class="week-grid">
+      <div class="wg-box">
+        <div class="wg-title">🟣 블록 1 (60분)</div>
+        <div class="wg-content"><strong>구매편익 4분류 심화</strong><br>기능/경험/상징/경제 편익 실전 분류. 내 제품의 주 편익 특정. 승패 관계 이해. 경쟁 축 재설정.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🔵 블록 2 (60분)</div>
+        <div class="wg-content"><strong>등가교환 + 관여도</strong><br>가치&gt;가격 체감 만드는 법. 관여도 스펙트럼과 내 제품. 관여도 이동 전략 실습.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟡 블록 3 (60분)</div>
+        <div class="wg-content"><strong>3장면 구조 설계</strong><br>자사몰사관학교 문제장면/전환장면/이상장면. 내 제품의 3장면 스크립트 초안 작성.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟢 블록 4 (60분)</div>
+        <div class="wg-content"><strong>Value Ladder 설계</strong><br>Brunson Value Ladder 내 브랜드 적용. Bait→Frontend→Middle→Backend→Continuity 설계.</div>
+      </div>
+    </div>
+    <h4>📌 핵심 질문</h4>
+    <ul>
+      <li>"우리 제품의 주 편익은 무엇이고 경쟁 축은 어떻게 설정해야 하는가?"</li>
+      <li>"Value Ladder의 각 단계에서 고객이 충분한 가치를 느끼는가?"</li>
+    </ul>
+    <h4>📝 과제 (AI 포함)</h4>
+    <ul>
+      <li>내 브랜드 Value Ladder 완성 (5단계 각 오퍼 정의)</li>
+      <li>Claude로 3장면 스크립트 3가지 버전 생성 → 최적 선택</li>
+    </ul>
+    <h4>📦 산출물</h4>
+    <ul><li>Value Ladder 다이어그램 + 3장면 스크립트 초안</li></ul>
+  </div>
+</div>
+
+<div class="week">
+  <div class="week-head">
+    <span class="week-num">6주차</span>
+    <span class="week-title">선택제어 3종 + O-M-C 심화 + Suby 8 Phase</span>
+    <span class="tg tb">Phase 2</span>
+  </div>
+  <div class="week-body">
+    <div class="week-grid">
+      <div class="wg-box">
+        <div class="wg-title">🟣 블록 1 (60분)</div>
+        <div class="wg-content"><strong>선택제어 3종 실전</strong><br>이지선다/더블바인드/소거법 각각 실습. 내 제품 상세페이지에 적용. A/B 버전 제작.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🔵 블록 2 (60분)</div>
+        <div class="wg-content"><strong>O-M-C 심화 + 클로징 4요소</strong><br>오프닝 Hook 10가지 패턴. 메리트 증거 유형. 클로징 4요소(CTA/긴박감/리스크/보너스) 실습.</div>
+      </div>
+      <div class
+      <div class="wg-box">
+        <div class="wg-title">🔵 블록 2 (60분)</div>
+        <div class="wg-content"><strong>최종 발표 2부</strong><br>나머지 팀 발표. 전체 피드백 공유. 가장 인상적인 아이디어 투표. 수료 기념 네트워킹.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟡 블록 3 (60분)</div>
+        <div class="wg-content"><strong>통찰력 테스트</strong><br>임의의 제품/브랜드 1개 제시 → 5분 안에 RCS 그림 그리기. 마케팅 본질 내재화 확인.</div>
+      </div>
+      <div class="wg-box">
+        <div class="wg-title">🟢 블록 4 (60분)</div>
+        <div class="wg-content"><strong>15주 회고 + 다음 스텝</strong><br>개인별 성장 소감. 실전 적용 계획 발표. 커뮤니티 연결. 추천 도서/자료 공유.</div>
+      </div>
+    </div>
+    <h4>📌 핵심 질문</h4>
+    <ul>
+      <li>"15주 전과 지금, 마케팅을 바라보는 시선이 어떻게 달라졌는가?"</li>
+      <li>"앞으로 6개월 안에 이 프레임워크로 무엇을 이룰 것인가?"</li>
+    </ul>
+    <h4>📦 산출물</h4>
+    <ul><li>최종 기획서 발표 + 개인 성장 회고문 + 실전 적용 계획서</li></ul>
+  </div>
+</div>
+
+<!-- ===== 6. AI 활용 가이드 ===== -->
+<h2 id="s6"><span class="sn">6</span> AI 활용 가이드 (Phase별)</h2>
+
+<div class="pq">AI는 마케터를 대체하지 않는다. AI는 <strong>마케팅 사고력이 있는 사람을 10배 빠르게</strong> 만든다. 프레임워크를 먼저 이해하고, 그 다음 AI로 가속한다.</div>
+
+<h3>Phase 1 (1~4주): Claude 기초 — 리서치 & 분석</h3>
+<div class="cd">
+<table>
+<tr><th>활용 영역</th><th>프롬프트 예시</th><th>산출물</th></tr>
+<tr><td>시장 리서치</td><td>"[카테고리] 시장의 주요 플레이어 10개, 각각 포지셔닝과 주요 메시지 분석해줘"</td><td>경쟁사 분석표</td></tr>
+<tr><td>고객 분석</td><td>"[제품] 구매하는 30대 여성의 페르소나를 상세하게 작성해줘. 일상/고민/미디어 소비 포함"</td><td>페르소나 3개</td></tr>
+<tr><td>키워드 발굴</td><td>"[제품]의 Schwartz 5단계별 검색 키워드를 각 10개씩 추출해줘"</td><td>키워드 맵 50개</td></tr>
+<tr><td>리뷰 분석</td><td>"아래 고객 리뷰 50개를 분석해서 욕구/불만/기대를 분류해줘: [리뷰 붙여넣기]"</td><td>욕구 분류표</td></tr>
+</table>
+</div>
+
+<h3>Phase 2 (5~8주): Midjourney + Canva — 소재 제작</h3>
+<div class="cd">
+<table>
+<tr><th>도구</th><th>활용 방법</th><th>팁</th></tr>
+<tr><td>Midjourney</td><td>제품 라이프스타일 이미지, 배경 교체, 모델 컷</td><td>/vary로 변형 10개 빠르게 생산. --ar 9:16 릴스용, 1:1 피드용</td></tr>
+<tr><td>Canva</td><td>광고 소재 편집, 상세페이지 레이아웃, 카루셀</td><td>Magic Design으로 초안 후 수정. 브랜드 키트 설정 먼저.</td></tr>
+<tr><td>Claude</td><td>Hook 카피 대량 생성, O-M-C 스크립트, 너처링 이메일</td><td>"버전 10개 만들어줘" → 최적 1개 선택. 톤/길이 지정 필수.</td></tr>
+</table>
+</div>
+
+<h3>Phase 3 (9~12주): Claude 데이터 분석 + 광고 자동화</h3>
+<div class="fl"><span class="h">광고 데이터 분석 프롬프트 예시:</span>
+"아래는 지난 2주간 Meta 광고 데이터야.
+CTR: 0.8%, 체류율: 45%, 결제시작률: 18%, 구매전환율: 55%
+벤치마크: CTR 1%, 체류 60%, 결제시작 30%, 구매전환 70%
+1) 각 단계 갭 분석
+2) 가장 큰 병목은 어디?
+3) 개선 가설 3개와 실행 방안 제안해줘"
+
+<span class="y">소재 대량 생성 프롬프트:</span>
+"아래 제품의 3초 Hook 문장을 10가지 패턴으로 각 3개씩 만들어줘.
+패턴: 공감형/충격형/질문형/숫자형/역설형/비교형/스토리형/약속형/비밀형/권위형
+제품: [제품명/특징]"</div>
+
+<h3>Phase 4 (13~15주): 기획서 구조화 + 포트폴리오</h3>
+<div class="cd">
+<table>
+<tr><th>활용</th><th>프롬프트</th></tr>
+<tr><td>기획서 구조화</td><td>"아래 마케팅 기획 내용을 임원 발표용 10페이지 구조로 재정리해줘. 각 페이지 제목과 핵심 메시지 포함: [내용]"</td></tr>
+<tr><td>임원 요약</td><td>"아래 기획서를 투자자/대표에게 보여줄 1페이지 요약으로 만들어줘. 수치와 근거 중심으로: [기획서]"</td></tr>
+<tr><td>포트폴리오</td><td>"15주 마케팅 커리큘럼 수료자로서 포트폴리오 소개 문장을 작성해줘. 주요 산출물 포함: [목록]"</td></tr>
+</table>
+</div>
+
+<div class="ok">AI 활용 황금률: 1) 프레임워크 먼저 이해 → 2) AI로 대량 생산 → 3) 인간이 선별/판단. 판단력 없이 AI만 쓰면 쓰레기 대량생산.</div>
+
+<!-- ===== 7. 평가 체계 ===== -->
+<h2 id="s7"><span class="sn">7</span> 평가 체계</h2>
+
+<div class="cd">
+<table>
+<tr><th>항목</th><th>비중</th><th>세부 기준</th></tr>
+<tr><td>매주 미션</td><td><span class="tg tgn">30%</span></td><td>과제 완성도 + AI 활용 증거 (프롬프트 로그 제출) + 개념 적용 정확도</td></tr>
+<tr><td>최종 발표</td><td><span class="tg tr">25%</span></td><td>통합 기획서 완성도 + 발표 설득력 + Q&amp;A 답변 + 통찰력 테스트</td></tr>
+<tr><td>중간 피드백</td><td><span class="tg tb">15%</span></td><td>8주 발표 완성도 + 동료 피드백 참여도 + 개선 의지</td></tr>
+<tr><td>통합 기획서</td><td><span class="tg ty">15%</span></td><td>15주 학습 통합 수준 + 실전 적용 가능성 + 데이터 근거</td></tr>
+<tr><td>출석 + 참여</td><td><span class="tg tp">15%</span></td><td>출석률 (80% 이상 필수) + 수업 내 질문/토론 참여도</td></tr>
+</table>
+</div>
+
+<div class="nw">AI 활용도 평가: 단순히 "AI 썼다"가 아니라 프롬프트의 정교함, 산출물의 품질, AI 결과를 판단하고 선별한 근거를 함께 제출해야 점수 인정.</div>
+
+<div class="fl"><span class="h">수료 기준:</span>
+총점 70점 이상 + 출석 80% 이상 + 최종 발표 참여
+
+<span class="y">우수 수료 (Distinguished):</span>
+총점 90점 이상 + 통찰력 테스트 통과 + 실전 매출 증거 제출
+
+<span class="b">특이 사항:</span>
+중간 발표 미참여 시 최종 발표로 대체 불가. 반드시 8주차 참여 필수.</div>
+
+<!-- ===== 8. 핵심 공식 종합 ===== -->
+<h2 id="s8"><span class="sn">8</span> 핵심 공식 종합 (15주 관통)</h2>
+
+<div class="pq">15주를 관통하는 하나의 질문: <strong>"고객이 왜 우리 제품을 사야 하는가?"</strong> — 아래 공식들이 각기 다른 각도에서 이 질문에 답한다.</div>
+
+<div class="cd ca">
+<table>
+<tr><th>공식</th><th>출처</th><th>핵심 의미</th><th>언제 쓰는가</th></tr>
+<tr><td>Value = (DO × PL) / (TD × E)</td><td>Hormozi</td><td>가치가 가격을 압도해야 구매</td><td>오퍼 설계, 상세페이지 카피</td></tr>
+<tr><td>RCS = R × C × S</td><td>엠타트업</td><td>리소스×채널×시스템의 곱</td><td>전체 마케팅 전략 설계</td></tr>
+<tr><td>총가치 = 광고비×추산행동률 + 광고품질</td><td>자사몰사관학교</td><td>좋은 소재가 광고비를 절약</td><td>Meta 캠페인 최적화</td></tr>
+<tr><td>ROAS = CTR × 체류 × 결제시작 × 구매</td><td>자사몰사관학교</td><td>각 단계가 곱해지는 구조</td><td>광고 성과 진단, 병목 찾기</td></tr>
+<tr><td>LTV = 객단가 × 구매빈도 × 고객수명</td><td>Deiss CVJ</td><td>한 고객의 평생 가치</td><td>재구매 전략, CRM 설계</td></tr>
+<tr><td>A→A→R→R→R (AARRR)</td><td>McClure</td><td>각 단계 10% 개선 = 46% 성장</td><td>성장 전략, KPI 설정</td></tr>
+<tr><td>O-M-C (오프닝-메리트-클로징)</td><td>엠타트업</td><td>모든 설득의 3막 구조</td><td>광고 소재, 상세페이지, 영업</td></tr>
+<tr><td>문제장면→전환장면→이상장면</td><td>자사몰사관학교</td><td>소재의 3막 스토리</td><td>광고 소재 스크립팅</td></tr>
+<tr><td>등가교환: 가치 ≥ 가격</td><td>엠타트업</td><td>체감 가치가 가격 이상이어야 구매</td><td>오퍼 설계, 가격 전략</td></tr>
+<tr><td>Bait→Frontend→Middle→Backend→Continuity</td><td>Brunson</td><td>단계적 신뢰 → LTV 극대화</td><td>제품 포트폴리오, 퍼널 설계</td></tr>
+</table>
+</div>
+
+<h3>15주 공식 통합도</h3>
+
+<div class="fl"><span class="d">──────── 통합 마케팅 시스템 공식 ────────</span>
+
+<span class="h">1단계: 리소스 정의</span>
+  가치 = (Dream Outcome × Likelihood) / (Time × Effort)   [Hormozi]
+  + 구매편익 4분류 (기능/경험/상징/경제)                   [엠타트업]
+  + Purple Cow (리마커블한 차별화)                         [Godin]
+  ↓
+<span class="y">2단계: 설득 시스템</span>
+  O-M-C (오프닝 → 메리트 → 클로징)                       [엠타트업]
+  = 문제장면 → 전환장면 → 이상장면                        [자사몰]
+  = Suby 8 Phase (HVCO → 너처링 → 전환)                   [Suby]
+  ↓
+<span class="b">3단계: 모으기 (트래픽)</span>
+  키워드 5단계 = Schwartz 5 Awareness                     [엠타트업+Schwartz]
+  총가치 = 광고비 × 추산행동률 + 광고품질                 [자사몰]
+  ↓
+<span class="g">4단계: 전환 최적화</span>
+  ROAS = CTR × 체류 × 결제시작 × 구매                    [자사몰 곱셈의 법칙]
+  = AARRR (Acquisition → Activation → ...)               [McClure]
+  ↓
+<span class="p">5단계: 시스템화</span>
+  LTV = 객단가 × 구매빈도 × 고객수명                     [Deiss CVJ]
+  Value Ladder (Bait → Continuity)                        [Brunson]
+  시스템 7대 영역                                         [엠타트업]
+  ↓
+<span class="o">결과: 지속 성장하는 마케팅 시스템</span></div>
+
+<!-- ===== 9. 참고 문헌 ===== -->
+<h2 id="s9"><span class="sn">9</span> 참고 문헌 / 레퍼런스</h2>
+
+<div class="bc">
+  <div class="bc-head"><span class="bi">📗</span><div><div class="bn">글로벌 도서</div><div class="bm">반드시 읽어야 할 7권</div></div></div>
+  <div class="bd">
+    <table>
+    <tr><th>도서</th><th>저자</th><th>연도</th><th>핵심 개념</th></tr>
+    <tr><td>Breakthrough Advertising</td><td>Eugene Schwartz</td><td>1966</td><td>5 Stages of Awareness, 카피라이팅 원론</td></tr>
+    <tr><td>$100M Offers</td><td>Alex Hormozi</td><td>2021</td><td>Value Equation, 거부할 수 없는 오퍼</td></tr>
+    <tr><td>DotCom Secrets</td><td>Russell Brunson</td><td>2015</td><td>Value Ladder, Sales Funnel, 훅/스토리/오퍼</td></tr>
+    <tr><td>Sell Like Crazy</td><td>Sabri Suby</td><td>2019</td><td>8 Phase Selling System, HVCO, Godfather Offer</td></tr>
+    <tr><td>Purple Cow</td><td>Seth Godin</td><td>2003</td><td>Remarkable = 생존, 평범함의 죽음</td></tr>
+    <tr><td>Permission Marketing</td><td>Seth Godin</td><td>1999</td><td>허락 기반 마케팅, Interruption Marketing 비판</td></tr>
+    <tr><td>Customer Value Optimization</td><td>Ryan Deiss</td><td>온라인</td><td>Customer Value Journey, LTV 최대화</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head"><span class="bi">🎓</span><div><div class="bn">국내 커리큘럼 / 강의</div><div class="bm">현장 검증된 한국 이커머스 실전</div></div></div>
+  <div class="bd">
+    <table>
+    <tr><th>출처</th><th>내용</th><th>핵심 개념</th></tr>
+    <tr><td>엠타트업 15기 전 강의</td><td>M군/맹지호 전체 강의 시리즈</td><td>RCS, 욕구축, O-M-C, 등가교환, 통찰력</td></tr>
+    <tr><td>자사몰사관학교 5기 커리큘럼</td><td>Meta 광고 실전 집중 과정</td><td>총가치 공식, 3장면 구조, 곱셈의 법칙, ASC+</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="bc-head"><span class="bi">🤖</span><div><div class="bn">AI 도구</div><div class="bm">커리큘럼 전반 활용</div></div></div>
+  <div class="bd">
+    <table>
+    <tr><th>도구</th><th>활용 용도</th><th>Phase</th></tr>
+    <tr><td>Claude (Anthropic)</td><td>리서치, 분석, 카피라이팅, 기획서 작성</td><td>전 Phase</td></tr>
+    <tr><td>Midjourney</td><td>광고 소재 이미지 생성, 라이프스타일 컷</td><td>Phase 2~3</td></tr>
+    <tr><td>Canva</td><td>광고 소재 편집, 상세페이지, 슬라이드</td><td>Phase 2~4</td></tr>
+    <tr><td>키프리스 (KIPRIS)</td><td>상표권 검색, 선행 상표 조사</td><td>Phase 4</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="dv"></div>
+
+<div class="pq" style="font-size:14px">
+  <strong>마지막 한 마디:</strong><br>
+  "마케팅 공식은 한국이든 미국이든 같다. Schwartz가 1966년에 발견한 것을 엠타트업이 한국 이커머스에 맞게 재정립했고, 자사몰사관학교가 Meta 광고로 실전에 적용했다.<br><br>
+  이 세 체계를 하나로 통합한 사람은 세계 어디서든, 어떤 제품이든 팔 수 있다.<br>
+  그것이 이 커리큘럼의 목표다."
+</div>
+
+<div class="ft">📚 통합 마케팅 프레임워크 v1 · 엠타트업 × 자사몰사관학교 × 글로벌 대가 × AI · 2026.03.11 · 내부 기획서</div>
+</div>
+</body>
+</html>

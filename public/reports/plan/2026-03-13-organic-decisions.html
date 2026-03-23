@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="date" content="2026-03-13">
+  <meta name="project" content="QA Helpdesk">
+  <title>오가닉 채널 — 의사결정 필요 항목</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    :root{--primary:#F75D5D;--primary-light:#fff1f1;--bg:#f8f9fc;--card:#fff;--border:#e2e8f0;--text:#1a1a1a;--muted:#64748b;--radius:12px;--blue:#3b82f6;--green:#10b981;--amber:#f59e0b;--purple:#8b5cf6;--red:#ef4444}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Pretendard Variable',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:2rem 1rem}
+    .ctn{max-width:960px;margin:0 auto}
+    a.back{display:inline-block;margin-bottom:1.5rem;color:var(--muted);text-decoration:none;font-size:.9rem}a.back:hover{color:var(--primary)}
+    .hero{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border-radius:var(--radius);padding:2.5rem 2rem;margin-bottom:2rem;position:relative;overflow:hidden}
+    .hero::after{content:'🎯';position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:5rem;opacity:.15}
+    .hero h1{font-size:1.8rem;font-weight:800;margin-bottom:.5rem}.hero p{font-size:1rem;opacity:.9}.hero .meta{font-size:.85rem;opacity:.6;margin-top:.75rem}
+    .decision{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:1.5rem;overflow:hidden}
+    .decision-header{padding:1.5rem 1.75rem .75rem;display:flex;align-items:flex-start;gap:1rem}
+    .decision-body{padding:0 1.75rem 1.5rem}
+    .d-num{background:var(--primary);color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0}
+    .d-title{font-size:1.15rem;font-weight:700;margin-bottom:.25rem}
+    .d-priority{font-size:.75rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;display:inline-block}
+    .p0{background:#fef2f2;color:var(--red)}.p1{background:#fff7ed;color:#ea580c}.p2{background:#fefce8;color:#a16207}
+    .d-q{background:#f0f4ff;border:1px solid #bfdbfe;border-radius:8px;padding:1rem;margin:.75rem 0;font-size:.95rem;font-weight:600;color:#1e40af}
+    table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.88rem}
+    th{background:var(--bg);font-weight:700;text-align:left;padding:.6rem .75rem;border-bottom:2px solid var(--border);white-space:nowrap}
+    td{padding:.6rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+    tr:hover td{background:#fafbfd}
+    .rec{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-size:.9rem}
+    .rec strong{color:var(--green)}
+    .warn{background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-size:.9rem}
+    .warn strong{color:var(--amber)}
+    .risk{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-size:.9rem}
+    .risk strong{color:var(--red)}
+    .summary{background:var(--card);border-radius:var(--radius);border:2px solid var(--primary);padding:1.75rem;margin-bottom:1.5rem}
+    .summary h2{font-size:1.3rem;font-weight:700;margin-bottom:1rem;color:var(--primary)}
+    .tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:600}
+    @media(max-width:640px){.hero h1{font-size:1.4rem}.decision-header{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<div class="ctn">
+  <a class="back" href="/">← 목록으로</a>
+
+  <div class="hero">
+    <h1>오가닉 채널 — 의사결정 필요 항목</h1>
+    <p>개발 착수 전 Smith님이 결정해야 할 7가지</p>
+    <div class="meta">2026-03-13 · 코드 분석 기반 · 결정 후 Phase 1 착수</div>
+  </div>
+
+  <!-- 요약 -->
+  <div class="summary">
+    <h2>📋 한눈에 보기</h2>
+    <table>
+      <thead><tr><th>#</th><th>결정사항</th><th>우선순위</th><th>영향 범위</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>오가닉 콘텐츠를 RAG 지식베이스에 넣을지</td><td><span class="d-priority p0">P0 필수</span></td><td>QA 답변 품질, 정보 노출 범위</td></tr>
+        <tr><td>2</td><td>외부 발행 톤 가이드 (교육 톤 vs 전문가 톤)</td><td><span class="d-priority p0">P0 필수</span></td><td>AI 초안 품질, 브랜드 일관성</td></tr>
+        <tr><td>3</td><td>Phase 1 지원 채널 범위</td><td><span class="d-priority p0">P0 필수</span></td><td>개발 범위, API 발급 순서</td></tr>
+        <tr><td>4</td><td>콘텐츠 승인 프로세스</td><td><span class="d-priority p1">P1 중요</span></td><td>발행 속도, 품질 관리</td></tr>
+        <tr><td>5</td><td>이미지 소싱 방법</td><td><span class="d-priority p1">P1 중요</span></td><td>콘텐츠 제작 비용, 자동화 범위</td></tr>
+        <tr><td>6</td><td>크로스 포스팅 자동화 수준</td><td><span class="d-priority p2">P2 선택</span></td><td>운영 리소스, AI 비용</td></tr>
+        <tr><td>7</td><td>성과 데이터 공개 범위</td><td><span class="d-priority p2">P2 선택</span></td><td>UI 설계, 수강생 접근 범위</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Decision 1 -->
+  <div class="decision">
+    <div class="decision-header">
+      <div class="d-num">1</div>
+      <div>
+        <div class="d-title">오가닉 콘텐츠를 RAG 지식베이스에 넣을 것인가?</div>
+        <span class="d-priority p0">P0 필수 — 개발 착수 전 결정</span>
+      </div>
+    </div>
+    <div class="decision-body">
+      <div class="d-q">외부 발행용 블로그/인스타 콘텐츠가 Q&A 챗봇의 지식에 포함되어야 하는가?</div>
+
+      <table>
+        <thead><tr><th width="15%">옵션</th><th>설명</th><th>장점</th><th>리스크</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A. 포함</strong></td>
+            <td>오가닉 콘텐츠도 임베딩 → knowledge_chunks에 저장</td>
+            <td>QA 답변 소스 풍부해짐, RAG 정확도 향상</td>
+            <td>외부 마케팅 톤이 QA 답변에 혼입 가능</td>
+          </tr>
+          <tr>
+            <td><strong>B. 제외</strong></td>
+            <td>오가닉은 임베딩 안 함, 외부 발행 전용</td>
+            <td>내부 교육 톤 보호, 깔끔한 분리</td>
+            <td>동일 주제 콘텐츠가 QA에서 활용 안 됨</td>
+          </tr>
+          <tr>
+            <td><strong>C. 선택적</strong></td>
+            <td>관리자가 콘텐츠별로 "RAG 포함" 체크</td>
+            <td>유연함, 필요한 것만 투입</td>
+            <td>관리 부담, 매번 판단 필요</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rec"><strong>모찌 추천: B (제외)</strong> — 오가닉은 마케팅 톤이라 QA와 섞이면 답변 톤이 뒤죽박죽될 수 있음. 나중에 필요하면 C로 전환하기 쉬움.</div>
+    </div>
+  </div>
+
+  <!-- Decision 2 -->
+  <div class="decision">
+    <div class="decision-header">
+      <div class="d-num">2</div>
+      <div>
+        <div class="d-title">외부 발행 톤 가이드</div>
+        <span class="d-priority p0">P0 필수 — AI 초안 품질에 직결</span>
+      </div>
+    </div>
+    <div class="decision-body">
+      <div class="d-q">오가닉 콘텐츠의 말투/톤을 어떻게 설정할 것인가?</div>
+
+      <p style="margin:.5rem 0;font-size:.9rem">현재 style-learner는 Smith님의 Q&A 답변 말투를 학습해서 "교육 코칭 톤"으로 AI 답변을 생성. 오가닉은 이 톤과 달라야 함.</p>
+
+      <table>
+        <thead><tr><th width="15%">옵션</th><th>톤</th><th>예시</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A. 전문가</strong></td>
+            <td>업계 전문가 포지셔닝, 깔끔한 존댓말</td>
+            <td>"상세페이지 전환율을 높이는 5가지 핵심 요소를 정리했습니다."</td>
+          </tr>
+          <tr>
+            <td><strong>B. 친근 전문가</strong></td>
+            <td>전문성 + 친근한 반말/혼용</td>
+            <td>"상세페이지 전환율 올리는 비결, 5가지만 기억하세요!"</td>
+          </tr>
+          <tr>
+            <td><strong>C. 코칭 연장</strong></td>
+            <td>현재 style-learner 톤 그대로</td>
+            <td>"이 부분은 제가 실제로 수강생분들에게도 강조하는 건데요~"</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rec"><strong>모찌 추천: B (친근 전문가)</strong> — 네이버 블로그 SEO에서 친근한 톤이 체류시간 높임. 동시에 전문성으로 신뢰 확보.</div>
+    </div>
+  </div>
+
+  <!-- Decision 3 -->
+  <div class="decision">
+    <div class="decision-header">
+      <div class="d-num">3</div>
+      <div>
+        <div class="d-title">Phase 1 지원 채널 범위</div>
+        <span class="d-priority p0">P0 필수 — 개발 범위 결정</span>
+      </div>
+    </div>
+    <div class="decision-body">
+      <div class="d-q">Phase 1 (MVP)에서 어떤 채널부터 지원할 것인가?</div>
+
+      <table>
+        <thead><tr><th width="15%">옵션</th><th>채널</th><th>이유</th><th>기간</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A. 블로그만</strong></td>
+            <td>네이버 블로그</td>
+            <td>API 발급 완료, SmartEditor 리서치 완료, 키워드 스크립트 완성</td>
+            <td>~3일</td>
+          </tr>
+          <tr>
+            <td><strong>B. 블로그+카페</strong></td>
+            <td>네이버 블로그 + 카페</td>
+            <td>같은 네이버 OAuth, 콘텐츠 포맷 동일, 크로스포스팅 쉬움</td>
+            <td>~4일</td>
+          </tr>
+          <tr>
+            <td><strong>C. 블로그+인스타</strong></td>
+            <td>네이버 블로그 + 인스타</td>
+            <td>텍스트+영상 두 축 동시 확보, Meta API 이미 익숙</td>
+            <td>~5일</td>
+          </tr>
+          <tr>
+            <td><strong>D. 전부</strong></td>
+            <td>블로그+카페+유튜브+인스타+틱톡</td>
+            <td>한번에 다 하기</td>
+            <td>~2주+</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rec"><strong>모찌 추천: A (블로그만)</strong> — 모든 인프라 준비 완료. 빠르게 MVP 나오고 실데이터 쌓은 후 확장.</div>
+    </div>
+  </div>
+
+  <!-- Decision 4 -->
+  <div class="decision">
+    <div class="decision-header">
+      <div class="d-num">4</div>
+      <div>
+        <div class="d-title">콘텐츠 승인 프로세스</div>
+        <span class="d-priority p1">P1 중요</span>
+      </div>
+    </div>
+    <div class="decision-body">
+      <div class="d-q">AI가 생성한 초안을 어디서 어떻게 검수하고 발행할 것인가?</div>
+
+      <table>
+        <thead><tr><th width="15%">옵션</th><th>프로세스</th><th>장점</th><th>단점</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A. 수동 검수</strong></td>
+            <td>AI 초안 → Smith님 bscamp에서 확인 → 승인 버튼 → 자동 발행</td>
+            <td>품질 보장, 실수 방지</td>
+            <td>Smith님 시간 소요</td>
+          </tr>
+          <tr>
+            <td><strong>B. 자동 발행</strong></td>
+            <td>AI 초안 → SEO 점수 80점 이상이면 자동 발행 (슬랙 알림만)</td>
+            <td>완전 자동, 운영 부담 0</td>
+            <td>AI 품질 리스크, 초기에 위험</td>
+          </tr>
+          <tr>
+            <td><strong>C. 단계적</strong></td>
+            <td>초기 A → SEO 점수 신뢰 쌓이면 → B로 전환</td>
+            <td>안전하면서 점진적 자동화</td>
+            <td>전환 시점 판단 필요</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rec"><strong>모찌 추천: C (단계적)</strong> — 처음 10~20개는 수동 검수로 품질 기준 잡고, 이후 자동 전환.</div>
+    </div>
+  </div>
+
+  <!-- Decision 5 -->
+  <div class="decision">
+    <div class="decision-header">
+      <div class="d-num">5</div>
+      <div>
+        <div class="d-title">이미지 소싱 방법</div>
+        <span class="d-priority p1">P1 중요</span>
+      </div>
+    </div>
+    <div class="decision-body">
+      <div class="d-q">블로그 글에 들어가는 이미지 7~10장을 어떻게 확보할 것인가?</div>
+
+      <table>
+        <thead><tr><th width="15%">옵션</th><th>방법</th><th>비용</th><th>품질</th><th>자동화</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A. Unsplash/Pexels</strong></td>
+            <td>무료 스톡 이미지 API</td>
+            <td>무료</td>
+            <td>보통 (범용적)</td>
+            <td>완전 자동</td>
+          </tr>
+          <tr>
+            <td><strong>B. AI 생성</strong></td>
+            <td>DALL-E / Midjourney로 맞춤 이미지</td>
+            <td>건당 $0.04~0.08</td>
+            <td>높음 (맞춤)</td>
+            <td>완전 자동</td>
+          </tr>
+          <tr>
+            <td><strong>C. 기존 자산</strong></td>
+            <td>강의 자료, 대시보드 캡처 등 내부 이미지</td>
+            <td>무료</td>
+            <td>높음 (오리지널)</td>
+            <td>수동</td>
+          </tr>
+          <tr>
+            <td><strong>D. 혼합</strong></td>
+            <td>핵심 이미지 = C(내부), 보조 이미지 = A(스톡)</td>
+            <td>무료</td>
+            <td>높음</td>
+            <td>반자동</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rec"><strong>모찌 추천: D (혼합)</strong> — 핵심 이미지(대시보드 캡처, 성과 그래프)는 오리지널로, 나머지는 Pexels API로 자동 매칭.</div>
+      <div class="warn"><strong>참고:</strong> 네이버 SEO에서 유니크 이미지가 중요. 스톡만 쓰면 C-Rank 불이익 가능. 최소 3~4장은 오리지널 권장.</div>
+    </div>
+  </div>
+
+  <!-- Decision 6 -->
+  <div class="decision">
+    <div class="decision-header">
+      <div class="d-num">6</div>
+      <div>
+        <div class="d-title">크로스 포스팅 자동화 수준</div>
+        <span class="d-priority p2">P2 선택 — Phase 2 이후</span>
+      </div>
+    </div>
+    <div class="decision-body">
+      <div class="d-q">블로그 글을 다른 채널로 변환할 때 어디까지 자동화할 것인가?</div>
+
+      <table>
+        <thead><tr><th width="15%">옵션</th><th>범위</th><th>AI 비용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A. 수동</strong></td>
+            <td>블로그 발행 후 직접 복사/편집해서 다른 채널에 올림</td>
+            <td>없음</td>
+          </tr>
+          <tr>
+            <td><strong>B. 반자동</strong></td>
+            <td>AI가 채널별 초안 생성 → 사람이 확인 후 발행</td>
+            <td>글당 ~$0.02</td>
+          </tr>
+          <tr>
+            <td><strong>C. 완전 자동</strong></td>
+            <td>블로그 발행 → 자동으로 카페/인스타/틱톡 포맷 변환 + 발행</td>
+            <td>글당 ~$0.05</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rec"><strong>모찌 추천: B (반자동)</strong> — Phase 1에서는 블로그만, Phase 2부터 AI 변환 초안 → 확인 후 발행.</div>
+    </div>
+  </div>
+
+  <!-- Decision 7 -->
+  <div class="decision">
+    <div class="decision-header">
+      <div class="d-num">7</div>
+      <div>
+        <div class="d-title">성과 데이터 공개 범위</div>
+        <span class="d-priority p2">P2 선택</span>
+      </div>
+    </div>
+    <div class="decision-body">
+      <div class="d-q">오가닉 채널 성과 데이터를 누가 볼 수 있는가?</div>
+
+      <table>
+        <thead><tr><th width="15%">옵션</th><th>공개 범위</th><th>적합한 경우</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A. 관리자만</strong></td>
+            <td>admin만 /admin/organic 접근</td>
+            <td>마케팅 데이터 비공개 원할 때</td>
+          </tr>
+          <tr>
+            <td><strong>B. 수강생 열람</strong></td>
+            <td>수강생도 읽기 전용으로 오가닉 성과 열람 가능</td>
+            <td>교육 콘텐츠로 활용 (실전 데이터 공유)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rec"><strong>모찌 추천: A (관리자만)</strong> — 초기에는 비공개. 나중에 교육용으로 일부 공개 가능.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:2rem 0;color:var(--muted);font-size:.85rem;">
+    모찌리포트 🍡 · 2026-03-13 · 오가닉 채널 의사결정 항목
+  </div>
+</div>
+</body>
+</html>

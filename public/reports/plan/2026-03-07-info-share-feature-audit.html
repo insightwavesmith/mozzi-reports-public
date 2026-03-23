@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정보공유 기능 전수조사 — 기능 맵 + 오류 리포트</title>
+<meta name="date" content="2026-03-07">
+<meta name="project" content="QA Helpdesk">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fc;color:#1a1a1a;font-size:14px;line-height:1.7}
+.page{max-width:1100px;margin:0 auto;padding:32px 24px}
+a.back{display:inline-block;margin-bottom:20px;color:#64748b;text-decoration:none;font-size:13px}
+a.back:hover{color:#1a1a1a}
+
+.hero{background:linear-gradient(135deg,#fff 0%,#fef2f2 100%);border:1px solid #e2e8f0;border-radius:12px;padding:32px;margin-bottom:32px}
+.hero h1{font-size:26px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.hero .subtitle{font-size:15px;color:#64748b}
+.hero .meta{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+.hero .meta-tag{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500}
+.tag-feature{background:#dbeafe;color:#1e40af}
+.tag-bug{background:#fee2e2;color:#991b1b}
+.tag-ux{background:#fef3c7;color:#92400e}
+.tag-ok{background:#d1fae5;color:#065f46}
+
+.section{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:28px;margin-bottom:20px}
+.section h2{font-size:18px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f1f5f9;display:flex;align-items:center;gap:8px}
+.section h3{font-size:15px;font-weight:600;margin:20px 0 10px;color:#334155}
+
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid #f1f5f9;font-size:13px}
+th{background:#f8f9fc;font-weight:600;color:#475569;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+tr:hover{background:#fafbfd}
+
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+.badge-feature{background:#dbeafe;color:#1e40af}
+.badge-bug{background:#fee2e2;color:#991b1b}
+.badge-ux{background:#fef3c7;color:#92400e}
+.badge-ok{background:#d1fae5;color:#065f46}
+.badge-missing{background:#f3e8ff;color:#6b21a8}
+
+.flow-box{background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:12px 0;font-size:13px}
+.flow-box code{background:#e2e8f0;padding:1px 5px;border-radius:4px;font-size:12px;font-family:'SF Mono','Fira Code',monospace}
+
+.file-ref{font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:#64748b;background:#f1f5f9;padding:2px 6px;border-radius:4px}
+
+.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:16px 0}
+.status-card{background:#f8f9fc;border:1px solid #e2e8f0;border-radius:8px;padding:16px}
+.status-card h4{font-size:13px;font-weight:600;margin-bottom:8px;color:#334155}
+.status-card p{font-size:12px;color:#64748b;line-height:1.6}
+.status-card .count{font-size:24px;font-weight:800;color:#F75D5D}
+
+.priority{font-weight:700}
+.p0{color:#dc2626}
+.p1{color:#ea580c}
+.p2{color:#d97706}
+.p3{color:#64748b}
+
+ul.checklist{list-style:none;padding:0}
+ul.checklist li{padding:6px 0;font-size:13px;display:flex;align-items:flex-start;gap:8px}
+ul.checklist li::before{content:'';display:inline-block;width:16px;height:16px;border:2px solid #cbd5e1;border-radius:4px;margin-top:2px;flex-shrink:0}
+ul.checklist li.done::before{background:#10b981;border-color:#10b981;content:'✓';color:#fff;font-size:11px;text-align:center;line-height:14px}
+
+.callout{background:#fef3c7;border-left:4px solid #f59e0b;padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:13px}
+.callout-red{background:#fef2f2;border-left-color:#ef4444}
+</style>
+</head>
+<body>
+<div class="page">
+
+<a href="/" class="back">← 모찌리포트 홈</a>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🔍 정보공유 기능 전수조사</h1>
+  <div class="subtitle">기능 맵 + 현재 오류 + 개선 필요사항 — 코드 기반 분석</div>
+  <div class="meta">
+    <span class="meta-tag tag-feature">기능 12개</span>
+    <span class="meta-tag tag-bug">오류/미구현 4건</span>
+    <span class="meta-tag tag-ux">UX 개선 2건</span>
+    <span class="meta-tag tag-ok">정상 6건</span>
+  </div>
+</div>
+
+<!-- 전체 구조 -->
+<div class="section">
+  <h2>📐 정보공유 전체 구조</h2>
+  <p style="font-size:13px;color:#64748b;margin-bottom:16px">
+    정보공유는 크게 <strong>큐레이션 파이프라인</strong>(소스 수집 → AI 생성)과 <strong>정보공유 탭</strong>(발행된 글 관리)으로 나뉨
+  </p>
+
+  <div class="flow-box">
+    <strong>소스 수집</strong> → <strong>사이드바</strong>(소스별 필터) → <strong>큐레이션 뷰</strong>(인박스/토픽맵) 또는 <strong>커리큘럼 뷰</strong>(블루프린트/자사몰사관학교)
+    <br><br>
+    큐레이션 뷰에서 콘텐츠 선택 → <strong>정보공유 생성</strong>(AI Opus) → <strong>미리보기/수정</strong> → 초안 저장 → <strong>콘텐츠 탭</strong>에서 게시
+    <br><br>
+    게시된 정보공유 → <strong>정보공유 탭</strong>(테이블 뷰) + <strong>수강생 페이지</strong>(<code>/posts</code>)
+  </div>
+</div>
+
+<!-- 기능별 상세 -->
+<div class="section">
+  <h2>📋 기능별 상세 분석</h2>
+
+  <!-- F1: 사이드바 -->
+  <h3>F1. 파이프라인 사이드바</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/pipeline-sidebar.tsx</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>소스별 콘텐츠 필터링 (블루프린트, 자사몰사관학교, YouTube, 블로그, 마케팅원론, 웨비나, 논문, 파일) + 통계 패널 (AI 요약 완료/미처리)</td></tr>
+    <tr><th>동작 방식</th><td>커리큘럼 소스(blueprint, lecture) 선택 → 커리큘럼 뷰 자동 전환<br>큐레이션 소스(나머지) 선택 → 큐레이션 뷰(인박스/토픽맵)</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span></td></tr>
+  </table>
+
+  <!-- F2: 큐레이션 뷰 -->
+  <h3>F2. 큐레이션 뷰 — 인박스</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/curation-view.tsx</span> +
+    <span class="file-ref">src/components/curation/curation-tab.tsx</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>상태 필터(전체/신규/선택됨/스킵/발행됨) + 중요도 필터 + 기간 필터 + 뷰 토글(인박스/토픽맵)<br>콘텐츠 체크박스 선택(최대 4개) → 일괄 스킵/생성/삭제</td></tr>
+    <tr><th>동작 방식</th><td>상태 탭 클릭 → <code>getCurationContents</code> API 호출 → Supabase 쿼리 → 카드 렌더링<br>날짜별 그룹핑 (오늘/어제/이번 주/그 이전)</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span></td></tr>
+  </table>
+
+  <!-- F3: 토픽맵 뷰 -->
+  <h3>F3. 큐레이션 뷰 — 토픽맵</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/topic-map-view.tsx</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>콘텐츠를 <code>key_topics</code> 첫 번째 유효 토픽 기준으로 그룹핑<br>토픽 없으면 "미분류"로 분류. 아코디언 열기/닫기</td></tr>
+    <tr><th>동작 방식</th><td><code>filterValidTopics()</code>로 메타데이터 키 제거 후 첫 번째 토픽으로 분류</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span> (Phase 2 버그픽스 이후)</td></tr>
+  </table>
+
+  <!-- F4: 큐레이션 카드 -->
+  <h3>F4. 큐레이션 카드</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/curation-card.tsx</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>AI 핵심요약 (항상 펼침, 최대 3줄) + 중요도 별점 + 토픽 뱃지 + 생성물 연결 표시<br>카드별 액션: 원문 보기, 스킵, 정보공유 생성</td></tr>
+    <tr><th>AI 요약 파싱</th><td>JSON 객체 → values 추출 / JSON 배열 → 배열 추출 / 불릿 텍스트 → 줄 분리<br><code>stripJsonChars()</code>로 잔여 JSON 문법 문자 제거, <code>renderInlineMarkdown()</code>로 볼드/이탤릭 렌더링</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span> (Phase 2 버그픽스 이후)</td></tr>
+  </table>
+
+  <!-- F5: 커리큘럼 뷰 -->
+  <h3>F5. 커리큘럼 뷰</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/curriculum-view.tsx</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>블루프린트/자사몰사관학교 전용 뷰. 레벨별(초급/중급/고급) 그룹핑 + 발행 진행률 바<br>순차 발행 시스템: 발행됨 → 다음 발행(1개) → 잠금(나머지)</td></tr>
+    <tr><th>잠금 로직</th><td><code>getPublishStatuses()</code>: <code>curation_status=published</code> + <code>ai_summary</code> 있으면 "발행됨"<br>그 다음 미발행 첫 번째만 "다음 발행", 나머지 전부 "잠금"</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ux">유연성 부족</span> — 아래 오류 섹션 참조</td></tr>
+  </table>
+
+  <!-- F6: 정보공유 생성 -->
+  <h3>F6. 정보공유 생성 (AI)</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/generate-preview-modal.tsx</span> +
+    <span class="file-ref">src/app/api/admin/curation/generate/route.ts</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>선택된 콘텐츠(1~4개)를 Opus 모델로 정보공유 글 생성<br>RAG 검색으로 강의 컨텍스트 보강 → 미리보기/수정 → 초안 저장</td></tr>
+    <tr><th>AI 파이프라인</th><td>① <code>AI_PROXY_URL</code> 경유(300초) → ② 폴백: <code>ANTHROPIC_API_KEY</code> 직접(240초)<br>모델: <code>claude-opus-4-6</code> + thinking(10000 토큰) + max_tokens 16000<br>클라이언트: 270초 AbortController + 경과시간 타이머 표시</td></tr>
+    <tr><th>시스템 프롬프트</th><td>자사몰사관학교 강사 페르소나, 리캐치 패턴(훅→도입→목차→본론→마치며), 최소 5000자, AI 상투어 금지 목록, 셀프 검수 체크리스트 포함</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span> (Opus 고정, 타임아웃 개선 완료)</td></tr>
+  </table>
+
+  <!-- F7: 초안 저장 -->
+  <h3>F7. 초안 저장 (createInfoShareDraft)</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/actions/curation.ts</span> — <code>createInfoShareDraft()</code>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>① <code>contents</code> 테이블에 <code>source_type=info_share</code>, <code>status=draft</code>로 INSERT<br>② <code>content_relations</code>에 소스→생성물 관계 기록<br>③ 자동 임베딩 (응답 후 비동기 <code>after()</code>)<br>④ 원본 콘텐츠 <code>curation_status → published</code></td></tr>
+    <tr><th>문제 포인트</th><td>④에서 <strong>원본 소스의 상태를 published로 변경</strong>함 → 아래 오류 #4 참조</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-bug">상태 혼동</span></td></tr>
+  </table>
+
+  <!-- F8: 정보공유 탭 -->
+  <h3>F8. 정보공유 탭</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/info-share-tab.tsx</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>발행된 정보공유 테이블 (제목, 카테고리, 조회수, 임베딩 상태, 게시일)<br>클릭 → 콘텐츠 상세 페이지 이동</td></tr>
+    <tr><th>필터</th><td><code>source_type=info_share</code> + <code>curation_status=published</code></td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span></td></tr>
+  </table>
+
+  <!-- F9: 스킵 처리 -->
+  <h3>F9. 스킵 (Dismiss) 처리</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/curation-view.tsx</span> — <code>handleDismiss()</code>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>개별 또는 일괄 스킵. <code>curation_status</code>를 <code>"dismissed"</code>로 변경<br>스킵 탭에서 확인 가능</td></tr>
+    <tr><th>문제</th><td><strong>되돌리기 기능 없음</strong>. <code>batchUpdateCurationStatus</code>가 <code>"selected" | "dismissed" | "published"</code>만 허용 — <code>"new"</code>로 되돌리는 액션 미구현</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-missing">미구현</span> — 아래 오류 #2 참조</td></tr>
+  </table>
+
+  <!-- F10: Soft Delete -->
+  <h3>F10. Soft Delete + 복원</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/components/curation/deleted-section.tsx</span> +
+    <span class="file-ref">src/actions/curation.ts</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td><code>deleted_at</code> 타임스탬프 마킹 → 삭제된 콘텐츠 섹션에 표시 (30일 후 영구 삭제)<br>개별/전체 복원 가능. 복원 시 <code>deleted_at = null</code></td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span></td></tr>
+  </table>
+
+  <!-- F11: 상태 카운트 -->
+  <h3>F11. 상태별 카운트</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/actions/curation.ts</span> — <code>getCurationStatusCounts()</code>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>탭 헤더에 전체/신규/선택됨/스킵/발행됨 카운트 표시<br>소스별 필터 적용됨</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span></td></tr>
+  </table>
+
+  <!-- F12: 수강생 정보공유 페이지 -->
+  <h3>F12. 수강생 정보공유 페이지</h3>
+  <p style="font-size:13px;color:#64748b;margin-bottom:8px">
+    <span class="file-ref">src/app/(main)/posts/page.tsx</span>
+  </p>
+  <table>
+    <tr><th style="width:120px">기능</th><td>수강생이 보는 정보공유 목록. 카테고리 필터 + 검색 + 페이지네이션<br>베스트 콘텐츠(is_pinned) 상단 고정. 관리자만 글쓰기 버튼 노출</td></tr>
+    <tr><th>상태</th><td><span class="badge badge-ok">정상</span></td></tr>
+  </table>
+</div>
+
+<!-- 오류/미구현 -->
+<div class="section">
+  <h2>🚨 오류 및 미구현 사항</h2>
+
+  <!-- 오류 1 -->
+  <h3><span class="priority p1">P1</span> #1. 커리큘럼 잠금 — 유연성 부족</h3>
+  <div class="callout">
+    <strong>현상:</strong> 커리큘럼 뷰에서 순차 발행이 강제됨. 중간 강의를 건너뛰고 뒤쪽 강의를 먼저 발행할 수 없음.
+  </div>
+  <table>
+    <tr><th style="width:100px">원인</th><td><code>getPublishStatuses()</code>가 위에서부터 순서대로 스캔하면서 첫 번째 미발행 항목만 "다음 발행"으로 마킹. 나머지는 무조건 "잠금".</td></tr>
+    <tr><th>영향</th><td>관리자가 특정 강의를 우선 발행하고 싶을 때 불가능. 순서대로만 작업해야 함.</td></tr>
+    <tr><th>파일</th><td><span class="file-ref">src/components/curation/curriculum-view.tsx</span> L52~66</td></tr>
+    <tr><th>제안</th><td>① "잠금 해제" 버튼 추가 (관리자가 수동으로 특정 항목 발행 가능하게)<br>② 또는 잠금 로직 자체를 제거하고 모든 항목에 "정보공유 생성" 버튼 노출</td></tr>
+  </table>
+
+  <!-- 오류 2 -->
+  <h3><span class="priority p1">P1</span> #2. 스킵 → 신규 되돌리기 미구현</h3>
+  <div class="callout-red callout">
+    <strong>현상:</strong> 스킵(dismissed) 처리한 콘텐츠를 다시 신규(new)로 되돌리는 기능이 없음. 실수로 스킵하면 복구 불가.
+  </div>
+  <table>
+    <tr><th style="width:100px">원인</th><td><code>batchUpdateCurationStatus()</code>의 타입이 <code>"selected" | "dismissed" | "published"</code>만 허용. <code>"new"</code>가 유니온에 없음.<br>스킵 탭 UI에도 "되돌리기" 버튼 없음.</td></tr>
+    <tr><th>영향</th><td>운영 중 실수로 스킵한 콘텐츠를 복구하려면 DB 직접 수정 필요.</td></tr>
+    <tr><th>파일</th><td><span class="file-ref">src/actions/curation.ts</span> L214, L237<br><span class="file-ref">src/components/curation/curation-view.tsx</span> (스킵 탭 렌더링 부분)</td></tr>
+    <tr><th>제안</th><td>① <code>batchUpdateCurationStatus</code> 타입에 <code>"new"</code> 추가<br>② 스킵 탭 카드에 "신규로 되돌리기" 버튼 추가</td></tr>
+  </table>
+
+  <!-- 오류 3 -->
+  <h3><span class="priority p2">P2</span> #3. 소스 전환 시 매번 API 호출 (캐싱 없음)</h3>
+  <div class="callout">
+    <strong>현상:</strong> 사이드바에서 소스를 전환할 때마다 <code>loadContents()</code> → Supabase API 재호출. 같은 소스를 다시 선택해도 캐시 없이 전체 리로딩.
+  </div>
+  <table>
+    <tr><th style="width:100px">원인</th><td><code>useEffect</code> 의존성에 <code>sourceFilter</code>가 포함되어 있어, 전환 때마다 무조건 새 API 호출.<br>클라이언트 캐시 레이어 없음.</td></tr>
+    <tr><th>영향</th><td>UX 느려짐. 소스 간 왔다갔다 하면서 비교할 때 매번 로딩 스피너.</td></tr>
+    <tr><th>파일</th><td><span class="file-ref">src/components/curation/curation-view.tsx</span> L60~92 (<code>loadContents</code>)</td></tr>
+    <tr><th>제안</th><td>① React Query / SWR 도입으로 클라이언트 캐싱<br>② 최소한 <code>useRef</code> 기반 간이 캐시 (sourceFilter → 데이터 맵)</td></tr>
+  </table>
+
+  <!-- 오류 4 -->
+  <h3><span class="priority p1">P1</span> #4. "발행됨" 탭에 미처리/처리 혼재</h3>
+  <div class="callout-red callout">
+    <strong>현상:</strong> "발행됨" 탭에 정보공유가 실제로 게시(published) 완료된 것과, AI 생성 → 초안만 만들어진 것이 구분 없이 같이 보임.
+  </div>
+  <table>
+    <tr><th style="width:100px">원인</th><td><code>createInfoShareDraft()</code>의 4단계에서 원본 소스 콘텐츠의 <code>curation_status</code>를 <code>"published"</code>로 변경함.<br>이 의미는 "이 소스로 정보공유를 만들었다"인데, 실제로는 <strong>info_share 자체가 아직 draft 상태</strong>일 수 있음.<br><br>"발행됨" 탭 카운트 = <code>curation_status=published</code>인 원본 소스 수. 하지만 이 중 일부는 info_share가 draft인 채로 남아있을 수 있음.</td></tr>
+    <tr><th>영향</th><td>"발행됨 N건"이라고 표시되지만 실제 수강생이 볼 수 있는 게시 완료된 정보공유 수와 다를 수 있음. 관리자 혼란.</td></tr>
+    <tr><th>파일</th><td><span class="file-ref">src/actions/curation.ts</span> L320~335 (<code>createInfoShareDraft</code>)<br><span class="file-ref">src/components/curation/curation-view.tsx</span> (발행됨 탭 필터)</td></tr>
+    <tr><th>제안</th><td>① 원본 상태를 <code>"used"</code> 또는 <code>"generated"</code>로 분리 (info_share 실제 게시 시에만 <code>"published"</code>)<br>② 또는 "발행됨" 탭에서 <code>linked_info_shares</code>의 실제 status(draft/published)를 같이 표시</td></tr>
+  </table>
+</div>
+
+<!-- 상태 요약 -->
+<div class="section">
+  <h2>📊 curation_status 상태 흐름</h2>
+  <div class="flow-box">
+    <code>new</code> → (관리자 선택) → <code>selected</code> → (정보공유 생성) → <code>published</code><br>
+    <code>new</code> → (관리자 스킵) → <code>dismissed</code> → <strong style="color:#dc2626">❌ new로 되돌리기 불가</strong><br><br>
+    <strong>문제:</strong> <code>published</code>의 의미가 "info_share가 게시됨"인지 "info_share 초안이 생성됨"인지 모호.<br>
+    실제로는 <code>createInfoShareDraft()</code> 호출 시점에 바로 <code>published</code>로 변경됨 → 초안 생성 = published 처리.
+  </div>
+</div>
+
+<!-- 개선 우선순위 -->
+<div class="section">
+  <h2>🎯 개선 우선순위</h2>
+  <table>
+    <tr><th style="width:60px">순위</th><th>항목</th><th style="width:80px">난이도</th><th>설명</th></tr>
+    <tr>
+      <td><span class="priority p1">P1</span></td>
+      <td>#2 스킵 → 신규 되돌리기</td>
+      <td>🟢 쉬움</td>
+      <td>타입 유니온에 <code>"new"</code> 추가 + 버튼 1개 추가. 30분 작업.</td>
+    </tr>
+    <tr>
+      <td><span class="priority p1">P1</span></td>
+      <td>#4 발행됨 상태 혼동</td>
+      <td>🟡 보통</td>
+      <td>상태 분리 또는 UI 보강. 상태 체계 변경 시 기존 데이터 마이그레이션 필요.</td>
+    </tr>
+    <tr>
+      <td><span class="priority p1">P1</span></td>
+      <td>#1 커리큘럼 잠금 유연화</td>
+      <td>🟢 쉬움</td>
+      <td>잠금 로직 완화 또는 관리자 오버라이드 버튼. 1시간 작업.</td>
+    </tr>
+    <tr>
+      <td><span class="priority p2">P2</span></td>
+      <td>#3 소스 전환 캐싱</td>
+      <td>🟡 보통</td>
+      <td>React Query/SWR 도입 또는 간이 캐시. 데이터 무효화 전략 필요.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- 파일 맵 -->
+<div class="section">
+  <h2>📁 관련 파일 맵</h2>
+  <table>
+    <tr><th style="width:50%">파일</th><th>역할</th></tr>
+    <tr><td><span class="file-ref">src/actions/curation.ts</span></td><td>서버 액션 전체 (CRUD, 카운트, 백필, soft delete)</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/pipeline-sidebar.tsx</span></td><td>사이드바 — 소스별 필터 + 통계</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/curation-view.tsx</span></td><td>메인 뷰 — 상태 필터, 뷰 토글, 일괄 액션</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/curation-tab.tsx</span></td><td>인박스 뷰 — 날짜별 그룹핑</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/curation-card.tsx</span></td><td>카드 컴포넌트 — AI 요약 파싱, 인라인 마크다운</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/topic-map-view.tsx</span></td><td>토픽맵 뷰 — 토픽별 그룹핑</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/curriculum-view.tsx</span></td><td>커리큘럼 뷰 — 순차 발행, 잠금 로직</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/generate-preview-modal.tsx</span></td><td>생성 모달 — AI 호출, 미리보기, 수정, 저장</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/info-share-tab.tsx</span></td><td>정보공유 탭 — 발행된 글 목록</td></tr>
+    <tr><td><span class="file-ref">src/components/curation/deleted-section.tsx</span></td><td>삭제 섹션 — soft delete + 복원</td></tr>
+    <tr><td><span class="file-ref">src/app/api/admin/curation/generate/route.ts</span></td><td>AI 생성 API — Opus + RAG + 프록시/폴백</td></tr>
+    <tr><td><span class="file-ref">src/lib/topic-utils.ts</span></td><td>공통 유틸 — isMetadataKey(), filterValidTopics()</td></tr>
+    <tr><td><span class="file-ref">src/app/(main)/posts/page.tsx</span></td><td>수강생 정보공유 목록 페이지</td></tr>
+  </table>
+</div>
+
+<div style="text-align:center;padding:20px;color:#94a3b8;font-size:12px">
+  모찌리포트 🍡 — 2026-03-07 · 코드 기반 전수조사
+</div>
+
+</div>
+</body>
+</html>

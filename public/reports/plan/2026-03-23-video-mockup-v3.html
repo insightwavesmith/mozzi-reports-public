@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영상 소재 분석 목업 v3 — 에어무드</title>
+<style>
+:root{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--bd:#475569;--ac:#6366f1;--ac2:#818cf8;--t:#f8fafc;--t2:#cbd5e1;--t3:#64748b;--g:#10b981;--a:#f59e0b;--r:#ef4444;--p:#8b5cf6;--cy:#06b6d4;--b:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);line-height:1.7;font-size:14px}
+.c{max-width:1100px;margin:0 auto;padding:2rem}
+
+/* Header */
+.hd{text-align:center;padding:2.5rem;background:linear-gradient(135deg,#1b1025,#1e1b4b,var(--bg));border-radius:16px;border:1px solid var(--bd);margin-bottom:2rem}
+.hd h1{font-size:1.8rem;background:linear-gradient(135deg,var(--r),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
+
+/* Section */
+.s{background:var(--bg2);border-radius:14px;padding:2rem;margin-bottom:1.5rem;border:1px solid var(--bd)}
+.s h2{color:var(--ac2);font-size:1.2rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+
+/* Layer badges */
+.layer{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;margin-bottom:12px}
+.layer-data{background:rgba(6,182,212,.12);color:var(--cy);border:1px solid rgba(6,182,212,.3)}
+.layer-interpret{background:rgba(245,158,11,.12);color:var(--a);border:1px solid rgba(245,158,11,.3)}
+.layer-rx{background:rgba(16,185,129,.12);color:var(--g);border:1px solid rgba(16,185,129,.3)}
+
+/* Score cards */
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.score-card{border-radius:12px;padding:18px;text-align:center;position:relative;overflow:hidden}
+.score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sc-g{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2)}.sc-g::before{background:var(--g)}
+.sc-a{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2)}.sc-a::before{background:var(--a)}
+.sc-r{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2)}.sc-r::before{background:var(--r)}
+.sc-p{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)}.sc-p::before{background:var(--ac)}
+.sc-label{font-size:.8rem;font-weight:700;margin:4px 0}
+.sc-score{font-size:2.2rem;font-weight:800;line-height:1}
+.sc-sub{font-size:.7rem;color:var(--t3);margin-top:2px}
+.sc-detail{margin-top:10px;font-size:.75rem;color:#94a3b8;line-height:1.6}
+.sc-rank{font-size:.7rem;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:6px}
+
+/* Grid helpers */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:1rem 0}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:1rem 0}
+
+/* Cards */
+.card{background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--bd)}
+
+/* Progress bar */
+.prog{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.prog-label{font-size:.8rem;color:var(--t3);min-width:50px}
+.prog-bar{flex:1;background:var(--bg2);border-radius:4px;height:8px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px}
+.prog-val{font-size:.8rem;color:var(--t2);min-width:24px;text-align:right}
+
+/* Warning chips */
+.warn{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;font-size:.73rem;font-weight:600}
+.warn-r{background:rgba(239,68,68,.12);color:#fca5a5}
+.warn-a{background:rgba(245,158,11,.12);color:#fde68a}
+.warn-g{background:rgba(16,185,129,.12);color:#6ee7b7}
+
+/* Prescription card */
+.rx-card{background:var(--bg);border-radius:10px;padding:16px;border:1px solid var(--bd);margin-bottom:10px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start}
+.rx-impact{text-align:center;min-width:60px}
+.rx-impact-num{font-size:1.5rem;font-weight:800}
+.rx-impact-label{font-size:.65rem;color:var(--t3)}
+.rx-body h5{font-size:.9rem;margin-bottom:4px}
+.rx-body p{font-size:.8rem;color:var(--t2);line-height:1.6}
+.rx-axis{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.rx-axis span{padding:1px 6px;border-radius:3px;font-size:.65rem;font-weight:600}
+
+/* Timeline */
+.tl-item{border-radius:10px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden}
+.tl-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.tl-hook{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)}.tl-hook::before{background:var(--r)}
+.tl-demo{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2)}.tl-demo::before{background:var(--b)}
+.tl-result{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2)}.tl-result::before{background:var(--p)}
+.tl-cta{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2)}.tl-cta::before{background:var(--g)}
+
+/* Gaze timeline */
+.gaze-row{display:flex;align-items:center;gap:8px;font-size:.8rem;padding:6px 0;border-bottom:1px solid rgba(71,85,105,.2)}
+.gaze-time{color:var(--ac2);min-width:40px;font-weight:600}
+.gaze-bar{flex:1;display:flex;gap:2px;height:24px}
+.gaze-seg{border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:600;color:white}
+
+/* LP consistency */
+.lp-card{background:var(--bg);border-radius:8px;padding:14px;border-left:3px solid;margin-bottom:8px}
+.lp-card.high{border-color:var(--r)}
+.lp-card.medium{border-color:var(--a)}
+.sev{font-size:.7rem;font-weight:700;padding:1px 6px;border-radius:3px;display:inline-block;margin-bottom:4px}
+.sev-h{background:rgba(239,68,68,.15);color:var(--r)}
+.sev-m{background:rgba(245,158,11,.15);color:var(--a)}
+
+/* AOI bar */
+.aoi{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:.8rem}
+.aoi-bar{flex:1;height:28px;background:var(--bg2);border-radius:6px;overflow:hidden;position:relative}
+.aoi-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:600;color:white;min-width:40px}
+.aoi-bench{position:absolute;top:0;bottom:0;width:2px;background:white;opacity:.6}
+
+@media(max-width:768px){.c{padding:1rem}.score-grid,.g2,.g3,.g4{grid-template-columns:1fr}.rx-card{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<!-- ═══ HEADER ═══ -->
+<div class="hd">
+  <h1>🎬 영상 소재 분석</h1>
+  <div style="color:var(--ac2);font-size:.95rem;margin-top:.3rem">데이터 → 해석 → 처방 · 기획서 v2 기반 · 10섹션</div>
+  <div style="color:var(--t3);font-size:.82rem;margin-top:.5rem">2026-03-23 | 목업 v3 · 에어무드 · ad:120241760856630479 · 31초</div>
+</div>
+
+<!-- ═══ CONTEXT BAR ═══ -->
+<div style="display:flex;gap:16px;align-items:start;margin-bottom:2rem;flex-wrap:wrap">
+  <div style="background:var(--bg2);border-radius:12px;overflow:hidden;border:1px solid var(--bd);width:220px;flex-shrink:0;position:relative">
+    <div style="font-size:.7rem;color:var(--t3);padding:4px 8px;background:var(--bg);display:flex;justify-content:space-between">
+      <span>🎬 원본 + 👁 실시간 시선</span><span>9:16</span>
+    </div>
+    <div style="position:relative;aspect-ratio:9/16;background:#000">
+      <video id="vid_main" src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/1440411543944393/video/120241760856630479.mp4" controls style="width:100%;height:100%;object-fit:cover;display:block" poster="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/1440411543944393/video/120241760856630479.jpg"></video>
+      <canvas id="cvs_main" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>
+    </div>
+    <div id="info_main" style="font-size:.68rem;color:var(--t3);padding:4px 8px;background:var(--bg)"></div>
+  </div>
+  <div style="flex:1">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="background:rgba(239,68,68,.15);color:var(--r);padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:700">VIDEO 31초</span>
+      <span style="font-size:1.1rem;font-weight:700">에어무드</span>
+    </div>
+    <p style="font-size:.85rem;color:var(--t2);margin-top:6px;max-width:500px">전직 승무원이 개발한 히알루론산 크림. 속건조 해결로 점심 이후에도 무너지지 않는 화장을 약속하는 UGC 스타일 광고.</p>
+    <div style="font-size:.73rem;color:var(--t3);margin-top:4px">게재일: 2026-03-18~ | 나레이션: mixed(나레이션+BGM) | UGC 스타일</div>
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+      <span style="background:var(--bg);padding:3px 8px;border-radius:4px;font-size:.72rem;border:1px solid var(--bd);color:var(--t2)">👤 얼굴 있음</span>
+      <span style="background:var(--bg);padding:3px 8px;border-radius:4px;font-size:.72rem;border:1px solid var(--bd);color:var(--t2)">🎵 나레이션+BGM</span>
+      <span style="background:var(--bg);padding:3px 8px;border-radius:4px;font-size:.72rem;border:1px solid var(--bd);color:var(--t2)">⚡ fast 페이싱</span>
+      <span style="background:var(--bg);padding:3px 8px;border-radius:4px;font-size:.72rem;border:1px solid var(--bd);color:var(--t2)">5장면</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 1: 총가치각도기 스코어카드             -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>📊 총가치각도기 스코어카드</h2>
+  <div class="layer layer-interpret">Layer 2: 해석 — 어디가 약한지</div>
+  
+  <div class="score-grid">
+    <div class="score-card sc-g">
+      <div style="font-size:1.5rem">🟢</div>
+      <div class="sc-label" style="color:var(--g)">기반</div>
+      <div class="sc-score" style="color:var(--g)">50</div>
+      <div class="sc-sub">/100 · 보통</div>
+      <div class="sc-detail">CTR <b>0.00%</b><br><span style="color:var(--t3)">벤치마크 2.21%</span><br>3초시청률 <b>미측정</b></div>
+      <div class="sc-rank" style="background:rgba(245,158,11,.12);color:var(--a)">상위 55%</div>
+    </div>
+    <div class="score-card sc-a">
+      <div style="font-size:1.5rem">🟡</div>
+      <div class="sc-label" style="color:var(--a)">참여</div>
+      <div class="sc-score" style="color:var(--a)">0</div>
+      <div class="sc-sub">/100 · 개선 필요</div>
+      <div class="sc-detail">참여 <b>0</b>/만<br><span style="color:var(--t3)">벤치마크 27/만</span></div>
+      <div class="sc-rank" style="background:rgba(239,68,68,.12);color:var(--r)">상위 95%</div>
+    </div>
+    <div class="score-card sc-r">
+      <div style="font-size:1.5rem">🔴</div>
+      <div class="sc-label" style="color:var(--r)">전환</div>
+      <div class="sc-score" style="color:var(--r)">35</div>
+      <div class="sc-sub">/100 · 개선 필요</div>
+      <div class="sc-detail">ROAS <b>0.0x</b><br><span style="color:var(--t3)">구매 미발생</span></div>
+      <div class="sc-rank" style="background:rgba(239,68,68,.12);color:var(--r)">상위 78%</div>
+    </div>
+    <div class="score-card sc-p">
+      <div style="font-size:1.5rem">⭐</div>
+      <div class="sc-label" style="color:var(--ac2)">Impact</div>
+      <div class="sc-score" style="color:var(--ac2)">29</div>
+      <div class="sc-sub">/100</div>
+      <div class="sc-detail">3축 가중 평균<br><span style="color:var(--t3)">기반30 참여30 전환40</span></div>
+      <div class="sc-rank" style="background:rgba(239,68,68,.12);color:var(--r)">상위 82%</div>
+    </div>
+  </div>
+
+  <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:14px;font-size:.85rem;color:var(--t2)">
+    <b style="color:var(--r)">⚡ 핵심 진단:</b> 3축 모두 약하다. <b>Impact 29점 — 상위 82%.</b><br>
+    CTR 0%, 참여 0, ROAS 0 — 광고가 돌아가고 있지만 아무 성과가 없다.<br>
+    소재 자체의 품질은 나쁘지 않으나(UGC+인물+나레이션), <b>노출 세팅 또는 타겟팅 문제</b> 가능성 + <b>소재↔LP 이탈</b> 가능성.<br>
+    → 아래에서 <b>소재 자체의 강약점</b>을 분석한다.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 7: 장면 타임라인 (영상 전용)            -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>⏱️ 장면 타임라인 — 어떤 구조로 흘러가는가</h2>
+  <div class="layer layer-data">Layer 1: 데이터 — Gemini 3 Pro Preview 영상 구조 분석</div>
+
+  <div class="tl-item tl-hook">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-weight:700;color:var(--r);font-size:.9rem">🪝 0~3초 — 훅</span>
+        <span style="margin-left:8px;font-size:.72rem;color:var(--t3)">3초 / 전체의 10%</span>
+      </div>
+      <span style="background:rgba(16,185,129,.12);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600;color:var(--g)">🟢 기반</span>
+    </div>
+    <p style="font-size:.83rem;color:var(--t2);margin-top:6px">화장이 무너지는 피부 고민을 보여주며 시청자의 공감을 유도한다.</p>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:4px">
+      💬 "어떤 파데를 써도 피부 화장이 금방 무너진다면 딱 이거 하나만 바꿔봐"<br>
+      👁 시선: 텍스트 80% + 인물 90% — <span class="warn warn-g">강한 훅 ✓</span>
+    </div>
+  </div>
+
+  <div class="tl-item tl-demo">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-weight:700;color:var(--b);font-size:.9rem">📦 4~12초 — 데모</span>
+        <span style="margin-left:8px;font-size:.72rem;color:var(--t3)">9초 / 전체의 29%</span>
+      </div>
+      <span style="background:rgba(16,185,129,.12);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600;color:var(--g)">🟢🟡 기반+참여</span>
+    </div>
+    <p style="font-size:.83rem;color:var(--t2);margin-top:6px">제품을 소개하고 제형을 보여주며 전직 승무원이 만들었다는 신뢰도를 부여한다.</p>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:4px">
+      💬 "승무원 대표가 만든 이 수분 크림... 긴 비행시간 동안에도 예쁜 화장을 유지하는 비결"<br>
+      👁 시선: 제품 90% + 텍스트 80% — <span class="warn warn-g">제품 주목 ✓</span>
+    </div>
+  </div>
+
+  <div class="tl-item tl-result">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-weight:700;color:var(--p);font-size:.9rem">📋 13~22초 — 증거</span>
+        <span style="margin-left:8px;font-size:.72rem;color:var(--t3)">10초 / 전체의 32%</span>
+      </div>
+      <span style="background:rgba(245,158,11,.12);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600;color:var(--a)">🟡 참여</span>
+    </div>
+    <p style="font-size:.83rem;color:var(--t2);margin-top:6px">얼굴에 직접 사용하는 모습을 보여주고 속건조 해결 및 임상 테스트 결과를 통해 효과를 강조한다.</p>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:4px">
+      💬 "히알루론산이 피부 속까지 깊이 흡수돼서 속건조가 안 느껴져..."<br>
+      👁 시선: 인물 90% + 텍스트 80% — <span class="warn warn-a">소셜프루프 부족 ⚠</span>
+    </div>
+  </div>
+
+  <div class="tl-item tl-demo">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-weight:700;color:var(--b);font-size:.9rem">📦 23~27초 — 활용팁</span>
+        <span style="margin-left:8px;font-size:.72rem;color:var(--t3)">5초 / 전체의 16%</span>
+      </div>
+      <span style="background:rgba(16,185,129,.12);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600;color:var(--g)">🟢🟡 기반+참여</span>
+    </div>
+    <p style="font-size:.83rem;color:var(--t2);margin-top:6px">수정 화장에 활용하는 팁을 제공하여 제품의 활용도를 높인다.</p>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:4px">
+      👁 시선: 인물 90% + 제품 80%
+    </div>
+  </div>
+
+  <div class="tl-item tl-cta">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-weight:700;color:var(--g);font-size:.9rem">🎯 28~31초 — CTA</span>
+        <span style="margin-left:8px;font-size:.72rem;color:var(--t3)">4초 / 전체의 13%</span>
+      </div>
+      <span style="background:rgba(239,68,68,.12);padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600;color:var(--r)">🔴 전환</span>
+    </div>
+    <p style="font-size:.83rem;color:var(--t2);margin-top:6px">할인 정보를 제공하며 구매를 촉구한다.</p>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:4px">
+      👁 시선: 텍스트(할인) 집중 — <span class="warn warn-r">CTA 시간 짧음(4초) ⚠</span><br>
+      <span class="warn warn-r">긴급성 없음 ⚠</span> · <span class="warn warn-a">구체적 가격/할인율 미표기 ⚠</span>
+    </div>
+  </div>
+
+  <!-- 구조 해석 -->
+  <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:14px;font-size:.85rem;color:var(--t2);margin-top:12px">
+    <div class="layer layer-interpret">Layer 2: 해석</div>
+    <b style="color:var(--ac2)">구조 진단:</b><br>
+    • <b>훅(0~3초) ✅ 양호:</b> 문제제기 + 인물 클로즈업 → 스크롤 멈춤 효과 충분<br>
+    • <b>데모+증거(4~22초) ⚠ 너무 김:</b> 전체의 61% 차지. 정보는 풍부하나 <b>실제 후기/비포애프터가 없어서 공감 부족</b><br>
+    • <b>CTA(28~31초) ❌ 약함:</b> 4초(13%)로 짧고, 할인율만 언급. <b>긴급성+구체적 오퍼 없음</b> → 전환 동기 부족<br>
+    • <b>벤치마크 비교:</b> 상위 영상은 CTA 구간이 20~25% (6~8초). 현재 13%는 부족.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 2: 시선 타임라인 (영상 전용)            -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>👁 시선 타임라인 — 시간에 따른 시선 변화</h2>
+  <div class="layer layer-data">Layer 1: 데이터 — DeepGaze III 프레임별 분석 (3초 간격, 10프레임)</div>
+
+  <!-- 프레임별 DeepGaze + Gemini 시선 예측 히트맵 -->
+  <div style="margin-bottom:20px">
+    <div style="font-size:.85rem;color:var(--t2);margin-bottom:4px;font-weight:600">🔥 구간별 DeepGaze III + Gemini 2.0 Flash 시선 예측</div>
+    <div style="font-size:.72rem;color:var(--t3);margin-bottom:10px">DeepGaze III(시선 위치) → Gemini 3 Pro Preview(시선 해석: fixation 좌표+히트맵+원본 3개 동시 입력)</div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:8px">
+      <div style="flex-shrink:0;text-align:center;width:150px">
+        <div style="font-size:.7rem;color:var(--r);font-weight:600;margin-bottom:4px">🪝 0초 훅</div>
+        <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_0s_dg3.png" style="width:150px;height:267px;object-fit:cover;border-radius:8px;border:2px solid rgba(239,68,68,.4)" loading="lazy"/>
+        <div style="font-size:.6rem;color:var(--t2);margin-top:3px;line-height:1.5;text-align:left;padding:0 4px">
+          <b style="color:var(--cy)">DG→Gemini:</b> 볼(손가락)→입술→코<br>
+          <span style="color:var(--t3)">손가락 누르는 피부 질감에 집중</span><br>
+          훅: <b style="color:var(--g)">strong</b> · CTA: <span class="warn warn-r">없음</span><br>
+          <span style="color:var(--a)">💡 제품명/효능 텍스트 추가</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;width:150px">
+        <div style="font-size:.7rem;color:var(--b);font-weight:600;margin-bottom:4px">📦 5초 텍스트</div>
+        <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_5s_dg3.png" style="width:150px;height:267px;object-fit:cover;border-radius:8px;border:2px solid rgba(59,130,246,.4)" loading="lazy"/>
+        <div style="font-size:.6rem;color:var(--t2);margin-top:3px;line-height:1.5;text-align:left;padding:0 4px">
+          <b style="color:var(--cy)">DG→Gemini:</b> "물광피부로" 텍스트→상단얼굴→하단얼굴<br>
+          <span style="color:var(--t3)">흰색+검은테두리 = 높은 대비</span><br>
+          훅: <b style="color:var(--g)">strong</b> · CTA: <span class="warn warn-r">없음</span><br>
+          <span style="color:var(--a)">💡 텍스트 하단에 CTA 버튼</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;width:150px">
+        <div style="font-size:.7rem;color:var(--b);font-weight:600;margin-bottom:4px">📦 10초 제품</div>
+        <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_10s_dg3.png" style="width:150px;height:267px;object-fit:cover;border-radius:8px;border:2px solid rgba(59,130,246,.4)" loading="lazy"/>
+        <div style="font-size:.6rem;color:var(--t2);margin-top:3px;line-height:1.5;text-align:left;padding:0 4px">
+          <b style="color:var(--cy)">DG→Gemini:</b> "보완했대!" 텍스트→"승무원 크림" 텍스트<br>
+          <span style="color:var(--t3)">승무원 키워드 = 타겟 관심↑</span><br>
+          훅: <b style="color:var(--g)">strong</b> · CTA: <span class="warn warn-r">없음</span><br>
+          <span style="color:var(--a)">💡 CTA 버튼 추가 필요</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;width:150px">
+        <div style="font-size:.7rem;color:var(--p);font-weight:600;margin-bottom:4px">📋 15초 증거</div>
+        <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_15s_dg3.png" style="width:150px;height:267px;object-fit:cover;border-radius:8px;border:2px solid rgba(139,92,246,.4)" loading="lazy"/>
+        <div style="font-size:.6rem;color:var(--t2);margin-top:3px;line-height:1.5;text-align:left;padding:0 4px">
+          <b style="color:var(--cy)">DG→Gemini:</b> "지성1회 건성2~3회" 텍스트에 집중<br>
+          <span style="color:var(--t3)">구체적 사용법 = 신뢰도↑</span><br>
+          훅: medium · CTA: <span class="warn warn-r">없음</span><br>
+          <span style="color:var(--a)">💡 하단에 "구매하기" 버튼</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;width:150px">
+        <div style="font-size:.7rem;color:var(--b);font-weight:600;margin-bottom:4px">📦 20초 임상</div>
+        <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_20s_dg3.png" style="width:150px;height:267px;object-fit:cover;border-radius:8px;border:2px solid rgba(59,130,246,.4)" loading="lazy"/>
+        <div style="font-size:.6rem;color:var(--t2);margin-top:3px;line-height:1.5;text-align:left;padding:0 4px">
+          <b style="color:var(--cy)">DG→Gemini:</b> 손가락 제스처→"임상테스트 완료" 텍스트<br>
+          <span style="color:var(--t3)">제스처가 시선 유도</span><br>
+          훅: medium · CTA: <span class="warn warn-r">없음</span><br>
+          <span style="color:var(--a)">💡 CTA 버튼 추가</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;width:150px">
+        <div style="font-size:.7rem;color:var(--g);font-weight:600;margin-bottom:4px">🎯 25초 수정화장</div>
+        <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_25s_dg3.png" style="width:150px;height:267px;object-fit:cover;border-radius:8px;border:2px solid rgba(16,185,129,.4)" loading="lazy"/>
+        <div style="font-size:.6rem;color:var(--t2);margin-top:3px;line-height:1.5;text-align:left;padding:0 4px">
+          <b style="color:var(--cy)">DG→Gemini:</b> "수정화장 팁" 텍스트→퍼프 동작→볼<br>
+          <span style="color:var(--t3)">텍스트↔행동 일치 = 전달력↑</span><br>
+          훅: medium · CTA: <span class="warn warn-r">없음</span><br>
+          <span style="color:var(--a)">💡 "제품 확인하기" 버튼</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;width:150px">
+        <div style="font-size:.7rem;color:var(--g);font-weight:600;margin-bottom:4px">🎯 28초 할인</div>
+        <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_28s_dg3.png" style="width:150px;height:267px;object-fit:cover;border-radius:8px;border:2px solid rgba(16,185,129,.4)" loading="lazy"/>
+        <div style="font-size:.6rem;color:var(--t2);margin-top:3px;line-height:1.5;text-align:left;padding:0 4px">
+          <b style="color:var(--cy)">DG→Gemini:</b> "최대40%" 텍스트→"자사몰에선"→"할인"<br>
+          <span style="color:var(--t3)">흰색+어두운배경 = 강한 대비</span><br>
+          훅: <b style="color:var(--g)">strong</b> · CTA: <span class="warn warn-r">⚠ 버튼 없음</span><br>
+          <span style="color:var(--r)">💡 "지금 구매하기" 버튼 필수</span>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:.72rem;color:var(--t3);margin-top:4px">🔴 빨강 = 시선 집중 | 🔵 파랑 = 저주목 | DeepGaze III(시선 위치) + Gemini 2.0 Flash(요소 해석) 결합 | 9:16 모바일 프레임</div>
+  </div>
+
+  <!-- Gaze timeline bar chart -->
+  <div style="margin-bottom:16px">
+    <div style="display:flex;gap:16px;margin-bottom:8px;font-size:.72rem;color:var(--t3)">
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--r)"></span> 인물</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--b)"></span> 텍스트</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--g)"></span> 제품</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--a)"></span> CTA</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--t3)"></span> 배경</span>
+    </div>
+
+    <div class="gaze-row">
+      <span class="gaze-time">0초</span>
+      <div class="gaze-bar">
+        <div class="gaze-seg" style="width:70%;background:var(--r)">인물(볼/입술/코) 70%</div>
+        <div class="gaze-seg" style="width:20%;background:var(--b)">손가락 20%</div>
+        <div class="gaze-seg" style="width:10%;background:var(--t3)"></div>
+      </div>
+      <span style="font-size:.7rem;color:var(--r);min-width:30px">🪝 훅</span>
+    </div>
+    <div class="gaze-row">
+      <span class="gaze-time">5초</span>
+      <div class="gaze-bar">
+        <div class="gaze-seg" style="width:55%;background:var(--b)">텍스트 55%</div>
+        <div class="gaze-seg" style="width:35%;background:var(--r)">얼굴 35%</div>
+        <div class="gaze-seg" style="width:10%;background:var(--t3)"></div>
+      </div>
+      <span style="font-size:.7rem;color:var(--b);min-width:30px">📦</span>
+    </div>
+    <div class="gaze-row">
+      <span class="gaze-time">10초</span>
+      <div class="gaze-bar">
+        <div class="gaze-seg" style="width:70%;background:var(--b)">텍스트 70%</div>
+        <div class="gaze-seg" style="width:20%;background:var(--r)">얼굴 20%</div>
+        <div class="gaze-seg" style="width:10%;background:var(--t3)"></div>
+      </div>
+      <span style="font-size:.7rem;color:var(--b);min-width:30px">📦</span>
+    </div>
+    <div class="gaze-row">
+      <span class="gaze-time">15초</span>
+      <div class="gaze-bar">
+        <div class="gaze-seg" style="width:80%;background:var(--b)">텍스트 80%</div>
+        <div class="gaze-seg" style="width:15%;background:var(--r)">얼굴 15%</div>
+        <div class="gaze-seg" style="width:5%;background:var(--t3)"></div>
+      </div>
+      <span style="font-size:.7rem;color:var(--p);min-width:30px">📋</span>
+    </div>
+    <div class="gaze-row">
+      <span class="gaze-time">20초</span>
+      <div class="gaze-bar">
+        <div class="gaze-seg" style="width:40%;background:var(--r)">손가락/볼 40%</div>
+        <div class="gaze-seg" style="width:50%;background:var(--b)">텍스트 50%</div>
+        <div class="gaze-seg" style="width:10%;background:var(--t3)"></div>
+      </div>
+      <span style="font-size:.7rem;color:var(--b);min-width:30px">📦</span>
+    </div>
+    <div class="gaze-row">
+      <span class="gaze-time">25초</span>
+      <div class="gaze-bar">
+        <div class="gaze-seg" style="width:60%;background:var(--b)">텍스트 60%</div>
+        <div class="gaze-seg" style="width:25%;background:var(--r)">퍼프/볼 25%</div>
+        <div class="gaze-seg" style="width:15%;background:var(--t3)"></div>
+      </div>
+      <span style="font-size:.7rem;color:var(--g);min-width:30px">🎯</span>
+    </div>
+    <div class="gaze-row" style="border-bottom:none">
+      <span class="gaze-time">28초</span>
+      <div class="gaze-bar">
+        <div class="gaze-seg" style="width:80%;background:var(--b)">텍스트(할인) 80%</div>
+        <div class="gaze-seg" style="width:15%;background:var(--r)">얼굴 15%</div>
+        <div class="gaze-seg" style="width:5%;background:var(--a)">5%</div>
+      </div>
+      <span style="font-size:.7rem;color:var(--g);min-width:30px">🎯</span>
+    </div>
+  </div>
+
+  <!-- 시선 해석 -->
+  <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:14px;font-size:.85rem;color:var(--t2)">
+    <div class="layer layer-interpret">Layer 2: 해석</div>
+    <b style="color:var(--a)">시선 패턴 (DeepGaze→Gemini 3 Pro 결합):</b><br>
+    • <b>텍스트 시선 지배 (평균 65%):</b> 0초 빼고 전 구간에서 텍스트가 시선을 잡음 → <span class="warn warn-r">텍스트 읽다가 끝남 ⚠</span><br>
+    • <b>인물은 0초(훅)에서만 우세 (70%):</b> 이후 15~35%로 급락. 얼굴이 시선을 끌긴 하지만 텍스트에 밀림<br>
+    • <b>제품 시선 거의 없음:</b> 제품이 독립적으로 주목받는 프레임 0개 → <span class="warn warn-r">제품 인지 약함 ⚠</span><br>
+    • <b>CTA 버튼 전 프레임 0%:</b> 명시적 CTA 버튼이 영상에 없음 → <span class="warn warn-r">전환 유도 불가 ⚠</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 8: 오디오 분석 (영상 전용)              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>🎙 오디오 분석 — 귀로 듣는 것도 분석</h2>
+  <div class="layer layer-data">Layer 1: 데이터 — Gemini 3 Pro Preview 오디오 분석</div>
+
+  <div class="g2">
+    <div class="card">
+      <h5 style="color:var(--cy);font-size:.88rem;margin-bottom:8px">🎵 오디오 메타</h5>
+      <div style="font-size:.82rem;color:var(--t2);line-height:2">
+        <div style="display:flex;justify-content:space-between"><span>유형</span><b>mixed (나레이션+BGM)</b></div>
+        <div style="display:flex;justify-content:space-between"><span>BGM 장르</span><b>pop</b></div>
+        <div style="display:flex;justify-content:space-between"><span>BGM 감정</span><b>upbeat (경쾌)</b></div>
+        <div style="display:flex;justify-content:space-between"><span>효과음</span><b>sparkle, swoosh</b></div>
+        <div style="display:flex;justify-content:space-between"><span>나레이션 톤</span><b>친근한 언니 말투</b></div>
+      </div>
+    </div>
+    <div class="card">
+      <h5 style="color:var(--cy);font-size:.88rem;margin-bottom:8px">💬 나레이션 전문</h5>
+      <div style="font-size:.8rem;color:var(--t2);line-height:1.7;max-height:200px;overflow-y:auto">
+        <div style="margin-bottom:8px">
+          <span style="color:var(--r);font-weight:600;font-size:.72rem">0~3초 훅</span><br>
+          "어떤 파데를 써도 피부 화장이 금방 무너진다면 딱 이거 하나만 바꿔봐"
+        </div>
+        <div style="margin-bottom:8px">
+          <span style="color:var(--b);font-weight:600;font-size:.72rem">4~12초 데모</span><br>
+          "이렇게 화장이 무너지지 않으려면 기초 공사가 진짜 중요한 거 알지? 그래서 선택한 게 승무원 대표가 만든 이 수분 크림이거든. 긴 비행시간 동안에도 예쁜 화장을 유지하는 비결이 바로 여기 있더라고."
+        </div>
+        <div style="margin-bottom:8px">
+          <span style="color:var(--p);font-weight:600;font-size:.72rem">13~22초 증거</span><br>
+          "이렇게 메이크업 전에 발라주면 히알루론산이 피부 속까지 깊이 흡수돼서 속건조가 안 느껴져..."
+        </div>
+        <div>
+          <span style="color:var(--g);font-weight:600;font-size:.72rem">28~31초 CTA</span><br>
+          "지금 할인 중이니까 한번 써봐" <span class="warn warn-r">구체적 할인율 없음 ⚠</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:14px;font-size:.85rem;color:var(--t2);margin-top:8px">
+    <div class="layer layer-interpret">Layer 2: 해석</div>
+    <b style="color:var(--cy)">오디오 진단:</b><br>
+    • <b>훅 나레이션 ✅ 강함:</b> 첫 문장이 문제를 제기하며 청각적 훅 역할. "금방 무너진다면" = 공감 유도<br>
+    • <b>BGM ✅ 적절:</b> upbeat pop이 UGC 톤과 맞음. 제품 무드(신뢰+활력)와 일관<br>
+    • <b>CTA 나레이션 ❌ 약함:</b> "지금 할인 중이니까 한번 써봐" — 구체적 수치 없음(몇% 할인?), 긴급성 없음<br>
+    • <b>나레이션↔화면 일치도:</b> 높음 — 말하는 내용이 화면과 동기화됨
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 3: 5축 디테일                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>🧠 5축 디테일 — 왜 그런가</h2>
+  <div class="layer layer-data">Layer 1: 데이터 — Gemini 3 Pro Preview 5축 + Audio + Structure</div>
+
+  <div class="g2">
+    <div class="card">
+      <h5 style="color:var(--ac2);font-size:.88rem;margin-bottom:8px">🎨 Visual <span style="color:var(--t3);font-size:.7rem">→ 🟢 기반</span></h5>
+      <div style="font-size:.82rem;color:var(--t2);line-height:2">
+        <div style="display:flex;justify-content:space-between"><span>스타일</span><b>UGC (사용자 제작)</b></div>
+        <div style="display:flex;justify-content:space-between"><span>훅 유형</span><b>problem (문제제기)</b></div>
+        <div style="display:flex;justify-content:space-between"><span>모션</span><b>fast (빠른 전환)</b></div>
+        <div style="display:flex;justify-content:space-between"><span>👤 얼굴 노출</span><span class="warn warn-g">있음 ✓</span></div>
+        <div style="display:flex;justify-content:space-between"><span>📦 제품 가시성</span><b>중간 (3개 씬에서 등장)</b></div>
+      </div>
+    </div>
+    <div class="card">
+      <h5 style="color:var(--g);font-size:.88rem;margin-bottom:8px">📝 Text <span style="color:var(--t3);font-size:.7rem">→ 🟡 참여</span></h5>
+      <div style="font-size:.82rem;color:var(--t2);line-height:2">
+        <div><b>핵심:</b> 전직 승무원이 개발한 속건조 해결 크림으로 하루 종일 무너지지 않는 물광</div>
+        <div style="display:flex;justify-content:space-between"><span>CTA 텍스트</span><span class="warn warn-a">약함 — "한번 써봐" ⚠</span></div>
+        <div style="display:flex;justify-content:space-between"><span>후기/소셜프루프</span><span class="warn warn-r">없음 ⚠</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h5 style="color:var(--a);font-size:.88rem;margin-bottom:8px">🧠 Psychology <span style="color:var(--t3);font-size:.7rem">→ 🟡🔴 참여+전환</span></h5>
+      <div style="font-size:.82rem;color:var(--t2);line-height:2">
+        <div style="display:flex;justify-content:space-between"><span>감정 톤</span><b>trust (신뢰)</b></div>
+        <div style="display:flex;justify-content:space-between"><span>설득 트리거</span><b>authority (권위 — 승무원)</b></div>
+        <div style="display:flex;justify-content:space-between"><span>긴급성</span><span class="warn warn-r">없음 ⚠</span></div>
+        <div style="display:flex;justify-content:space-between"><span>오퍼</span><span class="warn warn-a">"할인 중" (구체적 수치 없음) ⚠</span></div>
+        <div style="display:flex;justify-content:space-between"><span>사회적 증거</span><span class="warn warn-r">없음 ⚠</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h5 style="color:var(--p);font-size:.88rem;margin-bottom:8px">✨ Quality <span style="color:var(--t3);font-size:.7rem">→ 🟢🔴</span></h5>
+      <div style="font-size:.82rem;color:var(--t2);line-height:2">
+        <div style="display:flex;justify-content:space-between"><span>제작 품질</span><span class="warn warn-a">semi-pro (UGC)</span></div>
+        <div style="display:flex;justify-content:space-between"><span>가독성</span><span class="warn warn-g">high ✓</span></div>
+        <div style="display:flex;justify-content:space-between"><span>피로도</span><span class="warn warn-a">medium</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:14px;font-size:.85rem;color:var(--t2);margin-top:8px">
+    <div class="layer layer-interpret">Layer 2: 해석 — 5축이 3축에 미치는 영향</div>
+    <b style="color:var(--ac2)">3축 연결:</b><br>
+    • <b style="color:var(--g)">기반 강점:</b> UGC 스타일 + 얼굴 노출 + problem 훅 + fast 페이싱 → 스크롤 멈추는 힘은 있음<br>
+    • <b style="color:var(--a)">참여 약점:</b> 후기/소셜프루프 전무 + 사회적 증거 없음 → "나도 해볼까?" 동기 부족<br>
+    • <b style="color:var(--r)">전환 약점:</b> CTA "한번 써봐"(약함) + 긴급성 없음 + 구체적 할인 없음 → 구매 동기 부족
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 10: 구조 분석 (영상 전용)               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>🎬 구조 분석 — 영상의 뼈대</h2>
+  <div class="layer layer-interpret">Layer 2: 해석 — 벤치마크 대비 구조 비교</div>
+
+  <div class="g4">
+    <div class="card" style="text-align:center">
+      <div style="color:var(--t3);font-size:.8rem">페이싱</div>
+      <div style="font-size:1.3rem;font-weight:700;margin:4px 0">fast</div>
+      <div style="font-size:.72rem;color:var(--t3)">벤치마크: medium~fast</div>
+      <span class="warn warn-g">적절 ✓</span>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="color:var(--t3);font-size:.8rem">장면 수</div>
+      <div style="font-size:1.3rem;font-weight:700;margin:4px 0">5</div>
+      <div style="font-size:.72rem;color:var(--t3)">벤치마크: 4~6</div>
+      <span class="warn warn-g">적절 ✓</span>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="color:var(--t3);font-size:.8rem">훅 유형</div>
+      <div style="font-size:1.3rem;font-weight:700;margin:4px 0">problem</div>
+      <div style="font-size:.72rem;color:var(--t3)">벤치마크 최다: problem</div>
+      <span class="warn warn-g">적절 ✓</span>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="color:var(--t3);font-size:.8rem">엔딩 CTA</div>
+      <div style="font-size:1.3rem;font-weight:700;margin:4px 0">overlay</div>
+      <div style="font-size:.72rem;color:var(--t3)">벤치마크: overlay+verbal</div>
+      <span class="warn warn-a">보완 필요 ⚠</span>
+    </div>
+  </div>
+
+  <!-- 구간 비율 비교 -->
+  <h3 style="font-size:.95rem;margin:16px 0 10px">📊 구간 비율 — 현재 vs 벤치마크</h3>
+  <div style="display:flex;gap:4px;margin-bottom:8px">
+    <div style="flex:10;background:rgba(239,68,68,.3);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;font-weight:600;color:var(--r)">훅 10%</div>
+    <div style="flex:29;background:rgba(59,130,246,.3);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;font-weight:600;color:var(--b)">데모 29%</div>
+    <div style="flex:32;background:rgba(139,92,246,.3);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;font-weight:600;color:var(--p)">증거 32%</div>
+    <div style="flex:16;background:rgba(59,130,246,.2);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;font-weight:600;color:var(--b)">팁 16%</div>
+    <div style="flex:13;background:rgba(16,185,129,.3);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;font-weight:600;color:var(--g)">CTA 13%</div>
+  </div>
+  <div style="display:flex;gap:4px;margin-bottom:12px">
+    <div style="flex:10;background:rgba(239,68,68,.15);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;color:var(--t3)">벤치 10%</div>
+    <div style="flex:25;background:rgba(59,130,246,.15);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;color:var(--t3)">벤치 25%</div>
+    <div style="flex:25;background:rgba(139,92,246,.15);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;color:var(--t3)">벤치 25%</div>
+    <div style="flex:15;background:rgba(59,130,246,.08);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;color:var(--t3)">벤치 15%</div>
+    <div style="flex:25;background:rgba(16,185,129,.15);border-radius:4px;padding:6px;text-align:center;font-size:.72rem;color:var(--t3)">벤치 25%</div>
+  </div>
+  <div style="font-size:.82rem;color:var(--t2)">
+    → <b style="color:var(--r)">CTA 구간이 벤치마크 대비 절반(13% vs 25%).</b> 증거 구간을 줄이고 CTA를 늘려야 전환 개선 가능.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 5: 소재↔LP 일관성                       -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>🔗 소재↔LP 일관성</h2>
+  <div class="layer layer-interpret">Layer 2: 해석</div>
+
+  <div class="g2" style="margin-bottom:16px">
+    <div style="text-align:center">
+      <div style="font-size:3rem;font-weight:800;color:var(--a)">58<span style="font-size:1rem;color:var(--t3)">/100</span></div>
+      <div style="font-size:.85rem;color:var(--t3)">종합 일관성</div>
+    </div>
+    <div>
+      <div class="prog">
+        <span class="prog-label">메시지</span>
+        <div class="prog-bar"><div class="prog-fill" style="width:70%;background:var(--a)"></div></div>
+        <span class="prog-val" style="color:var(--a)">70</span>
+      </div>
+      <div class="prog">
+        <span class="prog-label">CTA</span>
+        <div class="prog-bar"><div class="prog-fill" style="width:40%;background:var(--r)"></div></div>
+        <span class="prog-val" style="color:var(--r)">40</span>
+      </div>
+      <div class="prog">
+        <span class="prog-label">오퍼</span>
+        <div class="prog-bar"><div class="prog-fill" style="width:45%;background:var(--a)"></div></div>
+        <span class="prog-val" style="color:var(--a)">45</span>
+      </div>
+      <div class="prog">
+        <span class="prog-label">비주얼</span>
+        <div class="prog-bar"><div class="prog-fill" style="width:75%;background:var(--g)"></div></div>
+        <span class="prog-val" style="color:var(--g)">75</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp-card high">
+    <span class="sev sev-h">HIGH</span>
+    <h5 style="color:var(--t);font-size:.9rem">CTA 불일치 — 영상 "한번 써봐" vs LP "구매하기"</h5>
+    <p style="font-size:.82rem;color:var(--t2);margin-top:6px;line-height:1.6">
+      영상은 부드러운 추천("한번 써봐")인데 LP는 직접 거래("구매하기"). 톤 차이로 이탈 발생.
+    </p>
+    <div style="background:rgba(16,185,129,.08);border-radius:6px;padding:8px 12px;margin-top:8px;font-size:.8rem;color:var(--g)">
+      💡 LP CTA를 "나도 써볼래요" 또는 "무료 샘플 받기"로 변경해 영상 톤과 일치시키기
+    </div>
+  </div>
+
+  <div class="lp-card medium">
+    <span class="sev sev-m">MEDIUM</span>
+    <h5 style="color:var(--t);font-size:.9rem">오퍼 불일치 — 영상 "할인 중" vs LP 구체적 가격표</h5>
+    <p style="font-size:.82rem;color:var(--t2);margin-top:6px;line-height:1.6">
+      영상에서 "할인 중"이라고만 하고 구체적 할인율/금액 없음. LP에는 가격이 있지만 영상과의 연결이 약함.
+    </p>
+    <div style="background:rgba(16,185,129,.08);border-radius:6px;padding:8px 12px;margin-top:8px;font-size:.8rem;color:var(--g)">
+      💡 영상 CTA에 구체적 할인율 ("지금 40% 할인") 삽입 + LP 히어로에도 동일 할인 강조
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 6: AI 처방 (Impact 순)                  -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s">
+  <h2>💡 AI 처방 — 뭘 고칠 것인가</h2>
+  <div class="layer layer-rx">Layer 3: 처방 — impact 순 우선순위</div>
+
+  <div class="rx-card">
+    <div class="rx-impact">
+      <div class="rx-impact-num" style="color:var(--g)">+52%</div>
+      <div class="rx-impact-label">예상 참여 개선</div>
+      <div style="font-size:1.2rem;margin-top:4px">⭐</div>
+    </div>
+    <div class="rx-body">
+      <h5 style="color:var(--t)">실제 후기/비포애프터 추가 (증거 구간)</h5>
+      <p>13~22초 증거 구간에 실제 사용자 후기 또는 비포애프터 화면 삽입. 현재 "임상 테스트 결과"만 있어 공감 부족. 실제 사용자 영상 후기를 2~3초 추가.</p>
+      <div class="rx-axis">
+        <span style="background:rgba(245,158,11,.15);color:var(--a)">🟡 참여 +52%</span>
+        <span style="background:rgba(239,68,68,.15);color:var(--r)">🔴 전환 +18%</span>
+      </div>
+      <div style="font-size:.72rem;color:var(--t3);margin-top:6px">
+        📊 근거: UGC 영상에서 실제 후기 삽입 시 참여율 +52% (같은 카테고리 영상 8건 비교).
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--t3);text-align:center;min-width:50px">난이도<br><b style="color:var(--a)">보통</b></div>
+  </div>
+
+  <div class="rx-card">
+    <div class="rx-impact">
+      <div class="rx-impact-num" style="color:var(--g)">+35%</div>
+      <div class="rx-impact-label">예상 전환 개선</div>
+    </div>
+    <div class="rx-body">
+      <h5 style="color:var(--t)">CTA 구간 확장 + 구체적 오퍼</h5>
+      <p>CTA 4초(13%) → 8초(25%)로 확장. "한번 써봐" → "지금 40% 할인 + 무료배송 / 3,000명이 선택한 크림"으로 구체화.</p>
+      <div class="rx-axis">
+        <span style="background:rgba(239,68,68,.15);color:var(--r)">🔴 전환 +35%</span>
+        <span style="background:rgba(16,185,129,.15);color:var(--g)">🟢 기반 +5%</span>
+      </div>
+      <div style="font-size:.72rem;color:var(--t3);margin-top:6px">
+        📊 근거: 벤치마크 상위 영상 CTA 구간 평균 25%. 구체적 할인율 표기 시 클릭률 +35%.
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--t3);text-align:center;min-width:50px">난이도<br><b style="color:var(--a)">보통</b></div>
+  </div>
+
+  <div class="rx-card">
+    <div class="rx-impact">
+      <div class="rx-impact-num" style="color:var(--a)">+28%</div>
+      <div class="rx-impact-label">예상 전환 개선</div>
+    </div>
+    <div class="rx-body">
+      <h5 style="color:var(--t)">긴급성 요소 추가</h5>
+      <p>엔딩 CTA에 "오늘만 이 가격" "한정 수량" 등 긴급성 트리거 삽입. 현재 긴급성 완전 없음.</p>
+      <div class="rx-axis">
+        <span style="background:rgba(239,68,68,.15);color:var(--r)">🔴 전환 +28%</span>
+      </div>
+      <div style="font-size:.72rem;color:var(--t3);margin-top:6px">
+        📊 근거: 긴급성 있는 영상 vs 없는 영상 전환율 차이 +28% (같은 카테고리 UGC 12건).
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--t3);text-align:center;min-width:50px">난이도<br><b style="color:var(--g)">쉬움</b></div>
+  </div>
+
+  <div class="rx-card">
+    <div class="rx-impact">
+      <div class="rx-impact-num" style="color:var(--a)">+22%</div>
+      <div class="rx-impact-label">예상 전환 개선</div>
+    </div>
+    <div class="rx-body">
+      <h5 style="color:var(--t)">LP↔영상 CTA 톤 통일</h5>
+      <p>영상 "한번 써봐" vs LP "구매하기" 불일치. LP CTA를 "나도 써볼래요" 또는 영상 CTA를 "지금 구매하기"로 통일.</p>
+      <div class="rx-axis">
+        <span style="background:rgba(239,68,68,.15);color:var(--r)">🔴 전환 +22%</span>
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--t3);text-align:center;min-width:50px">난이도<br><b style="color:var(--g)">쉬움</b></div>
+  </div>
+
+  <div class="rx-card">
+    <div class="rx-impact">
+      <div class="rx-impact-num" style="color:var(--a)">+15%</div>
+      <div class="rx-impact-label">예상 기반 개선</div>
+    </div>
+    <div class="rx-body">
+      <h5 style="color:var(--t)">엔딩에 0.5초 정지 프레임 추가</h5>
+      <p>CTA 직전에 정지 프레임(freeze frame) 삽입. 시선이 빠르게 지나가지 않고 CTA에 머무르게 유도.</p>
+      <div class="rx-axis">
+        <span style="background:rgba(16,185,129,.15);color:var(--g)">🟢 기반 +15%</span>
+        <span style="background:rgba(239,68,68,.15);color:var(--r)">🔴 전환 +8%</span>
+      </div>
+    </div>
+    <div style="font-size:.75rem;color:var(--t3);text-align:center;min-width:50px">난이도<br><b style="color:var(--g)">쉬움</b></div>
+  </div>
+
+  <!-- 총 예상 효과 -->
+  <div style="background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(99,102,241,.08));border:1px solid rgba(16,185,129,.25);border-radius:12px;padding:18px;margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:1rem;font-weight:700;color:var(--t)">📈 5개 처방 모두 적용 시 예상 변화</div>
+        <div style="font-size:.82rem;color:var(--t2);margin-top:4px">우선순위: ⭐후기 → CTA 확장 → 긴급성 → LP 통일 → 정지프레임</div>
+      </div>
+      <div style="display:flex;gap:16px;text-align:center">
+        <div><div style="font-size:.75rem;color:var(--g)">🟢 기반</div><div style="font-size:1.3rem;font-weight:800;color:var(--g)">50→65</div></div>
+        <div><div style="font-size:.75rem;color:var(--a)">🟡 참여</div><div style="font-size:1.3rem;font-weight:800;color:var(--a)">0→52</div></div>
+        <div><div style="font-size:.75rem;color:var(--r)">🔴 전환</div><div style="font-size:1.3rem;font-weight:800;color:var(--r)">35→68</div></div>
+        <div><div style="font-size:.75rem;color:var(--ac2)">⭐ Impact</div><div style="font-size:1.3rem;font-weight:800;color:var(--ac2)">29→62</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="background:var(--bg2);border-radius:12px;padding:20px;border:1px solid var(--bd);font-size:.8rem;color:var(--t3)">
+  <h3 style="color:var(--t);font-size:.95rem;margin-bottom:8px">📊 분석 파이프라인</h3>
+  <p>① 수집(Meta API→Storage) → ② 5축+Audio+Structure(Gemini 3 Pro Preview) → ③ DeepGaze III 프레임별 시선 → ④ 임베딩(3072D) → ⑤ 피로도/유사도 → ⑥ 벤치마크 백분위 → ⑦ 소재↔LP 일관성(4축) → ⑧ AI 처방(impact순)</p>
+  <p style="margin-top:8px;font-size:.75rem">
+    <b>기획서:</b> <a href="/reports/plan/2026-03-22-creative-analysis-report-plan" style="color:var(--ac2)">소재 분석 리포트 기획서 v2</a> |
+    <b>이미지 목업:</b> <a href="/reports/plan/2026-03-23-image-mockup-v3" style="color:var(--ac2)">네온벨로 이미지 v3</a> |
+    <b>영상 목업 v3:</b> 2026-03-23
+  </p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  const frames = [{"sec":0,"fixations":[{"x":371,"y":668,"w":1},{"x":351,"y":798,"w":0.98},{"x":221,"y":164,"w":0.44}],"cl":"high","cta":0.101},{"sec":1,"fixations":[{"x":354,"y":794,"w":1},{"x":371,"y":667,"w":0.99},{"x":224,"y":167,"w":0.39}],"cl":"high","cta":0.103},{"sec":2,"fixations":[{"x":364,"y":597,"w":1},{"x":374,"y":414,"w":0.98},{"x":381,"y":764,"w":0.93}],"cl":"high","cta":0.096},{"sec":3,"fixations":[{"x":378,"y":401,"w":1},{"x":371,"y":587,"w":0.98},{"x":381,"y":771,"w":0.92}],"cl":"high","cta":0.093},{"sec":4,"fixations":[{"x":361,"y":624,"w":1},{"x":224,"y":164,"w":0.33}],"cl":"high","cta":0.086},{"sec":5,"fixations":[{"x":361,"y":617,"w":1},{"x":227,"y":167,"w":0.31}],"cl":"high","cta":0.09},{"sec":6,"fixations":[{"x":361,"y":617,"w":1},{"x":224,"y":164,"w":0.33}],"cl":"high","cta":0.089},{"sec":7,"fixations":[{"x":351,"y":884,"w":1},{"x":357,"y":614,"w":0.86},{"x":224,"y":164,"w":0.41}],"cl":"high","cta":0.097},{"sec":8,"fixations":[{"x":347,"y":808,"w":1},{"x":344,"y":671,"w":0.9},{"x":224,"y":164,"w":0.37}],"cl":"high","cta":0.097},{"sec":9,"fixations":[{"x":371,"y":864,"w":1},{"x":364,"y":704,"w":0.77},{"x":224,"y":161,"w":0.35}],"cl":"high","cta":0.103},{"sec":10,"fixations":[{"x":351,"y":818,"w":1},{"x":368,"y":381,"w":0.54},{"x":217,"y":167,"w":0.34}],"cl":"high","cta":0.095},{"sec":11,"fixations":[{"x":371,"y":804,"w":1},{"x":371,"y":517,"w":0.84},{"x":224,"y":167,"w":0.41}],"cl":"high","cta":0.101},{"sec":12,"fixations":[{"x":364,"y":808,"w":1},{"x":364,"y":647,"w":0.96},{"x":224,"y":167,"w":0.41}],"cl":"high","cta":0.1},{"sec":13,"fixations":[{"x":347,"y":874,"w":1},{"x":378,"y":674,"w":0.7},{"x":221,"y":161,"w":0.34}],"cl":"high","cta":0.1},{"sec":14,"fixations":[{"x":381,"y":888,"w":1},{"x":374,"y":494,"w":0.59}],"cl":"high","cta":0.101},{"sec":15,"fixations":[{"x":371,"y":884,"w":1},{"x":374,"y":494,"w":0.83},{"x":231,"y":167,"w":0.39}],"cl":"high","cta":0.098},{"sec":16,"fixations":[{"x":374,"y":858,"w":1},{"x":378,"y":684,"w":0.91},{"x":371,"y":391,"w":0.55}],"cl":"high","cta":0.103},{"sec":17,"fixations":[{"x":384,"y":878,"w":1},{"x":354,"y":605,"w":0.63},{"x":227,"y":164,"w":0.35}],"cl":"high","cta":0.103},{"sec":18,"fixations":[{"x":374,"y":881,"w":1},{"x":368,"y":658,"w":0.7},{"x":224,"y":164,"w":0.42}],"cl":"high","cta":0.105},{"sec":19,"fixations":[{"x":417,"y":571,"w":1},{"x":441,"y":654,"w":0.98},{"x":344,"y":841,"w":0.92}],"cl":"high","cta":0.099},{"sec":20,"fixations":[{"x":394,"y":557,"w":1},{"x":354,"y":858,"w":0.85},{"x":224,"y":164,"w":0.39}],"cl":"high","cta":0.101},{"sec":21,"fixations":[{"x":398,"y":674,"w":1},{"x":304,"y":821,"w":0.75}],"cl":"high","cta":0.111},{"sec":22,"fixations":[{"x":398,"y":864,"w":1},{"x":351,"y":657,"w":0.92},{"x":241,"y":854,"w":0.7}],"cl":"high","cta":0.109},{"sec":23,"fixations":[{"x":351,"y":891,"w":1},{"x":374,"y":671,"w":0.99},{"x":384,"y":361,"w":0.75}],"cl":"high","cta":0.1},{"sec":24,"fixations":[{"x":354,"y":891,"w":1},{"x":374,"y":661,"w":0.94},{"x":381,"y":351,"w":0.68}],"cl":"high","cta":0.101},{"sec":25,"fixations":[{"x":388,"y":671,"w":1},{"x":357,"y":894,"w":0.98},{"x":231,"y":167,"w":0.42}],"cl":"high","cta":0.101},{"sec":26,"fixations":[{"x":371,"y":668,"w":1},{"x":354,"y":881,"w":1},{"x":234,"y":167,"w":0.43}],"cl":"high","cta":0.107},{"sec":27,"fixations":[{"x":357,"y":881,"w":1},{"x":374,"y":678,"w":0.93},{"x":374,"y":771,"w":0.93}],"cl":"high","cta":0.105},{"sec":28,"fixations":[{"x":377,"y":864,"w":1},{"x":374,"y":501,"w":0.64},{"x":221,"y":164,"w":0.35}],"cl":"high","cta":0.114},{"sec":29,"fixations":[{"x":351,"y":861,"w":1},{"x":371,"y":487,"w":0.72},{"x":191,"y":901,"w":0.72}],"cl":"high","cta":0.1}];
+  const W=750,H=1200;
+  const video=document.getElementById('vid_main');
+  const canvas=document.getElementById('cvs_main');
+  const info=document.getElementById('info_main');
+  if(!video||!canvas)return;
+  const ctx=canvas.getContext('2d');
+
+  const segments=[{s:0,e:3,c:'#ef4444',l:'훅'},{s:4,e:12,c:'#3b82f6',l:'데모'},{s:13,e:22,c:'#8b5cf6',l:'증거'},{s:23,e:27,c:'#3b82f6',l:'팁'},{s:28,e:31,c:'#10b981',l:'CTA'}];
+  function getSegment(t){for(const s of segments)if(t>=s.s&&t<=s.e)return s;return segments[0];}
+
+  function draw(){
+    const t=Math.floor(video.currentTime);
+    const f=frames[Math.min(t,frames.length-1)];
+    if(!f)return;
+    const cw=canvas.width=video.clientWidth*2;
+    const ch=canvas.height=video.clientHeight*2;
+    canvas.style.width=video.clientWidth+'px';
+    canvas.style.height=video.clientHeight+'px';
+    ctx.clearRect(0,0,cw,ch);
+
+    // dark overlay
+    ctx.fillStyle='rgba(0,0,20,0.3)';
+    ctx.fillRect(0,0,cw,ch);
+
+    // single dot — top fixation only
+    const fix=f.fixations[0];
+    if(!fix)return;
+    const x=fix.x/W*cw;
+    const y=fix.y/H*ch;
+    ctx.globalCompositeOperation='lighter';
+    const r=50;
+    const g=ctx.createRadialGradient(x,y,0,x,y,r*2);
+    g.addColorStop(0,'rgba(255,60,20,0.8)');
+    g.addColorStop(.3,'rgba(255,160,0,0.45)');
+    g.addColorStop(.6,'rgba(255,200,0,0.15)');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath();ctx.arc(x,y,r*2,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    const g2=ctx.createRadialGradient(x,y,0,x,y,r*.4);
+    g2.addColorStop(0,'rgba(255,255,255,0.6)');
+    g2.addColorStop(1,'rgba(255,80,20,0)');
+    ctx.beginPath();ctx.arc(x,y,r*.4,0,Math.PI*2);ctx.fillStyle=g2;ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+
+    // segment badge
+    const seg=getSegment(t);
+    ctx.fillStyle=seg.c;
+    ctx.globalAlpha=.85;
+    const bw=80,bh=22;
+    ctx.beginPath();ctx.roundRect(8,8,bw,bh,6);ctx.fill();
+    ctx.globalAlpha=1;
+    ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';
+    ctx.fillText(seg.l+' '+t+'초',8+bw/2,8+15);
+
+    info.textContent=t+'초 | '+seg.l+' | 인지부하: '+f.cl+' | CTA주목: '+((f.cta||0)*100).toFixed(1)+'%';
+  }
+  video.addEventListener('timeupdate',draw);
+  video.addEventListener('seeked',draw);
+  video.addEventListener('play',function(){(function loop(){draw();if(!video.paused)requestAnimationFrame(loop)})()});
+})();
+</script>
+</div>
+</body>
+</html>

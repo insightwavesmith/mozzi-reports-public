@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소재 분석 리포트 기획서 v2 — bscamp</title>
+<style>
+:root{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--bd:#475569;--ac:#6366f1;--ac2:#818cf8;--t:#f8fafc;--t2:#cbd5e1;--t3:#64748b;--g:#10b981;--a:#f59e0b;--r:#ef4444;--p:#8b5cf6;--cy:#06b6d4;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Pretendard Variable',-apple-system,sans-serif;background:var(--bg);color:var(--t);line-height:1.8;font-size:14px;}
+.c{max-width:1200px;margin:0 auto;padding:2rem;}
+.hd{text-align:center;padding:2.5rem;background:linear-gradient(135deg,#1e1b4b,var(--bg));border-radius:14px;border:1px solid var(--bd);margin-bottom:2rem;}
+.hd h1{font-size:2rem;background:linear-gradient(135deg,var(--ac),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;}
+.hd .sub{color:var(--ac2);font-size:1rem;margin-top:.3rem;}
+.hd .meta{color:var(--t3);font-size:.82rem;margin-top:.5rem;}
+.tabs{display:flex;gap:2px;background:var(--bg2);border-radius:10px;padding:4px;margin-bottom:2rem;border:1px solid var(--bd);overflow-x:auto;position:sticky;top:0;z-index:100;}
+.tab{padding:12px 20px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--t3);white-space:nowrap;transition:.15s;}
+.tab:hover{color:var(--t2);}.tab.on{background:var(--ac);color:#fff;}
+.pan{display:none;}.pan.on{display:block;}
+.s{background:var(--bg2);border-radius:12px;padding:2rem;margin-bottom:1.5rem;border:1px solid var(--bd);}
+.s h2{color:var(--ac);font-size:1.5rem;font-weight:700;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--bd);}
+.s h3{color:var(--t);font-size:1.15rem;font-weight:600;margin:1.5rem 0 .8rem;}
+.s h4{color:var(--ac2);font-size:.95rem;font-weight:600;margin:1rem 0 .5rem;}
+.s p,.s li{color:var(--t2);font-size:.88rem;}
+.bx{padding:1rem 1.2rem;border-radius:8px;margin:.8rem 0;font-size:.85rem;line-height:1.8;}
+.bx-r{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#fca5a5;}
+.bx-g{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);color:#6ee7b7;}
+.bx-b{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);color:#a5b4fc;}
+.bx-a{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);color:#fde68a;}
+.bx-p{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);color:#c4b5fd;}
+.bx-cy{background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.25);color:#67e8f9;}
+table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.82rem;}
+th{background:var(--bg);color:var(--ac);padding:.7rem;text-align:left;border-bottom:1px solid var(--bd);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;}
+td{padding:.7rem;border-bottom:1px solid rgba(71,85,105,.3);color:var(--t2);vertical-align:top;}
+.fl{background:#020617;border:1px solid var(--bd);border-radius:10px;padding:1.5rem;margin:.8rem 0;font-family:'SF Mono',Consolas,monospace;font-size:.82rem;line-height:2;color:var(--t2);white-space:pre-wrap;overflow-x:auto;}
+ul{padding-left:1.2rem;}li{margin:.3rem 0;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1rem 0;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0;}
+.card{background:var(--bg);border-radius:8px;padding:1rem;border:1px solid var(--bd);}
+.card h5{font-size:.85rem;margin-bottom:.5rem;}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:600;}
+.bg{background:rgba(16,185,129,.15);color:var(--g);}
+.br{background:rgba(239,68,68,.15);color:var(--r);}
+.ba{background:rgba(245,158,11,.15);color:var(--a);}
+.bb{background:rgba(99,102,241,.15);color:var(--ac2);}
+.funnel{display:flex;gap:0;margin:1rem 0;}
+.funnel-step{flex:1;padding:1rem;text-align:center;position:relative;}
+.funnel-step:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:1.2rem;}
+@media(max-width:768px){.c{padding:1rem;}.grid3,.grid2{grid-template-columns:1fr;}.funnel{flex-direction:column;}.funnel-step:not(:last-child)::after{content:'↓';right:50%;top:auto;bottom:-12px;transform:translateX(50%);}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="hd">
+  <h1>🔬 소재 분석 리포트 기획서</h1>
+  <div class="sub">왜 이 구조인가 — 총가치각도기에서 시작하는 소재 분석</div>
+  <div class="meta">2026-03-22 | 모찌 직접 작성 · 레퍼런스 7개 분석 + 마스터 설계서 기반</div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab on" onclick="sw(0)">💡 왜 이 구조인가</div>
+  <div class="tab" onclick="sw(1)">🔍 레퍼런스</div>
+  <div class="tab" onclick="sw(2)">🖼️ 이미지 분석</div>
+  <div class="tab" onclick="sw(3)">🎬 영상 분석</div>
+  <div class="tab" onclick="sw(4)">🏆 차별점</div>
+</div>
+
+<!-- ═══════ TAB 0: 왜 이 구조인가 ═══════ -->
+<div class="pan on" id="p0">
+<div class="s">
+<h2>💡 왜 이 구조인가 — 출발점은 총가치각도기</h2>
+
+<h3>수강생이 듣고 싶은 건 딱 하나</h3>
+<div class="bx bx-r">
+"내 광고가 왜 안 되는 건데? 어떻게 고치면 되는 건데?"
+</div>
+<p>수강생은 히트맵이 예쁜지, 임베딩이 뭔지 관심 없다. <b>돈이 되는 광고를 만들고 싶을 뿐</b>이다.</p>
+<p>그래서 우리의 소재 분석은 <b>총가치각도기 3축</b>에서 시작하고, 3축으로 끝난다.</p>
+
+<h3>총가치각도기 3축 = 광고 퍼널</h3>
+<div class="funnel">
+  <div class="funnel-step" style="background:rgba(16,185,129,.1);border-radius:8px 0 0 8px;border:1px solid rgba(16,185,129,.3)">
+    <div style="font-size:1.5rem">🟢</div>
+    <div style="color:var(--g);font-weight:700;margin:.3rem 0">기반</div>
+    <div style="font-size:.8rem;color:var(--t3)">사람들이 보긴 하나?</div>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:.3rem">3초시청률 · CTR<br>잔존율 · 완시청률</div>
+  </div>
+  <div class="funnel-step" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3)">
+    <div style="font-size:1.5rem">🟡</div>
+    <div style="color:var(--a);font-weight:700;margin:.3rem 0">참여</div>
+    <div style="font-size:.8rem;color:var(--t3)">관심을 갖나?</div>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:.3rem">반응 · 댓글<br>공유 · 저장</div>
+  </div>
+  <div class="funnel-step" style="background:rgba(239,68,68,.1);border-radius:0 8px 8px 0;border:1px solid rgba(239,68,68,.3)">
+    <div style="font-size:1.5rem">🔴</div>
+    <div style="color:var(--r);font-weight:700;margin:.3rem 0">전환</div>
+    <div style="font-size:.8rem;color:var(--t3)">돈이 되나?</div>
+    <div style="font-size:.75rem;color:var(--t3);margin-top:.3rem">도달→구매율<br>ROAS · 구매전환율</div>
+  </div>
+</div>
+
+<h3>각 분석 섹션이 3축 어디에 대응하는가</h3>
+<p>리포트의 모든 섹션은 "이 소재의 어떤 점이 기반/참여/전환에 영향을 주는가"를 설명하기 위해 존재한다.</p>
+
+<table>
+<tr><th>분석 섹션</th><th>🟢 기반 (보긴 하나)</th><th>🟡 참여 (관심 갖나)</th><th>🔴 전환 (돈 되나)</th></tr>
+<tr><td><b>시선 분석</b> (DeepGaze)</td><td style="color:var(--g)"><b>핵심</b> — 첫 시선이 가는 곳 = 훅의 힘. 3초 안에 시선을 잡는가?</td><td>시선이 머무는 곳 = 공감 포인트. 감정을 유발하는 영역이 주목받는가?</td><td>CTA에 시선이 가는가? CTA 주목도 = 클릭 확률의 선행 지표.</td></tr>
+<tr><td><b>5축: Visual</b></td><td style="color:var(--g)"><b>핵심</b> — 훅 유형, 색상 대비, 구성 = 스크롤 멈추게 하는 힘</td><td>인물/얼굴 노출 = 공감 유도</td><td>제품 가시성 = 뭘 파는지 인지</td></tr>
+<tr><td><b>5축: Text</b></td><td>헤드라인 = 첫 인상</td><td style="color:var(--a)"><b>핵심</b> — 핵심 메시지, 소셜프루프 = "나도 그래!" 공감</td><td>CTA 텍스트 = 행동 유도</td></tr>
+<tr><td><b>5축: Psychology</b></td><td>호기심 트리거 = 멈춤</td><td style="color:var(--a)"><b>핵심</b> — 감정(신뢰/공포/기쁨) = 반응+공유 유도</td><td>긴급성 + 오퍼 = 지금 사야 하는 이유</td></tr>
+<tr><td><b>5축: Quality</b></td><td>제작 품질 = 신뢰 첫인상</td><td>가독성 = 메시지 전달력</td><td style="color:var(--r)"><b>핵심</b> — 피로도 = 같은 소재 반복 시 전환율 하락</td></tr>
+<tr><td><b>임베딩 유사도</b></td><td>-</td><td>-</td><td style="color:var(--r)"><b>핵심</b> — 유사 소재 중 성과 좋은 것 = "이런 변형이 더 팔린다"</td></tr>
+<tr><td><b>소재↔LP 일관성</b></td><td>-</td><td>-</td><td style="color:var(--r)"><b>핵심</b> — 소재와 LP가 불일치하면 이탈. 일관성 = 전환의 전제조건.</td></tr>
+<tr><td><b>영상: Audio</b></td><td>나레이션 첫 문장 = 청각 훅</td><td>BGM 감정 = 분위기 + 공감</td><td>엔딩 나레이션 = CTA 강화</td></tr>
+<tr><td><b>영상: Structure</b></td><td style="color:var(--g)"><b>핵심</b> — 훅 구간(0~3초) 구조 = 이탈 방지</td><td>장면 수/페이싱 = 지루함 방지</td><td>엔딩 CTA 유형 = 전환 마무리</td></tr>
+</table>
+
+<div class="bx bx-g">
+<b>핵심 원칙:</b> 모든 분석 결과를 "그래서 기반/참여/전환 중 뭐에 영향을 주는데?"로 해석해야 한다.<br>
+히트맵이 예뻐도 기반 점수가 낮으면 의미 없다. 5축이 완벽해도 LP 일관성이 낮으면 전환이 안 된다.<br>
+<b>→ 리포트의 마지막은 항상 "3축 중 어디가 약하고, 뭘 고치면 되는지"로 끝난다.</b>
+</div>
+
+<h3>리포트가 수강생에게 전달하는 가치</h3>
+<div class="grid3">
+<div class="card" style="border-top:3px solid var(--g)">
+<h5 style="color:var(--g)">기반이 약할 때</h5>
+<p>"사람들이 네 광고를 안 봐."</p>
+<p style="font-size:.8rem;color:var(--t3)">→ 시선 분석: 훅 영역 주목도 낮음<br>→ Visual: 색상 대비 low, 훅 유형 weak<br>→ 영상: 첫 3초 구조 문제<br><br><b>해결:</b> "벤치마크 상위 광고는 이런 훅을 쓴다. 네 것과 비교해봐."</p>
+</div>
+<div class="card" style="border-top:3px solid var(--a)">
+<h5 style="color:var(--a)">참여가 약할 때</h5>
+<p>"보긴 하는데 반응이 없어."</p>
+<p style="font-size:.8rem;color:var(--t3)">→ Psychology: 감정 유발 없음 (none)<br>→ Text: 소셜프루프 없음, 질문형 아님<br>→ 시선: 공감 포인트에 시선 안 감<br><br><b>해결:</b> "이 업종에서 후기 추가 시 참여 +44%. 실제 후기 넣어봐."</p>
+</div>
+<div class="card" style="border-top:3px solid var(--r)">
+<h5 style="color:var(--r)">전환이 약할 때</h5>
+<p>"관심은 있는데 안 사."</p>
+<p style="font-size:.8rem;color:var(--t3)">→ LP 일관성: CTA 불일치 (45/100)<br>→ 시선: CTA 주목도 낮음<br>→ Quality: 소재 피로도 high<br>→ Psychology: 긴급성 없음<br><br><b>해결:</b> "소재-LP CTA 통일 + 긴급성 추가 + 소재 변형 필요."</p>
+</div>
+</div>
+</div>
+
+<div class="s">
+<h2>분석 흐름: 데이터 → 해석 → 처방</h2>
+
+<div class="bx bx-b">
+업계 서비스들은 대부분 <b>데이터</b> 단계에서 멈춘다.<br>
+Neurons: "여기에 시선이 간다" → 끝.<br>
+Motion: "이 소재가 CTR 높다" → 끝.<br><br>
+우리는 <b>데이터 → 해석(왜?) → 처방(어떻게?)</b>까지 간다.<br>
+"여기에 시선이 간다" → "왜? 색상 대비가 높으니까" → "그래서? 기반은 좋은데 CTA에 시선이 안 가니까 전환이 약해. CTA 색상을 바꿔."
+</div>
+
+<h3>3계층 분석 모델</h3>
+<table>
+<tr><th>계층</th><th>무엇</th><th>도구</th><th>수강생이 보는 것</th></tr>
+<tr><td style="color:var(--cy)"><b>Layer 1: 데이터</b></td><td>소재에서 뭘 감지했는가</td><td>DeepGaze(시선) + Gemini(5축) + Embedding(유사도)</td><td>히트맵, 속성 태그, 유사 소재</td></tr>
+<tr><td style="color:var(--a)"><b>Layer 2: 해석</b></td><td>왜 그런 결과인가</td><td>3축 매핑 + 벤치마크 비교 + LP 일관성</td><td>"기반 약함 — 훅 주목도 32%, 벤치마크 평균 67%"</td></tr>
+<tr><td style="color:var(--g)"><b>Layer 3: 처방</b></td><td>어떻게 고칠 것인가</td><td>순환 학습 + 벤치마크 콘텐츠 + 요소별 Lift</td><td>"후기 추가(+44%) > CTA 색상 변경(+12%) > 긴급성 추가(+8%)"</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ═══════ TAB 1: 레퍼런스 ═══════ -->
+<div class="pan" id="p1">
+<div class="s">
+<h2>🔍 업계 레퍼런스 — 7개 서비스가 뭘 보여주는가</h2>
+
+<p>각 서비스가 강한 영역과 우리 3축에서의 위치를 매핑했다.</p>
+
+<table>
+<tr><th>서비스</th><th>핵심 기능</th><th>3축 대응</th><th>가격</th><th>한계</th></tr>
+<tr><td><b>Neurons AI</b><br><span style="font-size:.7rem;color:var(--t3)">neuronsinc.com</span></td><td>Impact Score 1~10<br>히트맵(95%)<br>Engagement/Memory/Clarity<br>AOI + 비교뷰 + 벤치마크</td><td>🟢 기반 특화<br>(시선 = 주목)</td><td>Custom</td><td>성과 데이터 연동 없음. "보긴 하는가"까지만. 전환 예측 불가.</td></tr>
+<tr><td><b>Motion</b><br><span style="font-size:.7rem;color:var(--t3)">motionapp.com</span></td><td>소재+성과 병렬 대시보드<br>리더보드 + AI태깅<br>Hook 분석 + A/B 비교</td><td>🟢🟡🔴 전체<br>(성과 기반)</td><td>$250/월~</td><td>"왜" 안 되는지 분석 없음. 숫자만 보여줌. AI 분석 아님.</td></tr>
+<tr><td><b>Attention Insight</b><br><span style="font-size:.7rem;color:var(--t3)">attentioninsight.com</span></td><td>히트맵 + Focus Map<br>Clarity Score + AOI벤치마크<br>AI 개선 제안</td><td>🟢 기반 특화</td><td>€29~299/월</td><td>성과 데이터 없음. 시선 예측만.</td></tr>
+<tr><td><b>Brainsight</b><br><span style="font-size:.7rem;color:var(--t3)">brainsight.app</span></td><td>Gazeplot(시선 경로)<br>영상 프레임별 히트맵<br>브랜드 트래킹</td><td>🟢 기반 특화<br>(영상 전문)</td><td>€199~799/월</td><td>성과 연동 없음. 시선 전문.</td></tr>
+<tr><td><b>Realeyes</b><br><span style="font-size:.7rem;color:var(--t3)">adverteyes.ai</span></td><td>웹캠 감정 분석<br>감정 타임라인<br>주의 곡선</td><td>🟡 참여 특화<br>(감정 = 반응)</td><td>Enterprise</td><td>실시간 측정 필요. 예측 아닌 사후 분석.</td></tr>
+<tr><td><b>Vidmob</b><br><span style="font-size:.7rem;color:var(--t3)">vidmob.com</span></td><td>요소별 Lift(+23%)<br>40+ AI 모델<br>3조+ 요소 DB</td><td>🟢🟡🔴 전체<br>(요소→성과)</td><td>Enterprise</td><td>데이터 규모 의존. 중소 브랜드 접근 불가.</td></tr>
+<tr><td><b>CreativeX</b><br><span style="font-size:.7rem;color:var(--t3)">creativex.com</span></td><td>CQS 0~100%<br>브랜드 가이드 준수율<br>품질→예산 비율</td><td>(품질 관리)</td><td>Enterprise</td><td>분석이 아닌 품질 관리. 성과 예측 아님.</td></tr>
+</table>
+
+<div class="bx bx-a">
+<b>핵심 발견:</b><br>
+• <b>시선 전문</b> (Neurons/Brainsight/Attention Insight) — 🟢 기반만 커버. "보긴 하나?" 까지.<br>
+• <b>성과 전문</b> (Motion) — 숫자만. "왜?"를 안 알려줌.<br>
+• <b>요소 분석</b> (Vidmob) — "왜?"까지 가지만 Enterprise only.<br>
+• <b>감정</b> (Realeyes) — 🟡 참여만. 예측 아닌 사후.<br><br>
+→ <b>3축 전체를 커버하면서 "왜 + 어떻게"까지 가는 서비스는 없다.</b> 그게 우리 자리.
+</div>
+</div>
+</div>
+
+<!-- ═══════ TAB 2: 이미지 분석 ═══════ -->
+<div class="pan" id="p2">
+<div class="s">
+<h2>🖼️ 이미지 소재 분석 — 정의서</h2>
+
+<div class="bx bx-b">
+<b>흐름:</b> 총가치 스코어카드(어디가 약한지) → 시선(왜 약한지) → 5축(구체적 원인) → 유사도(다른 소재와 비교) → LP일관성(전환 단절 체크) → 처방(어떻게 고칠지)
+</div>
+
+<h3>섹션 1: 총가치각도기 스코어카드</h3>
+<p><b>수강생이 보는 것:</b> "내 소재는 기반 67점(상위 23%), 참여 45점(상위 55%), 전환 32점(상위 78%)이다."</p>
+<div class="grid3">
+<div class="card" style="border-top:3px solid var(--g)">
+<h5 style="color:var(--g)">🟢 기반 점수 67/100</h5>
+<p style="font-size:.8rem">벤치마크 상위 23%<br>CTR 2.43% (벤치마크 2.21%)<br>3초시청률: 이미지라 N/A</p>
+</div>
+<div class="card" style="border-top:3px solid var(--a)">
+<h5 style="color:var(--a)">🟡 참여 점수 45/100</h5>
+<p style="font-size:.8rem">벤치마크 상위 55%<br>참여: 12/만 (벤치마크 27/만)<br>댓글+공유 부족</p>
+</div>
+<div class="card" style="border-top:3px solid var(--r)">
+<h5 style="color:var(--r)">🔴 전환 점수 32/100</h5>
+<p style="font-size:.8rem">벤치마크 상위 78%<br>ROAS: 0 (구매 미발생)<br>LP 일관성: 64/100</p>
+</div>
+</div>
+<p style="font-size:.8rem;color:var(--t3)">→ <b>종합 Impact Score: 48/100</b> (3축 가중 평균. 가중치: 기반 30% / 참여 30% / 전환 40%)</p>
+<p style="font-size:.8rem;color:var(--t3)">→ "참여와 전환이 약하다. 아래에서 왜 약한지 본다."</p>
+
+<h3>섹션 2: 시선 분석 — 👁 어디를 보는가</h3>
+<p><b>수강생이 보는 것:</b> "사람들 시선이 텍스트에만 가고 제품이랑 CTA는 안 봐."</p>
+<div class="grid2">
+<div class="card">
+<h5>🔥 원본 + 히트맵 (나란히)</h5>
+<p style="font-size:.8rem">좌: 원본 이미지<br>우: DeepGaze 히트맵 (warm-to-cold)<br>+ 시선 포인트 순서 번호 (1→2→3→4→5)</p>
+</div>
+<div class="card">
+<h5>👁 Gazeplot + Focus Map</h5>
+<p style="font-size:.8rem">Gazeplot: 시선 이동 경로 (선으로 연결)<br>Focus Map: 인지 영역(녹) / 미인지(회)<br>→ "CTA가 미인지 영역에 있다 = 문제"</p>
+</div>
+</div>
+<p style="font-size:.8rem;color:var(--t3)">AOI 분석: CTA 주목도 12% (벤치마크 평균 34%) / 제품 주목도 45% / 텍스트 주목도 78%</p>
+<p style="font-size:.8rem;color:var(--t3)">인지 부하: low → "단순한 구성이라 보기 편하다. 하지만 CTA가 묻힌다."</p>
+
+<h3>섹션 3: 5축 디테일 — 🧠 왜 그런가</h3>
+<p><b>수강생이 보는 것:</b> "어떤 요소가 성과에 영향을 주는지"</p>
+<div class="grid2">
+<div class="card"><h5 style="color:var(--ac2)">🎨 Visual</h5>
+<p style="font-size:.8rem">스타일: professional / 훅: benefit / 구성: center<br>색상: warm톤, high대비 / 팔레트: 🟤🟫⬜<br>인물: 얼굴 없음 ← <span style="color:var(--r)">⚠ 시선 집중 감소 요인</span><br>제품 가시성: high / 텍스트 비율: 20%</p>
+</div>
+<div class="card"><h5 style="color:var(--g)">📝 Text</h5>
+<p style="font-size:.8rem">핵심: "사이즈 불만족 시 100% 환불"<br>헤드라인: benefit형 / CTA: 없음 ← <span style="color:var(--r)">⚠ 클릭 유도 부재</span><br>오버레이: ["100% 환불", "빅사이즈"]<br>소셜프루프: 후기 없음 ← <span style="color:var(--a)">⚠ 참여 약화 요인</span></p>
+</div>
+<div class="card"><h5 style="color:var(--a)">🧠 Psychology</h5>
+<p style="font-size:.8rem">감정: trust(신뢰) / 긴급성: none ← <span style="color:var(--r)">⚠ 전환 약화</span><br>트리거: none / 오퍼: 환불 보장<br>사회적 증거: none ← <span style="color:var(--a)">⚠ 참여 약화</span></p>
+</div>
+<div class="card"><h5 style="color:var(--p)">🎯 Quality + Attention</h5>
+<p style="font-size:.8rem">제작 품질: professional ✅<br>가독성: high ✅<br>인지 부하: low ✅<br>CTA 주목도: 12% ← <span style="color:var(--r)">⚠ 매우 낮음</span><br>피로도: null (유사 소재 비교 필요)</p>
+</div>
+</div>
+
+<h3>섹션 4: 임베딩 & 유사도 — 🔗 비슷한 소재와 비교</h3>
+<p><b>수강생이 보는 것:</b> "내 소재와 비슷한데 성과 좋은 소재가 있다"</p>
+<ul>
+<li><b>같은 계정 유사 소재 Top 3</b> — 썸네일 + 코사인 유사도 + 성과 차이</li>
+<li><b>벤치마크 유사 소재 Top 3</b> — "이 소재와 비슷한데 CTR이 2배인 소재. 차이: 얼굴 노출 + 후기 추가."</li>
+<li><b>피로도 위험</b> — 유사 소재 비율 높으면 "오디언스가 같은 소재에 지쳤다. 다른 각도 필요."</li>
+</ul>
+
+<h3>섹션 5: 소재↔LP 일관성 — 🔗 끊기는 곳 찾기</h3>
+<p><b>수강생이 보는 것:</b> "소재에서 약속한 걸 LP에서 지키고 있나?"</p>
+<ul>
+<li>종합 일관성: 64/100</li>
+<li>메시지 78 ✅ / CTA 45 ❌ / 오퍼 50 ⚠️</li>
+<li><span style="color:var(--r)">불일치: "소재는 '100% 환불' 강조하는데, LP 상단에 환불 정책 없음 → 이탈 유발"</span></li>
+</ul>
+
+<h3>섹션 6: AI 개선 제안 — 💡 뭘 고칠 것인가 (처방)</h3>
+<p><b>수강생이 보는 것:</b> "우선순위대로 이걸 고치면 된다"</p>
+<div class="bx bx-a">
+<b>Impact 순 정렬 (높은 것부터):</b><br><br>
+1. ⭐ <b>실제 후기 추가</b> → 참여 예상 +44% (이 업종 순환학습 데이터)<br>
+2. 🎯 <b>CTA 텍스트 명시</b> ("지금 구매하기") → 전환 개선 (CTA 주목도 12%→34% 목표)<br>
+3. ⚡ <b>긴급성 추가</b> (한정 수량/기간) → 전환 예상 +8%<br>
+4. 🔗 <b>LP 환불 정책 상단 배치</b> → 소재↔LP 일관성 64→80+ 목표<br>
+5. 👤 <b>얼굴 노출 이미지 테스트</b> → 기반(시선 집중) 예상 +40%
+</div>
+</div>
+</div>
+
+<!-- ═══════ TAB 3: 영상 분석 ═══════ -->
+<div class="pan" id="p3">
+<div class="s">
+<h2>🎬 영상 소재 분석 — 이미지 6섹션 + 영상 전용 4섹션</h2>
+
+<div class="bx bx-p">
+이미지 분석의 6개 섹션을 그대로 포함하고, 영상만의 시간축 분석 4개 섹션이 추가된다.<br>
+영상의 핵심: <b>시간에 따른 변화</b>. 이미지는 한 장이지만 영상은 매 초가 다르다.
+</div>
+
+<h4>↑ 섹션 1~6: 이미지와 동일</h4>
+<p style="font-size:.85rem;color:var(--t3)">총가치 스코어카드 / 시선(히트맵은 구간별) / 5축(Audio+Structure 추가) / 임베딩 / LP일관성 / 개선제안</p>
+
+<h3>섹션 7: 장면 타임라인 — ⏱️ 어떤 구조로 흘러가는가</h3>
+<p><b>수강생이 보는 것:</b> "내 영상이 어떤 흐름으로 구성됐고, 각 구간이 제 역할을 하는가"</p>
+
+<div class="fl">구간       유형    역할 (3축)                     설명
+───────────────────────────────────────────────────────────────────────
+0~3초      [훅]    🟢 기반 — 스크롤 멈추기      화장 무너지는 피부 클로즈업으로 공감 유도
+4~12초     [데모]   🟢🟡 기반+참여               제품 소개 + 전직 승무원 신뢰도 부여
+13~22초    [증거]   🟡 참여 — 공감+신뢰          사용 전후 비교 + 성분 설명
+23~31초    [CTA]    🔴 전환 — 행동 유도          구매 유도 + 할인 오퍼</div>
+
+<ul>
+<li><b>구간별 시선 히트맵</b> — 각 구간의 키프레임에 DeepGaze 히트맵 오버레이</li>
+<li><b>시선 타임라인 그래프</b> — X축: 시간, Y축: 주목 영역 변화 (제품/얼굴/텍스트/CTA)</li>
+<li>각 구간이 3축 중 어디에 대응하는지 표시 → "훅 구간이 약하면 기반이 무너진다"</li>
+</ul>
+
+<h3>섹션 8: 오디오 분석 — 🎙 귀로 듣는 것도 분석</h3>
+<p><b>수강생이 보는 것:</b> "나레이션이 화면과 맞는지, BGM이 적절한지"</p>
+<div class="grid2">
+<div class="card">
+<h5 style="color:var(--cy)">오디오 메타</h5>
+<p style="font-size:.8rem">유형: mixed (나레이션+BGM)<br>BGM: pop / 감정: upbeat<br>효과음: sparkle, swoosh<br>→ 🟡 참여: BGM 감정이 제품 무드와 맞는가?</p>
+</div>
+<div class="card">
+<h5 style="color:var(--cy)">나레이션 전문 + 시각 일치</h5>
+<p style="font-size:.8rem">"어떤 파데를 써도 피부 화장이 금방 무너진다면 딱 이거 하나만 바꿔봐..."<br><br>→ 🟢 기반: 첫 문장이 청각 훅 역할 하는가?<br>→ 나레이션↔화면 일치도: 말하는 내용이 보이는 것과 맞는가?</p>
+</div>
+</div>
+
+<h3>섹션 9: 영상 시선 Canvas — 👁 재생하면서 시선 따라가기</h3>
+<div class="bx bx-r">
+<b>인터랙티브 뷰</b> (bscamp 앱 전용 — 모찌리포트에서는 구간별 키프레임으로 대체)<br><br>
+HTML5 video 재생 + canvas 히트맵 오버레이 → 시선이 실시간으로 따라감<br>
+구간 색상: <span style="color:#ef4444">●빨강(훅 0~3초)</span> → <span style="color:#3b82f6">●파랑(제품 3~8초)</span> → <span style="color:#10b981">●초록(CTA 8초+)</span><br><br>
+video-heatmap-overlay.tsx: video timeupdate → 가장 가까운 프레임 fixations → canvas 가우시안 히트맵<br><br>
+<b>수강생이 보는 것:</b> "내 영상을 재생하면 사람들 시선이 어디로 가는지 실시간으로 보인다."
+</div>
+
+<h3>섹션 10: 구조 분석 — 🎬 영상의 뼈대</h3>
+<p><b>수강생이 보는 것:</b> "내 영상 구조가 최적인가, 뭘 바꿔야 하는가"</p>
+<ul>
+<li>페이싱: <b>fast</b> (빠른 전환 → 지루함 방지 ✅ but 정보 과부하 가능)</li>
+<li>장면 수: 4개 / 평균 장면 길이: 7.8초</li>
+<li>훅 유형: <b>문제제기</b> ("화장이 무너진다면") → 🟢 기반 강화</li>
+<li>엔딩 CTA: <b>할인 오퍼</b> ("지금 구매") → 🔴 전환 강화</li>
+</ul>
+<div class="bx bx-g">
+<b>구조 최적화 제안:</b><br>
+• 훅 구간 3초 → OK (벤치마크 평균 2~3초 이내)<br>
+• 증거 구간에 실제 후기 추가하면 참여 강화<br>
+• 엔딩 CTA 전 0.5초 정지 프레임 추가 → CTA 주목도 향상
+</div>
+</div>
+</div>
+
+<!-- ═══════ TAB 4: 차별점 ═══════ -->
+<div class="pan" id="p4">
+<div class="s">
+<h2>🏆 bscamp만의 차별점 — 어디에도 없는 것</h2>
+
+<div class="bx bx-b">
+시선 분석만 하는 Neurons, 성과만 보여주는 Motion, 요소만 태깅하는 Vidmob.<br>
+우리는 <b>"소재 → 시선 → 해석 → LP까지 → 전환까지 → 처방까지"</b> 풀 퍼널을 커버한다.
+</div>
+
+<div class="grid3">
+<div class="card" style="border-left:3px solid var(--g)">
+<h5 style="color:var(--g)">1. 총가치각도기 연동</h5>
+<p style="font-size:.8rem">모든 분석이 기반/참여/전환 퍼널에 매핑된다. "히트맵이 예쁘다"가 아니라 "기반 점수가 67점이다."로 읽힌다.<br><br>
+<b>다른 곳:</b> 시선 점수와 비즈니스 성과가 분리됨.</p>
+</div>
+<div class="card" style="border-left:3px solid var(--a)">
+<h5 style="color:var(--a)">2. 소재↔LP 일관성</h5>
+<p style="font-size:.8rem">소재만 분석하는 게 아니라 <b>LP까지 이어지는 흐름</b>을 본다. 메시지/시각/CTA/오퍼 4축. 끊기는 곳 = 이탈 지점.<br><br>
+<b>다른 곳:</b> LP는 아예 안 봄.</p>
+</div>
+<div class="card" style="border-left:3px solid var(--r)">
+<h5 style="color:var(--r)">3. 순환 학습 기반 처방</h5>
+<p style="font-size:.8rem">"후기 추가 = +44%"는 추측이 아니라 <b>실제 데이터</b>. 소재 변경 → 성과 변화를 추적해서 축적한 실증 데이터.<br><br>
+<b>다른 곳:</b> 일반적 베스트 프랙티스 권고.</p>
+</div>
+<div class="card" style="border-left:3px solid var(--p)">
+<h5 style="color:var(--p)">4. 벤치마크 콘텐츠 비교</h5>
+<p style="font-size:.8rem">숫자 비교("네 CTR이 낮아")가 아닌 <b>소재 자체 비교</b>("잘 되는 광고는 이런 훅을 쓴다"). 임베딩으로 유사 소재 매칭.<br><br>
+<b>다른 곳:</b> 숫자 벤치마크만.</p>
+</div>
+<div class="card" style="border-left:3px solid var(--cy)">
+<h5 style="color:var(--cy)">5. 영상 시간축 분석</h5>
+<p style="font-size:.8rem">장면 타임라인 + 구간별 히트맵 + 오디오 분석 + Canvas 오버레이. 영상을 초 단위로 해부.<br><br>
+<b>다른 곳:</b> Brainsight만 영상 히트맵, 나머지는 이미지만.</p>
+</div>
+<div class="card" style="border-left:3px solid var(--ac)">
+<h5 style="color:var(--ac)">6. 3계층 분석</h5>
+<p style="font-size:.8rem">데이터(뭘 감지) → 해석(왜) → 처방(어떻게). 대부분 서비스는 Layer 1에서 멈춤. 우리는 Layer 3까지.<br><br>
+<b>다른 곳:</b> "여기에 시선이 간다" → 끝.</p>
+</div>
+</div>
+
+<h3>정리: 각 레퍼런스 기능 vs bscamp</h3>
+<table>
+<tr><th>기능</th><th>Neurons</th><th>Motion</th><th>Vidmob</th><th>bscamp</th></tr>
+<tr><td>시선 히트맵</td><td style="color:var(--g)">✅ 95%</td><td>❌</td><td>❌</td><td style="color:var(--g)">✅ DeepGaze</td></tr>
+<tr><td>성과 연동</td><td>❌</td><td style="color:var(--g)">✅</td><td style="color:var(--g)">✅</td><td style="color:var(--g)">✅ 28개 지표</td></tr>
+<tr><td>5축 AI 분석</td><td>△</td><td>❌</td><td style="color:var(--g)">✅</td><td style="color:var(--g)">✅ Gemini</td></tr>
+<tr><td>영상 구조 분석</td><td>❌</td><td>△</td><td>❌</td><td style="color:var(--g)">✅ 장면+오디오</td></tr>
+<tr><td>LP 일관성</td><td>❌</td><td>❌</td><td>❌</td><td style="color:var(--g)"><b>✅ 유일</b></td></tr>
+<tr><td>벤치마크 콘텐츠 비교</td><td>❌</td><td>❌</td><td>❌</td><td style="color:var(--g)"><b>✅ 유일</b></td></tr>
+<tr><td>순환 학습 처방</td><td>❌</td><td>❌</td><td>❌</td><td style="color:var(--g)"><b>✅ 유일</b></td></tr>
+<tr><td>임베딩 유사 검색</td><td>❌</td><td>❌</td><td>△</td><td style="color:var(--g)">✅ 3072D</td></tr>
+<tr><td>3축 퍼널 매핑</td><td>❌</td><td>❌</td><td>❌</td><td style="color:var(--g)"><b>✅ 유일</b></td></tr>
+</table>
+</div>
+</div>
+
+</div>
+
+<script>
+function sw(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('on',i===n)});
+  document.querySelectorAll('.pan').forEach((p,i)=>{p.classList.toggle('on',i===n)});
+}
+</script>
+</body>
+</html>

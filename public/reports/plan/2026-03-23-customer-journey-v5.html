@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소재 분석 — 고객 여정 뷰 (에어무드)</title>
+<style>
+:root{--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--bd:#475569;--ac:#6366f1;--ac2:#818cf8;--t:#f8fafc;--t2:#cbd5e1;--t3:#64748b;--g:#10b981;--a:#f59e0b;--r:#ef4444;--p:#8b5cf6;--cy:#06b6d4;--b:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',-apple-system,sans-serif;background:var(--bg);color:var(--t);line-height:1.7;font-size:14px}
+.c{max-width:1200px;margin:0 auto;padding:2rem}
+.hd{text-align:center;padding:2rem;background:linear-gradient(135deg,#1b1025,#1e1b4b,var(--bg));border-radius:14px;border:1px solid var(--bd);margin-bottom:2rem}
+.hd h1{font-size:1.6rem;background:linear-gradient(135deg,var(--ac),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
+.s{background:var(--bg2);border-radius:12px;padding:1.5rem;margin-bottom:1.2rem;border:1px solid var(--bd)}
+.s h2{color:var(--ac2);font-size:1.15rem;font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:8px}
+.tag{display:inline-flex;padding:3px 10px;border-radius:16px;font-size:.7rem;font-weight:600;margin:2px}
+.step-header{display:flex;align-items:center;gap:10px;margin-bottom:1.2rem}
+.step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800}
+.step-title{font-size:1.2rem;font-weight:700}
+details{margin-bottom:.8rem}
+details>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:.7rem 1rem;border:1px solid var(--bd);font-weight:600;color:var(--t);font-size:.85rem}
+details>summary::after{content:'▼';font-size:.65rem;color:var(--t3)}
+details[open]>summary::after{content:'▲'}
+details>.inner{background:var(--bg);border-radius:0 0 8px 8px;padding:1rem;border:1px solid var(--bd);border-top:none}
+.journey-row{display:grid;grid-template-columns:70px 1fr;gap:0;margin-bottom:2px}
+.journey-time{font-size:.72rem;font-weight:700;padding:10px 8px;text-align:center;border-right:2px solid var(--bd)}
+.journey-content{padding:8px 12px;border-radius:0 8px 8px 0}
+.journey-content:hover{background:rgba(99,102,241,.04)}
+.emoji-row{display:flex;gap:12px;font-size:.78rem;margin-top:4px}
+.emoji-label{color:var(--t3);min-width:20px;text-align:center}
+@media(max-width:768px){.c{padding:1rem}.video-grid{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+<div class="c">
+
+<div class="hd">
+  <h1>🎬 에어무드 히알루론산 크림 — 고객 여정 분석</h1>
+  <div style="color:var(--t3);font-size:.82rem;margin-top:.4rem">
+    "모든 숫자는 고객이 만든다. 보고, 듣고, 생각하고, 행동한 것의 합."
+  </div>
+  <div style="color:var(--t3);font-size:.72rem;margin-top:.3rem">
+    31초 · 김선영_31s · ad_id: 120241760856630479 · 실제 데이터 기반
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 광고축: 네가 만든 건 이런 거야                    -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s" style="border-left:4px solid var(--ac)">
+  <div class="step-header">
+    <div class="step-num" style="background:rgba(99,102,241,.15);color:var(--ac2)">📋</div>
+    <div>
+      <div class="step-title" style="color:var(--ac2)">광고축 — 네가 만든 콘텐츠는 이런 거야</div>
+      <div style="font-size:.78rem;color:var(--t3)">5축 분석 기반 카테고리 분류</div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem">
+    <span class="tag" style="background:rgba(239,68,68,.12);color:var(--r);border:1px solid rgba(239,68,68,.3)">🎬 UGC · 셀프촬영</span>
+    <span class="tag" style="background:rgba(99,102,241,.12);color:var(--ac2);border:1px solid rgba(99,102,241,.3)">🪝 훅: 문제제기 (problem)</span>
+    <span class="tag" style="background:rgba(139,92,246,.12);color:var(--p);border:1px solid rgba(139,92,246,.3)">💬 메시징: 권위+혜택</span>
+    <span class="tag" style="background:rgba(6,182,212,.12);color:var(--cy);border:1px solid rgba(6,182,212,.3)">👤 타겟: 직장인 여성 (solution_aware)</span>
+    <span class="tag" style="background:rgba(245,158,11,.12);color:var(--a);border:1px solid rgba(245,158,11,.3)">🏷️ beauty · skincare</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+    <div style="background:var(--bg);border-radius:8px;padding:.8rem;text-align:center">
+      <div style="font-size:.7rem;color:var(--t3)">포맷</div>
+      <div style="font-size:.85rem;font-weight:700">세로 영상 31초</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:.8rem;text-align:center">
+      <div style="font-size:.7rem;color:var(--t3)">구조</div>
+      <div style="font-size:.85rem;font-weight:700">훅→데모→결과→CTA</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:.8rem;text-align:center">
+      <div style="font-size:.7rem;color:var(--t3)">설득 전략</div>
+      <div style="font-size:.85rem;font-weight:700">authority (전직 승무원)</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:.8rem;text-align:center">
+      <div style="font-size:.7rem;color:var(--t3)">오퍼</div>
+      <div style="font-size:.85rem;font-weight:700">discount 40%</div>
+    </div>
+  </div>
+
+  <div style="margin-top:.8rem;font-size:.75rem;color:var(--t3)">
+    Andromeda: <span style="color:var(--ac2)">skincare-demo-ugc-text-overlay-glowy-skin</span> · 
+    P.D.A: <span style="color:var(--a)">office_worker × beauty × solution_aware</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- Step 1: 고객 이해                                -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="s" style="border-left:4px solid var(--cy)">
+  <div class="step-header">
+    <div class="step-num" style="background:rgba(6,182,212,.15);color:var(--cy)">1</div>
+    <div>
+      <div class="step-title" style="color:var(--cy)">고객 이해 — 이 영상을 본 고객은 이렇게 반응했어</div>
+      <div style="font-size:.78rem;color:var(--t3)">보고 → 듣고 → 생각하고 → 행동했다 (시간순)</div>
+    </div>
+  </div>
+
+  <!-- 영상 + 타임라인 -->
+  <div class="video-grid" style="display:grid;grid-template-columns:210px 1fr;gap:1.5rem;margin-bottom:1.5rem">
+
+    <!-- 영상 + Canvas 히트맵 오버레이 -->
+    <div>
+      <!-- 영상 + 시선 오버레이 (영상 위에 직접) -->
+      <div style="position:relative;width:200px">
+        <video id="vid" style="width:200px;border-radius:10px;display:block" controls preload="metadata"
+          src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/1440411543944393/video/120241760856630479.mp4">
+        </video>
+        <canvas id="heatCanvas" width="200" height="356" style="position:absolute;top:0;left:0;width:200px;height:356px;border-radius:10px;pointer-events:none"></canvas>
+        <div id="timeOverlay" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,.7);color:#fff;padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:700;font-family:monospace;pointer-events:none">00초</div>
+        <div id="heatInfo" style="position:absolute;bottom:36px;left:6px;right:6px;font-size:.6rem;color:rgba(255,255,255,.8);text-align:center;background:rgba(0,0,0,.6);padding:3px;border-radius:4px;pointer-events:none"></div>
+        <div style="position:absolute;top:8px;right:8px;font-size:.55rem;color:rgba(255,255,255,.5);pointer-events:none">🔴 시선 추적</div>
+      </div>
+      <div style="font-size:.65rem;color:var(--t3);margin-top:.3rem;text-align:center">
+        영상 재생 → 히트맵 + 타임라인 실시간 동기화
+      </div>
+    </div>
+
+    <!-- 고객 여정 타임라인 -->
+    <div style="max-height:420px;overflow-y:auto" id="journeyTimeline">
+
+      <!-- 0-3초: 훅 -->
+      <div class="journey-row" id="j0">
+        <div class="journey-time" style="color:var(--r);border-color:var(--r)">0-3초<br><span style="font-size:.6rem">훅</span></div>
+        <div class="journey-content" style="background:rgba(239,68,68,.04)">
+          <div class="emoji-row">
+            <span class="emoji-label">👁</span>
+            <span><b>봤다:</b> 피부 클로즈업 + "점심만 지나면 파데 무너지는 사람!!" 자막</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">👂</span>
+            <span><b>들었다:</b> "어떤 파데를 써도 피부 화장이 금방 무너진다면 딱 이거 하나만 바꿔봐"</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🧠</span>
+            <span><b>생각:</b> "아 나도 그래" → <span style="color:var(--p)">공감 (empathy)</span> · problem hook 작동</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🖱</span>
+            <span><b>행동:</b> 3초시청률 19~60% (일별 변동) — <span style="color:var(--a)">⚠️ 불안정</span></span>
+          </div>
+          <div style="margin-top:4px;padding:4px 8px;background:rgba(239,68,68,.08);border-radius:4px;font-size:.7rem;color:var(--r)">
+            📍 📍 시선: 0초 <b>인물</b>(100%) → 3초 <b>인물</b>(92%) · 얼굴 클로즈업에 시선 집중
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-10초: 제품 소개 + 데모 -->
+      <div class="journey-row" id="j1">
+        <div class="journey-time" style="color:var(--b);border-color:var(--b)">3-10초<br><span style="font-size:.6rem">소개+<br>데모</span></div>
+        <div class="journey-content" style="background:rgba(59,130,246,.04)">
+          <div class="emoji-row">
+            <span class="emoji-label">👁</span>
+            <span><b>봤다:</b> 승무원 크림 소개 자막 → 제형 시연 → "전직 승무원" 키워드</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">👂</span>
+            <span><b>들었다:</b> "기초 공사가 중요... 승무원 대표가 만든 이 수분 크림"</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🧠</span>
+            <span><b>생각:</b> "승무원이 만들었으면 괜찮겠다" → <span style="color:var(--p)">신뢰 (authority)</span></span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🖱</span>
+            <span><b>행동:</b> 계속 시청 중 (이탈 적음)</span>
+          </div>
+          <div style="margin-top:4px;padding:4px 8px;background:rgba(59,130,246,.08);border-radius:4px;font-size:.7rem;color:var(--b)">
+            📍 📍 시선: 6초 <b>텍스트</b>(86%) → 9초 <b>텍스트</b>(90%) · ⚠️ 자막에 시선 지배, 제품은 아직 안 봄
+          </div>
+        </div>
+      </div>
+
+      <!-- 10-20초: 결과 시연 -->
+      <div class="journey-row" id="j2">
+        <div class="journey-time" style="color:var(--b);border-color:var(--b)">10-20초<br><span style="font-size:.6rem">결과</span></div>
+        <div class="journey-content" style="background:rgba(59,130,246,.04)">
+          <div class="emoji-row">
+            <span class="emoji-label">👁</span>
+            <span><b>봤다:</b> 얼굴에 크림 도포 → 물광 피부 결과 → 임상 수치 텍스트</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">👂</span>
+            <span><b>들었다:</b> "히알루론산이 피부 속까지 깊이 흡수... 속건조가 안 느껴져서 너무 좋은 거야"</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🧠</span>
+            <span><b>생각:</b> "진짜 좋아 보이네" → <span style="color:var(--p)">기대 (excitement)</span> + 임상 데이터로 신뢰 강화</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🖱</span>
+            <span><b>행동:</b> 계속 시청 · <span style="color:var(--a)">⚠️ 텍스트 읽기에 몰두</span></span>
+          </div>
+          <div style="margin-top:4px;padding:4px 8px;background:rgba(245,158,11,.08);border-radius:4px;font-size:.7rem;color:var(--a)">
+            📍 📍 시선: 12초 <b style="color:var(--g)">제품</b>(88%) ← 유일하게 제품에 시선 간 구간! → 15초 다시 <b>텍스트</b>(87%)
+          </div>
+        </div>
+      </div>
+
+      <!-- 20-27초: 수정화장 팁 -->
+      <div class="journey-row" id="j3">
+        <div class="journey-time" style="color:var(--b);border-color:var(--b)">20-27초<br><span style="font-size:.6rem">팁</span></div>
+        <div class="journey-content" style="background:rgba(59,130,246,.04)">
+          <div class="emoji-row">
+            <span class="emoji-label">👁</span>
+            <span><b>봤다:</b> 크림으로 화장 녹이기 → 쿠션 톡톡 → 수정 완료</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">👂</span>
+            <span><b>들었다:</b> "크림으로 살짝 녹여준 뒤에 쿠션으로 눌러주면 자극 없이 예쁘게 수정된다"</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🧠</span>
+            <span><b>생각:</b> "이런 활용법도 있구나" → <span style="color:var(--p)">활용도 인지</span></span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🖱</span>
+            <span><b>행동:</b> 시청 유지 · 아직 클릭 충동 없음</span>
+          </div>
+          <div style="margin-top:4px;padding:4px 8px;background:rgba(59,130,246,.08);border-radius:4px;font-size:.7rem;color:var(--b)">
+            📍 📍 시선: 21초 <b>인물</b>(100%) → 23~24초 <b>텍스트</b>+<b style="color:var(--g)">제품</b> 병행 · 시선이 인물↔텍스트 오감
+          </div>
+        </div>
+      </div>
+
+      <!-- 27-30초: CTA -->
+      <div class="journey-row" id="j4">
+        <div class="journey-time" style="color:var(--g);border-color:var(--g)">27-30초<br><span style="font-size:.6rem">CTA</span></div>
+        <div class="journey-content" style="background:rgba(16,185,129,.04)">
+          <div class="emoji-row">
+            <span class="emoji-label">👁</span>
+            <span><b>봤다:</b> "자사몰에서 최대 40% 할인 중" 텍스트</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">👂</span>
+            <span><b>들었다:</b> "요거 지금 할인 행사 중이니까 꼭 사 봐"</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🧠</span>
+            <span><b>생각:</b> "40% 할인이면 괜찮은데... <span style="color:var(--a)">근데 급하진 않네</span>" → urgency 없음 ⚠️</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-label">🖱</span>
+            <span><b>행동:</b> CTR 1.2% · <span style="color:var(--r)">클릭은 하지만 구매 전환 약함 (ROAS 0.5~1.1)</span></span>
+          </div>
+          <div style="margin-top:4px;padding:4px 8px;background:rgba(239,68,68,.08);border-radius:4px;font-size:.7rem;color:var(--r)">
+            📍 📍 시선: 28초 <b>텍스트</b>(100%) + <b style="color:var(--a)">CTA</b>(64%) → 29초 <b>텍스트</b>+<b style="color:var(--a)">CTA</b>(72%) · 시선은 갔지만 버튼 없음 ⚠️
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- 고객 여정 요약 -->
+  <div style="background:var(--bg);border-radius:10px;padding:1.2rem;border:1px solid var(--bd)">
+    <div style="font-weight:700;color:var(--t);margin-bottom:.6rem;font-size:.9rem">📊 고객 여정 요약</div>
+    
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem">
+      <div style="text-align:center;padding:.6rem;background:var(--bg2);border-radius:8px;border-top:3px solid var(--cy)">
+        <div style="font-size:1.5rem">👁👂</div>
+        <div style="font-size:.7rem;color:var(--t3)">감각</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--cy)">텍스트 지배 65%</div>
+        <div style="font-size:.65rem;color:var(--t3)">제품 시선 거의 없음</div>
+      </div>
+      <div style="text-align:center;padding:.6rem;background:var(--bg2);border-radius:8px;border-top:3px solid var(--p)">
+        <div style="font-size:1.5rem">🧠</div>
+        <div style="font-size:.7rem;color:var(--t3)">사고</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--p)">공감→신뢰→기대</div>
+        <div style="font-size:.65rem;color:var(--t3)">감정 흐름은 좋음</div>
+      </div>
+      <div style="text-align:center;padding:.6rem;background:var(--bg2);border-radius:8px;border-top:3px solid var(--a)">
+        <div style="font-size:1.5rem">🖱</div>
+        <div style="font-size:.7rem;color:var(--t3)">행동 (선행)</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--a)">CTR 1.2~3.7%</div>
+        <div style="font-size:.65rem;color:var(--t3)">클릭은 함</div>
+      </div>
+      <div style="text-align:center;padding:.6rem;background:var(--bg2);border-radius:8px;border-top:3px solid var(--r)">
+        <div style="font-size:1.5rem">💳</div>
+        <div style="font-size:.7rem;color:var(--t3)">행동 (후행)</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--r)">ROAS 0.5~1.1</div>
+        <div style="font-size:.65rem;color:var(--t3)">구매 전환 약함</div>
+      </div>
+    </div>
+
+    <div style="font-size:.8rem;color:var(--t2);line-height:1.8">
+      <b>핵심 발견:</b> 고객은 영상을 <b>보고 들으면서 공감→신뢰→기대</b>까지는 잘 타는데,
+      마지막 <b>행동(구매)</b>에서 떨어져. 이유: ① 급하지 않음(urgency 없음) ② 텍스트만 읽다 끝남(제품 인지 약함) ③ CTA 구간이 마지막 3초뿐.
+    </div>
+  </div>
+</div>
+
+
+  <!-- 씬별 시선 분석 + 처방 -->
+  <div style="margin-bottom:1.2rem">
+    <div style="font-size:.9rem;font-weight:700;color:var(--t);margin-bottom:.5rem">👁 씬별 시선 분석 + 처방</div>
+    <div style="font-size:.7rem;color:var(--t3);margin-bottom:8px">AI가 영상을 씬 단위로 분할 → 각 씬별 시선 분포 + 분석 + 개선안</div>
+    <div style="font-size:.65rem;color:var(--t3);margin-bottom:12px;display:flex;gap:12px">
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--r)"></span> 인물</span>
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--b)"></span> 텍스트</span>
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--g)"></span> 제품</span>
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--a)"></span> CTA</span>
+    </div>
+
+    <!-- 씬 1: 훅 0-3초 -->
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:8px;border-left:4px solid var(--r)">
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:12px">
+        <div>
+          <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_0s_dg3.png" style="width:120px;height:213px;object-fit:cover;border-radius:6px" loading="lazy"/>
+          <div style="font-size:.6rem;color:var(--r);font-weight:600;text-align:center;margin-top:3px">0-3초 · 훅</div>
+        </div>
+        <div>
+          <div style="display:flex;height:18px;border-radius:4px;overflow:hidden;margin-bottom:6px">
+            <div style="width:85%;background:var(--r);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600">인물 85%</div>
+            <div style="width:15%;background:var(--b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">텍스트</div>
+          </div>
+          <div style="font-size:.75rem;color:var(--t2);margin-bottom:6px;line-height:1.7">
+            <b>👁 봤다:</b> 인물 피부 클로즈업 + 손가락으로 피부 누르는 장면. "점심만 지나면 파데 무너지는 사람!!ㅠ" 자막<br>
+            <b>👂 들었다:</b> "어떤 파데를 써도 피부 화장이 금방 무너진다면 딱 이거 하나만 바꿔봐"<br>
+            <b>🧠 느꼈다:</b> 공감(empathy) — "아 나도 오후에 무너지는데" → problem hook 작동<br>
+            <b>시선:</b> 0초 <span style="color:var(--r)">인물 100%</span> → 3초 <span style="color:var(--r)">인물 92%</span> · 피부 질감에 시선 고정
+          </div>
+          <div style="font-size:.72rem;color:var(--t3);margin-bottom:4px;padding:4px 8px;background:var(--bg2);border-radius:4px">
+            📝 자막: "점심만 지나면 파데 무너지는 사람!!ㅠ" · 흰색+검정테두리 · 중앙 하단 · 세이프티존 ✅
+          </div>
+          <div style="font-size:.72rem;padding:6px 8px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:6px">
+            💊 <span style="color:var(--g);font-weight:700">유지</span> · <span style="font-size:.6rem;background:rgba(6,182,212,.15);color:var(--cy);padding:1px 4px;border-radius:3px">👁 감각</span> — 훅 잘 작동 ✅ 인물 클로즈업이 시선을 확실히 잡음<br>
+            <span style="color:var(--t3)">선택: 제품명 1줄 추가 → 훅+제품인지 동시 가능</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 씬 2: 소개+데모 3-10초 -->
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:8px;border-left:4px solid var(--b)">
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:12px">
+        <div>
+          <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_5s_dg3.png" style="width:120px;height:213px;object-fit:cover;border-radius:6px" loading="lazy"/>
+          <div style="font-size:.6rem;color:var(--b);font-weight:600;text-align:center;margin-top:3px">3-10초 · 소개+데모</div>
+        </div>
+        <div>
+          <div style="display:flex;height:18px;border-radius:4px;overflow:hidden;margin-bottom:6px">
+            <div style="width:70%;background:var(--b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600">텍스트 70%</div>
+            <div style="width:25%;background:var(--r);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">인물 25%</div>
+            <div style="width:5%;background:var(--g)"></div>
+          </div>
+          <div style="font-size:.75rem;color:var(--t2);margin-bottom:6px;line-height:1.7">
+            <b>👁 봤다:</b> 비포(무너진 피부)→애프터(물광 피부) 비교 + "파데 끼임, 들뜸없이 반짝 물광 피부로.." 자막 + "전직 승무원 대표가 만드는" + 제형 시연<br>
+            <b>👂 들었다:</b> "화장이 무너지지 않으려면 속건조를 잡는 게 중요. 승무원 대표가 만든 이 수분크림"<br>
+            <b>🧠 느꼈다:</b> 신뢰(authority) — "승무원이 만들었으면 기내 건조에 검증된 거겠다"<br>
+            <b>시선:</b> 6초 <span style="color:var(--b)">텍스트 86%</span> → 9초 <span style="color:var(--b)">텍스트 90%</span> · <span style="color:var(--a)">⚠️ 비포애프터 비주얼이 있는데 자막만 읽음</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--t3);margin-bottom:4px;padding:4px 8px;background:var(--bg2);border-radius:4px">
+            📝 자막 4개: "스킨케어 딱! 하나 바꿨더니" / "파데 끼임, 들뜸없이 반짝 물광 피부로.." / "현직 승무원 20명 대상 설문조사로 탄생" / "전직 승무원 대표가 만드는..." · 흰색+검정테두리 · <span style="color:var(--a)">⚠️ 자막 과다 — 비포애프터 비주얼을 가림</span> · 세이프티존 내
+          </div>
+          <div style="font-size:.72rem;padding:6px 8px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:6px">
+            💊 <span style="color:var(--a);font-weight:700">개선</span> · <span style="font-size:.6rem;background:rgba(6,182,212,.15);color:var(--cy);padding:1px 4px;border-radius:3px">👁 감각</span> — 비포애프터가 있는데 자막이 시선을 독점 → 비포애프터 효과 못 봄<br>
+            <span style="color:var(--t2)">① 비포애프터 구간 자막 1~2개로 축소 — 비주얼로 승부해야 하는 구간<br>
+            ② 비포애프터를 더 극적으로 (화면 분할, 크게) — 자막 없어도 차이가 보이게<br>
+            ③ 제품 풀스크린 2초 삽입 — 제형+제품 강제 인지</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 씬 3: 결과 10-20초 -->
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:8px;border-left:4px solid var(--b)">
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:12px">
+        <div>
+          <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_15s_dg3.png" style="width:120px;height:213px;object-fit:cover;border-radius:6px" loading="lazy"/>
+          <div style="font-size:.6rem;color:var(--b);font-weight:600;text-align:center;margin-top:3px">10-20초 · 결과</div>
+        </div>
+        <div>
+          <div style="display:flex;height:18px;border-radius:4px;overflow:hidden;margin-bottom:6px">
+            <div style="width:55%;background:var(--b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600">텍스트 55%</div>
+            <div style="width:25%;background:var(--r);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">인물 25%</div>
+            <div style="width:20%;background:var(--g);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">제품 20%</div>
+          </div>
+          <div style="font-size:.75rem;color:var(--t2);margin-bottom:6px;line-height:1.7">
+            <b>👁 봤다:</b> 얼굴에 크림 도포 → 물광 피부 결과. "히알루론산 타사 대비 360배" + "임상테스트 완료" 자막. 수분 108.41% 증가, 외부 자극 80.50% 완화 수치<br>
+            <b>👂 들었다:</b> "히알루론산이 피부 속까지 깊이 흡수돼서 속건조가 안 느껴져"<br>
+            <b>🧠 느꼈다:</b> 기대(excitement) + 신뢰 강화(expert) — "임상 수치까지 있네, 진짜 되나 봐"<br>
+            <b>시선:</b> 12초 <span style="color:var(--g);font-weight:700">제품 88%</span> ← 유일하게 제품에 시선! → 15초 다시 <span style="color:var(--b)">텍스트 87%</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--t3);margin-bottom:4px;padding:4px 8px;background:var(--bg2);border-radius:4px">
+            📝 자막: "히알루론산 타사 대비 360배" / "속건조를 꽉 잡아주지요~~" / "임상테스트까지 완료!" / 수분 108.41% 수치 · 텍스트 비율 높음 · <span style="color:var(--a)">⚠️ 임상 수치와 제품이 동시에 안 보임</span>
+          </div>
+          <div style="font-size:.72rem;padding:6px 8px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:6px">
+            💊 <span style="color:var(--a);font-weight:700">개선</span> · <span style="font-size:.6rem;background:rgba(6,182,212,.15);color:var(--cy);padding:1px 4px;border-radius:3px">👁 감각</span><span style="font-size:.6rem;background:rgba(139,92,246,.15);color:var(--p);padding:1px 4px;border-radius:3px;margin-left:2px">🧠 사고</span> — 12초가 유일한 제품 시선 구간인데 1초뿐<br>
+            <span style="color:var(--t2)">① 제품 시선 구간 3-4초로 확장 — 크림 질감/용기를 충분히 보여줘야 기억에 남음<br>
+            ② 임상 수치를 제품 옆에 배치 — "보면서 생각" 동시에 → 구매 근거 강화</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 씬 4: 수정화장 팁 20-27초 -->
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:8px;border-left:4px solid var(--b)">
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:12px">
+        <div>
+          <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_25s_dg3.png" style="width:120px;height:213px;object-fit:cover;border-radius:6px" loading="lazy"/>
+          <div style="font-size:.6rem;color:var(--b);font-weight:600;text-align:center;margin-top:3px">20-27초 · 팁</div>
+        </div>
+        <div>
+          <div style="display:flex;height:18px;border-radius:4px;overflow:hidden;margin-bottom:6px">
+            <div style="width:45%;background:var(--b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600">텍스트 45%</div>
+            <div style="width:40%;background:var(--r);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">인물 40%</div>
+            <div style="width:15%;background:var(--g);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">제품</div>
+          </div>
+          <div style="font-size:.75rem;color:var(--t2);margin-bottom:6px;line-height:1.7">
+            <b>👁 봤다:</b> 크림으로 화장 녹이기 → 쿠션 톡톡 수정 완료. "수정화장 할 때! 크림발라서 살짝~ 피부 화장 녹이고 쿠션 톡톡!" 자막<br>
+            <b>👂 들었다:</b> "크림으로 살짝 녹여준 뒤에 쿠션으로 눌러주면 자극 없이 예쁘게 수정된다"<br>
+            <b>🧠 느꼈다:</b> 활용도 인지 — "수정화장에도 쓸 수 있구나, 하나로 두 가지"<br>
+            <b>시선:</b> 21초 <span style="color:var(--r)">인물 100%</span> → 23~24초 <span style="color:var(--b)">텍스트</span>+<span style="color:var(--g)">제품</span> 병행 · 인물↔텍스트 오감
+          </div>
+          <div style="font-size:.72rem;color:var(--t3);margin-bottom:4px;padding:4px 8px;background:var(--bg2);border-radius:4px">
+            📝 자막: "수정화장 할 때! 크림발라서 살짝~ 피부 화장 녹이고 쿠션 톡톡!" · 하단 배치 · 세이프티존 ✅ · CTA 없음 ⚠️
+          </div>
+          <div style="font-size:.72rem;padding:6px 8px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:6px">
+            💊 <span style="color:var(--r);font-weight:700">추가</span> · <span style="font-size:.6rem;background:rgba(245,158,11,.15);color:var(--a);padding:1px 4px;border-radius:3px">🖱 행동</span> — 관심은 충분한데 행동 유도가 없음<br>
+            <span style="color:var(--t2)">① 미니 CTA "링크는 아래↓" 자막 삽입 — 여기서 이미 구매 의향 있는 사람을 놓치고 있음<br>
+            ② 25초쯤 "지금 바로 체험하기" 같은 중간 CTA — 끝까지 안 봐도 클릭 가능하게</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 씬 5: CTA 27-30초 -->
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:8px;border-left:4px solid var(--g)">
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:12px">
+        <div>
+          <img src="https://symvlrsmkjlztoopbnht.supabase.co/storage/v1/object/public/creatives/saliency/video/120241760856630479/frame_28s_dg3.png" style="width:120px;height:213px;object-fit:cover;border-radius:6px" loading="lazy"/>
+          <div style="font-size:.6rem;color:var(--g);font-weight:600;text-align:center;margin-top:3px">27-30초 · CTA</div>
+        </div>
+        <div>
+          <div style="display:flex;height:18px;border-radius:4px;overflow:hidden;margin-bottom:6px">
+            <div style="width:75%;background:var(--b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.6rem;font-weight:600">텍스트(할인) 75%</div>
+            <div style="width:15%;background:var(--a);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">CTA</div>
+            <div style="width:10%;background:var(--r);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem">얼굴</div>
+          </div>
+          <div style="font-size:.75rem;color:var(--t2);margin-bottom:6px;line-height:1.7">
+            <b>👁 봤다:</b> "자사몰에서 최대 40% 할인 중~~" 자막. 흰색+어두운 배경 = 강한 대비<br>
+            <b>👂 들었다:</b> "요거 지금 할인 행사 중이니까 꼭 사 봐"<br>
+            <b>🧠 느꼈다:</b> "40% 할인이면 괜찮은데..." → <span style="color:var(--a)">근데 급하진 않음</span> (urgency: none)<br>
+            <b>시선:</b> 28초 <span style="color:var(--b)">텍스트 100%</span> + <span style="color:var(--a)">CTA 64%</span> → 29초 <span style="color:var(--a)">CTA 72%</span> · 시선은 갔지만 <span style="color:var(--r)">누를 버튼이 없음</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--t3);margin-bottom:4px;padding:4px 8px;background:var(--bg2);border-radius:4px">
+            📝 자막: "자사몰에서 최대 40% 할인 중~~" · 흰색+어두운배경 = 강한 대비 ✅ · <span style="color:var(--r)">⚠️ 버튼 없음 — 텍스트만 있고 클릭 가능한 CTA 요소 0개</span> · <span style="color:var(--a)">긴급성 없음 (기한/재고 미표시)</span>
+          </div>
+          <div style="font-size:.72rem;padding:6px 8px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:6px">
+            💊 <span style="color:var(--r);font-weight:700">필수</span> · <span style="font-size:.6rem;background:rgba(139,92,246,.15);color:var(--p);padding:1px 4px;border-radius:3px">🧠 사고</span><span style="font-size:.6rem;background:rgba(245,158,11,.15);color:var(--a);padding:1px 4px;border-radius:3px;margin-left:2px">🖱 행동</span> — 시선은 CTA 영역에 도달했는데 행동 수단이 없음<br>
+            <span style="color:var(--t2)">① "지금 구매하기" 명확한 CTA 버튼 추가 — 시선이 가는 곳에 버튼이 있어야<br>
+            ② 할인 구체화 "40% → 19,800원, 이번 주까지" — 구체적 가격+기한이 행동 유도<br>
+            ③ 나레이션에 "아래 링크 눌러봐" 행동 유도 멘트 — CTA 버튼은 메타가 제공, 영상에선 "이유"만</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<!-- ═══ 오디오 분석 (영상 전체) ═══ -->
+<div class="s" style="border-left:4px solid var(--p)">
+  <h2>🔊 오디오 분석</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem">
+    <div style="background:var(--bg);border-radius:8px;padding:1rem">
+      <div style="font-size:.72rem;color:var(--t3);margin-bottom:.3rem">나레이션</div>
+      <div style="font-size:.82rem">친근한 언니 말투 · 1인칭 경험담</div>
+      <div style="font-size:.72rem;color:var(--t3);margin-top:.5rem">BGM</div>
+      <div style="font-size:.82rem">pop · upbeat · 효과음: sparkle, swoosh</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:1rem">
+      <div style="font-size:.72rem;color:var(--t3);margin-bottom:.3rem">감정 흐름</div>
+      <div style="display:flex;gap:4px;align-items:center;font-size:.75rem;flex-wrap:wrap;margin-top:.3rem">
+        <span style="background:rgba(239,68,68,.12);padding:3px 8px;border-radius:10px;color:#fca5a5">공감 0-3초</span>
+        <span style="color:var(--t3)">→</span>
+        <span style="background:rgba(139,92,246,.12);padding:3px 8px;border-radius:10px;color:#c4b5fd">신뢰 3-10초</span>
+        <span style="color:var(--t3)">→</span>
+        <span style="background:rgba(59,130,246,.12);padding:3px 8px;border-radius:10px;color:#93c5fd">기대 10-20초</span>
+        <span style="color:var(--t3)">→</span>
+        <span style="background:rgba(16,185,129,.12);padding:3px 8px;border-radius:10px;color:#6ee7b7">행동 27-30초</span>
+      </div>
+      <div style="font-size:.72rem;color:var(--t3);margin-top:.5rem">나레이션↔화면 일치도</div>
+      <div style="font-size:.82rem">높음 ✅ — 말하는 내용이 화면과 동기화</div>
+    </div>
+  </div>
+  <div style="font-size:.72rem;padding:8px;background:var(--bg);border-radius:6px;border-left:3px solid var(--a)">
+    💊 <b style="color:var(--a)">개선:</b> CTA 나레이션이 약함 — "지금 할인 중이니까 꼭 사 봐"에 구체적 수치 없음(몇%? 언제까지?). 나레이션에 "40% 할인, 이번 주까지" 같은 구체적 정보 추가
+  </div>
+</div>
+
+<!-- ═══ 개선 우선순위 Top 3 ═══ -->
+<div class="s" style="border:2px solid rgba(245,158,11,.4);border-left:4px solid var(--a)">
+  <h2 style="color:var(--a)">🏆 개선 우선순위 Top 3</h2>
+  <div style="font-size:.72rem;color:var(--t3);margin-bottom:1rem">씬별 분석에서 도출된 처방을 impact 순으로 정렬</div>
+
+  <div style="background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start">
+    <div style="width:32px;height:32px;border-radius:50%;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:var(--r);flex-shrink:0">1</div>
+    <div>
+      <div style="font-size:.88rem;font-weight:700;color:var(--t)">긴급성 + 할인 구체화 + 행동 유도 멘트</div>
+      <div style="font-size:.75rem;color:var(--t2);margin-top:.2rem">27-30초 씬: 시선이 CTA 영역에 도달(64~72%)했는데 "지금 눌러야 하는 이유"가 없음. 긴급성("오늘까지") + 가격 구체화("19,800원") + 나레이션 "아래 링크 눌러봐"</div>
+      <div style="display:flex;gap:6px;margin-top:.4rem">
+        <span style="font-size:.6rem;background:rgba(139,92,246,.12);color:var(--p);padding:2px 6px;border-radius:8px">🧠 사고</span>
+        <span style="font-size:.6rem;background:rgba(245,158,11,.12);color:var(--a);padding:2px 6px;border-radius:8px">🖱 행동</span>
+        <span style="font-size:.6rem;background:rgba(16,185,129,.12);color:var(--g);padding:2px 6px;border-radius:8px">난이도: 쉬움</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start">
+    <div style="width:32px;height:32px;border-radius:50%;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:var(--a);flex-shrink:0">2</div>
+    <div>
+      <div style="font-size:.88rem;font-weight:700;color:var(--t)">비포애프터 구간 자막 줄이기 + 제품 클로즈업</div>
+      <div style="font-size:.75rem;color:var(--t2);margin-top:.2rem">3-10초 씬: 비포애프터가 있는데 자막이 시선을 독점(텍스트 86~90%). 비포애프터를 더 극적으로 보여주고, 제품 풀스크린 2초 삽입</div>
+      <div style="display:flex;gap:6px;margin-top:.4rem">
+        <span style="font-size:.6rem;background:rgba(6,182,212,.12);color:var(--cy);padding:2px 6px;border-radius:8px">👁 감각</span>
+        <span style="font-size:.6rem;background:rgba(245,158,11,.12);color:var(--a);padding:2px 6px;border-radius:8px">난이도: 보통</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--bg);border-radius:10px;padding:1rem;display:flex;gap:12px;align-items:flex-start">
+    <div style="width:32px;height:32px;border-radius:50%;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:var(--b);flex-shrink:0">3</div>
+    <div>
+      <div style="font-size:.88rem;font-weight:700;color:var(--t)">20-27초에 중간 CTA 삽입</div>
+      <div style="font-size:.75rem;color:var(--t2);margin-top:.2rem">수정화장 팁 구간: 관심 충분한데 행동 유도 없음. "링크는 아래↓" 미니 CTA 자막 삽입 → 끝까지 안 봐도 클릭 가능</div>
+      <div style="display:flex;gap:6px;margin-top:.4rem">
+        <span style="font-size:.6rem;background:rgba(245,158,11,.12);color:var(--a);padding:2px 6px;border-radius:8px">🖱 행동</span>
+        <span style="font-size:.6rem;background:rgba(16,185,129,.12);color:var(--g);padding:2px 6px;border-radius:8px">난이도: 쉬움</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 성과 비교 (접기) -->
+<details>
+  <summary>📈 같은 계정 성과 좋은 소재와 비교</summary>
+  <div class="inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:var(--bg2);border-radius:8px;padding:1rem;border-top:3px solid var(--t3)">
+        <div style="font-size:.75rem;color:var(--t3);margin-bottom:.3rem">이 소재 (김선영_31s)</div>
+        <div style="font-size:.82rem">CTR <b>~1.2%</b> · 3초 <b>19~60%</b> · ROAS <b>0.5</b></div>
+        <div style="font-size:.72rem;color:var(--t3);margin-top:.2rem">참여 16/만 · urgency 없음</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:8px;padding:1rem;border-top:3px solid var(--g)">
+        <div style="font-size:.75rem;color:var(--g);margin-bottom:.3rem">✅ 같은 계정 Top (승무원 수정화장_22s)</div>
+        <div style="font-size:.82rem">CTR <b style="color:var(--g)">3.7%</b> · 3초 <b style="color:var(--g)">37%</b> · ROAS <b style="color:var(--g)">1.14</b></div>
+        <div style="font-size:.72rem;color:var(--t3);margin-top:.2rem">참여 30/만 · 22초 (더 짧음)</div>
+      </div>
+    </div>
+    <div style="margin-top:.8rem;font-size:.78rem;color:var(--t2)">
+      <b>차이점:</b> Top 소재는 9초 더 짧고(22초 vs 31초), CTR 3배, ROAS 2배.
+      짧은 영상 + 핵심만 → 행동까지 더 빨리 도달.
+    </div>
+  </div>
+</details>
+
+<div style="text-align:center;padding:1.5rem;color:var(--t3);font-size:.75rem;margin-top:1rem">
+  🍡 모찌 직접 작성 · 실제 AI 분석 + 시선 예측 + Meta 성과 데이터 기반<br>
+  2026-03-23 · "모든 숫자는 고객이 만든다"
+</div>
+
+</div>
+
+<script>
+// ── 시선 데이터: AI 시선 예측 + 요소 해석 결합 ──
+// AI가 "어디를 봤는지" 예측 + "그게 뭔지" 판단
+const eyeData = [
+  {t:0,  fixes:[{x:.51,y:.52,w:1.0,l:'인물'},{x:.49,y:.62,w:.98,l:'텍스트'},{x:.31,y:.13,w:.44,l:'배경'}]},
+  {t:1,  fixes:[{x:.49,y:.62,w:1.0,l:'텍스트'},{x:.51,y:.52,w:.99,l:'인물'},{x:.31,y:.13,w:.39,l:'배경'}]},
+  {t:2,  fixes:[{x:.51,y:.47,w:1.0,l:'인물'},{x:.52,y:.32,w:.98,l:'인물'},{x:.53,y:.60,w:.93,l:'텍스트'}]},
+  {t:3,  fixes:[{x:.52,y:.31,w:1.0,l:'인물'},{x:.51,y:.46,w:.98,l:'인물'},{x:.53,y:.60,w:.92,l:'텍스트'}]},
+  {t:4,  fixes:[{x:.50,y:.49,w:1.0,l:'텍스트'},{x:.31,y:.13,w:.33,l:'배경'}]},
+  {t:5,  fixes:[{x:.50,y:.48,w:1.0,l:'텍스트'},{x:.32,y:.13,w:.31,l:'배경'}]},
+  {t:6,  fixes:[{x:.50,y:.48,w:1.0,l:'텍스트'},{x:.31,y:.13,w:.33,l:'배경'}]},
+  {t:7,  fixes:[{x:.49,y:.69,w:1.0,l:'텍스트'},{x:.50,y:.48,w:.86,l:'인물'},{x:.31,y:.13,w:.41,l:'배경'}]},
+  {t:8,  fixes:[{x:.48,y:.63,w:1.0,l:'텍스트'},{x:.48,y:.52,w:.90,l:'인물'},{x:.31,y:.13,w:.37,l:'배경'}]},
+  {t:9,  fixes:[{x:.51,y:.67,w:1.0,l:'텍스트'},{x:.51,y:.55,w:.77,l:'인물'},{x:.31,y:.13,w:.35,l:'배경'}]},
+  {t:10, fixes:[{x:.49,y:.64,w:1.0,l:'텍스트'},{x:.51,y:.30,w:.54,l:'인물'},{x:.30,y:.13,w:.34,l:'배경'}]},
+  {t:11, fixes:[{x:.51,y:.63,w:1.0,l:'텍스트'},{x:.51,y:.40,w:.84,l:'인물'},{x:.31,y:.13,w:.41,l:'배경'}]},
+  {t:12, fixes:[{x:.50,y:.63,w:1.0,l:'제품'},{x:.51,y:.51,w:.96,l:'텍스트'},{x:.31,y:.13,w:.41,l:'배경'}]},
+  {t:13, fixes:[{x:.48,y:.68,w:1.0,l:'텍스트'},{x:.52,y:.53,w:.70,l:'인물'},{x:.31,y:.13,w:.34,l:'배경'}]},
+  {t:14, fixes:[{x:.53,y:.69,w:1.0,l:'텍스트'},{x:.52,y:.39,w:.59,l:'인물'}]},
+  {t:15, fixes:[{x:.51,y:.69,w:1.0,l:'텍스트'},{x:.52,y:.39,w:.83,l:'인물'},{x:.32,y:.13,w:.39,l:'배경'}]},
+  {t:16, fixes:[{x:.52,y:.67,w:1.0,l:'텍스트'},{x:.52,y:.53,w:.91,l:'인물'},{x:.51,y:.31,w:.55,l:'제품'}]},
+  {t:17, fixes:[{x:.53,y:.69,w:1.0,l:'텍스트'},{x:.49,y:.47,w:.63,l:'인물'},{x:.32,y:.13,w:.35,l:'배경'}]},
+  {t:18, fixes:[{x:.52,y:.69,w:1.0,l:'텍스트'},{x:.51,y:.51,w:.70,l:'인물'},{x:.31,y:.13,w:.42,l:'배경'}]},
+  {t:19, fixes:[{x:.58,y:.45,w:1.0,l:'텍스트'},{x:.61,y:.51,w:.98,l:'텍스트'},{x:.48,y:.66,w:.92,l:'인물'}]},
+  {t:20, fixes:[{x:.55,y:.44,w:1.0,l:'텍스트'},{x:.49,y:.67,w:.85,l:'인물'},{x:.31,y:.13,w:.39,l:'배경'}]},
+  {t:21, fixes:[{x:.55,y:.53,w:1.0,l:'인물'},{x:.42,y:.64,w:.75,l:'텍스트'}]},
+  {t:22, fixes:[{x:.55,y:.68,w:1.0,l:'텍스트'},{x:.49,y:.51,w:.92,l:'인물'},{x:.33,y:.67,w:.70,l:'제품'}]},
+  {t:23, fixes:[{x:.49,y:.70,w:1.0,l:'텍스트'},{x:.52,y:.52,w:.99,l:'인물'},{x:.53,y:.28,w:.75,l:'제품'}]},
+  {t:24, fixes:[{x:.49,y:.70,w:1.0,l:'텍스트'},{x:.52,y:.52,w:.94,l:'인물'},{x:.53,y:.27,w:.68,l:'제품'}]},
+  {t:25, fixes:[{x:.54,y:.52,w:1.0,l:'인물'},{x:.50,y:.70,w:.98,l:'텍스트'},{x:.32,y:.13,w:.42,l:'배경'}]},
+  {t:26, fixes:[{x:.51,y:.52,w:1.0,l:'인물'},{x:.49,y:.69,w:1.0,l:'텍스트'},{x:.33,y:.13,w:.43,l:'배경'}]},
+  {t:27, fixes:[{x:.50,y:.69,w:1.0,l:'텍스트'},{x:.52,y:.53,w:.93,l:'인물'},{x:.52,y:.60,w:.93,l:'텍스트'}]},
+  {t:28, fixes:[{x:.52,y:.68,w:1.0,l:'텍스트'},{x:.52,y:.39,w:.64,l:'CTA'},{x:.31,y:.13,w:.35,l:'배경'}]},
+  {t:29, fixes:[{x:.49,y:.67,w:1.0,l:'텍스트'},{x:.51,y:.38,w:.72,l:'CTA'},{x:.27,y:.70,w:.72,l:'텍스트'}]}
+];
+const canvas = document.getElementById('heatCanvas');
+const ctx = canvas.getContext('2d');
+
+let lastT = 0;
+function drawHeat(t) {
+  lastT = t;
+  const W = 200, H = 356;
+  ctx.clearRect(0, 0, W, H);
+  // 현재 초에 맞는 프레임 찾기
+  let frame = eyeData[0];
+  for (let i = 0; i < eyeData.length; i++) {
+    if (eyeData[i].t <= t) frame = eyeData[i];
+  }
+  // 1순위 시선 점 — 라벨별 색상 분리 (인물/텍스트/제품)
+  const f = frame.fixes[0];
+  if (f) {
+    const px = f.x * W, py = f.y * H;
+    // 빨강 단색
+    const c = {main:'rgba(239,68,68,.85)', glow:'rgba(239,68,68,.25)'};
+    const r = 40;
+    // 큰 글로우
+    const grd = ctx.createRadialGradient(px, py, 0, px, py, r * 2.5);
+    grd.addColorStop(0, c.main);
+    grd.addColorStop(0.25, c.glow);
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+    // 중심점 (크게)
+    ctx.beginPath();
+    ctx.arc(px, py, 10, 0, Math.PI * 2);
+    ctx.fillStyle = c.main;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    // 라벨 없음 — 빨간 점만
+  }
+  // 초수만 표시
+  document.getElementById('heatInfo').textContent = f ? (Math.floor(t) + '초') : '';
+}
+
+// ── 영상 재생 → 히트맵 + 초수 + 타임라인 동기화 ──
+const vid = document.getElementById('vid');
+const scenes = [{start:0,end:3},{start:3,end:10},{start:10,end:20},{start:20,end:27},{start:27,end:31}];
+const sceneColors = [
+  'rgba(239,68,68,.12)', 'rgba(59,130,246,.12)', 'rgba(59,130,246,.12)',
+  'rgba(59,130,246,.12)', 'rgba(16,185,129,.12)'
+];
+const sceneBorders = ['var(--r)', 'var(--b)', 'var(--b)', 'var(--b)', 'var(--g)'];
+const defaultBgs = [
+  'rgba(239,68,68,.04)', 'rgba(59,130,246,.04)', 'rgba(59,130,246,.04)',
+  'rgba(59,130,246,.04)', 'rgba(16,185,129,.04)'
+];
+
+vid.addEventListener('timeupdate', () => {
+  const t = vid.currentTime;
+
+  // 초수 오버레이
+  document.getElementById('timeOverlay').textContent = String(Math.floor(t)).padStart(2, '0') + '초';
+
+  // 히트맵
+  drawHeat(t);
+
+  // 타임라인 하이라이트
+  scenes.forEach((s, i) => {
+    const el = document.getElementById('j' + i);
+    if (!el) return;
+    const content = el.querySelector('.journey-content');
+    const timeEl = el.querySelector('.journey-time');
+    if (t >= s.start && t <= s.end) {
+      content.style.background = sceneColors[i];
+      content.style.border = '2px solid ' + sceneBorders[i];
+      content.style.borderRadius = '0 10px 10px 0';
+      content.style.boxShadow = '0 0 12px ' + sceneColors[i].replace('.12', '.25');
+      timeEl.style.background = sceneColors[i];
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      content.style.background = defaultBgs[i];
+      content.style.border = 'none';
+      content.style.boxShadow = 'none';
+      timeEl.style.background = 'transparent';
+    }
+  });
+});
+
+drawHeat(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="date" content="2026-03-08">
+  <meta name="project" content="bscamp">
+  <title>경쟁사 분석기 UX 리디자인 — 개발+고객 기획서</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #F75D5D;
+      --primary-light: #fee2e2;
+      --bg: #f8f9fc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #1a1a1a;
+      --muted: #64748b;
+      --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.75; padding: 2rem; max-width: 900px; margin: 0 auto;
+    }
+    a.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); text-decoration: none; font-size: 0.875rem; }
+    a.back:hover { color: var(--primary); }
+    h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 2rem; }
+    .section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+    .section h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .section h3 { font-size: 0.9rem; font-weight: 700; margin: 1rem 0 0.4rem; }
+    .section p, .section li { font-size: 0.85rem; color: #374151; }
+    .section ul { padding-left: 1.2rem; }
+    .section li { margin-bottom: 0.3rem; }
+    .badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 100px; font-size: 0.65rem; font-weight: 600; }
+    .b-new { background: #dbeafe; color: #2563eb; }
+    .b-fix { background: #fef3c7; color: #d97706; }
+    .b-core { background: var(--primary-light); color: var(--primary); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin: 0.5rem 0; }
+    th { background: #f8fafc; text-align: left; padding: 0.5rem 0.6rem; font-weight: 600; border-bottom: 2px solid var(--border); }
+    td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .now { color: #dc2626; }
+    .to { color: #16a34a; font-weight: 600; }
+    .flow { background: #f1f5f9; border-radius: 8px; padding: 1rem; margin: 0.5rem 0; font-size: 0.78rem; font-family: 'SF Mono', Menlo, monospace; line-height: 1.9; white-space: pre-wrap; }
+    .wire { background: #f8fafc; border: 2px dashed var(--border); border-radius: var(--radius); padding: 1rem; margin: 0.75rem 0; font-size: 0.78rem; }
+    .wire-title { font-weight: 700; font-size: 0.82rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .box { display: inline-block; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.3rem 0.6rem; background: white; font-size: 0.72rem; margin: 0.15rem; }
+    .box.on { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 600; }
+    .callout { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0; font-size: 0.8rem; }
+    .callout strong { color: #92400e; }
+    .api-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0; font-size: 0.78rem; font-family: monospace; }
+    code { background: #f1f5f9; padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.78rem; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+  </style>
+</head>
+<body>
+<a class="back" href="/">← 목록으로</a>
+<h1>🔍 경쟁사 분석기 UX 리디자인</h1>
+<p class="sub">개발 + 고객 관점 통합 기획서 — 2026.03.08</p>
+
+<!-- =========================================== -->
+<!-- WHY -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>🎯 왜 리디자인하는가</h2>
+  <p>수강생이 이 기능을 쓰는 이유: <strong>"효과 좋은 경쟁사 광고 소재를 빠르게 찾아서 내 것으로 만들기"</strong></p>
+  <p style="margin-top:0.5rem;">지금은 "검색은 되지만 쓰기 불편한" 상태:</p>
+  <ul>
+    <li><strong>30건 고정</strong> — 필터 걸면 건수가 더 줄어듦</li>
+    <li><strong>다운로드가 개별 1건씩</strong> — 레퍼런스 수집에 시간 오래 걸림</li>
+    <li><strong>경쟁사 고정 약함</strong> — 새 광고 올라와도 알 수 없음</li>
+    <li><strong>소재 유형 분류 부족</strong> — 캐러셀(슬라이드) 구분 없음</li>
+    <li><strong>검색이 키워드 의존</strong> — 정확한 브랜드 매칭 어려움</li>
+    <li><strong>"Meta에서 보기" 링크 동작 안함</strong> — 인스타/페북 연결 필요</li>
+  </ul>
+</div>
+
+<!-- =========================================== -->
+<!-- 수강생 여정 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>👤 수강생 사용 여정</h2>
+  <div class="flow">① 경쟁사 찾기 (검색)
+   └→ "올리브영" 검색 → 브랜드 목록 (프로필+인스타+좋아요수)
+   └→ 또는 인스타 URL / 랜딩페이지 URL 붙여넣기
+   └→ 또는 한글 브랜드명 → 영어 인스타 계정도 인식
+
+② 경쟁사 핀 고정 (모니터링)
+   └→ 검색 결과에서 브랜드 선택 → 📌 핀 등록
+   └→ 매일 접속 → 🔴 NEW +3건 표시 → 클릭하면 새 광고만 보기
+
+③ 광고 분석 (필터 + 정렬)
+   └→ 30일+ 필터 → "오래 돌아간 광고 = 효과 좋은 광고"
+   └→ 이미지 / 슬라이드 / 영상 분류
+   └→ 운영기간순 정렬 → 상위 = 가장 효과 좋은 소재
+   └→ 더보기 → 전체 광고 무제한 탐색
+
+④ 소재 다운로드 (레퍼런스 수집)
+   └→ ☑️ 원하는 카드 체크 → "선택 다운로드 (ZIP)"
+   └→ 이미지+영상 모두 포함 (클라이언트 직접 다운로드)
+   └→ 슬라이드 → 전체 이미지 폴더로 묶음
+
+⑤ 광고 원본 확인
+   └→ 카드에서 인스타/페북 링크 → 원본 광고 페이지 이동</div>
+</div>
+
+<!-- =========================================== -->
+<!-- AXIS 1: 검색 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>🔎 축 1: 검색의 다양성 · 정확성 <span class="badge b-core">핵심</span></h2>
+
+  <h3>현재 vs 변경</h3>
+  <table>
+    <tr><th>항목</th><th>현재</th><th>변경</th></tr>
+    <tr><td>검색 방식</td><td class="now">키워드 텍스트 1가지</td><td class="to">키워드 + URL + 브랜드 자동완성 3가지</td></tr>
+    <tr><td>검색 결과</td><td class="now">광고 목록만</td><td class="to">먼저 브랜드 목록 → 선택 → 해당 브랜드 광고</td></tr>
+    <tr><td>한글 인식</td><td class="now">키워드 그대로 전달</td><td class="to">한글 → 영어 브랜드도 매칭 (SearchAPI.io 자체 지원)</td></tr>
+    <tr><td>인스타 연결</td><td class="now">없음</td><td class="to">브랜드별 인스타 계정+팔로워 표시</td></tr>
+    <tr><td>URL 검색</td><td class="now">없음</td><td class="to">인스타 URL / 랜딩페이지 URL에서 브랜드 추출</td></tr>
+  </table>
+
+  <h3>검색 UX: 드롭다운 자동완성 + 모드 분리</h3>
+  <div class="wire">
+    <div class="wire-title">검색바 — 브랜드 모드 (기본)</div>
+    <div style="display:flex; gap:0.3rem; margin-bottom:0.5rem;">
+      <span class="box on">🏢 브랜드 검색</span>
+      <span class="box">🔑 키워드 검색</span>
+    </div>
+    <div style="border:1px solid var(--border); border-radius:8px; padding:0.5rem; background:white;">
+      <div style="font-size:0.75rem; color:var(--muted);">🔍 올리브영</div>
+    </div>
+    <div style="border:1px solid var(--border); border-radius:0 0 8px 8px; border-top:none; background:white; padding:0.3rem;">
+      <div style="display:flex; align-items:center; gap:0.5rem; padding:0.4rem; border-radius:6px; background:#fef2f2; margin-bottom:0.3rem;">
+        <div style="width:28px; height:28px; border-radius:50%; background:#e2e8f0;"></div>
+        <div>
+          <div style="font-size:0.75rem; font-weight:600;">올리브영 (OLIVE YOUNG) <span style="font-size:0.6rem; color:#2563eb;">✓ 인증</span></div>
+          <div style="font-size:0.65rem; color:#64748b;">@oliveyoung_official · 👍 626,926 · Cosmetics store</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.5rem; padding:0.4rem; border-radius:6px;">
+        <div style="width:28px; height:28px; border-radius:50%; background:#e2e8f0;"></div>
+        <div>
+          <div style="font-size:0.75rem; font-weight:600;">OLIVE YOUNG Global</div>
+          <div style="font-size:0.65rem; color:#64748b;">@oliveyoung_global · 👍 143,765 · Cosmetics store</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.5rem; padding:0.4rem; border-radius:6px;">
+        <div style="width:28px; height:28px; border-radius:50%; background:#e2e8f0;"></div>
+        <div>
+          <div style="font-size:0.75rem; font-weight:600;">올리브영 세일픽</div>
+          <div style="font-size:0.65rem; color:#64748b;">@oliveyoungsalepick · 👍 10</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:0.65rem; color:var(--muted); margin-top:0.3rem;">
+      드롭다운에서 브랜드 선택 → 해당 page_id의 광고만 정확히 로드
+    </div>
+  </div>
+
+  <h3>두 가지 검색 모드</h3>
+  <table>
+    <tr><th>모드</th><th>입력</th><th>결과</th><th>API</th></tr>
+    <tr>
+      <td><strong>🏢 브랜드 검색</strong> (기본)</td>
+      <td>브랜드명, 인스타 URL, 랜딩페이지 URL</td>
+      <td>브랜드 드롭다운 → 선택 → 해당 브랜드 광고만</td>
+      <td><code>page_search</code> → <code>search_page_ids</code></td>
+    </tr>
+    <tr>
+      <td><strong>🔑 키워드 검색</strong></td>
+      <td>광고 문구 키워드 ("마스크팩", "세일")</td>
+      <td>키워드 포함 광고 전체 (브랜드 무관)</td>
+      <td><code>meta_ad_library&q=키워드</code></td>
+    </tr>
+  </table>
+
+  <div class="flow">브랜드 검색 흐름:
+━━━━━━━━━━━━━━━━
+타이핑 → debounce 300ms → page_search API 호출
+→ 드롭다운에 브랜드 목록 (프로필+인스타+좋아요수)
+→ 브랜드 클릭 → search_page_ids={page_id}로 광고 검색
+→ 핀 등록 버튼도 드롭다운에 바로 표시
+
+키워드 검색 흐름:
+━━━━━━━━━━━━━━━━
+타이핑 → Enter → meta_ad_library&q=키워드
+→ 기존처럼 광고 목록 바로 표시 (브랜드 혼합)</div>
+
+  <h3>API 검증 완료</h3>
+  <div class="api-box">
+    <strong>✅ 한글 검색 테스트 (실제 호출 결과)</strong><br>
+    GET /search?engine=meta_ad_library_page_search&q=올리브영<br><br>
+    결과: 15건 반환<br>
+    1위: page_id=215712131799664, ig=oliveyoung_official, likes=626,926<br>
+    → <strong>한글 검색으로 영어 인스타 계정 정상 매칭됨</strong>
+  </div>
+
+  <div class="api-box" style="margin-top:0.5rem;">
+    <strong>✅ Page Search 응답 필드</strong><br>
+    page_id, page_name, category, image_uri(프로필사진),<br>
+    likes, ig_username, ig_followers, ig_verification,<br>
+    page_alias, entity_type, verification<br>
+    → <strong>브랜드 카드 렌더링에 필요한 모든 정보 제공</strong>
+  </div>
+
+  <h3>URL 검색 로직</h3>
+  <ul>
+    <li><strong>인스타 URL</strong>: <code>instagram.com/oliveyoung_official</code> → username 추출 → page_search로 검색</li>
+    <li><strong>페이스북 URL</strong>: <code>facebook.com/OY.GLOBAL</code> → page_alias 추출 → page_search로 검색</li>
+    <li><strong>랜딩페이지 URL</strong>: <code>oliveyoung.co.kr</code> → 도메인에서 키워드 추출 → page_search</li>
+    <li><strong>구현</strong>: 프론트에서 URL 패턴 감지 → 적절한 검색어로 변환 후 API 호출</li>
+  </ul>
+
+  <h3>크레딧 영향</h3>
+  <ul>
+    <li>Page Search: 1크레딧/호출 (브랜드 검색)</li>
+    <li>Ad Search: 1크레딧/호출 (광고 검색)</li>
+    <li>2단계 = 최대 2크레딧 (핀 등록 후에는 page_id 캐시되므로 1크레딧)</li>
+  </ul>
+</div>
+
+<!-- =========================================== -->
+<!-- AXIS 2: 핀 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>📌 축 2: 브랜드 핀 고정 + NEW 알림 <span class="badge b-core">핵심</span></h2>
+
+  <h3>현재 vs 변경</h3>
+  <table>
+    <tr><th>항목</th><th>현재</th><th>변경</th></tr>
+    <tr><td>등록 기준</td><td class="now">브랜드명 (문자열)</td><td class="to">page_id (고유 식별자)</td></tr>
+    <tr><td>등록 경로</td><td class="now">별도 모달에서 검색</td><td class="to">브랜드 검색 결과에서 바로 📌 핀 등록</td></tr>
+    <tr><td>새 광고 알림</td><td class="now">없음</td><td class="to">🔴 NEW +N건 배지</td></tr>
+    <tr><td>프로필 표시</td><td class="now">텍스트만</td><td class="to">프로필 사진 + 인스타 + 좋아요수</td></tr>
+    <tr><td>마지막 확인</td><td class="now">없음</td><td class="to">"3분 전 확인" 타임스탬프</td></tr>
+    <tr><td>조회 방식</td><td class="now">키워드 재검색</td><td class="to">page_id 기반 정확 조회</td></tr>
+  </table>
+
+  <h3>와이어프레임</h3>
+  <div class="wire">
+    <div class="wire-title">📌 모니터링 (3/10)</div>
+    <div style="border:1px solid #fca5a5; border-radius:8px; padding:0.6rem; margin-bottom:0.4rem; background:#fef2f2;">
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="width:32px; height:32px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">🖼</div>
+        <div>
+          <div style="font-weight:600; font-size:0.8rem;">올리브영 <span style="font-size:0.6rem; background:#dc2626; color:white; padding:0.05rem 0.3rem; border-radius:100px; font-weight:700;">NEW +4</span></div>
+          <div style="font-size:0.65rem; color:#64748b;">@oliveyoung_official · 광고 1,785건 · 3분 전 확인</div>
+        </div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border); border-radius:8px; padding:0.6rem; margin-bottom:0.4rem;">
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="width:32px; height:32px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">🖼</div>
+        <div>
+          <div style="font-weight:600; font-size:0.8rem;">메디큐브</div>
+          <div style="font-size:0.65rem; color:#64748b;">@medicube_global · 광고 892건 · 1시간 전</div>
+        </div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border); border-radius:8px; padding:0.6rem; margin-bottom:0.4rem;">
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="width:32px; height:32px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:0.6rem;">🖼</div>
+        <div>
+          <div style="font-weight:600; font-size:0.8rem;">닥터지 <span style="font-size:0.6rem; background:#dc2626; color:white; padding:0.05rem 0.3rem; border-radius:100px; font-weight:700;">NEW +1</span></div>
+          <div style="font-size:0.65rem; color:#64748b;">@drg_official · 광고 456건 · 2시간 전</div>
+        </div>
+      </div>
+    </div>
+    <div style="border:1px dashed var(--border); border-radius:8px; padding:0.6rem; text-align:center; color:#94a3b8; font-size:0.75rem;">
+      + 경쟁사 추가
+    </div>
+  </div>
+
+  <h3>NEW 감지 로직</h3>
+  <div class="flow">Cron (1일 1회, 04:00 KST)
+━━━━━━━━━━━━━━━━━━━━━━━━
+등록된 브랜드 N개 순회:
+  → SearchAPI.io search_page_ids={page_id} 호출
+  → 최신 광고 start_date 확인
+  → start_date > last_checked_at → new_ads_count += 1
+  → competitor_monitors 테이블 UPDATE
+
+사용자가 브랜드 클릭:
+  → last_checked_at = NOW()
+  → new_ads_count = 0
+  → NEW 배지 해제</div>
+
+  <h3>DB 변경 (competitor_monitors)</h3>
+  <table>
+    <tr><th>컬럼</th><th>타입</th><th>용도</th></tr>
+    <tr><td><code>page_id</code></td><td>TEXT</td><td>Facebook 페이지 고유 ID (기존 있음)</td></tr>
+    <tr><td><code>page_profile_url</code></td><td>TEXT (신규)</td><td>프로필 사진 URL</td></tr>
+    <tr><td><code>ig_username</code></td><td>TEXT (신규)</td><td>인스타그램 계정</td></tr>
+    <tr><td><code>category</code></td><td>TEXT (신규)</td><td>업종 (Cosmetics store 등)</td></tr>
+    <tr><td><code>last_checked_at</code></td><td>TIMESTAMPTZ (신규)</td><td>마지막 확인 시간</td></tr>
+    <tr><td><code>new_ads_count</code></td><td>INTEGER (신규)</td><td>새 광고 건수</td></tr>
+    <tr><td><code>latest_ad_date</code></td><td>TIMESTAMPTZ (신규)</td><td>가장 최신 광고 날짜</td></tr>
+    <tr><td><code>total_ads_count</code></td><td>INTEGER (신규)</td><td>전체 광고 건수 (total_results)</td></tr>
+  </table>
+</div>
+
+<!-- =========================================== -->
+<!-- AXIS 3: 필터 + 페이지네이션 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>🏷️ 축 3: 필터 · 정렬 · 페이지네이션 <span class="badge b-fix">개선</span></h2>
+
+  <h3>필터 칩 리디자인 — 3종 소재 분류</h3>
+  <div class="wire">
+    <div class="wire-title">필터</div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.3rem; align-items:center;">
+      <span class="box on">30일+</span>
+      <span class="box">게재중</span>
+      <span class="box">Facebook</span>
+      <span class="box">Instagram</span>
+      <span style="color:#cbd5e1; margin:0 0.2rem;">│</span>
+      <span class="box">🖼️ 이미지</span>
+      <span class="box on">📑 슬라이드</span>
+      <span class="box">🎬 영상</span>
+    </div>
+    <div style="display:flex; gap:0.3rem; margin-top:0.5rem; align-items:center;">
+      <span style="font-size:0.7rem; color:var(--muted);">정렬:</span>
+      <span class="box on">최신순</span>
+      <span class="box">운영기간순</span>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>소재 유형</th><th>코드</th><th>설명</th><th>SearchAPI.io 값</th></tr>
+    <tr><td>🖼️ 이미지</td><td><code>IMAGE</code></td><td>단일 이미지 1장</td><td><code>display_format: "IMAGE"</code></td></tr>
+    <tr><td>📑 슬라이드</td><td><code>CAROUSEL</code></td><td>여러 장 넘기기 (캐러셀)</td><td><code>display_format: "CAROUSEL" / "DCO" / "MULTI_IMAGES"</code></td></tr>
+    <tr><td>🎬 영상</td><td><code>VIDEO</code></td><td>동영상 광고</td><td><code>display_format: "VIDEO"</code> 또는 <code>videos[]</code> 존재</td></tr>
+  </table>
+  <p>기존 코드에서 이미 <code>detectDisplayFormat()</code>이 3종 분류 중. 필터 칩만 분리하면 됨.</p>
+
+  <h3>페이지네이션</h3>
+  <table>
+    <tr><th>항목</th><th>현재</th><th>변경</th></tr>
+    <tr><td>검색 결과</td><td class="now">30건 고정</td><td class="to">30건 + "더보기" 버튼</td></tr>
+    <tr><td>전체 건수</td><td class="now">미표시</td><td class="to">"총 1,785건" 표시</td></tr>
+    <tr><td>로드 방식</td><td class="now">1회 끝</td><td class="to">더보기 → next_page_token으로 다음 30건 append</td></tr>
+  </table>
+  <p><strong>SearchAPI.io 지원 확인:</strong> 응답에 <code>pagination.next_page_token</code> 포함. 다음 요청에 <code>&next_page_token=AQH...</code> 전달.</p>
+
+  <div class="callout">
+    <strong>⚠️ 토큰 크기 주의:</strong> SearchAPI.io 문서에 따르면 next_page_token이 페이지 깊어질수록 2KB → 5KB → 8KB+로 커짐.
+    GET 요청 URL 길이 제한에 걸릴 수 있음 → <strong>토큰은 POST body로 전달하거나 서버에서 핸들링</strong>.
+  </div>
+
+  <h3>정렬 로직</h3>
+  <ul>
+    <li><strong>최신순</strong> (기본): SearchAPI.io 기본 반환 순서 (start_date DESC)</li>
+    <li><strong>운영기간순</strong>: 클라이언트에서 <code>durationDays</code> DESC 정렬</li>
+    <li><strong>"30일+ 필터" + "운영기간순"</strong> = 수강생이 가장 원하는 뷰 (효과 좋은 광고 순서대로)</li>
+  </ul>
+</div>
+
+<!-- =========================================== -->
+<!-- AXIS 4: 다운로드 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>📥 축 4: 다운로드 UX <span class="badge b-new">신규</span></h2>
+
+  <h3>핵심 변경: 클라이언트 직접 다운로드 (서버 안 탐)</h3>
+  <div class="callout">
+    <strong>기존 문제:</strong> Vercel 서버가 fbcdn에서 파일 → 클라이언트 전달 → 영상 5~30MB → 서버 응답 제한(~5MB) 초과.<br>
+    <strong>해결:</strong> <strong>브라우저가 fbcdn에서 직접 다운로드</strong> → Vercel 서버 비용 0, 용량 제한 없음.<br>
+    <strong>✅ CORS 검증 완료:</strong> fbcdn 응답 헤더에 <code>Access-Control-Allow-Origin: *</code> 확인. 이미지+영상 모두 브라우저에서 직접 fetch 가능.<br>
+    <strong>결론:</strong> 서버 프록시 불필요. <code>/api/competitor/download</code> 삭제 가능 (또는 극단적 fallback으로만 유지).
+  </div>
+
+  <h3>다운로드 3가지 모드</h3>
+  <table>
+    <tr><th>모드</th><th>설명</th><th>구현</th></tr>
+    <tr><td><strong>개별 다운로드</strong></td><td>카드/모달에서 1건씩</td><td>클라이언트 직접 <code>&lt;a download&gt;</code></td></tr>
+    <tr><td><strong>선택 다운로드</strong></td><td>체크박스로 원하는 카드 선택 → ZIP</td><td>클라이언트 JSZip (브라우저에서 ZIP 생성)</td></tr>
+    <tr><td><strong>전체 다운로드</strong></td><td>현재 검색 결과 전체 → ZIP</td><td>클라이언트 JSZip (이미지+영상 포함)</td></tr>
+  </table>
+
+  <h3>선택 다운로드 UX</h3>
+  <div class="wire">
+    <div class="wire-title">검색 결과 헤더</div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size:0.8rem;">
+        <strong>"올리브영"</strong> 검색 결과
+        <span style="color:var(--primary); font-weight:600;">30건</span>
+        <span style="color:var(--muted);">— 총 1,785건</span>
+      </div>
+      <div style="display:flex; gap:0.3rem;">
+        <span class="box on">☑️ 5개 선택됨</span>
+        <span class="box" style="background:var(--primary); color:white; font-weight:600;">📥 선택 다운로드</span>
+        <span class="box">📥 전체 다운로드</span>
+      </div>
+    </div>
+    <hr style="margin:0.5rem 0;">
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.4rem;">
+      <div style="border:1px solid #fca5a5; border-radius:6px; padding:0.4rem; background:#fef2f2;">
+        <div style="font-size:0.6rem; color:var(--primary);">☑️</div>
+        <div style="background:#e2e8f0; height:40px; border-radius:4px; margin:0.2rem 0;"></div>
+        <div style="font-size:0.65rem; font-weight:600;">올리브영 배너</div>
+        <div style="font-size:0.6rem; color:#64748b;">🖼️ 이미지 · 45일</div>
+      </div>
+      <div style="border:1px solid var(--border); border-radius:6px; padding:0.4rem;">
+        <div style="font-size:0.6rem; color:#94a3b8;">☐</div>
+        <div style="background:#e2e8f0; height:40px; border-radius:4px; margin:0.2rem 0;"></div>
+        <div style="font-size:0.65rem; font-weight:600;">뷰잘알 광고</div>
+        <div style="font-size:0.6rem; color:#64748b;">🎬 영상 · 32일</div>
+      </div>
+      <div style="border:1px solid #fca5a5; border-radius:6px; padding:0.4rem; background:#fef2f2;">
+        <div style="font-size:0.6rem; color:var(--primary);">☑️</div>
+        <div style="background:#e2e8f0; height:40px; border-radius:4px; margin:0.2rem 0;"></div>
+        <div style="font-size:0.65rem; font-weight:600;">신상품 캐러셀</div>
+        <div style="font-size:0.6rem; color:#64748b;">📑 슬라이드 3장 · 28일</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>슬라이드(캐러셀) 다운로드</h3>
+  <ul>
+    <li>슬라이드 광고 = <code>cards[]</code> 배열에 이미지 여러 장</li>
+    <li>ZIP 내 폴더로 구분: <code>올리브영_12345/slide_1.jpg, slide_2.jpg, ...</code></li>
+    <li>개별 다운로드 시 모달에서 슬라이드 넘기면서 각각 다운로드 가능</li>
+  </ul>
+
+  <h3>클라이언트 직접 다운로드 구현</h3>
+  <div class="flow">// 개별 다운로드 (CORS 가능 시)
+const res = await fetch(fbcdnUrl);
+const blob = await res.blob();
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url; a.download = filename; a.click();
+
+// CORS 불가 시 → 서버 프록시 fallback
+const res = await fetch(`/api/competitor/download?url=${encodeURIComponent(fbcdnUrl)}`);
+
+// ZIP (클라이언트)
+const zip = new JSZip();
+for (const ad of selectedAds) {
+  const blob = await fetch(ad.imageUrl).then(r => r.blob());
+  zip.file(filename, blob);
+}
+const content = await zip.generateAsync({ type: 'blob' });
+saveAs(content, 'competitor-ads.zip');</div>
+</div>
+
+<!-- =========================================== -->
+<!-- 광고 원본 링크 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>🔗 광고 원본 링크 수정 <span class="badge b-fix">버그</span></h2>
+
+  <h3>현재 문제</h3>
+  <p>"Meta에서 보기" 링크가 <code>facebook.com/ads/archive/render_ad/?id=xxx</code> → <strong>동작 안 함</strong> (Meta가 외부 접근 차단).</p>
+
+  <h3>해결</h3>
+  <table>
+    <tr><th>링크</th><th>URL</th><th>조건</th></tr>
+    <tr><td>📷 Instagram</td><td><code>instagram.com/{ig_username}</code></td><td>ig_username 있을 때</td></tr>
+    <tr><td>📘 Facebook</td><td><code>facebook.com/{page_alias 또는 page_id}</code></td><td>항상</td></tr>
+    <tr><td>🔍 Ad Library</td><td><code>facebook.com/ads/library/?active_status=all&ad_type=all&country=KR&view_all_page_id={page_id}</code></td><td>항상</td></tr>
+  </table>
+  <p>SearchAPI.io Page Search 응답에 <code>page_alias</code>, <code>ig_username</code> 모두 포함 → 추가 API 호출 불필요.</p>
+</div>
+
+<!-- =========================================== -->
+<!-- 개발 영향도 + 우선순위 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>⚙️ 개발 영향도 · 우선순위</h2>
+
+  <h3>변경 파일</h3>
+  <table>
+    <tr><th>영역</th><th>파일</th><th>변경 내용</th></tr>
+    <tr><td>API</td><td><code>api/competitor/search/route.ts</code></td><td>2단계 검색 (page_search → ad_search), 페이지네이션</td></tr>
+    <tr><td>API</td><td><code>api/competitor/page-search/route.ts</code> (신규)</td><td>브랜드 검색 엔드포인트</td></tr>
+    <tr><td>API</td><td><code>api/competitor/download/route.ts</code></td><td>클라이언트 직접 다운로드 시 축소 (fallback만)</td></tr>
+    <tr><td>API</td><td><code>api/cron/competitor-check/route.ts</code></td><td>NEW 감지 Cron</td></tr>
+    <tr><td>Lib</td><td><code>lib/competitor/meta-ad-library.ts</code></td><td>page_search 함수 추가, search_page_ids 지원</td></tr>
+    <tr><td>UI</td><td><code>competitor-dashboard.tsx</code></td><td>2단계 검색 UI, 정렬 옵션</td></tr>
+    <tr><td>UI</td><td><code>filter-chips.tsx</code></td><td>슬라이드 분리, 정렬 칩</td></tr>
+    <tr><td>UI</td><td><code>monitor-panel.tsx</code></td><td>프로필 사진, NEW 배지, 타임스탬프</td></tr>
+    <tr><td>UI</td><td><code>ad-card-list.tsx</code></td><td>선택 다운로드, 체크박스</td></tr>
+    <tr><td>UI</td><td><code>ad-card.tsx</code></td><td>체크박스, 소재 유형 아이콘, 링크 수정</td></tr>
+    <tr><td>UI</td><td><code>ad-media-modal.tsx</code></td><td>인스타/페북 링크, 클라이언트 다운로드</td></tr>
+    <tr><td>UI</td><td><code>brand-search.tsx</code> (신규)</td><td>브랜드 검색 결과 컴포넌트</td></tr>
+    <tr><td>DB</td><td><code>competitor_monitors</code></td><td>컬럼 추가 (6개)</td></tr>
+  </table>
+
+  <h3>구현 우선순위</h3>
+  <table>
+    <tr><th>순서</th><th>기능</th><th>이유</th><th>난이도</th></tr>
+    <tr><td style="color:var(--primary); font-weight:700;">P1</td><td>슬라이드 필터 분리</td><td>코드 변경 최소 (필터 칩만 추가)</td><td>낮음</td></tr>
+    <tr><td style="color:var(--primary); font-weight:700;">P1</td><td>광고 원본 링크 수정</td><td>현재 동작 안 하는 버그 (인스타/페북 링크)</td><td>낮음</td></tr>
+    <tr><td style="color:var(--primary); font-weight:700;">P1</td><td>정렬 옵션 (최신순/운영기간순)</td><td>클라이언트 정렬만 추가</td><td>낮음</td></tr>
+    <tr><td style="color:#d97706; font-weight:700;">P2</td><td>선택 다운로드 (체크박스 + ZIP)</td><td>핵심 UX 개선, 레퍼런스 수집 편의</td><td>중간</td></tr>
+    <tr><td style="color:#d97706; font-weight:700;">P2</td><td>클라이언트 직접 다운로드 전환</td><td>서버 비용 제거 + 용량 제한 해소</td><td>중간</td></tr>
+    <tr><td style="color:#2563eb; font-weight:700;">P3</td><td>2단계 검색 (브랜드 → 광고)</td><td>검색 정확도 + URL 검색</td><td>높음</td></tr>
+    <tr><td style="color:#2563eb; font-weight:700;">P3</td><td>핀 리디자인 (프로필, NEW 배지)</td><td>모니터링 UX 전면 개편</td><td>높음</td></tr>
+    <tr><td style="color:#2563eb; font-weight:700;">P3</td><td>NEW 감지 Cron</td><td>P3 핀 완료 후</td><td>중간</td></tr>
+  </table>
+
+  <h3>크레딧 예상 (월간)</h3>
+  <table>
+    <tr><th>사용처</th><th>건수</th><th>크레딧</th></tr>
+    <tr><td>검색 (22명 × 10회/일 × 30일)</td><td>6,600</td><td>6,600</td></tr>
+    <tr><td>더보기 (검색당 평균 1회)</td><td>3,300</td><td>3,300</td></tr>
+    <tr><td>Cron 모니터링 (10브랜드 × 30일)</td><td>300</td><td>300</td></tr>
+    <tr><td><strong>합계</strong></td><td></td><td><strong>~10,200</strong></td></tr>
+  </table>
+  <p>현재 플랜: $40/mo = 10,000크레딧. 더보기 사용량에 따라 <strong>플랜 업그레이드 필요할 수 있음</strong>.</p>
+</div>
+
+<!-- =========================================== -->
+<!-- 핵심 결정 -->
+<!-- =========================================== -->
+<div class="section">
+  <h2>🔑 핵심 결정 3가지</h2>
+  <ol style="padding-left:1.2rem;">
+    <li style="margin-bottom:0.75rem;">
+      <strong>다운로드를 클라이언트로 전환</strong><br>
+      <span style="font-size:0.8rem; color:var(--muted);">Vercel 서버 프록시 대신 브라우저에서 직접 fbcdn 다운로드. 영상 용량 제한 해소 + 서버 비용 0. CORS 안 되면 서버 fallback 유지.</span>
+    </li>
+    <li style="margin-bottom:0.75rem;">
+      <strong>검색을 2단계로 분리 (브랜드 → 광고)</strong><br>
+      <span style="font-size:0.8rem; color:var(--muted);">키워드 검색 → 바로 광고 목록이 아니라, 먼저 브랜드를 정확히 선택한 뒤 해당 page_id의 광고만 조회. 검색 정확도 대폭 향상.</span>
+    </li>
+    <li style="margin-bottom:0.75rem;">
+      <strong>모니터링 = page_id 기반 + NEW 자동 감지</strong><br>
+      <span style="font-size:0.8rem; color:var(--muted);">수강생이 매일 확인하는 루틴. 새 광고 올라오면 즉시 알 수 있어야 함. Cron 1일 1회로 크레딧 절약.</span>
+    </li>
+  </ol>
+
+  <div class="callout">
+    <strong>열린 질문:</strong> 수강생별로 모니터링 브랜드가 다른데, Cron에서 전체 사용자의 브랜드를 합산하면 크레딧 소비가 커질 수 있다. 중복 page_id는 1회만 호출하는 최적화가 필요할까, 아니면 사용자별 개별 호출이 맞을까?
+  </div>
+</div>
+
+</body>
+</html>

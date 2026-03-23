@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>디자인 기획서 v4 &#8212; BS CAMP UI 개선안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#1a1a1a;font-size:15px;line-height:1.7}
+.wrap{max-width:800px;margin:0 auto;padding:40px 24px 80px}
+.cover{text-align:center;padding:60px 0 48px;border-bottom:2px solid #f0f0f0;margin-bottom:56px}
+.ctag{display:inline-block;background:#F75D5D;color:#fff;font-size:12px;font-weight:700;letter-spacing:.08em;padding:4px 14px;border-radius:4px;margin-bottom:20px;text-transform:uppercase}
+.cover h1{font-size:28px;font-weight:800;color:#111;margin-bottom:12px;line-height:1.3}
+.csub{color:#888;font-size:14px}
+.cmeta{display:flex;justify-content:center;gap:24px;margin-top:24px;font-size:13px;color:#666;flex-wrap:wrap}
+.tbox{background:#f8f9fa;border-left:4px solid #F75D5D;border-radius:0 8px 8px 0;padding:24px 28px;margin-bottom:56px}
+.tbox h3{font-size:12px;font-weight:700;color:#F75D5D;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.tlist{list-style:none}
+.tlist li{padding:8px 0;border-bottom:1px solid #e9ecef}
+.tlist li:last-child{border-bottom:none}
+.tnum{font-size:12px;font-weight:700;color:#F75D5D;display:block}
+.tnam{font-size:14px;font-weight:600;color:#111;display:block}
+.tsub{font-size:12px;color:#9ca3af;display:block}
+.ph{display:flex;align-items:flex-start;gap:16px;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid #f0f0f0}
+.pnum{flex-shrink:0;width:48px;height:48px;background:#F75D5D;color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
+.pt h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
+.pt p{font-size:13px;color:#888}
+.ib{background:#fff8f8;border:1px solid #ffd0d0;border-radius:10px;padding:20px 24px;margin-bottom:36px}
+.ib h4{font-size:11px;font-weight:700;color:#F75D5D;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.ib ul{list-style:none}
+.ib li{padding:5px 0 5px 18px;font-size:14px;color:#333;position:relative}
+.ib li::before{content:"&#8594;";position:absolute;left:0;color:#F75D5D;font-weight:700}
+.ms{margin-bottom:52px}
+.ml{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.mb{background:#111;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.05em}
+.mb.blue{background:#2563EB}.mb.green{background:#059669}
+.ml h3{font-size:16px;font-weight:700;color:#111}
+.mc{border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.mbar{background:#f3f4f6;padding:8px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #e5e7eb}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.d1{background:#fc6058}.d2{background:#fec02f}.d3{background:#2aca44}
+.mi{padding:24px;background:#fff}
+.ev{display:flex;gap:10px;font-size:13px;margin-bottom:6px;flex-wrap:wrap}
+.eg,.eb{border-radius:6px;padding:7px 12px;flex:1;min-width:200px;line-height:1.5}
+.eg{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.eb{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}
+.rt{font-size:11px;color:#888;margin-bottom:18px;font-style:italic}
+.rt strong{color:#F75D5D;font-style:normal}
+.rec{background:linear-gradient(135deg,#F75D5D 0%,#ff8c8c 100%);color:#fff;border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:16px;margin-top:8px;margin-bottom:48px}
+.ri{font-size:28px;flex-shrink:0}
+.rec h4{font-size:14px;font-weight:800;margin-bottom:4px}
+.rec p{font-size:13px;opacity:.9}
+.pdiv{border:none;border-top:2px dashed #f0f0f0;margin:64px 0}
+.ac{background:#fff;border-top:1px solid #e5e7eb;padding-top:20px}
+.aci{display:flex;align-items:flex-start;gap:16px}
+.av{width:80px;height:80px;border-radius:50%;background:#e5e7eb;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:10px;text-align:center;border:2px solid #f3f4f6;line-height:1.3}
+.av img{width:100%;height:100%;object-fit:cover}
+.ai{flex:1;min-width:0}
+.an{font-size:16px;font-weight:700;color:#111;margin-bottom:2px}
+.ar{font-size:13px;color:#6b7280;margin-bottom:8px}
+.ad{font-size:13px;color:#374151;line-height:1.6}
+.br{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.bsep{width:1px;height:18px;background:#e5e7eb;margin:0 2px;flex-shrink:0}
+.csm{display:inline-flex;align-items:center;gap:4px;background:#f3f4f6;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#374151}
+.dr{width:5px;height:5px;border-radius:50%;background:#F75D5D;display:inline-block;flex-shrink:0}
+.csec{background:#f8f9fa;border-radius:8px;padding:12px 14px;margin-top:10px}
+.csl{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.cgrid{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cib{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:5px 10px}
+.cib span{font-size:11px;font-weight:600;color:#374151}
+.pbr{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.pbr span{font-size:11px;color:#6b7280}
+.atr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.tb{display:inline-flex;align-items:center;gap:3px;border:1px solid #1877F2;color:#1877F2;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.cil{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.cpil{display:inline-flex;align-items:center;gap:4px;background:#fff8f8;border:1px solid #fecaca;color:#dc2626;font-size:10px;font-weight:600;padding:3px 8px;border-radius:12px}
+.mp-s{background:#f3f4f6;border-radius:8px;padding:11px 14px;margin-bottom:10px;color:#9ca3af;font-size:13px}
+.mp-s::before{content:"&#128269;  검색하기..."}
+.mp-w{background:#fff;border:2px solid #F75D5D;border-radius:10px;padding:14px 18px;margin-bottom:10px;position:relative}
+.mp-wl{position:absolute;top:-9px;left:14px;background:#F75D5D;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+.mp-wt{font-size:12px;font-weight:700;color:#F75D5D;margin-bottom:8px}
+.mp-stats{display:flex;gap:20px}
+.sv{font-size:20px;font-weight:800;color:#111}
+.sk{font-size:10px;color:#9ca3af}
+.mp-n{background:#fffbeb;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;font-size:13px}
+.nl{font-size:10px;font-weight:700;color:#d97706;margin-bottom:4px}
+.mp-bl{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:12px 16px;margin-bottom:10px}
+.mp-bt{font-size:11px;font-weight:700;color:#6b7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.mp-i{padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.mp-i:last-child{border-bottom:none}
+.ps{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.psl{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;flex-shrink:0}
+.psimgs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.psimgs img{height:22px;width:auto;object-fit:contain}
+.pssep{width:1px;height:16px;background:#e5e7eb;flex-shrink:0}
+.mp-r2{display:flex;gap:10px;margin-bottom:10px}
+.mp-r2 .mp-n{flex:1;margin-bottom:0}
+.sc{width:120px;flex-shrink:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center}
+.sc img{height:20px;width:auto}
+.scs{font-size:9px;color:#9ca3af}
+.cdots{display:flex;gap:3px;justify-content:center}
+.cdots img{height:13px;width:auto}
+.mp-f{background:#f8f9fa;border-top:1px solid #e5e7eb;padding:12px 16px;border-radius:0 0 10px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fbl{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0}
+.fimgs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fimgs img{height:20px;width:auto}
+.bag{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:540px){.bag{grid-template-columns:1fr}}
+.bap{border-radius:10px;overflow:hidden;border:1px solid #e5e7eb}
+.bah{padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.bah.bef{background:#fee2e2;color:#991b1b}
+.bah.aft{background:#dcfce7;color:#166534}
+.bab{background:#f8f9fa;padding:16px;font-size:13px;color:#374151;min-height:160px}
+.bh2{font-size:15px;font-weight:700;color:#111;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #e5e7eb}
+.bul{list-style:none;padding:0}
+.bul li{padding:4px 0}
+.bul li::before{content:"\2022 ";color:#9ca3af}
+.tl{font-size:10px;font-weight:700;color:#F75D5D;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.tolist{list-style:none}
+.tolist li{padding:7px 0;border-bottom:1px solid #e9ecef;display:flex;flex-direction:column;gap:2px}
+.tolist li:last-child{border-bottom:none}
+.tno{font-size:11px;font-weight:700;color:#F75D5D}
+.tna{font-size:13px;color:#111;font-weight:600}
+.tds{font-size:11px;color:#9ca3af}
+.bcall{background:#fff8f8;border-left:3px solid #F75D5D;border-radius:0 6px 6px 0;padding:10px 14px;margin:10px 0;font-size:13px}
+.bhl{background:#fff3cd;padding:1px 4px;border-radius:3px;font-weight:700;color:#111}
+.bbq{border-left:3px solid #d1d5db;padding:8px 14px;color:#6b7280;font-style:italic;margin:8px 0;font-size:13px}
+.cll{list-style:none}
+.cll li{padding:9px 12px;margin-bottom:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#374151}
+.cn{font-size:11px;font-weight:700;color:#F75D5D;margin-right:4px}
+.ck{color:#059669;margin-right:3px}
+.cw{font-size:11px;color:#9ca3af;margin-top:4px;display:block;padding-left:20px}
+@media(max-width:600px){
+  .aci{flex-direction:column;align-items:center;text-align:center}
+  .br,.cil,.cgrid,.psimgs,.fimgs{justify-content:center}
+  .mp-r2{flex-direction:column}.sc{width:100%}
+  .cover h1{font-size:22px}.ph{flex-direction:column}
+  .cmeta{flex-direction:column;gap:8px;align-items:center}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="cover">
+  <div class="ctag">Design Proposal v4</div>
+  <h1>BS CAMP UI 개선 기획서</h1>
+  <p class="csub">작성자 소개 카드 &nbsp;&middot;&nbsp; 메인페이지 파트너 배지 &nbsp;&middot;&nbsp; 정보공유 글 가독성</p>
+  <div class="cmeta">
+    <span>&#128197; 2026-03-01</span>
+    <span>&#9997;&#65039; 모찌</span>
+    <span>&#127919; 3개 파트 &middot; 각 3안</span>
+    <span>&#128194; mozzi-reports v4</span>
+  </div>
+</div>
+
+<div class="tbox">
+  <h3>목차</h3>
+  <ul class="tlist">
+    <li>
+      <span class="tnum">01</span>
+      <span class="tnam">작성자 소개 카드 (이메일/정보공유 하단)</span>
+      <span class="tsub">현재 가로형 구조 유지 + Meta Partner 로고 &amp; Certified 배지 3종 추가 &middot; 3안 비교</span>
+    </li>
+    <li>
+      <span class="tnum">02</span>
+      <span class="tnam">메인페이지 파트너 배지 배치</span>
+      <span class="tsub">광고성과 위젯 고정 &middot; 광고성과 아래 / 공지사항 옆 / 페이지 하단 3안</span>
+    </li>
+    <li>
+      <span class="tnum">03</span>
+      <span class="tnam">정보공유 글 가독성 개선</span>
+      <span class="tsub">목차 / 강조 / 체크리스트 Before&amp;After &middot; bscamp 디자인 스타일 유지</span>
+    </li>
+  </ul>
+</div>
+
+<div class="ph">
+  <div class="pnum">1</div>
+  <div class="pt">
+    <h2>작성자 소개 카드</h2>
+    <p>이메일 뉴스레터 &amp; 정보공유 글 하단 &middot; Meta Partner 로고 + Certified 배지 3종 추가</p>
+  </div>
+</div>
+<div class="ib">
+  <h4>레퍼런스 핵심 패턴 요약</h4>
+  <ul>
+    <li><strong>가로형 카드가 표준</strong> &#8212; 좌측 원형 프로필(80px) + 우측 이름/역할/소개 구조가 SEJ&middot;Brafton&middot;ContentPowered 등 주요 사례 80% 이상 채택. 현재 구조 유지</li>
+    <li><strong>배지 위치: 이름 아래, 소개 텍스트 위</strong> &#8212; 스캔 순서(이름&#8594;신뢰지표&#8594;소개)를 따르며 프로필 사진 크기의 50~70%가 적정 배지 크기 (Neil Patel&middot;SEJ 레퍼런스)</li>
+    <li><strong>배지 이미지 + 텍스트 레이블 병행이 최적</strong> &#8212; 이미지(시각 신뢰)와 텍스트(접근성&middot;SEO)를 함께 사용. 흰 배경에 원본 색상 유지 (ContentPowered 분석)</li>
+  </ul>
+</div>
+
+<div class="ms">
+  <div class="ml"><div class="mb">안 A</div><h3>가로 배지 줄 &#8212; 파트너 로고 + 인증 배지 인라인</h3></div>
+  <p class="rt">근거: <strong>Brafton Author Template</strong> &middot; <strong>SEJ Author Box</strong> &#8212; 가장 보편적인 가로형 + 인라인 배지 조합. 이름&#8594;배지&#8594;설명 스캔 순서 최적화</p>
+  <div class="mc">
+<div class="mbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+    <div class="mi">
+      <div class="ac"><div class="aci">
+        <div class="av"><img src="images/profile-smith.png" alt="Smith" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.innerHTML='프로필<br>사진'"></div>
+        <div class="ai">
+          <div class="an">Smith</div>
+          <div class="ar">퍼포먼스 마케팅 전문가 &middot; 자사몰사관학교 운영</div>
+          <div class="br">
+            <img src="images/inline-positive.png" alt="Meta Business Partner" style="height:26px;width:auto;vertical-align:middle" onerror="this.outerHTML='<span style=&quot;font-size:11px;font-weight:700;color:#1877F2;background:#e7f3ff;padding:3px 10px;border-radius:4px&quot;>Meta Business Partner</span>'">
+            <div class="bsep"></div>
+            <div class="csm"><span class="dr"></span> AI Performance Certified</div>
+            <div class="csm"><span class="dr"></span> Media Measurement Certified</div>
+            <div class="csm"><span class="dr"></span> Technical Implementation Certified</div>
+          </div>
+          <div class="ad">Meta 광고 10년 경력. ASC&middot;CAPI&middot;AI 예산최적화 전문. 자사몰사관학교에서 실전 퍼포먼스 마케팅을 가르칩니다.</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">스캔하기 쉽고 정보 밀도 높음. 이름&#8594;배지&#8594;설명 순으로 자연스럽게 읽힘. 구현 단순</div>
+    <div class="eb">배지 3종 나열 시 모바일에서 줄바꿈 발생, 레이아웃이 흐트러질 수 있음</div>
+  </div>
+</div>
+
+<div class="ms">
+  <div class="ml"><div class="mb blue">안 B</div><h3>인증 섹션 분리 &#8212; 파트너 + 배지를
+ 별도 블록으로</h3></div>
+  <p class="rt">근거: <strong>Tinuiti 파트너 배지 섹션</strong> &middot; <strong>Wpromote 파트너 허브</strong> &#8212; 배지를 신뢰지표 영역으로 분리해 권위 극대화. 파트너십/인증 계층 명확히 구분</p>
+  <div class="mc">
+<div class="mbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+    <div class="mi">
+      <div class="ac"><div class="aci">
+        <div class="av"><img src="images/profile-smith.png" alt="Smith" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.innerHTML='프로필<br>사진'"></div>
+        <div class="ai">
+          <div class="an">Smith</div>
+          <div class="ar">퍼포먼스 마케팅 전문가 &middot; 자사몰사관학교 운영</div>
+          <div class="ad" style="margin-bottom:10px">Meta 광고 10년 경력. ASC&middot;CAPI&middot;AI 예산최적화 전문. 자사몰사관학교에서 실전 퍼포먼스 마케팅을 가르칩니다.</div>
+          <div class="csec">
+            <div class="csl">공식 인증 &amp; 파트너십</div>
+            <div class="pbr">
+              <img src="images/inline-positive.png" alt="Meta Business Partner" style="height:20px;width:auto" onerror="this.style.display='none'">
+              <span>Meta Business Partner</span>
+            </div>
+            <div class="cgrid">
+              <div class="cib"><img src="images/cert-ai-performance.png" alt="" style="height:16px;width:auto" onerror="this.style.display='none'"><span>AI Performance Certified</span></div>
+              <div class="cib"><img src="images/cert-media-measurement.png" alt="" style="height:16px;width:auto" onerror="this.style.display='none'"><span>Media Measurement Certified</span></div>
+              <div class="cib"><img src="images/cert-technical-implementation.png" alt="" style="height:16px;width:auto" onerror="this.style.display='none'"><span>Technical Implementation Certified</span></div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">파트너 로고와 인증 배지 계층이 명확. 텍스트 병기로 접근성&middot;SEO 우수. 모바일 안정적</div>
+    <div class="eb">카드 높이 증가로 이메일에서 다소 무거움. 인증 섹션 배경이 레이아웃 부담 줄 수 있음</div>
+  </div>
+</div>
+
+<div class="ms">
+  <div class="ml"><div class="mb green">안 C</div><h3>인라인 텍스트 배지 &#8212; E-E-A-T 최적화형</h3></div>
+  <p class="rt">근거: <strong>The Digital Nonprofit E-E-A-T Author Bio</strong> &middot; <strong>ContentPowered 분석</strong> &#8212; 배지 이미지 대신 텍스트 자격증 표기로 SEO&middot;접근성 극대화. 이름 옆 인라인 파트너 배지</p>
+  <div class="mc">
+<div class="mbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+    <div class="mi">
+      <div class="ac"><div class="aci">
+        <div class="av"><img src="images/profile-smith.png" alt="Smith" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.innerHTML='프로필<br>사진'"></div>
+        <div class="ai">
+          <div class="atr">
+            <span class="an">Smith</span>
+            <span class="tb"><img src="images/inline-positive.png" alt="" style="height:11px;width:auto" onerror="this.style.display='none'"> Meta Partner</span>
+          </div>
+          <div class="ar">퍼포먼스 마케팅 전문가 &middot; 자사몰사관학교 운영</div>
+          <div class="ad" style="margin-bottom:8px">Meta 광고 10년 경력. ASC&middot;CAPI&middot;AI 예산최적화 전문. 자사몰사관학교에서 실전 퍼포먼스 마케팅을 가르칩니다.</div>
+          <div class="cil">
+            <span class="cpil"><img src="images/cert-ai-performance.png" alt="" style="height:11px;width:auto" onerror="this.style.display='none'"> &#10003; AI Performance Certified</span>
+            <span class="cpil"><img src="images/cert-media-measurement.png" alt="" style="height:11px;width:auto" onerror="this.style.display='none'"> &#10003; Media Measurement Certified</span>
+            <span class="cpil"><img src="images/cert-technical-implementation.png" alt="" style="height:11px;width:auto" onerror="this.style.display='none'"> &#10003; Technical Implementation Certified</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">가장 가볍고 모바일 최적화. 이름 옆 파트너 배지로 즉각적인 신뢰감. SEO 친화적</div>
+    <div class="eb">배지 이미지 시각 효과가 약함. 인증 배지가 텍스트만으로 표시되어 존재감 낮을 수 있음</div>
+  </div>
+</div>
+<div class="rec"><div class="ri">&#11088;</div><div><h4>추천안: 안 B (인증 섹션 분리형)</h4><p>파트너십과 인증 배지의 계층이 명확하고, 이미지+텍스트 병기로 접근성과 SEO를 모두 충족. 이메일 레이아웃에서도 안정적으로 표시됨</p></div></div>
+<hr class="pdiv">
+
+<div class="ph">
+  <div class="pnum">2</div>
+  <div class="pt">
+    <h2>메인페이지 파트너 배지</h2>
+    <p>광고성과 위젯은 최상단 고정 &middot; 3가지 배치 위치 비교</p>
+  </div>
+</div>
+<div class="ib">
+  <h4>레퍼런스 핵심 패턴 요약</h4>
+  <ul>
+    <li><strong>배지는 단독보다 묶음 배치가 효과적</strong> &#8212; SF Digital Studios(히어로 아래), Logical Position(어워드 섹션), Optmyzr(하단 파트너 섹션) 등 위치에 따라 신뢰 계층을 구성. 단독 배치는 푸터나 소형으로</li>
+    <li><strong>클릭 가능 + 검증 URL 연결이 표준</strong> &#8212; 대부분 배지에 Meta Business Partner 디렉토리 링크 연결. 클릭 시 공식 인증 확인 가능하게 구성 (WebFX, SF Digital Studios 레퍼런스)</li>
+    <li><strong>로그인 후 대시보드에는 드문 패턴</strong> &#8212; 업계 표준은 로그인 전 홈페이지/마케팅 페이지에 배지 집중 배치. 내부 대시보드에서는 소형 또는 푸터 배치가 적절</li>
+  </ul>
+</div>
+
+<div class="ms">
+  <div class="ml"><div class="mb">안 A</div><h3>광고성과 위젯 바로 아래 &#8212; 파트너 배지 스트립</h3></div>
+  <p class="rt">근거: <strong>SF Digital Studios</strong>(히어로 아래 인라인 배지) &middot; <strong>Optmyzr</strong>(파트너 섹션 나열) &#8212; 광고성과 위젯의 신뢰감을 파트너 배지로 즉시 보강. 성과 데이터 + 공식 파트너십의 맥락 연결</p>
+  <div class="mc">
+<div class="mbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+    <div class="mi">
+      <div style="font-size:13px;color:#374151">
+        <div class="mp-s"></div>
+
+<div class="mp-w">
+  <div class="mp-wl">광고성과 위젯 (고정)</div>
+  <div class="mp-wt">&#128201; 이번 달 광고 성과</div>
+  <div class="mp-stats">
+    <div><div class="sv">4.8x</div><div class="sk">평균 ROAS</div></div>
+    <div><div class="sv">2.1%</div><div class="sk">CTR</div></div>
+    <div><div class="sv">&#8675;12%</div><div class="sk">CPA</div></div>
+  </div>
+</div>
+        <div class="ps">
+          <div class="psl">공식 인증</div>
+          <div class="psimgs">
+            <img src="images/inline-positive.png" alt="Meta Business Partner" onerror="this.outerHTML='<span style=&quot;font-size:10px;font-weight:700;color:#1877F2;background:#e7f3ff;padding:2px 8px;border-radius:3px&quot;>Meta Partner</span>'">
+            <div class="pssep"></div>
+            <img src="images/badge-light.png" alt="Meta Badge" onerror="this.style.display='none'">
+            <div class="pssep"></div>
+            <img src="images/cert-ai-performance.png" alt="AI Performance" onerror="this.style.display='none'">
+            <img src="images/cert-media-measurement.png" alt="Media Measurement" onerror="this.style.display='none'">
+            <img src="images/cert-technical-implementation.png" alt="Technical" onerror="this.style.display='none'">
+          </div>
+        </div>
+
+<div class="mp-n">
+  <div class="nl">&#128276; 공지사항</div>
+  [2026-03] 자사몰사관학교 5기 모집 안내 &mdash; 마감 D-7
+</div>
+<div class="mp-bl">
+  <div class="mp-bt">&#128172; 최근 Q&amp;A</div>
+  <div class="mp-i">ASC에서 예산 배분을 어떻게 해야 하나요?</div>
+  <div class="mp-i">픽셀 이벤트 누락 문제 해결 방법이 있나요?</div>
+  <div class="mp-i">CAPI 설정 후 이벤트 매칭 점수가 안 올라요</div>
+</div>
+<div class="mp-bl">
+  <div class="mp-bt">&#128196; 정보공유 최신글</div>
+  <div class="mp-i">Meta AI 예산 최적화 완전 정복 가이드</div>
+  <div class="mp-i">어드밴티지+ 쇼핑 캠페인 세팅 체크리스트</div>
+  <div class="mp-i">2026 Q1 메타 알고리즘 변화 정리</div>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">광고성과와 파트너 배지가 한 맥락에 묶여 신뢰감 극대화. 위젯 바로 아래라 자연스럽게 노출됨</div>
+    <div class="eb">화면 상단에 여러 요소가 집중되어 정보 과부하 느낌 줄 수 있음. 스트립이 위젯과 공지 사이를 끊음</div>
+  </div>
+</div>
+
+<div class="ms">
+  <div class="ml"><div class="mb blue">안 B</div><h3>공지사항 옆 사이드 카드 &#8212; 공지와 나란히</h3></div>
+  <p class="rt">근거: <strong>Baremetrics</strong>(푸터 소형) &middot; <strong>MailerLite</strong>(맥락별 관련 배지 선택 노출) &#8212; 공지사항 옆에 사이드 카드로 배치해 레이아웃 흐름을 유지하면서 자연스럽게 노출</p>
+  <div class="mc">
+<div class="mbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+    <div class="mi">
+      <div style="font-size:13px;color:#374151">
+        <div class="mp-s"></div>
+
+<div class="mp-w">
+  <div class="mp-wl">광고성과 위젯 (고정)</div>
+  <div class="mp-wt">&#128201; 이번 달 광고 성과</div>
+  <div class="mp-stats">
+    <div><div class="sv">4.8x</div><div class="sk">평균 ROAS</div></div>
+    <div><div class="sv">2.1%</div><div class="sk">CTR</div></div>
+    <div><div class="sv">&#8675;12%</div><div class="sk">CPA</div></div>
+  </div>
+</div>
+        <div class="mp-r2">
+          <div class="mp-n">
+            <div class="nl">&#128276; 공지사항</div>
+            [2026-03] 자사몰사관학교 5기 모집 안내 &mdash; 마감 D-7
+          </div>
+          <div class="sc">
+            <img src="images/inline-positive.png" alt="Meta Partner" onerror="this.outerHTML='<span style=&quot;font-size:9px;font-weight:700;color:#1877F2&quot;>Meta Partner</span>'">
+            <div class="scs">공식 인증</div>
+            <div class="cdots">
+              <img src="images/cert-ai-performance.png" alt="" onerror="this.style.display='none'">
+              <img src="images/cert-media-measurement.png" alt="" onerror="this.style.display='none'">
+              <img src="images/cert-technical-implementation.png" alt="" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+<div class="mp-bl">
+  <div class="mp-bt">&#128172; 최근 Q&amp;A</div>
+  <div class="mp-i">ASC에서 예산 배분을 어떻게 해야 하나요?</div>
+  <div class="mp-i">픽셀 이벤트 누락 문제 해결 방법이 있나요?</div>
+  <div class="mp-i">CAPI 설정 후 이벤트 매칭 점수가 안 올라요</div>
+</div>
+<div class="mp-bl">
+  <div class="mp-bt">&#128196; 정보공유 최신글</div>
+  <div class="mp-i">Meta AI 예산 최적화 완전 정복 가이드</div>
+  <div class="mp-i">어드밴티지+ 쇼핑 캠페인 세팅 체크리스트</div>
+  <div class="mp-i">2026 Q1 메타 알고리즘 변화 정리</div>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">레이아웃 흐름을 유지하면서 자연스럽게 배지 노출. 공지사항과 같은 시각적 무게로 균형잡힘</div>
+    <div class="eb">사이드 카드 폭(120px)이 모바일에서 레이아웃을 깨뜨릴 수 있음. 배지 크기가 작아 가독성 낮음</div>
+  </div>
+</div>
+
+<div class="ms">
+  <div class="ml"><div class="mb green">안 C</div><h3>페이지 하단 푸터 배지 &#8212; 전체 컨텐츠 마무리</h3></div>
+  <p class="rt">근거: <strong>Baremetrics</strong>(푸터 소형 배치) &middot; <strong>WebFX</strong>(파트너 페이지 집약) &#8212; 콘텐츠를 다 본 뒤 마지막에 신뢰 지표로 마무리. 눈에 잘 띄지 않지만 검증 역할 충실</p>
+  <div class="mc">
+<div class="mbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+    <div class="mi">
+      <div style="font-size:13px;color:#374151">
+        <div class="mp-s"></div>
+
+<div class="mp-w">
+  <div class="mp-wl">광고성과 위젯 (고정)</div>
+  <div class="mp-wt">&#128201; 이번 달 광고 성과</div>
+  <div class="mp-stats">
+    <div><div class="sv">4.8x</div><div class="sk">평균 ROAS</div></div>
+    <div><div class="sv">2.1%</div><div class="sk">CTR</div></div>
+    <div><div class="sv">&#8675;12%</div><div class="sk">CPA</div></div>
+  </div>
+</div>
+<div class="mp-n">
+  <div class="nl">&#128276; 공지사항</div>
+  [2026-03] 자사몰사관학교 5기 모집 안내 &mdash; 마감 D-7
+</div>
+<div class="mp-bl">
+  <div class="mp-bt">&#128172; 최근 Q&amp;A</div>
+  <div class="mp-i">ASC에서 예산 배분을 어떻게 해야 하나요?</div>
+  <div class="mp-i">픽셀 이벤트 누락 문제 해결 방법이 있나요?</div>
+  <div class="mp-i">CAPI 설정 후 이벤트 매칭 점수가 안 올라요</div>
+</div>
+<div class="mp-bl">
+  <div class="mp-bt">&#128196; 정보공유 최신글</div>
+  <div class="mp-i">Meta AI 예산 최적화 완전 정복 가이드</div>
+  <div class="mp-i">어드밴티지+ 쇼핑 캠페인 세팅 체크리스트</div>
+  <div class="mp-i">2026 Q1 메타 알고리즘 변화 정리</div>
+</div>
+        <div class="mp-f">
+          <div class="fbl">공식 파트너 &amp; 인증</div>
+          <div class="fimgs">
+            <img src="images/inline-positive.png" alt="Meta Business Partner" onerror="this.outerHTML='<span style=&quot;font-size:10px;font-weight:700;color:#1877F2&quot;>Meta Partner</span>'">
+            <img src="images/badge-light.png" alt="" onerror="this.style.display='none'">
+            <img src="images/cert-ai-performance.png" alt="" onerror="this.style.display='none'">
+            <img src="images/cert-media-measurement.png" alt="" onerror="this.style.display='none'">
+            <img src="images/cert-technical-implementation.png" alt="" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">전체 레이아웃 흐름을 전혀 방해하지 않음. 광고성과 위젯과 콘텐츠 경험 완전 보존</div>
+    <div class="eb">노출 위치가 하단이라 대부분의 방문자가 스크롤하지 않으면 못 봄. 신뢰 효과 제한적</div>
+  </div>
+</div>
+<div class="rec"><div class="ri">&#11088;</div><div><h4>추천안: 안 A (광고성과 위젯 아래 배지 스트립)</h4><p>광고성과 데이터와 Meta Business Partner 배지를 같은 맥락으로 묶어 신뢰감 극대화. Tinuiti&middot;Logical Position 레퍼런스처럼 성과+파트너십 조합이 가장 효과적</p></div></div>
+<hr class="pdiv">
+
+<div class="ph">
+  <div class="pnum">3</div>
+  <div class="pt">
+    <h2>정보공유 글 가독성 개선</h2>
+    <p>글 쓰는 방식(구성·표현)만 변경 &middot; bscamp 색상·폰트·스타일 그대로 유지</p>
+  </div>
+</div>
+<div class="ib">
+  <h4>레퍼런스 핵심 패턴 요약</h4>
+  <ul>
+    <li><strong>번호 목차 + 한 줄 설명이 표준</strong> &#8212; Lenny's Newsletter, HubSpot Blog, ConvertKit Blog 등 "01. 제목 &#8212; 핵심 요약 1줄" 형식. 불릿 나열 대비 스캔 속도 3배 향상</li>
+    <li><strong>핵심 문장은 Bold + Callout 박스로 강조</strong> &#8212; Morning Brew(수치 Bold), Backlinko(2~3문장 단락+Bold 키워드), Ahrefs(Note/Warning 박스) &#8212; 모든 단락에 최소 1개 강조 요소 적용</li>
+    <li><strong>체크리스트에 "왜 중요한가" 1줄 추가</strong> &#8212; The Hustle의 "Why it matters" 박스, ConvertKit의 액션 아이템 체크박스 스타일 &#8212; 항목에 이유를 붙이면 행동 유도 효과 크게 상승</li>
+  </ul>
+</div>
+
+<!-- 목차 Before/After -->
+<div class="ms">
+  <div class="ml"><div class="mb">안 A</div><h3>목차 개선 &#8212; 번호 + 한 줄 설명</h3></div>
+  <p class="rt">근거: <strong>Lenny's Newsletter TOC</strong> &middot; <strong>ConvertKit Blog</strong> &#8212; 번호+설명 목차가 불릿 목차 대비 스캔 효율 우수. Morning Brew 이모지 TOC 패턴 결합</p>
+  <div class="bag">
+    <div class="bap">
+      <div class="bah bef">Before</div>
+      <div class="bab">
+        <div class="bh2">목차</div>
+        <ul class="bul">
+          <li>캠페인 구조</li>
+          <li>예산 세팅</li>
+          <li>소재 전략</li>
+          <li>성과 분석</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bap">
+      <div class="bah aft">After</div>
+      <div class="bab" style="background:#f8f9fa;border-left:4px solid #F75D5D;border-radius:0 8px 8px 0">
+        <div class="tl">&#128204; 이번 글에서 다루는 것</div>
+        <ul class="tolist">
+          <li><span class="tno">01</span><span class="tna">캠페인 구조</span><span class="tds">&#8212; 올바른 세팅이 성과를 결정한다</span></li>
+          <li><span class="tno">02</span><span class="tna">예산 세팅</span><span class="tds">&#8212; 흔한 실수 3가지와 해결법</span></li>
+          <li><span class="tno">03</span><span class="tna">소재 전략</span><span class="tds">&#8212; AI가 선택하는 소재의 조건</span></li>
+          <li><span class="tno">04</span><span class="tna">성과 분석</span><span class="tds">&#8212; 이 수치만 보면 된다</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">각 항목의 내용 예고로 클릭률 향상. 번호로 순서감 확보. 스캔 최적화</div>
+    <div class="eb">목차 자체가 길어져 짧은 글에는 과할 수 있음</div>
+  </div>
+</div>
+
+<!-- 강조 Before/After -->
+<div class="ms">
+  <div class="ml"><div class="mb blue">안 B</div><h3>강조 방식 개선 &#8212; Bold + Callout 박스</h3></div>
+  <p class="rt">근거: <strong>Backlinko Short Paragraph</strong> &middot; <strong>Ahrefs Callout 박스</strong> &middot; <strong>Morning Brew Bold 수치</strong> &#8212; 모든 단락 최소 1개 Bold + 핵심 인사이트는 Callout 박스로 감싸기</p>
+  <div class="bag">
+    <div class="bap">
+      <div class="bah bef">Before</div>
+      <div class="bab">
+        <div class="bh2">ASC 예산 배분</div>
+        <p style="font-size:13px;line-height:1.7;color:#374151">어드밴티지+ 쇼핑 캠페인에서 예산을 설정할 때는 일일 예산 기준으로 설정하는 것이 좋습니다. 최소 50달러 이상의 예산을 권장하며, 학습 기간인 7일 동안은 예산을 변경하지 않는 것이 좋습니다. ROAS가 목표치에 도달하면 예산을 20% 씩 증액할 수 있습니다.</p>
+      </div>
+    </div>
+    <div class="bap">
+      <div class="bah aft">After</div>
+      <div class="bab">
+        <div class="bh2">ASC 예산 배분</div>
+        <p style="font-size:13px;line-height:1.7;color:#374151">어드밴티지+ 쇼핑 캠페인은 <strong style="color:#111">일일 예산 기준</strong>으로 설정하세요. <span class="bhl">최소 $50 이상</span> 권장합니다.</p>
+        <div class="bcall"><strong style="color:#F75D5D">&#128161; 핵심:</strong> 학습 기간 <strong>7일</strong> 동안은 예산 변경 금지. ROAS 목표 도달 후 <strong>20%씩</strong> 증액</div>
+        <div class="bbq">예산을 자주 바꾸면 학습이 리셋됩니다. 참으세요.</div>
+      </div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">핵심 정보가 즉시 눈에 들어옴. Callout 박스로 놓치면 안 되는 내용 강조. 스캔 가능한 구조</div>
+    <div class="eb">Callout 박스가 많아지면 오히려 강조 효과 희석. 섹션당 1개로 제한 필요</div>
+  </div>
+</div>
+
+<!-- 체크리스트 Before/After -->
+<div class="ms">
+  <div class="ml"><div class="mb green">안 C</div><h3>체크리스트 개선 &#8212; 번호 + 이유 1줄</h3></div>
+  <p class="rt">근거: <strong>The Hustle "Why it matters"</strong> &middot; <strong>ConvertKit 체크박스 스타일</strong> &middot; <strong>HubSpot ☑ 이모지 체크리스트</strong> &#8212; 항목에 이유를 붙이면 행동 유도 효과 크게 상승</p>
+  <div class="bag">
+    <div class="bap">
+      <div class="bah bef">Before</div>
+      <div class="bab">
+        <div class="bh2">세팅 체크리스트</div>
+        <ul class="bul">
+          <li>광고 계정 확인</li>
+          <li>픽셀 세팅</li>
+          <li>소재 준비</li>
+          <li>예산 설정</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bap">
+      <div class="bah aft">After</div>
+      <div class="bab">
+        <div class="bh2">세팅 체크리스트</div>
+        <ul class="cll">
+          <li><span class="cn">01</span><span class="ck">&#10003;</span>광고 계정 확인<span class="cw">&#8594; 계정 품질 탭에서 점수 확인. 낮으면 성과 직결</span></li>
+          <li><span class="cn">02</span><span class="ck">&#10003;</span>픽셀 세팅<span class="cw">&#8594; Events Manager에서 이벤트 수신 확인. 없으면 최적화 불가</span></li>
+          <li><span class="cn">03</span><span class="ck">&#10003;</span>소재 준비<span class="cw">&#8594; 이미지 5개 이상 / 영상 2개 이상 권장. 다양할수록 AI 최적화 유리</span></li>
+          <li><span class="cn">04</span><span class="ck">&#10003;</span>예산 설정<span class="cw">&#8594; 일일 $50 이상. 7일 학습 기간 동안 건드리지 않기</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="ev">
+    <div class="eg">각 항목의 이유가 명확해 실행 동기 상승. 번호로 우선순위 인식. 행동 유도 효과 우수</div>
+    <div class="eb">항목이 길어져 체크리스트가 시각적으로 무거워질 수 있음. 항목 5개 이하로 제한 필요</div>
+  </div>
+</div>
+<div class="rec"><div class="ri">&#11088;</div><div><h4>추천안: 전체 패키지 적용</h4><p>안 A(번호 목차) + 안 B(Bold+Callout) + 안 C(체크리스트 이유 추가)를 함께 적용. 각각 독립적으로도 효과적이나 세 가지 조합 시 가독성 최대화. bscamp 색상(#F75D5D, #f8f9fa)과 Pretendard 폰트 유지</p></div></div>
+</div>
+</body>
+</html>

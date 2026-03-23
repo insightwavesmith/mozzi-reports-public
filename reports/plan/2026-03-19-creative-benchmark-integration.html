@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소재 분석 × 3단계 벤치마크 연동 기획</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.7; }
+
+.header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 48px 24px; text-align: center; }
+.header h1 { font-size: 28px; margin-bottom: 8px; }
+.header p { opacity: 0.8; font-size: 15px; }
+.header .badge { display: inline-block; background: #F75D5D; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 12px; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 24px; }
+
+.section { background: white; border-radius: 16px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.section h2 { font-size: 20px; margin-bottom: 16px; color: #1a1a2e; border-left: 4px solid #F75D5D; padding-left: 12px; }
+.section h3 { font-size: 16px; margin: 20px 0 10px; color: #333; }
+
+.problem { background: #fff3cd; border-left: 4px solid #ffc107; padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 16px 0; }
+.solution { background: #d1ecf1; border-left: 4px solid #17a2b8; padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 16px 0; }
+
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+table th { background: #f8f9fa; text-align: left; padding: 10px 12px; border-bottom: 2px solid #dee2e6; font-weight: 600; }
+table td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+table tr:hover { background: #f8f9fa; }
+
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+.metric-card { background: #f8f9fa; border-radius: 12px; padding: 16px; text-align: center; }
+.metric-card .title { font-size: 12px; color: #666; margin-bottom: 4px; }
+.metric-card .value { font-size: 20px; font-weight: 700; color: #1a1a2e; }
+.metric-card .sub { font-size: 11px; color: #999; margin-top: 4px; }
+
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; margin: 2px; }
+.tag-red { background: #fee2e2; color: #dc2626; }
+.tag-green { background: #d1fae5; color: #059669; }
+.tag-blue { background: #dbeafe; color: #2563eb; }
+.tag-gray { background: #f3f4f6; color: #6b7280; }
+
+.flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+.flow-step { background: #e8f4f8; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; }
+.flow-arrow { color: #999; font-size: 18px; }
+
+.example { background: #f0f4ff; border-radius: 12px; padding: 20px; margin: 16px 0; }
+.example h4 { font-size: 14px; color: #2563eb; margin-bottom: 8px; }
+
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+.comp-card { border-radius: 12px; padding: 20px; }
+.comp-before { background: #fee2e2; }
+.comp-after { background: #d1fae5; }
+.comp-card h4 { font-size: 14px; margin-bottom: 8px; }
+
+code { background: #f1f3f5; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+
+.footer { text-align: center; padding: 32px; color: #999; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎯 소재 분석 × 3단계 벤치마크 연동</h1>
+  <p>기반 / 참여 / 전환 벤치마크 기반 소재 요소 분석</p>
+  <div class="badge">기획서 v1 — 2026.03.19</div>
+</div>
+
+<div class="container">
+
+<!-- 현재 문제 -->
+<div class="section">
+  <h2>🔴 현재 문제</h2>
+  
+  <div class="problem">
+    <strong>1. ROAS 단일 지표로만 벤치마크</strong><br>
+    hook_type별 ROAS만 비교 → "기반(시청률)은 좋은데 전환이 안 되는 소재"를 구분 못함
+  </div>
+  
+  <div class="problem">
+    <strong>2. 동영상/이미지 구분 없음</strong><br>
+    동영상(3초시청률, 완시청률)과 이미지(CTR 위주)를 같은 기준으로 비교. 동영상 346건 vs 이미지 12건.
+  </div>
+  
+  <div class="problem">
+    <strong>3. hook_type "none" 존재</strong><br>
+    동영상에 hook 없음은 비정상. L1 태깅이 인식 못한 경우 → 별도 처리 필요.
+  </div>
+  
+  <div class="problem">
+    <strong>4. 단순평균</strong><br>
+    광고비 1만원짜리 ROAS 50과 광고비 100만원짜리 ROAS 2를 동등하게 취급. 가중평균 필수.
+  </div>
+</div>
+
+<!-- 총가치각도기 3단계 -->
+<div class="section">
+  <h2>📐 총가치각도기 3단계 벤치마크 (기존)</h2>
+  
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="title">🔵 기반</div>
+      <div class="value">시청·클릭</div>
+      <div class="sub">"봤나?"</div>
+    </div>
+    <div class="metric-card">
+      <div class="title">🟡 참여</div>
+      <div class="value">반응·댓글</div>
+      <div class="sub">"반응했나?"</div>
+    </div>
+    <div class="metric-card">
+      <div class="title">🔴 전환</div>
+      <div class="value">구매·ROAS</div>
+      <div class="sub">"샀나?"</div>
+    </div>
+  </div>
+  
+  <table>
+    <tr>
+      <th>단계</th>
+      <th>동영상 지표</th>
+      <th>이미지 지표</th>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">기반</span></td>
+      <td>3초시청률, 완시청률(ThruPlay), 잔존율, CTR</td>
+      <td>CTR</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-green">참여</span></td>
+      <td colspan="2">반응/만, 댓글/만, 공유/만, 저장/만, 참여합계/만</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-red">전환</span></td>
+      <td colspan="2">구매전환율, 결제시작률, 결제→구매, ROAS</td>
+    </tr>
+  </table>
+  
+  <p style="font-size: 13px; color: #666; margin-top: 8px;">
+    ※ DB에 모든 지표가 <code>daily_ad_insights</code>에 저장되어 있음. 연동만 하면 됨.
+  </p>
+</div>
+
+<!-- 연동 설계 -->
+<div class="section">
+  <h2>🔗 연동 설계: 소재 요소 × 3단계 벤치마크</h2>
+  
+  <h3>핵심 아이디어</h3>
+  <div class="solution">
+    소재의 각 요소(hook_type, style, cta_type 등)별로 ROAS만이 아닌 <strong>기반·참여·전환 3단계 지표</strong>를 계산.<br>
+    → "이 hook 유형은 시청률은 좋지만 전환이 약하다" 같은 <strong>단계별 진단</strong>이 가능.
+  </div>
+  
+  <h3>계산 구조 (동영상/이미지 분리)</h3>
+  
+  <table>
+    <tr>
+      <th>요소</th>
+      <th>동영상 벤치마크</th>
+      <th>이미지 벤치마크</th>
+    </tr>
+    <tr>
+      <td><strong>hook_type</strong><br><span class="tag tag-gray">problem</span> <span class="tag tag-gray">question</span> <span class="tag tag-gray">benefit</span> <span class="tag tag-gray">shock</span></td>
+      <td>
+        기반: 3초시청률, 완시청률, CTR<br>
+        참여: 반응/만, 댓글/만, 공유/만<br>
+        전환: 구매전환율, ROAS
+      </td>
+      <td>
+        기반: CTR<br>
+        참여: 반응/만, 댓글/만, 공유/만<br>
+        전환: 구매전환율, ROAS
+      </td>
+    </tr>
+    <tr>
+      <td><strong>style</strong><br><span class="tag tag-gray">ugc</span> <span class="tag tag-gray">professional</span> <span class="tag tag-gray">lifestyle</span> <span class="tag tag-gray">minimal</span></td>
+      <td colspan="2">동일 구조</td>
+    </tr>
+    <tr>
+      <td><strong>cta_type</strong><br><span class="tag tag-gray">button</span> <span class="tag tag-gray">overlay</span> <span class="tag tag-gray">text</span> <span class="tag tag-gray">none</span></td>
+      <td colspan="2">동일 구조</td>
+    </tr>
+  </table>
+  
+  <h3>가중평균 계산 방식</h3>
+  <div class="example">
+    <h4>예: hook_type = "problem" + format = "video"의 3초시청률 벤치마크</h4>
+    <p style="font-size: 13px;">
+      1. <code>creative_element_analysis</code>에서 hook_type='problem' AND format='video'인 ad_id 추출<br>
+      2. <code>daily_ad_insights</code>에서 해당 ad_id의 video_p3s_rate × impressions 합산<br>
+      3. 가중평균 = SUM(video_p3s_rate × impressions) / SUM(impressions)<br>
+      4. 최소 광고비 10,000원 이상만 포함
+    </p>
+  </div>
+</div>
+
+<!-- 소재 분석 연동 UI -->
+<div class="section">
+  <h2>🖥️ 소재 분석 UI 연동</h2>
+  
+  <h3>개별 소재 상세: 3단계 진단 카드</h3>
+  
+  <div class="example">
+    <h4>예: 비포 애프터 (썸넬 추가)_25s</h4>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px;">
+      <div style="background: white; border-radius: 8px; padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: #2563eb;">🔵 기반</div>
+        <div style="font-size: 10px; color: #999; margin: 4px 0;">내 소재 vs 전체 평균</div>
+        <div style="font-size: 13px;">3초시청률 <strong>22.8%</strong> vs <strong>35.2%</strong></div>
+        <div style="font-size: 13px;">완시청률 <strong>2.8%</strong> vs <strong>8.1%</strong></div>
+        <div style="font-size: 13px;">CTR <strong>3.7%</strong> vs <strong>2.8%</strong></div>
+        <div style="margin-top: 8px;"><span class="tag tag-red">기반 부족 🔴</span></div>
+      </div>
+      <div style="background: white; border-radius: 8px; padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: #059669;">🟡 참여</div>
+        <div style="font-size: 10px; color: #999; margin: 4px 0;">내 소재 vs 전체 평균</div>
+        <div style="font-size: 13px;">반응/만 <strong>0.0</strong> vs <strong>12.5</strong></div>
+        <div style="font-size: 13px;">저장/만 <strong>28.2</strong> vs <strong>8.3</strong></div>
+        <div style="margin-top: 8px;"><span class="tag tag-green">참여 양호 🟡</span></div>
+      </div>
+      <div style="background: white; border-radius: 8px; padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: #dc2626;">🔴 전환</div>
+        <div style="font-size: 10px; color: #999; margin: 4px 0;">내 소재 vs 전체 평균</div>
+        <div style="font-size: 13px;">구매전환율 <strong>0.0%</strong> vs <strong>1.2%</strong></div>
+        <div style="font-size: 13px;">ROAS <strong>0.0</strong> vs <strong>2.1</strong></div>
+        <div style="margin-top: 8px;"><span class="tag tag-red">전환 부족 🔴</span></div>
+      </div>
+    </div>
+    <div style="margin-top: 12px; padding: 12px; background: white; border-radius: 8px; font-size: 13px;">
+      <strong>AI 진단:</strong> 이 소재는 CTR(클릭)은 평균 이상이지만, 3초시청률과 완시청률이 낮아 <strong>초반 이탈</strong>이 심합니다. 
+      저장률이 높은 것으로 보아 관심을 끄는 주제이지만, 동영상 시작 부분의 hook을 강화하고 ROAS 개선을 위해 LP와의 일관성을 점검하세요.
+    </div>
+  </div>
+
+  <h3>포트폴리오: 요소별 3단계 히트맵</h3>
+  <div class="example">
+    <h4>hook_type × 3단계 (동영상만)</h4>
+    <table style="font-size: 13px;">
+      <tr>
+        <th>hook</th>
+        <th>🔵 기반<br><span style="font-weight: normal; font-size: 11px;">3초시청률</span></th>
+        <th>🟡 참여<br><span style="font-weight: normal; font-size: 11px;">참여/만</span></th>
+        <th>🔴 전환<br><span style="font-weight: normal; font-size: 11px;">ROAS</span></th>
+        <th>소재 수</th>
+      </tr>
+      <tr>
+        <td><strong>problem</strong></td>
+        <td><span class="tag tag-green">38.2%</span></td>
+        <td><span class="tag tag-green">15.3</span></td>
+        <td><span class="tag tag-green">2.35</span></td>
+        <td>163</td>
+      </tr>
+      <tr>
+        <td><strong>benefit</strong></td>
+        <td><span class="tag tag-green">32.1%</span></td>
+        <td><span class="tag tag-red">8.7</span></td>
+        <td><span class="tag tag-green">1.80</span></td>
+        <td>72</td>
+      </tr>
+      <tr>
+        <td><strong>question</strong></td>
+        <td><span class="tag tag-red">25.4%</span></td>
+        <td><span class="tag tag-green">12.1</span></td>
+        <td><span class="tag tag-red">1.68</span></td>
+        <td>51</td>
+      </tr>
+      <tr>
+        <td><strong>shock</strong></td>
+        <td><span class="tag tag-green">41.5%</span></td>
+        <td><span class="tag tag-red">6.2</span></td>
+        <td><span class="tag tag-red">1.75</span></td>
+        <td>23</td>
+      </tr>
+    </table>
+    <p style="font-size: 12px; color: #666; margin-top: 8px;">
+      → shock은 시청률이 높지만 참여가 낮다 = "보긴 하는데 반응 안 함"<br>
+      → problem은 전 영역 균형 = 가장 안정적인 hook
+    </p>
+  </div>
+</div>
+
+<!-- none 처리 -->
+<div class="section">
+  <h2>⚠️ hook_type "none" 처리</h2>
+  
+  <div class="comparison">
+    <div class="comp-card comp-before">
+      <h4>현재</h4>
+      <p style="font-size: 13px;">
+        L1 태깅에서 hook을 인식 못하면 "none"<br>
+        벤치마크에 "none"이 포함됨<br>
+        동영상인데 hook 없음 = 비정상
+      </p>
+    </div>
+    <div class="comp-card comp-after">
+      <h4>개선</h4>
+      <p style="font-size: 13px;">
+        1. 동영상 "none" → L1 재태깅 (프롬프트 강화)<br>
+        2. 이미지 "none" → "direct" (바로 제품 노출)로 rename<br>
+        3. 벤치마크에서 동영상 none은 제외 (샘플 부족)
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- 구현 순서 -->
+<div class="section">
+  <h2>📋 구현 순서</h2>
+  
+  <table>
+    <tr>
+      <th>#</th>
+      <th>작업</th>
+      <th>변경 대상</th>
+      <th>우선순위</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><strong>benchmark.mjs 3단계 확장</strong><br>ROAS만 → 기반/참여/전환 12개 지표 가중평균</td>
+      <td><code>services/creative-pipeline/benchmark.mjs</code></td>
+      <td><span class="tag tag-red">P0</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>동영상/이미지 분리 계산</strong><br>format별 별도 벤치마크 row 생성</td>
+      <td><code>benchmark.mjs</code> + <code>creative_element_performance</code> 테이블</td>
+      <td><span class="tag tag-red">P0</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>벤치마크 API 확장</strong><br>3단계 지표 + format 파라미터 추가</td>
+      <td><code>api/protractor/creative-benchmark</code></td>
+      <td><span class="tag tag-red">P0</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>개별 소재 상세 3단계 진단 카드</strong><br>내 소재 vs 같은 요소 평균 비교</td>
+      <td><code>creative-analysis.tsx</code></td>
+      <td><span class="tag tag-blue">P1</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>포트폴리오 히트맵</strong><br>요소 × 3단계 매트릭스</td>
+      <td><code>creative-analysis.tsx</code></td>
+      <td><span class="tag tag-blue">P1</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>hook_type "none" 처리</strong><br>동영상 재태깅 + 이미지 rename</td>
+      <td><code>analyze.mjs</code> L1 프롬프트</td>
+      <td><span class="tag tag-gray">P2</span></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>AI 진단 메시지 생성</strong><br>3단계 점수 기반 자동 코멘트</td>
+      <td><code>score.mjs</code> L4 프롬프트</td>
+      <td><span class="tag tag-gray">P2</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- 기대 효과 -->
+<div class="section">
+  <h2>✨ 기대 효과</h2>
+  
+  <div class="comparison">
+    <div class="comp-card comp-before">
+      <h4>Before (현재)</h4>
+      <p style="font-size: 13px;">
+        "problem hook ROAS 54.9" → 뭐가 좋은지 모름<br>
+        동영상/이미지 섞여서 비교 무의미<br>
+        ROAS 하나로만 판단 → "시청률은 좋은데 전환 안 됨" 놓침<br>
+        수강생: "그래서 어떻게 하라고?"
+      </p>
+    </div>
+    <div class="comp-card comp-after">
+      <h4>After (개선)</h4>
+      <p style="font-size: 13px;">
+        "이 소재는 기반 🟢 / 참여 🟡 / 전환 🔴" → 단계별 진단<br>
+        동영상끼리, 이미지끼리 비교<br>
+        "shock hook은 시청률 높지만 전환 약함" → 구체적 인사이트<br>
+        수강생: "아, 시청률은 되는데 LP가 문제구나"
+      </p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  모찌 🍡 — 2026.03.19 기획<br>
+  총가치각도기 × Creative Intelligence 연동
+</div>
+
+</body>
+</html>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소재 + LP AI 분석 스키마 | BS Camp</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Pretendard', sans-serif; background: #0a0a0a; color: #e0e0e0; line-height: 1.7; }
+  
+  .hero { padding: 80px 40px 60px; text-align: center; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%); }
+  .hero h1 { font-size: 2.4rem; font-weight: 800; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+  .hero p { color: #888; font-size: 1.1rem; max-width: 700px; margin: 0 auto; }
+  .hero .date { color: #555; font-size: 0.85rem; margin-top: 16px; }
+  
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+  
+  h2 { font-size: 1.6rem; font-weight: 700; color: #fff; margin: 48px 0 24px; padding-bottom: 12px; border-bottom: 2px solid #333; }
+  h3 { font-size: 1.2rem; font-weight: 600; color: #b8c5f2; margin: 32px 0 16px; }
+  h4 { font-size: 1rem; font-weight: 600; color: #9ca3af; margin: 20px 0 12px; }
+  
+  p { color: #bbb; margin-bottom: 16px; }
+  
+  .ref-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin: 24px 0; }
+  .ref-card { background: #141420; border: 1px solid #2a2a3a; border-radius: 12px; padding: 24px; }
+  .ref-card .tag { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
+  .ref-card .tag.product { background: #1a3a2a; color: #6ee7b7; }
+  .ref-card .tag.framework { background: #2a1a3a; color: #c4b5fd; }
+  .ref-card .tag.workflow { background: #3a2a1a; color: #fcd34d; }
+  .ref-card h4 { color: #fff; margin: 0 0 8px; }
+  .ref-card p { font-size: 0.9rem; color: #888; margin: 0; }
+  .ref-card ul { list-style: none; margin-top: 12px; }
+  .ref-card li { font-size: 0.85rem; color: #999; padding: 3px 0; }
+  .ref-card li::before { content: "→ "; color: #667eea; }
+  
+  .schema-section { background: #111118; border: 1px solid #2a2a3a; border-radius: 12px; padding: 28px; margin: 24px 0; }
+  
+  .axis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin: 20px 0; }
+  .axis-card { background: #1a1a28; border: 1px solid #333; border-radius: 10px; padding: 20px; }
+  .axis-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .axis-card .name { font-weight: 700; color: #fff; font-size: 1rem; margin-bottom: 4px; }
+  .axis-card .desc { font-size: 0.85rem; color: #888; margin-bottom: 12px; }
+  .axis-card .fields { list-style: none; }
+  .axis-card .fields li { font-size: 0.8rem; color: #999; padding: 2px 0; font-family: 'SF Mono', monospace; }
+  .axis-card .fields li span { color: #667eea; }
+  
+  .json-block { background: #0d0d15; border: 1px solid #333; border-radius: 8px; padding: 20px; overflow-x: auto; margin: 16px 0; }
+  .json-block pre { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.82rem; color: #c4b5fd; line-height: 1.6; }
+  .json-block .key { color: #6ee7b7; }
+  .json-block .str { color: #fcd34d; }
+  .json-block .num { color: #f472b6; }
+  .json-block .comment { color: #555; font-style: italic; }
+  
+  .pipeline { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
+  .pipe-step { background: #1a1a28; border: 1px solid #333; border-radius: 10px; padding: 16px 20px; text-align: center; min-width: 140px; }
+  .pipe-step .num { font-size: 0.7rem; color: #667eea; font-weight: 700; }
+  .pipe-step .label { font-size: 0.9rem; color: #fff; font-weight: 600; margin: 4px 0; }
+  .pipe-step .sub { font-size: 0.75rem; color: #666; }
+  .pipe-arrow { color: #444; font-size: 1.2rem; }
+  
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #1a1a28; color: #b8c5f2; font-size: 0.8rem; font-weight: 600; padding: 10px 14px; text-align: left; border-bottom: 2px solid #333; }
+  td { padding: 10px 14px; font-size: 0.85rem; color: #999; border-bottom: 1px solid #222; }
+  tr:hover td { background: #141420; }
+  
+  .highlight { background: #1a2a3a; border-left: 3px solid #667eea; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+  .highlight p { color: #b8c5f2; margin: 0; font-size: 0.9rem; }
+  
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .tag-item { font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; border: 1px solid #333; color: #999; }
+  
+  .footer { text-align: center; padding: 40px; color: #444; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🔬 소재 + LP AI 분석 스키마</h1>
+  <p>Gemini 2.5 Pro 기반 광고 소재 & 랜딩페이지 멀티모달 분석 프레임워크<br>레퍼런스 조사 → 분석 축 설계 → DB 스키마 → 파이프라인</p>
+  <div class="date">2026-03-20 · BS Camp Creative Intelligence</div>
+</div>
+
+<div class="container">
+
+<!-- 레퍼런스 -->
+<h2>📚 레퍼런스</h2>
+<p>업계 최고 수준의 소재 분석 프레임워크 3가지를 조사해서 우리 서비스에 맞게 재설계했습니다.</p>
+
+<div class="ref-cards">
+  <div class="ref-card">
+    <span class="tag product">프로덕트</span>
+    <h4>AdFire — GPT-4o Vision 30+ 차원</h4>
+    <p>adfire.io/ad-creative-analysis</p>
+    <ul>
+      <li>6개 코어 축: 얼굴, 색상, CTA, 텍스트, 모바일, 감정</li>
+      <li>각 축 0-100 점수 → 종합 Composite Score</li>
+      <li>상위 소재 대비 비교 + 피로도 위험 측정</li>
+      <li>구체적 개선 추천 ("CTA 대비 높여라" 등)</li>
+    </ul>
+  </div>
+  <div class="ref-card">
+    <span class="tag framework">프레임워크</span>
+    <h4>Termo.ai — 오픈소스 분석 스킬</h4>
+    <p>termo.ai/skills/ad-creative-analysis</p>
+    <ul>
+      <li>이미지: attention_grab / message_clarity / cta_strength</li>
+      <li>영상: hook 첫 3초 / 스크립트 구조 / 페이싱</li>
+      <li>hook_type: question, bold_claim, pain_point 등 7종</li>
+      <li>emotion_appeal: fear, aspiration, urgency 등 9종</li>
+      <li>JSON 구조화 출력 — DB 바로 저장 가능</li>
+    </ul>
+  </div>
+  <div class="ref-card">
+    <span class="tag workflow">워크플로우</span>
+    <h4>n8n + Gemini + GPT-4o 파이프라인</h4>
+    <p>n8n.io 커뮤니티 워크플로우</p>
+    <ul>
+      <li>영상 → Gemini: 트랜스크립트, 씬, 훅, 오퍼 추출</li>
+      <li>이미지 → GPT-4o: 비주얼 요소, USP 식별</li>
+      <li>분석 결과 → 광고 카피 자동 생성</li>
+      <li>구글 시트 연동 → 캠페인 추적</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 분석 축 설계 -->
+<h2>🎯 분석 축 설계</h2>
+<p>레퍼런스 3개를 종합해서, 우리 서비스(BS Camp)에 맞는 분석 축 2트랙을 설계합니다.</p>
+
+<h3>Track A — 소재 분석 (Creative Analysis)</h3>
+<p>이미지/영상 소재 자체를 Gemini 2.5 Pro Vision으로 분석합니다.</p>
+
+<div class="axis-grid">
+  <div class="axis-card">
+    <div class="icon">👁️</div>
+    <div class="name">시선 & 주목도</div>
+    <div class="desc">첫인상에서 스크롤을 멈추는 힘</div>
+    <ul class="fields">
+      <li><span>attention_score</span> : number (1-10)</li>
+      <li><span>focal_point</span> : string — 시선이 먼저 가는 요소</li>
+      <li><span>face_count</span> : number</li>
+      <li><span>face_emotion</span> : string — happy, neutral, surprised…</li>
+      <li><span>face_prominence</span> : number (1-10)</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">💬</div>
+    <div class="name">메시지 & 훅</div>
+    <div class="desc">핵심 메시지 전달력</div>
+    <ul class="fields">
+      <li><span>message_clarity</span> : number (1-10)</li>
+      <li><span>primary_message</span> : string — 한 문장 요약</li>
+      <li><span>hook_text</span> : string — 눈에 먼저 들어오는 카피</li>
+      <li><span>hook_type</span> : enum — question | bold_claim | pain_point | curiosity_gap | social_proof | before_after | demonstration</li>
+      <li><span>emotion_appeal</span> : enum — fear | aspiration | social_proof | urgency | curiosity | humor | trust | belonging | exclusivity</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">📣</div>
+    <div class="name">CTA 강도</div>
+    <div class="desc">행동 유도 요소의 효과</div>
+    <ul class="fields">
+      <li><span>cta_strength</span> : number (1-10)</li>
+      <li><span>cta_text</span> : string — CTA 텍스트</li>
+      <li><span>cta_visible</span> : boolean</li>
+      <li><span>cta_contrast</span> : number (1-10) — 배경 대비</li>
+      <li><span>cta_position</span> : string — top | center | bottom</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">🎨</div>
+    <div class="name">비주얼 & 디자인</div>
+    <div class="desc">색상, 레이아웃, 가독성</div>
+    <ul class="fields">
+      <li><span>dominant_colors</span> : string[] — 주요 색상 5개</li>
+      <li><span>color_harmony</span> : number (1-10)</li>
+      <li><span>text_density</span> : enum — low | medium | high</li>
+      <li><span>text_readability</span> : number (1-10)</li>
+      <li><span>mobile_optimized</span> : boolean</li>
+      <li><span>aspect_ratio</span> : string — 1:1, 9:16, 4:5…</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">🎬</div>
+    <div class="name">영상 전용 (Video Only)</div>
+    <div class="desc">첫 3초 훅 + 스크립트 구조</div>
+    <ul class="fields">
+      <li><span>hook_quality</span> : number (1-10) — 첫 3초</li>
+      <li><span>script_structure</span> : enum — problem_solution | testimonial | demo | story | list</li>
+      <li><span>pacing</span> : enum — slow | balanced | fast</li>
+      <li><span>cta_timing</span> : enum — early | middle | end | repeated</li>
+      <li><span>transcript_summary</span> : string</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">📊</div>
+    <div class="name">종합 점수</div>
+    <div class="desc">스케일링 가능성 예측</div>
+    <ul class="fields">
+      <li><span>scale_score</span> : number (1-10) — 종합 스케일 점수</li>
+      <li><span>strengths</span> : string[] — 강점 3개</li>
+      <li><span>weaknesses</span> : string[] — 약점 3개</li>
+      <li><span>recommendations</span> : string[] — 개선 제안 3개</li>
+      <li><span>target_audience</span> : string — 추정 타겟</li>
+    </ul>
+  </div>
+</div>
+
+<h3>Track B — LP 분석 (Landing Page Analysis)</h3>
+<p>광고 클릭 후 도착하는 랜딩페이지를 분석합니다. 소재↔LP 일관성이 핵심.</p>
+
+<div class="axis-grid">
+  <div class="axis-card">
+    <div class="icon">🔗</div>
+    <div class="name">소재↔LP 일관성</div>
+    <div class="desc">광고와 LP 사이의 메시지 일치도</div>
+    <ul class="fields">
+      <li><span>congruency_score</span> : number (1-10) — 핵심 지표</li>
+      <li><span>message_match</span> : boolean — 핵심 메시지 일치?</li>
+      <li><span>visual_match</span> : boolean — 비주얼 톤 일치?</li>
+      <li><span>offer_match</span> : boolean — 오퍼/가격 일치?</li>
+      <li><span>gap_description</span> : string — 불일치 설명</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">🏗️</div>
+    <div class="name">전환 구조</div>
+    <div class="desc">방문자를 구매로 이끄는 흐름</div>
+    <ul class="fields">
+      <li><span>conversion_structure</span> : enum — problem_solution_proof_cta | hero_features_social_cta | story_offer_urgency | minimal_direct</li>
+      <li><span>structure_score</span> : number (1-10)</li>
+      <li><span>scroll_depth_needed</span> : enum — shallow | medium | deep</li>
+      <li><span>sections</span> : string[] — 페이지 섹션 순서</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">💰</div>
+    <div class="name">가격 & 오퍼</div>
+    <div class="desc">가격 표시와 구매 유도</div>
+    <ul class="fields">
+      <li><span>price_visible</span> : boolean</li>
+      <li><span>price_value</span> : string — 실제 가격</li>
+      <li><span>discount_present</span> : boolean</li>
+      <li><span>urgency_elements</span> : string[] — 한정, 타이머 등</li>
+      <li><span>shipping_info</span> : boolean</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">🛡️</div>
+    <div class="name">신뢰 요소</div>
+    <div class="desc">구매 불안 해소</div>
+    <ul class="fields">
+      <li><span>trust_score</span> : number (1-10)</li>
+      <li><span>reviews_present</span> : boolean</li>
+      <li><span>review_count</span> : number</li>
+      <li><span>social_proof</span> : string[] — 수상, 언론, 인증 등</li>
+      <li><span>guarantee</span> : boolean — 환불/보증</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">📱</div>
+    <div class="name">UX & 속도</div>
+    <div class="desc">모바일 경험</div>
+    <ul class="fields">
+      <li><span>mobile_score</span> : number (1-10)</li>
+      <li><span>load_speed</span> : enum — fast | normal | slow</li>
+      <li><span>cta_above_fold</span> : boolean</li>
+      <li><span>navigation_simplicity</span> : number (1-10)</li>
+      <li><span>form_fields_count</span> : number</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">📊</div>
+    <div class="name">LP 종합 점수</div>
+    <div class="desc">전환 가능성 예측</div>
+    <ul class="fields">
+      <li><span>lp_score</span> : number (1-10)</li>
+      <li><span>strengths</span> : string[] — 강점 3개</li>
+      <li><span>weaknesses</span> : string[] — 약점 3개</li>
+      <li><span>recommendations</span> : string[] — 개선 제안 3개</li>
+      <li><span>estimated_cvr_impact</span> : enum — low | medium | high</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DB 스키마 -->
+<h2>🗄️ DB 스키마</h2>
+
+<h3>creative_analysis (소재 분석 결과)</h3>
+<div class="json-block"><pre>
+<span class="key">CREATE TABLE</span> creative_analysis (
+  <span class="key">id</span>           UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  <span class="key">ad_id</span>        TEXT NOT NULL REFERENCES ad_creative_embeddings(ad_id),
+  <span class="key">account_id</span>   TEXT NOT NULL,
+  <span class="key">model</span>        TEXT DEFAULT 'gemini-2.5-pro',
+  
+  <span class="comment">-- 시선 & 주목도</span>
+  <span class="key">attention_score</span>    SMALLINT,  <span class="comment">-- 1-10</span>
+  <span class="key">focal_point</span>        TEXT,
+  <span class="key">face_count</span>         SMALLINT,
+  <span class="key">face_emotion</span>       TEXT,
+  <span class="key">face_prominence</span>    SMALLINT,
+  
+  <span class="comment">-- 메시지 & 훅</span>
+  <span class="key">message_clarity</span>    SMALLINT,
+  <span class="key">primary_message</span>    TEXT,
+  <span class="key">hook_text</span>          TEXT,
+  <span class="key">hook_type</span>          TEXT,      <span class="comment">-- question, bold_claim, pain_point...</span>
+  <span class="key">emotion_appeal</span>     TEXT,      <span class="comment">-- fear, aspiration, urgency...</span>
+  
+  <span class="comment">-- CTA</span>
+  <span class="key">cta_strength</span>       SMALLINT,
+  <span class="key">cta_text</span>           TEXT,
+  <span class="key">cta_visible</span>        BOOLEAN,
+  <span class="key">cta_contrast</span>       SMALLINT,
+  <span class="key">cta_position</span>       TEXT,
+  
+  <span class="comment">-- 비주얼</span>
+  <span class="key">dominant_colors</span>    TEXT[],
+  <span class="key">color_harmony</span>     SMALLINT,
+  <span class="key">text_density</span>       TEXT,
+  <span class="key">text_readability</span>   SMALLINT,
+  <span class="key">mobile_optimized</span>   BOOLEAN,
+  
+  <span class="comment">-- 영상 전용</span>
+  <span class="key">hook_quality</span>       SMALLINT,
+  <span class="key">script_structure</span>   TEXT,
+  <span class="key">pacing</span>             TEXT,
+  <span class="key">cta_timing</span>         TEXT,
+  <span class="key">transcript_summary</span> TEXT,
+  
+  <span class="comment">-- 종합</span>
+  <span class="key">scale_score</span>        SMALLINT,  <span class="comment">-- 1-10 종합 점수</span>
+  <span class="key">strengths</span>          TEXT[],
+  <span class="key">weaknesses</span>         TEXT[],
+  <span class="key">recommendations</span>    TEXT[],
+  <span class="key">target_audience</span>    TEXT,
+  
+  <span class="key">analyzed_at</span>    TIMESTAMPTZ DEFAULT NOW(),
+  <span class="key">created_at</span>     TIMESTAMPTZ DEFAULT NOW(),
+  
+  UNIQUE(ad_id)  <span class="comment">-- 소재당 1건</span>
+);
+</pre></div>
+
+<h3>lp_analysis (LP 분석 결과)</h3>
+<div class="json-block"><pre>
+<span class="key">CREATE TABLE</span> lp_analysis (
+  <span class="key">id</span>               UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  <span class="key">ad_id</span>            TEXT NOT NULL REFERENCES ad_creative_embeddings(ad_id),
+  <span class="key">lp_url</span>           TEXT NOT NULL,
+  <span class="key">model</span>            TEXT DEFAULT 'gemini-2.5-pro',
+  
+  <span class="comment">-- 소재↔LP 일관성 (핵심!)</span>
+  <span class="key">congruency_score</span>     SMALLINT,  <span class="comment">-- 1-10</span>
+  <span class="key">message_match</span>        BOOLEAN,
+  <span class="key">visual_match</span>         BOOLEAN,
+  <span class="key">offer_match</span>          BOOLEAN,
+  <span class="key">gap_description</span>      TEXT,
+  
+  <span class="comment">-- 전환 구조</span>
+  <span class="key">conversion_structure</span> TEXT,
+  <span class="key">structure_score</span>      SMALLINT,
+  <span class="key">scroll_depth_needed</span>  TEXT,
+  <span class="key">sections</span>             TEXT[],
+  
+  <span class="comment">-- 가격 & 오퍼</span>
+  <span class="key">price_visible</span>        BOOLEAN,
+  <span class="key">price_value</span>          TEXT,
+  <span class="key">discount_present</span>     BOOLEAN,
+  <span class="key">urgency_elements</span>     TEXT[],
+  
+  <span class="comment">-- 신뢰 요소</span>
+  <span class="key">trust_score</span>          SMALLINT,
+  <span class="key">reviews_present</span>      BOOLEAN,
+  <span class="key">review_count</span>         INTEGER,
+  <span class="key">social_proof</span>         TEXT[],
+  <span class="key">guarantee</span>            BOOLEAN,
+  
+  <span class="comment">-- UX</span>
+  <span class="key">mobile_score</span>         SMALLINT,
+  <span class="key">load_speed</span>           TEXT,
+  <span class="key">cta_above_fold</span>      BOOLEAN,
+  
+  <span class="comment">-- LP 종합</span>
+  <span class="key">lp_score</span>             SMALLINT,  <span class="comment">-- 1-10</span>
+  <span class="key">strengths</span>            TEXT[],
+  <span class="key">weaknesses</span>           TEXT[],
+  <span class="key">recommendations</span>      TEXT[],
+  
+  <span class="key">analyzed_at</span>      TIMESTAMPTZ DEFAULT NOW(),
+  <span class="key">created_at</span>       TIMESTAMPTZ DEFAULT NOW(),
+  
+  UNIQUE(ad_id, lp_url)
+);
+</pre></div>
+
+<!-- Gemini 프롬프트 설계 -->
+<h2>🤖 Gemini 2.5 Pro 프롬프트 설계</h2>
+
+<h3>소재 분석 프롬프트 (이미지)</h3>
+<div class="json-block"><pre>
+<span class="str">You are a senior creative strategist analyzing Meta ad creatives.
+Analyze this ad image and return structured JSON.
+
+Evaluate these dimensions:
+
+1. ATTENTION & GAZE
+   - attention_score (1-10): How quickly does this stop a scroll?
+   - focal_point: What does the eye land on first?
+   - face_count, face_emotion, face_prominence
+
+2. MESSAGE & HOOK
+   - message_clarity (1-10): How clear is the core message at a glance?
+   - primary_message: One sentence summary
+   - hook_text: The first copy the eye lands on
+   - hook_type: question | bold_claim | pain_point | curiosity_gap | social_proof | before_after | demonstration
+   - emotion_appeal: fear | aspiration | social_proof | urgency | curiosity | humor | trust | belonging | exclusivity
+
+3. CTA
+   - cta_strength (1-10)
+   - cta_text, cta_visible, cta_contrast (1-10), cta_position
+
+4. VISUAL DESIGN
+   - dominant_colors (top 5), color_harmony (1-10)
+   - text_density: low | medium | high
+   - text_readability (1-10), mobile_optimized
+
+5. OVERALL
+   - scale_score (1-10): Likelihood of performing well at scale
+   - strengths (3), weaknesses (3), recommendations (3)
+   - target_audience: Inferred from visuals and copy
+
+Return valid JSON only. No markdown wrapping.</span>
+</pre></div>
+
+<h3>LP 분석 프롬프트 (소재+LP 스크린샷 동시 입력)</h3>
+<div class="json-block"><pre>
+<span class="str">You are a conversion optimization expert.
+You will receive two images:
+1. An ad creative (the ad that was clicked)
+2. A landing page screenshot (where the user arrives)
+
+Also provided: LP headline, price, and text content.
+
+Analyze the LANDING PAGE and its CONSISTENCY with the ad:
+
+1. AD↔LP CONGRUENCY (most important)
+   - congruency_score (1-10): How well does the LP deliver on the ad's promise?
+   - message_match: Does the LP reinforce the ad's core message?
+   - visual_match: Is the visual tone consistent?
+   - offer_match: Is the price/offer the same?
+   - gap_description: Describe any disconnect
+
+2. CONVERSION STRUCTURE
+   - conversion_structure: problem_solution_proof_cta | hero_features_social_cta | story_offer_urgency | minimal_direct
+   - structure_score (1-10)
+   - sections: List page sections in order
+   
+3. PRICING & OFFER
+   - price_visible, price_value, discount_present, urgency_elements
+
+4. TRUST ELEMENTS
+   - trust_score (1-10)
+   - reviews_present, review_count, social_proof, guarantee
+
+5. LP OVERALL
+   - lp_score (1-10)
+   - strengths (3), weaknesses (3), recommendations (3)
+
+Return valid JSON only.</span>
+</pre></div>
+
+<!-- 파이프라인 -->
+<h2>⚡ 실행 파이프라인</h2>
+
+<div class="pipeline">
+  <div class="pipe-step">
+    <div class="num">STEP 1</div>
+    <div class="label">소재 선택</div>
+    <div class="sub">creative_analysis 없는 소재</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step">
+    <div class="num">STEP 2</div>
+    <div class="label">이미지/영상 로드</div>
+    <div class="sub">storage_url 또는 media_url</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step">
+    <div class="num">STEP 3</div>
+    <div class="label">Gemini 2.5 Pro</div>
+    <div class="sub">소재 분석 프롬프트</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step">
+    <div class="num">STEP 4</div>
+    <div class="label">DB 저장</div>
+    <div class="sub">creative_analysis INSERT</div>
+  </div>
+</div>
+
+<div class="pipeline">
+  <div class="pipe-step">
+    <div class="num">STEP 5</div>
+    <div class="label">LP 스크린샷 로드</div>
+    <div class="sub">lp_screenshot_url</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step">
+    <div class="num">STEP 6</div>
+    <div class="label">Gemini 2.5 Pro</div>
+    <div class="sub">소재+LP 동시 입력</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step">
+    <div class="num">STEP 7</div>
+    <div class="label">DB 저장</div>
+    <div class="sub">lp_analysis INSERT</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step">
+    <div class="num">STEP 8</div>
+    <div class="label">대시보드 연동</div>
+    <div class="sub">총가치각도기 탭</div>
+  </div>
+</div>
+
+<div class="highlight">
+  <p>💡 <strong>핵심 포인트:</strong> 소재와 LP를 <em>별도로</em> 분석하지 않고, Gemini에 <em>동시에</em> 넣어서 일관성(congruency)을 직접 평가합니다. 이게 실제 전환율에 가장 큰 영향을 주는 지표입니다. "광고에서 약속한 것"과 "LP에서 보여주는 것"의 갭이 이탈의 핵심 원인.</p>
+  </div>
+
+<!-- 실행 환경 -->
+<h2>🖥️ 실행 환경</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>항목</th><th>설정</th><th>이유</th></tr>
+  <tr><td>모델</td><td>Gemini 2.5 Pro</td><td>멀티모달 + 2M 토큰 + 구조화 출력</td></tr>
+  <tr><td>실행 위치</td><td>로컬 Mac Studio</td><td>타임아웃 없음, 비용 절약</td></tr>
+  <tr><td>배치</td><td>50건/라운드, 1초 딜레이</td><td>Gemini API rate limit 대응</td></tr>
+  <tr><td>입력</td><td>storage_url (우리 서버 이미지) + LP 스크린샷</td><td>CDN 만료 방지</td></tr>
+  <tr><td>출력</td><td>구조화 JSON → DB INSERT</td><td>대시보드 즉시 연동</td></tr>
+  <tr><td>예상 소요</td><td>3,096건 × 2초 ≈ 약 2시간</td><td>소재+LP 합쳐서</td></tr>
+  <tr><td>일일 신규</td><td>~20건/일</td><td>collect-daily 이후 자동 실행</td></tr>
+</table>
+</div>
+
+<!-- Enum 정리 -->
+<h2>📋 Enum 값 정리</h2>
+
+<h4>hook_type (7종)</h4>
+<div class="tag-list">
+  <span class="tag-item">question — 질문형</span>
+  <span class="tag-item">bold_claim — 강한 주장</span>
+  <span class="tag-item">pain_point — 고통 포인트</span>
+  <span class="tag-item">curiosity_gap — 호기심 유발</span>
+  <span class="tag-item">social_proof — 사회적 증거</span>
+  <span class="tag-item">before_after — 전후 비교</span>
+  <span class="tag-item">demonstration — 시연</span>
+</div>
+
+<h4>emotion_appeal (9종)</h4>
+<div class="tag-list">
+  <span class="tag-item">fear — 불안/공포</span>
+  <span class="tag-item">aspiration — 열망</span>
+  <span class="tag-item">social_proof — 따라하기</span>
+  <span class="tag-item">urgency — 긴급성</span>
+  <span class="tag-item">curiosity — 호기심</span>
+  <span class="tag-item">humor — 유머</span>
+  <span class="tag-item">trust — 신뢰</span>
+  <span class="tag-item">belonging — 소속감</span>
+  <span class="tag-item">exclusivity — 희소성</span>
+</div>
+
+<h4>conversion_structure (4종)</h4>
+<div class="tag-list">
+  <span class="tag-item">problem_solution_proof_cta — 문제→해결→증거→CTA</span>
+  <span class="tag-item">hero_features_social_cta — 히어로→기능→사회증거→CTA</span>
+  <span class="tag-item">story_offer_urgency — 스토리→오퍼→긴급성</span>
+  <span class="tag-item">minimal_direct — 미니멀 직접 전환</span>
+</div>
+
+<!-- ROAS 검증 -->
+<h2>🔬 프레임워크 ≠ 정답. 태깅 도구 + ROAS 검증.</h2>
+
+<div class="highlight">
+  <p>⚠️ <strong>핵심 원칙:</strong> 위의 분석 축은 "정답"이 아니라 <em>"태깅 도구"</em>입니다. 해외 프레임워크(AdFire, Termo)가 말하는 "좋은 소재"가 한국 시장에서도 좋은 소재인지는 <strong>실제 ROAS 데이터로 검증</strong>해야 합니다.</p>
+</div>
+
+<h3>왜 해외 프레임워크를 그대로 쓰면 안 되나</h3>
+<p>한국 이커머스 LP/소재의 현실:</p>
+<div class="axis-grid">
+  <div class="axis-card">
+    <div class="icon">🇰🇷</div>
+    <div class="name">한국형 LP = 초장문 스크롤</div>
+    <div class="desc">해외: problem→solution→proof→CTA (깔끔한 구조)<br>한국: 가격+리뷰+상세이미지+체험단+성분표+인증서 폭포</div>
+    <ul class="fields">
+      <li>카페24/스마트스토어 상세페이지가 LP의 대부분</li>
+      <li>"스크롤 깊이=깊을수록 나쁘다"가 아님</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">📦</div>
+    <div class="name">한국형 CTA ≠ "Shop Now"</div>
+    <div class="desc">"무료배송" "당일발송" "리뷰 12,384개"가 CTA보다 강력</div>
+    <ul class="fields">
+      <li>리뷰 수량 = 신뢰의 핵심 지표</li>
+      <li>인스타/블로그 체험단 = social proof</li>
+      <li>네이버 스마트스토어 찜 수 = 구매 신호</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">🎯</div>
+    <div class="name">한국형 훅 ≠ Pain Point</div>
+    <div class="desc">해외: "고통 → 해결" 구조가 왕<br>한국: 가격 직구, 리뷰 수, 무료체험이 더 먹힘</div>
+    <ul class="fields">
+      <li>price_direct — "9,900원부터"</li>
+      <li>review_count — "후기 3만개"</li>
+      <li>free_trial — "7일 무료체험"</li>
+    </ul>
+  </div>
+</div>
+
+<h3>2단계 접근: 태깅 → ROAS 검증</h3>
+
+<div class="pipeline">
+  <div class="pipe-step" style="background: #1a2a1a; border-color: #2a4a2a;">
+    <div class="num" style="color: #6ee7b7;">PHASE 1</div>
+    <div class="label">구조화 태깅</div>
+    <div class="sub">프레임워크로 태그만 뽑기</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step" style="background: #2a1a1a; border-color: #4a2a2a;">
+    <div class="num" style="color: #f472b6;">PHASE 2</div>
+    <div class="label">ROAS 검증</div>
+    <div class="sub">실제 성과 데이터로 패턴 발견</div>
+  </div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step" style="background: #1a1a2a; border-color: #2a2a4a;">
+    <div class="num" style="color: #667eea;">PHASE 3</div>
+    <div class="label">한국형 모델</div>
+    <div class="sub">데이터 기반 분석 축 진화</div>
+  </div>
+</div>
+
+<h4>Phase 1 — 구조화 태깅 (해외 프레임워크 활용)</h4>
+<p>Gemini 2.5 Pro로 3,096건 소재에 태그를 붙입니다. 이 단계에서는 "좋다/나쁘다" 판단을 하지 않습니다. 분류만.</p>
+<div class="json-block"><pre>
+<span class="comment">// 예시: 소재 A의 태깅 결과</span>
+{
+  <span class="key">"ad_id"</span>: <span class="str">"120230250238360448"</span>,
+  <span class="key">"hook_type"</span>: <span class="str">"price_direct"</span>,        <span class="comment">// ← 한국형 추가</span>
+  <span class="key">"emotion_appeal"</span>: <span class="str">"urgency"</span>,
+  <span class="key">"cta_text"</span>: <span class="str">"무료배송"</span>,
+  <span class="key">"text_density"</span>: <span class="str">"high"</span>,
+  <span class="key">"face_count"</span>: <span class="num">0</span>,
+  <span class="key">"scale_score"</span>: <span class="num">6</span>,                  <span class="comment">// AI 예측 (검증 전)</span>
+  
+  <span class="comment">// 실제 성과 (daily_ad_insights에서 조인)</span>
+  <span class="key">"actual_roas"</span>: <span class="num">4.2</span>,
+  <span class="key">"actual_ctr"</span>: <span class="num">2.1</span>,
+  <span class="key">"spend"</span>: <span class="num">150000</span>
+}
+</pre></div>
+
+<h4>Phase 2 — ROAS 검증 (핵심)</h4>
+<p>3,096건 태깅 완료 후, 실제 ROAS 데이터와 교차 분석합니다.</p>
+
+<div class="schema-section">
+<h4>검증 쿼리 예시</h4>
+<div class="json-block"><pre>
+<span class="comment">-- ROAS 상위 20% vs 하위 20%의 hook_type 분포 비교</span>
+<span class="key">WITH</span> ranked <span class="key">AS</span> (
+  <span class="key">SELECT</span> ca.*, d.roas,
+    NTILE(<span class="num">5</span>) OVER (ORDER BY d.roas DESC) as roas_quintile
+  <span class="key">FROM</span> creative_analysis ca
+  <span class="key">JOIN</span> daily_ad_insights d ON ca.ad_id = d.ad_id
+  <span class="key">WHERE</span> d.spend > <span class="num">10000</span>  <span class="comment">-- 최소 지출 필터</span>
+)
+<span class="key">SELECT</span> 
+  hook_type,
+  COUNT(*) FILTER (WHERE roas_quintile = <span class="num">1</span>) as top_20pct,
+  COUNT(*) FILTER (WHERE roas_quintile = <span class="num">5</span>) as bottom_20pct,
+  AVG(roas) FILTER (WHERE roas_quintile = <span class="num">1</span>) as top_avg_roas
+<span class="key">FROM</span> ranked
+<span class="key">GROUP BY</span> hook_type
+<span class="key">ORDER BY</span> top_20pct DESC;
+</pre></div>
+
+<h4>발견할 수 있는 패턴 (가설)</h4>
+<div class="table-wrap">
+<table>
+  <tr><th>발견</th><th>해외 프레임워크 예측</th><th>한국 실제 (ROAS 검증)</th></tr>
+  <tr><td>hook_type</td><td>pain_point가 최고</td><td>price_direct, review_count가 더 높을 수 있음</td></tr>
+  <tr><td>text_density</td><td>low가 좋다 (Meta 권장)</td><td>high가 ROAS 높을 수 있음 (정보량=신뢰)</td></tr>
+  <tr><td>face_count</td><td>얼굴 있으면 좋다</td><td>제품 클로즈업이 더 좋을 수 있음</td></tr>
+  <tr><td>CTA</td><td>"Shop Now" 강조</td><td>"무료배송" "리뷰 N만개"가 더 효과적일 수 있음</td></tr>
+  <tr><td>emotion</td><td>aspiration 최고</td><td>trust + urgency 조합이 더 좋을 수 있음</td></tr>
+  <tr><td>congruency</td><td>높을수록 좋다</td><td>이건 한국에서도 맞을 가능성 높음 (보편 원칙)</td></tr>
+</table>
+</div>
+<p style="color: #888; font-size: 0.85rem;">* 위는 가설일 뿐. Phase 2에서 데이터가 답을 줍니다.</p>
+</div>
+
+<h4>Phase 3 — 한국형 분석 모델 진화</h4>
+<p>Phase 2 검증 결과를 바탕으로:</p>
+<div class="axis-grid">
+  <div class="axis-card">
+    <div class="icon">🔄</div>
+    <div class="name">Enum 값 진화</div>
+    <div class="desc">데이터에서 발견된 한국형 패턴을 분류 체계에 추가</div>
+    <ul class="fields">
+      <li>hook_type += <span>price_direct</span>, <span>review_count</span>, <span>free_trial</span>, <span>celebrity_endorsement</span></li>
+      <li>emotion_appeal += <span>value_for_money</span>, <span>peer_validation</span></li>
+      <li>conversion_structure += <span>scroll_waterfall</span> (한국형 초장문)</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">📊</div>
+    <div class="name">가중치 학습</div>
+    <div class="desc">scale_score 예측 모델을 ROAS로 캘리브레이션</div>
+    <ul class="fields">
+      <li>AI가 6점 준 소재의 실제 ROAS가 4.0+</li>
+      <li>→ face_count 가중치 ↓, price_visibility 가중치 ↑</li>
+      <li>→ 한국 시장에 맞는 점수 모델로 진화</li>
+    </ul>
+  </div>
+  <div class="axis-card">
+    <div class="icon">💡</div>
+    <div class="name">수강생 인사이트</div>
+    <div class="desc">BS Camp 수강생한테 바로 적용 가능한 발견</div>
+    <ul class="fields">
+      <li>"너희 업종에서 ROAS 상위 소재의 공통점"</li>
+      <li>"이 hook_type으로 바꾸면 평균 CTR N% 상승"</li>
+      <li>→ 총가치각도기 대시보드에 인사이트 카드로 표시</li>
+    </ul>
+  </div>
+</div>
+
+<div class="highlight">
+  <p>💡 <strong>우리만의 강점:</strong> AdFire, Termo 같은 SaaS는 프레임워크만 제공하고 끝. 우리는 <em>실제 ROAS 데이터 3,096건</em>을 가지고 있어서 "한국 이커머스에서 진짜 뭐가 먹히는지" 검증할 수 있다. 이게 차별점.</p>
+</div>
+
+</div>
+
+<div class="footer">
+  🍡 모찌 리포트 · BS Camp Creative Intelligence · 2026-03-20
+</div>
+
+</body>
+</html>

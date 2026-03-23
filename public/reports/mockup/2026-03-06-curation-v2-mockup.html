@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>큐레이션 탭 v2 목업 — 커리큘럼 + 큐레이션 듀얼 모드</title>
+<meta name="date" content="2026-03-06">
+<meta name="project" content="QA Helpdesk">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f9fafb;color:#111827;font-size:13px}
+.container{max-width:1280px;margin:0 auto;padding:24px}
+a.back{display:inline-block;margin-bottom:16px;color:#666;text-decoration:none;font-size:13px}
+.header{margin-bottom:20px}
+.header h1{font-size:22px;font-weight:700}
+.header p{font-size:13px;color:#6b7280;margin-top:4px}
+.ref-note{font-size:11px;color:#9ca3af;margin-top:8px;padding:8px 12px;background:#f3f4f6;border-radius:6px;line-height:1.5}
+
+.tabs{display:flex;border-bottom:2px solid #e5e7eb;margin-bottom:16px}
+.tab{padding:10px 16px;font-size:13px;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;display:flex;align-items:center;gap:6px}
+.tab.active{color:#111827;border-bottom-color:#111827;font-weight:600}
+.tab .badge{background:#F75D5D;color:white;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600}
+
+.main-layout{display:flex;gap:16px}
+
+/* Sidebar */
+.sidebar{width:210px;flex-shrink:0}
+.sidebar-section{margin-bottom:16px}
+.sidebar-section-title{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.05em;padding:0 4px 6px;border-bottom:1px solid #e5e7eb;margin-bottom:6px}
+.sidebar-card{border:1px solid #e5e7eb;border-radius:8px;padding:10px;margin-bottom:5px;cursor:pointer;transition:all .15s}
+.sidebar-card:hover{background:#f9fafb}
+.sidebar-card.active{border-color:#F75D5D;background:rgba(247,93,93,.05)}
+.sidebar-card .label{font-size:11px;font-weight:500;display:flex;align-items:center;gap:6px;justify-content:space-between}
+.sidebar-card .stats{font-size:10px;color:#9ca3af;margin-top:3px;display:flex;gap:10px}
+.new-badge{background:#F75D5D;color:white;font-size:9px;padding:1px 5px;border-radius:8px;font-weight:600}
+.level-badge{font-size:9px;padding:1px 6px;border-radius:8px;font-weight:500}
+.level-badge.beginner{background:#DBEAFE;color:#1E40AF}
+.level-badge.intermediate{background:#FEF3C7;color:#92400E}
+.level-badge.advanced{background:#FCE7F3;color:#9D174D}
+
+.content-area{flex:1;min-width:0}
+
+/* Toolbar */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.view-toggle{display:flex;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden}
+.view-btn{padding:5px 11px;font-size:11px;cursor:pointer;background:white;border:none;color:#6b7280;white-space:nowrap}
+.view-btn.active{background:#111827;color:white}
+.status-filters{display:flex;gap:3px;flex-wrap:wrap}
+.status-pill{padding:4px 9px;font-size:10px;border-radius:14px;border:1px solid #e5e7eb;cursor:pointer;background:white;color:#6b7280}
+.status-pill.active{background:#111827;color:white;border-color:#111827}
+.status-pill .count{font-weight:600;margin-left:2px}
+.search-input{padding:5px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:11px;width:160px;outline:none}
+
+/* Bulk bar */
+.bulk-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#111827;border-radius:8px;margin-bottom:10px}
+.bulk-bar .info{color:white;font-size:12px}
+.bulk-bar .actions{display:flex;gap:6px}
+.bulk-bar .btn{padding:4px 10px;font-size:11px;border-radius:6px;border:none;cursor:pointer;font-weight:500}
+.btn-skip{background:#374151;color:white}
+.btn-generate{background:#F75D5D;color:white}
+
+/* Content Card */
+.content-card{display:flex;gap:8px;padding:10px;margin:4px 0;border-radius:8px;border:1px solid #f3f4f6;transition:all .15s}
+.content-card:hover{border-color:#e5e7eb;background:#fafafa}
+.content-card.selected{border-color:#F75D5D;background:rgba(247,93,93,.03)}
+.checkbox{width:15px;height:15px;border:1.5px solid #d1d5db;border-radius:3px;flex-shrink:0;margin-top:2px}
+.checkbox.checked{border-color:#F75D5D;background:#FEF2F2}
+.card-body{flex:1;min-width:0}
+.card-top{display:flex;align-items:start;justify-content:space-between;gap:6px;margin-bottom:4px}
+.card-title{font-size:12px;font-weight:600;color:#111827;display:flex;align-items:center;gap:5px}
+.src-icon{font-size:11px}
+.card-meta{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.stars{display:flex;gap:1px}
+.star{font-size:9px;color:#d1d5db}
+.star.filled{color:#F59E0B}
+.card-date{font-size:10px;color:#9ca3af}
+
+.ai-summary{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:7px 9px;margin:5px 0}
+.ai-summary .label{font-size:9px;font-weight:600;color:#64748B;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.ai-summary ul{margin:0;padding-left:14px}
+.ai-summary li{font-size:11px;color:#475569;line-height:1.5;margin-bottom:1px}
+
+.card-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
+.tag{font-size:9px;padding:2px 7px;border-radius:10px;background:#F1F5F9;color:#64748B}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:6px;padding-top:5px;border-top:1px solid #f3f4f6}
+.card-source{font-size:10px;color:#9ca3af}
+.card-actions{display:flex;gap:3px}
+.card-btn{font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid #e5e7eb;background:white;cursor:pointer;color:#6b7280}
+.card-btn:hover{background:#f9fafb}
+.card-btn.primary{background:#F75D5D;color:white;border-color:#F75D5D}
+.linked-content{display:flex;align-items:center;gap:5px;margin-top:3px;padding:3px 7px;background:#EEF2FF;border-radius:4px}
+.linked-content .arrow{color:#818CF8;font-size:10px}
+.linked-content .link{font-size:10px;color:#4F46E5;cursor:pointer}
+.link-status{font-size:9px;padding:1px 5px;border-radius:8px;background:#E0E7FF;color:#4338CA}
+
+/* Topic Map */
+.topic-group{margin-bottom:10px}
+.topic-header{display:flex;align-items:center;gap:8px;padding:9px 12px;background:white;border:1px solid #e5e7eb;border-radius:8px 8px 0 0;cursor:pointer}
+.topic-header .icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.icon.meta{background:#EBF5FF}.icon.shop{background:#F0FDF4}.icon.data{background:#FFF7ED}
+.topic-header .name{font-size:13px;font-weight:600;flex:1}
+.topic-header .topic-count{font-size:11px;color:#9ca3af}
+.subtopic-list{border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;background:white}
+.subtopic{padding:0 12px}
+.subtopic-header{display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid #f3f4f6;cursor:pointer}
+.subtopic-header .dot{width:6px;height:6px;border-radius:50%}
+.subtopic-header .name{font-size:12px;font-weight:500;color:#374151;flex:1}
+.sub-count{font-size:10px;color:#9ca3af;background:#f3f4f6;padding:1px 7px;border-radius:10px}
+
+/* ═══ CURRICULUM VIEW ═══ */
+.curriculum{background:white;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden}
+.cur-header{padding:12px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between}
+.cur-header .title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.cur-header .progress{font-size:11px;color:#6b7280}
+.progress-bar{width:120px;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px}
+.progress-fill{height:100%;border-radius:3px}
+.progress-fill.blue{background:#3B82F6}
+
+.cur-sequence{padding:0}
+.seq-item{display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid #f3f4f6;transition:background .15s}
+.seq-item:hover{background:#fafafa}
+.seq-item:last-child{border-bottom:none}
+.seq-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.seq-num.done{background:#D1FAE5;color:#065F46}
+.seq-num.current{background:#DBEAFE;color:#1E40AF;box-shadow:0 0 0 2px #93C5FD}
+.seq-num.upcoming{background:#F3F4F6;color:#9CA3AF}
+.seq-body{flex:1;min-width:0}
+.seq-title{font-size:12px;font-weight:600;margin-bottom:3px}
+.seq-desc{font-size:11px;color:#6b7280;line-height:1.4}
+.seq-meta{display:flex;gap:8px;margin-top:4px;align-items:center}
+.seq-badge{font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500}
+.seq-badge.published{background:#D1FAE5;color:#065F46}
+.seq-badge.ready{background:#DBEAFE;color:#1E40AF}
+.seq-badge.locked{background:#F3F4F6;color:#9CA3AF}
+.seq-overlap{font-size:10px;color:#F59E0B;display:flex;align-items:center;gap:3px}
+.seq-actions{flex-shrink:0;display:flex;align-items:center}
+
+/* Deleted */
+.deleted-section{margin-top:16px}
+.deleted-header{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;cursor:pointer}
+.deleted-header .left{display:flex;align-items:center;gap:6px}
+.deleted-header .dname{font-size:12px;font-weight:600;color:#991B1B}
+.restore-all{font-size:10px;padding:3px 10px;background:white;border:1px solid #FECACA;border-radius:6px;color:#DC2626;cursor:pointer;font-weight:500}
+.deleted-items{border:1px solid #FECACA;border-top:none;border-radius:0 0 8px 8px;background:white;padding:0 12px}
+.del-item{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid #FEF2F2;font-size:11px}
+.del-item:last-child{border-bottom:none}
+.del-item .dtitle{color:#9ca3af;flex:1;text-decoration:line-through}
+.del-item .restore-link{color:#F75D5D;cursor:pointer;font-weight:500;font-size:10px}
+.del-item .ddate{color:#d1d5db;font-size:10px}
+
+.view-section{display:none}
+.view-section.visible{display:block}
+
+.mode-label{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;margin-bottom:10px}
+.mode-label.curriculum{background:#EEF2FF;color:#4338CA}
+.mode-label.curation{background:#FEF3C7;color:#92400E}
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back" href="/">&larr; 목록으로</a>
+<div class="header">
+  <h1>큐레이션 탭 v2 — 듀얼 모드</h1>
+  <p>블루프린트 = 커리큘럼 빌더 · 외부 소스 = AI 큐레이션</p>
+  <div class="ref-note">📚 Feedly (Board+Clustering) · ContentStudio (Discover→Compose) · Curata (Editorial Workflow) · Notion (Multi-view)<br>💡 핵심: 사이드바 소스 선택에 따라 메인 영역이 커리큘럼 뷰 ↔ 큐레이션 뷰로 자동 전환</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active">✨ 큐레이션 <span class="badge">12</span></div>
+  <div class="tab">📄 콘텐츠</div>
+  <div class="tab">📰 정보공유</div>
+  <div class="tab">📧 이메일</div>
+</div>
+
+<div class="main-layout">
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <!-- 커리큘럼 소스 -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">📚 커리큘럼 소스</div>
+    <div class="sidebar-card active">
+      <div class="label"><span>🛡️ 블루프린트</span></div>
+      <div class="stats"><span>초급 3 · 중급 4 · 고급 2</span></div>
+    </div>
+  </div>
+  
+  <!-- 큐레이션 소스 -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">🔍 큐레이션 소스</div>
+    <div class="sidebar-card">
+      <div class="label"><span>🗄️ 전체</span><span class="new-badge">NEW 5</span></div>
+      <div class="stats"><span>36개</span><span>1,450 청크</span></div>
+    </div>
+    <div class="sidebar-card">
+      <div class="label"><span>🎓 자사몰사관학교</span></div>
+      <div class="stats"><span>15개</span><span>1,200 청크</span></div>
+    </div>
+    <div class="sidebar-card">
+      <div class="label"><span>▶️ YouTube</span></div>
+      <div class="stats"><span>8개</span></div>
+    </div>
+    <div class="sidebar-card">
+      <div class="label"><span>🌐 블로그</span><span class="new-badge">NEW</span></div>
+      <div class="stats"><span>13개</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTENT AREA ═══ -->
+<div class="content-area">
+
+<!-- ══════════════════════════════════════ -->
+<!-- MODE 1: 커리큘럼 뷰 (블루프린트 선택 시) -->
+<!-- ══════════════════════════════════════ -->
+<div class="view-section visible" id="view-curriculum">
+<span class="mode-label curriculum">📚 커리큘럼 모드</span>
+
+<!-- 초급 -->
+<div class="curriculum" style="margin-bottom:12px">
+  <div class="cur-header">
+    <div class="title">
+      <span class="level-badge beginner">초급</span>
+      Meta 광고 기초
+    </div>
+    <div class="progress">
+      2/3 발행 <div class="progress-bar"><div class="progress-fill blue" style="width:66%"></div></div>
+    </div>
+  </div>
+  <div class="cur-sequence">
+    <div class="seq-item">
+      <div class="seq-num done">1</div>
+      <div class="seq-body">
+        <div class="seq-title">메타 광고 시작하기 — 계정 구조와 캠페인 설정</div>
+        <div class="seq-desc">비즈니스 관리자 세팅 → 캠페인 목표 선택 → 예산/일정 기본 → 광고 세트 구조 이해</div>
+        <div class="seq-meta">
+          <span class="seq-badge published">✓ 발행됨</span>
+          <span style="font-size:10px;color:#9ca3af">3/1 발행</span>
+        </div>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-num done">2</div>
+      <div class="seq-body">
+        <div class="seq-title">타겟팅의 기본 — 핵심/맞춤/유사 타겟</div>
+        <div class="seq-desc">핵심 타겟 설정법 → 맞춤 타겟 (웹사이트/앱/CRM) → 유사 타겟 1~10% 범위 → 제외 타겟 활용</div>
+        <div class="seq-meta">
+          <span class="seq-badge published">✓ 발행됨</span>
+          <span class="seq-overlap">⚠️ 중급 #2와 30% 중복</span>
+        </div>
+      </div>
+    </div>
+    <div class="seq-item" style="background:#F0F9FF">
+      <div class="seq-num current">3</div>
+      <div class="seq-body">
+        <div class="seq-title">📍 픽셀과 전환 추적 — 설치부터 최적화까지</div>
+        <div class="seq-desc">Meta 픽셀 설치 → 표준 이벤트 설정 → 맞춤 전환 → 이벤트 테스트 도구 → CAPI 기초</div>
+        <div class="seq-meta">
+          <span class="seq-badge ready">→ 다음 발행</span>
+        </div>
+      </div>
+      <div class="seq-actions">
+        <button class="card-btn primary">생성</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 중급 -->
+<div class="curriculum" style="margin-bottom:12px">
+  <div class="cur-header">
+    <div class="title">
+      <span class="level-badge intermediate">중급</span>
+      성과 최적화
+    </div>
+    <div class="progress">
+      0/4 발행 <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="cur-sequence">
+    <div class="seq-item">
+      <div class="seq-num upcoming">1</div>
+      <div class="seq-body">
+        <div class="seq-title">캠페인 예산 최적화 (CBO) 전략</div>
+        <div class="seq-desc">CBO vs ABO 비교 → 예산 배분 로직 → 최소 ROAS 제약 → 스케일링 단계별 전략</div>
+        <div class="seq-meta"><span class="seq-badge locked">🔒 초급 완료 후</span></div>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-num upcoming">2</div>
+      <div class="seq-body">
+        <div class="seq-title">고급 타겟팅 — 리타게팅 퍼널과 밸류베이스</div>
+        <div class="seq-desc">리타게팅 3단계 퍼널 → 밸류베이스 룩어라이크 → 제외 전략 → 프리퀀시 캡</div>
+        <div class="seq-meta">
+          <span class="seq-badge locked">🔒 초급 완료 후</span>
+          <span class="seq-overlap">⚠️ 초급 #2와 30% 중복</span>
+        </div>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-num upcoming">3</div>
+      <div class="seq-body">
+        <div class="seq-title">크리에이티브 전략 — A/B 테스트 프레임워크</div>
+        <div class="seq-desc">DCT 다이나믹 크리에이티브 → 변수 분리 테스트법 → 소재 피로도 관리 → 승리 소재 스케일링</div>
+        <div class="seq-meta"><span class="seq-badge locked">🔒 초급 완료 후</span></div>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-num upcoming">4</div>
+      <div class="seq-body">
+        <div class="seq-title">어트리뷰션과 리포팅 — 데이터 기반 의사결정</div>
+        <div class="seq-desc">7일 클릭/1일 뷰 어트리뷰션 → 전환 API (CAPI) 심화 → 리프트 테스트 → 리포트 자동화</div>
+        <div class="seq-meta"><span class="seq-badge locked">🔒 초급 완료 후</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 고급 (접힘) -->
+<div class="curriculum">
+  <div class="cur-header" style="cursor:pointer">
+    <div class="title">
+      <span class="level-badge advanced">고급</span>
+      스케일링 & 자동화
+      <span style="color:#9ca3af;font-size:11px;font-weight:400">▸</span>
+    </div>
+    <div class="progress">
+      0/2 발행 <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- MODE 2: 큐레이션 뷰 (외부 소스 선택 시) -->
+<!-- ══════════════════════════════════════ -->
+<div class="view-section" id="view-curation">
+<span class="mode-label curation">🔍 큐레이션 모드</span>
+
+<div class="toolbar">
+  <div style="display:flex;gap:8px;align-items:center">
+    <div class="view-toggle">
+      <button class="view-btn" id="btn-inbox" onclick="switchSub('inbox')">📥 인박스</button>
+      <button class="view-btn active" id="btn-topicmap" onclick="switchSub('topicmap')">🗺️ 토픽맵</button>
+    </div>
+    <input class="search-input" placeholder="🔍 콘텐츠 검색...">
+  </div>
+  <div class="status-filters">
+    <div class="status-pill active">전체<span class="count">36</span></div>
+    <div class="status-pill">신규<span class="count">12</span></div>
+    <div class="status-pill">생성됨<span class="count">8</span></div>
+    <div class="status-pill">발행됨<span class="count">13</span></div>
+    <div class="status-pill">스킵<span class="count">3</span></div>
+  </div>
+</div>
+
+<div class="bulk-bar">
+  <div class="info">✓ 2개 선택됨</div>
+  <div class="actions">
+    <button class="btn btn-skip">✕ 일괄 스킵</button>
+    <button class="btn btn-generate">✨ 정보공유 생성</button>
+  </div>
+</div>
+
+<!-- 토픽맵 -->
+<div class="topic-group">
+  <div class="topic-header"><div class="icon meta">📢</div><div class="name">메타 광고</div><div class="topic-count">10개</div></div>
+  <div class="subtopic-list">
+    <div class="subtopic">
+      <div class="subtopic-header"><div class="dot" style="background:#3B82F6"></div><div class="name">ASC / 어드밴티지+</div><div class="sub-count">3</div></div>
+      <div style="padding:0 4px">
+        <div class="content-card selected">
+          <div class="checkbox checked"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-title"><span class="src-icon">🌐</span>브로드 타겟 vs ASC 성과 비교 — 뷰티 카테고리</div>
+              <div class="card-meta"><div class="stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span></div><span class="card-date">3/6</span></div>
+            </div>
+            <div class="ai-summary">
+              <div class="label">🤖 AI 핵심요약</div>
+              <ul>
+                <li>뷰티 3개 브랜드 A/B 테스트 (30일, 총 1.2억)</li>
+                <li>ASC: CPA 18%↓ / 브로드: ROAS 12%↑ → <strong>목표별 선택</strong></li>
+                <li>상품 단가 30만원↑에서 브로드 우세</li>
+              </ul>
+            </div>
+            <div class="card-tags"><span class="tag">ASC</span><span class="tag">브로드타겟</span><span class="tag">뷰티</span></div>
+            <div class="card-footer"><span class="card-source">searchengineland.com · 3/6</span><div class="card-actions"><button class="card-btn">원문</button><button class="card-btn">스킵</button><button class="card-btn primary">생성</button></div></div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="checkbox"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-title"><span class="src-icon">▶️</span>메타 2026 Q1 변경사항 총정리</div>
+              <div class="card-meta"><div class="stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">★</span><span class="star">★</span></div><span class="card-date">3/6</span></div>
+            </div>
+            <div class="ai-summary">
+              <div class="label">🤖 AI 핵심요약</div>
+              <ul>
+                <li>Graph API v21.0 필수 마이그레이션 (6/30 마감)</li>
+                <li>Advantage+ 쇼핑: 카탈로그 없이 사용 가능</li>
+                <li>iOS 18 ATT → CAPI 이벤트 매칭률 개선</li>
+              </ul>
+            </div>
+            <div class="card-tags"><span class="tag">API변경</span><span class="tag">Advantage+</span></div>
+            <div class="card-footer"><span class="card-source">YouTube · 3/6</span><div class="card-actions"><button class="card-btn">원문</button><button class="card-btn">스킵</button><button class="card-btn primary">생성</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="subtopic"><div class="subtopic-header"><div class="dot" style="background:#3B82F6"></div><div class="name">타겟팅 전략</div><div class="sub-count">3</div></div></div>
+    <div class="subtopic"><div class="subtopic-header"><div class="dot" style="background:#3B82F6"></div><div class="name">소재 / 크리에이티브</div><div class="sub-count">4</div></div></div>
+  </div>
+</div>
+
+<div class="topic-group">
+  <div class="topic-header"><div class="icon shop">🏪</div><div class="name">자사몰 운영</div><div class="topic-count">9개</div></div>
+  <div class="subtopic-list">
+    <div class="subtopic"><div class="subtopic-header"><div class="dot" style="background:#16A34A"></div><div class="name">상세페이지 / 랜딩</div><div class="sub-count">3</div></div></div>
+    <div class="subtopic"><div class="subtopic-header"><div class="dot" style="background:#16A34A"></div><div class="name">CRM / 재구매</div><div class="sub-count">3</div></div></div>
+    <div class="subtopic"><div class="subtopic-header"><div class="dot" style="background:#16A34A"></div><div class="name">결제 최적화</div><div class="sub-count">3</div></div></div>
+  </div>
+</div>
+
+<div class="topic-group">
+  <div class="topic-header"><div class="icon data">📊</div><div class="name">분석 / 데이터</div><div class="topic-count">6개</div></div>
+</div>
+
+<!-- 삭제된 콘텐츠 -->
+<div class="deleted-section">
+  <div class="deleted-header">
+    <div class="left"><span>🗑️</span><span class="dname">삭제됨 (7)</span></div>
+    <button class="restore-all">전체 복원</button>
+  </div>
+  <div class="deleted-items">
+    <div class="del-item"><span class="dtitle">카탈로그 광고 세팅 (테스트)</span><span class="ddate">3/5</span><span class="restore-link">복원</span></div>
+    <div class="del-item"><span class="dtitle">ROAS 계산법 — 초보자 가이드</span><span class="ddate">3/4</span><span class="restore-link">복원</span></div>
+    <div class="del-item"><span class="dtitle">UTM 파라미터 완벽 정리</span><span class="ddate">3/3</span><span class="restore-link">복원</span></div>
+  </div>
+</div>
+</div><!-- end curation view -->
+
+</div><!-- end content-area -->
+</div><!-- end main-layout -->
+</div>
+
+<script>
+document.querySelectorAll('.sidebar-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    const isBP = card.querySelector('.label span')?.textContent.includes('블루프린트');
+    document.getElementById('view-curriculum').classList.toggle('visible', isBP);
+    document.getElementById('view-curation').classList.toggle('visible', !isBP);
+  });
+});
+</script>
+</body>
+</html>

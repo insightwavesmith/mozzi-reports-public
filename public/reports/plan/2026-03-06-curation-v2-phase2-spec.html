@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>큐레이션 v2 Phase 2 — 아키텍처 + 목업</title>
+<meta name="date" content="2026-03-06">
+<meta name="project" content="QA Helpdesk">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fc;color:#1a1a1a;font-size:14px;line-height:1.7}
+.page{max-width:1100px;margin:0 auto;padding:32px 24px}
+a.back{display:inline-block;margin-bottom:20px;color:#64748b;text-decoration:none;font-size:13px}
+a.back:hover{color:#1a1a1a}
+
+/* Header */
+.hero{background:linear-gradient(135deg,#fff 0%,#fef2f2 100%);border:1px solid #e2e8f0;border-radius:12px;padding:32px;margin-bottom:32px}
+.hero h1{font-size:26px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.hero .subtitle{font-size:15px;color:#64748b}
+.hero .meta{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+.hero .meta-tag{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500}
+.tag-done{background:#d1fae5;color:#065f46}
+.tag-progress{background:#dbeafe;color:#1e40af}
+.tag-todo{background:#fef3c7;color:#92400e}
+.tag-blocked{background:#fee2e2;color:#991b1b}
+
+/* Section */
+.section{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:28px;margin-bottom:20px}
+.section h2{font-size:18px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f1f5f9;display:flex;align-items:center;gap:8px}
+.section h3{font-size:15px;font-weight:600;margin:20px 0 10px;color:#334155}
+.section p{color:#475569;margin-bottom:10px}
+.section ul{margin:0 0 12px 20px;color:#475569}
+.section li{margin-bottom:4px}
+
+/* Phase Table */
+.phase-table{width:100%;border-collapse:collapse;margin:16px 0}
+.phase-table th,.phase-table td{padding:10px 14px;text-align:left;border-bottom:1px solid #f1f5f9;font-size:13px}
+.phase-table th{background:#f8f9fc;font-weight:600;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+.phase-table td:first-child{font-weight:600}
+.status-chip{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.chip-done{background:#d1fae5;color:#065f46}
+.chip-todo{background:#fef3c7;color:#92400e}
+
+/* Architecture Diagram */
+.arch-diagram{background:#f8f9fc;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin:16px 0;overflow-x:auto}
+.arch-flow{display:flex;align-items:stretch;gap:0;justify-content:center;flex-wrap:wrap}
+.arch-node{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;min-width:140px;text-align:center;position:relative}
+.arch-node .node-icon{font-size:24px;margin-bottom:6px}
+.arch-node .node-title{font-size:12px;font-weight:700;color:#1a1a1a}
+.arch-node .node-desc{font-size:10px;color:#64748b;margin-top:4px}
+.arch-node.active{border-color:#F75D5D;background:#fff5f5}
+.arch-arrow{display:flex;align-items:center;padding:0 6px;font-size:20px;color:#d1d5db}
+
+/* Component Tree */
+.comp-tree{font-family:'JetBrains Mono',monospace;font-size:12px;background:#1e293b;color:#e2e8f0;padding:20px;border-radius:10px;line-height:1.8;overflow-x:auto}
+.comp-tree .new{color:#34d399}
+.comp-tree .modified{color:#fbbf24}
+.comp-tree .keep{color:#94a3b8}
+
+/* DB Schema */
+.db-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.db-table th{background:#1e293b;color:#e2e8f0;padding:8px 12px;text-align:left;font-size:11px}
+.db-table td{padding:8px 12px;border-bottom:1px solid #f1f5f9}
+.db-table .col-name{font-family:'JetBrains Mono',monospace;font-weight:600;color:#7c3aed}
+.db-table .col-type{font-family:'JetBrains Mono',monospace;color:#64748b;font-size:12px}
+.db-new{background:#f0fdf4}
+
+/* Card Comparison */
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.comp-box{border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+.comp-box .comp-label{padding:8px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.comp-box.before .comp-label{background:#fee2e2;color:#991b1b}
+.comp-box.after .comp-label{background:#d1fae5;color:#065f46}
+.comp-box .comp-content{padding:14px}
+
+/* Mock Card */
+.mock-card{border:1px solid #e2e8f0;border-radius:8px;padding:12px;font-size:12px;background:#fff}
+.mock-card .mc-top{display:flex;justify-content:space-between;margin-bottom:6px}
+.mock-card .mc-title{font-weight:600;display:flex;align-items:center;gap:4px}
+.mock-card .mc-stars{color:#f59e0b;font-size:10px}
+.mock-card .mc-summary{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin:6px 0}
+.mock-card .mc-summary .label{font-size:9px;font-weight:700;color:#64748b;margin-bottom:4px}
+.mock-card .mc-summary ul{margin:0;padding-left:14px}
+.mock-card .mc-summary li{font-size:11px;color:#475569;line-height:1.5}
+.mock-card .mc-tags{display:flex;gap:4px;margin:6px 0}
+.mock-card .mc-tag{font-size:9px;padding:2px 8px;border-radius:12px;background:#f1f5f9;color:#64748b}
+.mock-card .mc-link{display:flex;align-items:center;gap:4px;font-size:10px;color:#4f46e5;margin:4px 0;padding:3px 8px;background:#eef2ff;border-radius:4px;width:fit-content}
+.mock-card .mc-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #f1f5f9}
+.mock-card .mc-source{font-size:10px;color:#9ca3af}
+.mock-card .mc-actions{display:flex;gap:4px}
+.mock-card .mc-btn{font-size:10px;padding:3px 8px;border-radius:5px;border:1px solid #e2e8f0;background:#fff;color:#64748b}
+.mock-card .mc-btn.primary{background:#F75D5D;color:#fff;border-color:#F75D5D}
+.mc-old-summary{font-size:11px;color:#9ca3af;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:4px 0}
+.mc-expand{font-size:10px;color:#9ca3af;cursor:pointer}
+
+/* Mockup embed */
+.mockup-frame{border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;margin:16px 0}
+.mockup-frame iframe{width:100%;height:800px;border:none}
+.mockup-label{background:#1e293b;color:#e2e8f0;padding:8px 16px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:space-between}
+.mockup-label a{color:#93c5fd;font-size:11px}
+
+/* Flow diagram */
+.flow-box{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.flow-step{display:flex;align-items:center;gap:10px}
+.flow-num{width:28px;height:28px;border-radius:50%;background:#F75D5D;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.flow-text{font-size:13px;color:#475569}
+.flow-arrow-down{text-align:center;color:#d1d5db;font-size:16px}
+
+@media(max-width:768px){
+  .comparison{grid-template-columns:1fr}
+  .arch-flow{flex-direction:column;align-items:center}
+  .arch-arrow{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<a class="back" href="/">&larr; 목록으로</a>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <h1>✨ 큐레이션 v2 Phase 2</h1>
+  <div class="subtitle">인박스 리뉴얼 + 토픽맵 + Soft Delete — 아키텍처 & 목업</div>
+  <div class="meta">
+    <span class="meta-tag tag-done">Phase 0+1 완료</span>
+    <span class="meta-tag tag-progress">Phase 2 개발 예정</span>
+    <span class="meta-tag tag-todo">Phase 3 Soft Delete</span>
+  </div>
+</div>
+
+<!-- ═══ 1. 현재 상태 & 문제점 ═══ -->
+<div class="section">
+  <h2>📋 현재 상태 & 문제점</h2>
+  
+  <table class="phase-table">
+    <thead><tr><th>Phase</th><th>내용</th><th>상태</th></tr></thead>
+    <tbody>
+      <tr><td>Phase 0</td><td>데이터 정비 — ai_summary null 30건 + importance_score 0 98건 백필</td><td><span class="status-chip chip-done">✅ 완료</span></td></tr>
+      <tr><td>Phase 1</td><td>사이드바 듀얼모드 + CurriculumView (시퀀스 뷰)</td><td><span class="status-chip chip-done">✅ 완료</span></td></tr>
+      <tr><td>코드 리뷰</td><td>타입 안전성 + 빈 본문 가드 + API 인증 + 발행 상태</td><td><span class="status-chip chip-done">✅ 74c1268</span></td></tr>
+      <tr><td>Phase 2</td><td>인박스 리뉴얼 + 토픽맵 뷰 + 상태 필터</td><td><span class="status-chip chip-todo">🔨 다음</span></td></tr>
+      <tr><td>Phase 3</td><td>Soft Delete + 복원 + 30일 자동 정리 cron</td><td><span class="status-chip chip-todo">🔨 다음</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>❌ 현재 문제</h3>
+  <ul>
+    <li><strong>AI 요약이 접혀있어서 안 읽게 됨</strong> — 카드의 핵심 가치가 숨겨져 있음</li>
+    <li><strong>토픽 분류 없이 날짜 그룹만</strong> — 어떤 주제가 풍부/빈약한지 파악 불가</li>
+    <li><strong>삭제 = hard dismiss</strong> — 실수로 날리면 복구 불가</li>
+    <li><strong>생성물 연결 없음</strong> — 이미 정보공유로 만든 소스인지 모름</li>
+  </ul>
+
+  <h3>✅ Phase 2 해결 목표</h3>
+  <ul>
+    <li>AI 핵심요약 <strong>항상 펼침</strong> (불릿 3줄)</li>
+    <li><strong>토픽맵 뷰</strong> 추가 (key_topics 기반 2-depth 트리)</li>
+    <li><strong>Soft Delete + 복원</strong> (30일 후 자동 영구 삭제)</li>
+    <li>소스 → 생성물 <strong>양방향 연결</strong> 표시</li>
+  </ul>
+</div>
+
+<!-- ═══ 2. 아키텍처 ═══ -->
+<div class="section">
+  <h2>🏗️ 아키텍처</h2>
+
+  <h3>전체 파이프라인</h3>
+  <div class="arch-diagram">
+    <div class="arch-flow">
+      <div class="arch-node">
+        <div class="node-icon">📡</div>
+        <div class="node-title">수집</div>
+        <div class="node-desc">크롤러 / YouTube<br>Cron 자동 수집</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="node-icon">🤖</div>
+        <div class="node-title">AI 분석</div>
+        <div class="node-desc">요약 생성<br>중요도 스코어링<br>토픽 태깅</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node active">
+        <div class="node-icon">✨</div>
+        <div class="node-title">큐레이션</div>
+        <div class="node-desc">인박스 뷰<br>토픽맵 뷰<br><strong>← Phase 2</strong></div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="node-icon">📝</div>
+        <div class="node-title">생성</div>
+        <div class="node-desc">정보공유 초안<br>AI 작성</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="node-icon">🚀</div>
+        <div class="node-title">발행</div>
+        <div class="node-desc">검수 → 발행<br>이메일 발송</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>컴포넌트 구조</h3>
+  <div class="comp-tree">
+<span class="keep">src/components/curation/</span>
+├── <span class="modified">curation-card.tsx</span>        ← <span class="modified">수정</span> (v2: 요약 항상 펼침 + 생성물 연결 + 인라인 액션)
+├── <span class="modified">curation-tab.tsx</span>         ← <span class="modified">수정</span> (인박스 뷰로 역할 축소)
+├── <span class="new">curation-view.tsx</span>        ← <span class="new">신규</span> (인박스+토픽맵 래퍼 + 뷰 토글 + 상태 필터)
+├── <span class="new">topic-map-view.tsx</span>       ← <span class="new">신규</span> (key_topics 기반 2-depth 트리 뷰)
+├── <span class="new">deleted-section.tsx</span>      ← <span class="new">신규</span> (soft delete 복원 섹션)
+├── <span class="keep">curriculum-view.tsx</span>      ← 유지 (Phase 1 완료)
+├── <span class="keep">pipeline-sidebar.tsx</span>     ← 유지 (Phase 1 완료)
+├── <span class="keep">generate-preview-modal.tsx</span> ← 유지
+└── <span class="keep">info-share-tab.tsx</span>       ← 유지
+
+<span class="keep">src/actions/</span>
+└── <span class="modified">curation.ts</span>              ← <span class="modified">수정</span> (softDelete + restore + 생성물 JOIN)
+
+<span class="keep">src/app/api/cron/</span>
+└── <span class="new">cleanup-deleted/route.ts</span> ← <span class="new">신규</span> (30일 자동 영구 삭제)
+  </div>
+
+  <h3>DB 변경사항</h3>
+  <table class="db-table">
+    <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>변경</th></tr></thead>
+    <tbody>
+      <tr class="db-new"><td class="col-name">deleted_at</td><td class="col-type">timestamptz</td><td>soft delete 시각 (null = 삭제 안 됨)</td><td><span class="status-chip chip-todo">추가</span></td></tr>
+      <tr><td class="col-name">ai_summary</td><td class="col-type">text</td><td>AI 핵심요약 (Phase 0에서 백필 완료)</td><td>유지</td></tr>
+      <tr><td class="col-name">importance_score</td><td class="col-type">integer</td><td>중요도 1~5 (Phase 0에서 백필 완료)</td><td>유지</td></tr>
+      <tr><td class="col-name">key_topics</td><td class="col-type">text[]</td><td>토픽 태그 배열 — 토픽맵 그룹핑에 활용</td><td>유지</td></tr>
+      <tr><td class="col-name">curation_status</td><td class="col-type">text</td><td>new | selected | dismissed | published</td><td>유지</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:#64748b;margin-top:4px">※ curation_status는 수정하지 않음. deleted_at으로 삭제 상태를 별도 관리 (status와 독립)</p>
+
+  <h3>Cron 스케줄</h3>
+  <table class="db-table">
+    <thead><tr><th>Cron</th><th>스케줄</th><th>동작</th></tr></thead>
+    <tbody>
+      <tr class="db-new"><td class="col-name">/api/cron/cleanup-deleted</td><td>매일 04:00 KST</td><td>deleted_at < 30일 전 → 영구 삭제</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ 3. 카드 v2 비교 ═══ -->
+<div class="section">
+  <h2>🃏 카드 v2 — Before / After</h2>
+
+  <div class="comparison">
+    <div class="comp-box before">
+      <div class="comp-label">❌ 현재 (요약 접힘)</div>
+      <div class="comp-content">
+        <div class="mock-card">
+          <div class="mc-top">
+            <div class="mc-title">🌐 브로드 vs ASC 비교 — 뷰티</div>
+            <div class="mc-stars">★★★★☆</div>
+          </div>
+          <div class="mc-old-summary">뷰티 3개 브랜드 A/B 테스트 (30일)... ASC CPA 18%↓ / 브로드 ROAS 12%↑...</div>
+          <div class="mc-expand">▸ 더보기</div>
+          <div class="mc-tags">
+            <span class="mc-tag">ASC</span>
+            <span class="mc-tag">브로드타겟</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="comp-box after">
+      <div class="comp-label">✅ Phase 2 (요약 항상 펼침)</div>
+      <div class="comp-content">
+        <div class="mock-card">
+          <div class="mc-top">
+            <div class="mc-title">🌐 브로드 vs ASC 비교 — 뷰티</div>
+            <div class="mc-stars">★★★★☆</div>
+          </div>
+          <div class="mc-summary">
+            <div class="label">🤖 AI 핵심요약</div>
+            <ul>
+              <li>뷰티 3개 브랜드 A/B 테스트 (30일, 총 1.2억)</li>
+              <li>ASC: CPA 18%↓ / 브로드: ROAS 12%↑ → <strong>목표별 선택</strong></li>
+              <li>상품 단가 30만원↑에서 브로드 우세</li>
+            </ul>
+          </div>
+          <div class="mc-link">↳ "ASC 시대, 자사몰이 준비해야 할 3가지" <span style="font-size:9px;padding:1px 5px;border-radius:8px;background:#e0e7ff;color:#4338ca;margin-left:4px">발행됨</span></div>
+          <div class="mc-tags">
+            <span class="mc-tag">ASC</span>
+            <span class="mc-tag">브로드타겟</span>
+            <span class="mc-tag">뷰티</span>
+          </div>
+          <div class="mc-footer">
+            <span class="mc-source">searchengineland.com · 3/6</span>
+            <div class="mc-actions">
+              <span class="mc-btn">원문</span>
+              <span class="mc-btn">스킵</span>
+              <span class="mc-btn primary">생성</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 4. 뷰 전환 플로우 ═══ -->
+<div class="section">
+  <h2>🔄 뷰 전환 플로우</h2>
+  
+  <h3>사이드바 클릭에 따른 모드 자동 전환</h3>
+  <div class="arch-diagram">
+    <div class="arch-flow">
+      <div class="arch-node">
+        <div class="node-icon">📚</div>
+        <div class="node-title">커리큘럼 소스</div>
+        <div class="node-desc">블루프린트<br>자사몰사관학교</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node" style="border-color:#4338ca;background:#eef2ff">
+        <div class="node-icon">📖</div>
+        <div class="node-title">커리큘럼 뷰</div>
+        <div class="node-desc">시퀀스 순서<br>레벨/회차별<br>발행 상태 추적</div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:10px 0;color:#d1d5db">─── 또는 ───</div>
+    <div class="arch-flow">
+      <div class="arch-node">
+        <div class="node-icon">🔍</div>
+        <div class="node-title">큐레이션 소스</div>
+        <div class="node-desc">블로그 / YouTube<br>마케팅원론 / 전체</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node active">
+        <div class="node-icon">📥</div>
+        <div class="node-title">인박스 뷰</div>
+        <div class="node-desc">날짜/중요도 정렬<br>카드 v2<br>벌크 액션</div>
+      </div>
+      <div class="arch-arrow" style="color:#64748b;font-size:14px">⇄ 토글</div>
+      <div class="arch-node active">
+        <div class="node-icon">🗂️</div>
+        <div class="node-title">토픽맵 뷰</div>
+        <div class="node-desc">key_topics 기반<br>2-depth 트리<br>접기/펼치기</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>상태 필터 탭</h3>
+  <div style="display:flex;gap:6px;margin:12px 0;flex-wrap:wrap">
+    <span style="padding:6px 14px;border-radius:20px;background:#1e293b;color:#fff;font-size:12px;font-weight:600">전체 48</span>
+    <span style="padding:6px 14px;border-radius:20px;border:1px solid #e2e8f0;font-size:12px;color:#64748b">신규 12</span>
+    <span style="padding:6px 14px;border-radius:20px;border:1px solid #e2e8f0;font-size:12px;color:#64748b">생성됨 8</span>
+    <span style="padding:6px 14px;border-radius:20px;border:1px solid #e2e8f0;font-size:12px;color:#64748b">발행됨 18</span>
+    <span style="padding:6px 14px;border-radius:20px;border:1px solid #e2e8f0;font-size:12px;color:#64748b">스킵 3</span>
+  </div>
+  <p>curation_status 기반 필터. 전체/신규/생성됨/발행됨/스킵을 클릭하면 해당 상태 콘텐츠만 표시.</p>
+</div>
+
+<!-- ═══ 5. 토픽맵 상세 ═══ -->
+<div class="section">
+  <h2>🗂️ 토픽맵 뷰 상세</h2>
+  
+  <h3>그룹핑 로직</h3>
+  <div class="flow-box">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><code>key_topics[0]</code> 기준 1차 그룹 (MVP — 첫 번째 토픽이 대분류)</div></div>
+    <div class="flow-arrow-down">↓</div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">같은 토픽을 가진 콘텐츠끼리 묶어서 토픽 헤더 아래 나열</div></div>
+    <div class="flow-arrow-down">↓</div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">토픽이 없는 콘텐츠 → "미분류" 그룹으로 하단 배치</div></div>
+    <div class="flow-arrow-down">↓</div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">클라이언트사이드 그룹핑 (별도 API/AI 호출 없음, 기존 key_topics 활용)</div></div>
+  </div>
+
+  <h3>토픽맵 UI 구조</h3>
+  <div style="background:#f8f9fc;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin:12px 0;font-size:13px;line-height:2">
+    <div style="font-weight:700;margin-bottom:8px">📢 메타 광고 <span style="color:#9ca3af;font-weight:400">(10개)</span></div>
+    <div style="margin-left:20px">
+      <div>• ASC / 어드밴티지+ <span style="color:#9ca3af">(3)</span> — 카드 v2 리스트</div>
+      <div>• 타겟팅 전략 <span style="color:#9ca3af">(3)</span></div>
+      <div>• 소재 / 크리에이티브 <span style="color:#9ca3af">(4)</span></div>
+    </div>
+    <div style="font-weight:700;margin:12px 0 8px">🏪 자사몰 운영 <span style="color:#9ca3af;font-weight:400">(9개)</span></div>
+    <div style="margin-left:20px">
+      <div>• 상세페이지 / 랜딩 <span style="color:#9ca3af">(3)</span></div>
+      <div>• CRM / 재구매 <span style="color:#9ca3af">(3)</span></div>
+      <div>• 결제 최적화 <span style="color:#9ca3af">(3)</span></div>
+    </div>
+    <div style="font-weight:700;margin:12px 0 8px">📊 분석 / 데이터 <span style="color:#9ca3af;font-weight:400">(6개)</span></div>
+    <div style="font-weight:700;margin:12px 0 8px;color:#9ca3af">📁 미분류 <span style="font-weight:400">(2개)</span></div>
+  </div>
+</div>
+
+<!-- ═══ 6. Soft Delete 플로우 ═══ -->
+<div class="section">
+  <h2>🗑️ Soft Delete 플로우</h2>
+  
+  <div class="arch-diagram">
+    <div class="arch-flow">
+      <div class="arch-node">
+        <div class="node-icon">📄</div>
+        <div class="node-title">콘텐츠</div>
+        <div class="node-desc">deleted_at = null</div>
+      </div>
+      <div class="arch-arrow">삭제 →</div>
+      <div class="arch-node" style="border-color:#fca5a5;background:#fef2f2">
+        <div class="node-icon">🗑️</div>
+        <div class="node-title">삭제됨</div>
+        <div class="node-desc">deleted_at = now()<br>UI에서 숨김<br>복원 가능</div>
+      </div>
+      <div class="arch-arrow">30일 →</div>
+      <div class="arch-node" style="border-color:#d1d5db;background:#f9fafb">
+        <div class="node-icon">💀</div>
+        <div class="node-title">영구 삭제</div>
+        <div class="node-desc">Cron 자동 실행<br>매일 04:00 KST<br>복구 불가</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>삭제 섹션 UI</h3>
+  <div style="margin:12px 0">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px 8px 0 0">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span>🗑️</span>
+        <span style="font-size:13px;font-weight:600;color:#991b1b">삭제됨 (3)</span>
+      </div>
+      <span style="font-size:11px;padding:4px 12px;background:#fff;border:1px solid #fecaca;border-radius:6px;color:#dc2626;font-weight:500">전체 복원</span>
+    </div>
+    <div style="border:1px solid #fecaca;border-top:none;border-radius:0 0 8px 8px;background:#fff;padding:0 14px">
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #fef2f2;font-size:12px">
+        <span style="color:#9ca3af;flex:1;text-decoration:line-through">카탈로그 광고 세팅 (테스트)</span>
+        <span style="color:#d1d5db;font-size:11px">3/5</span>
+        <span style="color:#F75D5D;font-weight:500;font-size:11px">복원</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #fef2f2;font-size:12px">
+        <span style="color:#9ca3af;flex:1;text-decoration:line-through">ROAS 계산법 — 초보자 가이드</span>
+        <span style="color:#d1d5db;font-size:11px">3/4</span>
+        <span style="color:#F75D5D;font-weight:500;font-size:11px">복원</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-size:12px">
+        <span style="color:#9ca3af;flex:1;text-decoration:line-through">UTM 파라미터 완벽 정리</span>
+        <span style="color:#d1d5db;font-size:11px">3/3</span>
+        <span style="color:#F75D5D;font-weight:500;font-size:11px">복원</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 7. 레퍼런스 ═══ -->
+<div class="section">
+  <h2>📚 레퍼런스 분석 요약</h2>
+  <table class="phase-table">
+    <thead><tr><th>서비스</th><th>채택 패턴</th><th>적용</th></tr></thead>
+    <tbody>
+      <tr><td>Feedly</td><td>AI Feed + Board + Clustering</td><td>토픽맵 자동 그룹핑</td></tr>
+      <tr><td>ContentStudio</td><td>Discover → Compose 원클릭</td><td>카드 인라인 "생성" 버튼</td></tr>
+      <tr><td>Curata</td><td>Source ↔ 생성물 양방향 추적</td><td>카드에 생성물 연결 링크</td></tr>
+      <tr><td>Notion</td><td>같은 데이터, 다중 뷰</td><td>인박스 ⇄ 토픽맵 토글</td></tr>
+    </tbody>
+  </table>
+  
+  <h3>핵심 원칙</h3>
+  <ul>
+    <li><strong>큐레이션 = 입구</strong> (소스 이해 + 선별), <strong>정보공유 = 출구</strong> (생성 + 발행)</li>
+    <li>커리큘럼 소스(블루프린트/강의)와 외부 소스(블로그/YouTube)는 성격이 다르므로 <strong>듀얼모드</strong></li>
+    <li>칸반 뷰는 삭제 — 정보공유 탭과 역할 중복</li>
+    <li>토픽 분류는 <strong>기존 key_topics 활용</strong> (MVP). AI 재분석은 향후</li>
+  </ul>
+</div>
+
+<!-- ═══ 8. 인터랙티브 목업 ═══ -->
+<div class="section">
+  <h2>🎨 인터랙티브 목업</h2>
+  <p>사이드바에서 블루프린트 ↔ 전체/블로그 클릭하면 커리큘럼 뷰 ↔ 큐레이션 뷰 전환됩니다.</p>
+  <div class="mockup-frame">
+    <div class="mockup-label">
+      <span>📐 큐레이션 v2 — 듀얼모드 목업 (#88)</span>
+      <a href="/reports/mockup/2026-03-06-curation-v2-mockup.html" target="_blank">새 탭에서 열기 →</a>
+    </div>
+    <iframe src="/reports/mockup/2026-03-06-curation-v2-mockup.html"></iframe>
+  </div>
+</div>
+
+<!-- ═══ 9. 구현 체크리스트 ═══ -->
+<div class="section">
+  <h2>✅ 구현 체크리스트</h2>
+  
+  <h3>T1: 카드 v2 (의존성 없음)</h3>
+  <ul>
+    <li>☐ <code>curation-card.tsx</code> — AI 요약 항상 펼침 (불릿 3줄)</li>
+    <li>☐ <code>curation-card.tsx</code> — 생성물 연결 링크 (source_ref 역추적)</li>
+    <li>☐ <code>curation-card.tsx</code> — 인라인 액션 버튼 (원문/스킵/생성)</li>
+    <li>☐ <code>curation-card.tsx</code> — 소스 출처 도메인 + 수집일 표시</li>
+    <li>☐ <code>curation.ts</code> — getCurationContents에 생성물 JOIN 추가</li>
+  </ul>
+
+  <h3>T2: 큐레이션 뷰 리뉴얼 (T1 완료 후)</h3>
+  <ul>
+    <li>☐ <code>curation-view.tsx</code> — 신규 (인박스+토픽맵 래퍼)</li>
+    <li>☐ <code>curation-view.tsx</code> — 뷰 토글 (📋 인박스 / 🗂️ 토픽맵)</li>
+    <li>☐ <code>curation-view.tsx</code> — 상태 필터 탭 (전체/신규/생성됨/발행됨/스킵)</li>
+    <li>☐ <code>topic-map-view.tsx</code> — 신규 (key_topics[0] 기반 그룹핑)</li>
+    <li>☐ <code>topic-map-view.tsx</code> — 토픽 헤더 접기/펼치기</li>
+    <li>☐ <code>topic-map-view.tsx</code> — 미분류 그룹</li>
+    <li>☐ <code>curation-tab.tsx</code> — 인박스 뷰 역할로 축소</li>
+    <li>☐ <code>content/page.tsx</code> — CurationView 사용</li>
+  </ul>
+
+  <h3>T3: Soft Delete (T2와 병렬 가능)</h3>
+  <ul>
+    <li>☐ DB: <code>contents.deleted_at</code> 컬럼 추가</li>
+    <li>☐ <code>content.ts</code> — 타입에 deleted_at 추가</li>
+    <li>☐ <code>curation.ts</code> — softDeleteContents() 서버 액션</li>
+    <li>☐ <code>curation.ts</code> — restoreContents() 서버 액션</li>
+    <li>☐ <code>curation.ts</code> — getCurationContents에 deleted_at IS NULL 조건</li>
+    <li>☐ <code>deleted-section.tsx</code> — 신규 (접힌 섹션 + 개별/전체 복원)</li>
+    <li>☐ <code>cleanup-deleted/route.ts</code> — 신규 (30일 자동 영구 삭제 cron)</li>
+  </ul>
+</div>
+
+<div style="text-align:center;padding:32px 0;color:#9ca3af;font-size:12px">
+  🍡 모찌 × 🍤 텐동 — 2026-03-06 · BS CAMP QA Helpdesk
+</div>
+
+</div><!-- end page -->
+</body>
+</html>
